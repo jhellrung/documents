@@ -1,0 +1,130 @@
+Slide 1 (title)
+I will present our second-order numerical method to solve the variable coefficient Poisson equation on irregular domains with embedded interfaces.  Our method can handle discontinuities across the interface in the solution, the Poisson coefficient, and the right-hand side.  As we will see, the method is essentially variational, yielding a symmetric positive definite linear system, but we use the standard 5-pt finite difference Poisson stencil within most of the domain, giving a sparsity pattern only slightly more dense than a standard Poisson matrix.
+
+Slide 2 (equations)
+Just to be specific, and to nail down the notation, we aim to solve for u satisfying the given Poisson equation, where beta can be spatially varying.  We discretize the problem over a regular Cartesian grid, but we assume that Gamma and the boundary of Omega are non-conforming, i.e., irregular.  Thus, the domain and the interface are embedded into the Cartesian grid.  Our discretization unifies the handling of domain problems with Neumann or Dirichlet boundary conditions as well as interface problems with interfacial discontinuities in u, du/dx, and beta.
+
+Slide 3 (applications)
+I probably don't need to motivate the problem too much, but we need an excuse to watch these movies.  In any case, interfacial problems arise, for example, in the simulation of multi-material interactions and in the simulation of elastic interfaces immersed in an incompressible fluid.  Iregular domain problems arise whenever one wishes to avoid meshing the domain, e.g., when the domain is specified is specified as a level set.
+
+Slide 4 (movies)
+
+Slide 5 (existing methods)
+There's been a lot of previous work developing methods to solve this problem already, but we feel the feature set of our method puts it in a unique position.
+Immersed interface methods are among the most popular, and are second-order in L-infinity and use the standard 5-pt stencil away from the embedded features.  However, they typically yield a non-symmetric system, and can be difficult to implement.
+Immersed boundary methods yield a symmetric positive definite system, but are only first-order accurate in L-infinity.
+Ghost fluid methods likewise yield a symmetric positive definite system and "sharp" changes in the solution across the interface, but, too, are typically only first-order accurate in L-infinity.
+The finite volume methods of Almgren et al. to solve domain problems are actually very similar to our method, and our domain discretization drew some inspiration from this.
+The extended finite element method is also quite similar to our method, especially using a bubble-stabilized discretization.
+Perhaps the most natural approach to this problem is to use a finite element method with unstructured meshes.  The downside, of course, is the mesh generation and the inability to apply geometric multigrid methods.
+
+Slide 6 (outline, Neumann)
+We will begin by describing the discretization for embedded Neumann problems.  As we will see, the discussion will naturally transition from Neumann to Dirichlet to interface problems, in the sense that our Dirichlet discretization builds upon our Neumann discretization, and a combination of the two yields our interface discretization.
+
+Slide 7 (Neumann, variational)
+We reformulate the embedded Neumann problem as a minimization problem.  We do this for two reasons: it naturally yields a symmetric system; and it naturally gives the denser stencil we need to retain accuracy near the boundary.  Note that our beta-weighted quadratic term will yield our numerical stencils.
+
+Slide 8 (Neumann, discretization)
+The discretization consists of embedding the domain into a regular Cartesian grid, keeping those grid cells, the red cells, that intersect the domain; these cells comprise the computational domain.  Our discretization of the solution space, H^1, then consists of piecewise-bilinear functions over each grid cell in the computational domain.  Thus, the degrees of freedom are the vertices on the cells in the computational domain.
+When discretizing the energy from the variational formulation, we distinguish between grid cells in the interior and grid cells on the boundary.  We will discretize the energy in the interior grid cells in such a way as to yield the standard 5-pt stencil.  The discretization along the boundary will yield a denser stencil.
+
+Slide 9 (Neumann, system)
+By setting the derivative of the discrete minimization problem equal to zero, we obtain a symmetric semi-definite linear system, with a null-space consisting of constant functions.  Note that the left-hand and right-hand sides of the linear system require the computation of some integrals, specifically some area integrals over the intersection of the domain with a grid cell and some line integrals over the intersection of the domain boundary with a grid cell.  We will detail how we compute these integrals shortly.
+
+Slide 10 (Neumann, interior energy)
+First, though, let us look at how we discretize the energy over interior grid cells.  As you can see, to approximate the square of the x-derivative of u, we average finite difference approximations across the x-oriented edges of the cell.  We approximate the square of the y-derivatives similarly.  Here, beta-bar is some cell-average of beta; for example, if beta is naturally available at grid vertices, it can just be an average of the beta values from the 4 grid vertices of the cell.  This discretization yields the standard 5-pt stencil in the interior of the computational domain.
+
+Slide 11 (Neumann, boundary energy)
+Contrast the previous finite difference discretization of the energy with that used over boundary grid cells, which uses the bilinear representation of the approximate solution.  Here, the N functions are piecewise-blinear nodal basis functions.  We equally well could've used this energy discretization on the interior as well, and it would yield a 9-pt stencil, as is done by Almgren et al.
+This discretization requires the computation of some integrals over the intersection of the domain with a grid cell.  Note that since the nodal basis functions are blinear, the integrands in these integrals are quadratics.
+
+Slide 12 (integration)
+We compute these integrals as in Almgren et al. by applying the divergence theorem.  We approximate the domain within each cut cell by a polygon, and transform the area integrals of a quadratic polynomial into line integrals of a cubic polynomial, which are evaluated exactly.  Of course, this procedure works for any polynomial integrand, and, for example, we compute beta-bar in a similar fashion, using an appropriate polynomial approximation to beta.
+
+Slide 13 (Neumann right-hand side)
+We approximate the integrals over boundary cells appearing in the right-hand side of the system in a similar fashion, computing averages of f (the forcing term) and q (the Neumann boundary condition) and integrals of the polynomial nodal basis functions.
+
+Slide 14 (Neumann, summary)
+To summarize, we use a variational formulation of the Neumann problem to guarantee symmetry.  A finite difference discretization of the energy on the interior yields the standard 5-pt stencil, while a more refined treatment of the energy along the boundary ensures sufficient accuracy.  This analysis parallels the immersed interface method, in that special care is given near embedded features, but we retain symmetry in the discretization.
+
+Slide 15 (Neumann, stencil)
+Here we can visualize the differing stencils between a boundary degree of freedom and an interior degree of freedom.  A boundary degree of freedom will couple with at least one other diagonally adjacent boundary degree of freedom through the use of the e-tilde energy discretization.  On the other hand, interior degrees of freedom will only couple with vertically and horizontally adjacent degrees of freedom due to the use of the finite difference energy discretization.
+
+Slide 16 (outline, Dirichlet)
+Having covered our embedded Neumann discretization, we will see how this extends to our embedded Dirichlet discretization.
+
+Slide 17 (Dirichlet, variational)
+We likewise use a variational formulation of the Dirichlet problem, which now becomes a constrained minimization problem.  The energy is the same as for the Neumann problem, but we weakly enforce the Dirichlet boundary conditions.  These state that, on the domain boundary, the integral of the solution against any test function should equal the integral of the prescribed Dirichlet data against the same test function.
+
+Slide 18 (Dirichlet, discretization)
+We discretize the solution space exactly as for the embedded Neumann discretization: piecewise bilinear functions over each grid cell intersecting the domain.  For the moment, we discretize the Dirichlet constraint test space by piecewise constant functions over the intersection of each grid cell with the domain boundary.
+
+Slide 19 (Dirichlet, discretization)
+To be a little bit more explicit about the constraint test space, we use the notation chi to indicate the characteristic function over the intersection of a grid cell, shown in light yellow, with the domain boundary.  Then the collection of these chi's form a basis for the constraint test space, also known as the discrete Lagrange multiplier space.
+
+Slide 20 (Dirichlet, constraint system)
+This discretization gives rise to a finite dimensional linear constraint system, where the number of constraint equations equals the number of boundary grid cells, say m.  Each constraint equation enforces the condition that the integral of the approximate solution over the part of the domain boundary intersection a grid cell must equal the corresponding integral of the prescribed Dirichlet data.
+
+Slide 21, 22 (Dirichlet, constraint visualization)
+Since we use a piecewise-bilinear approximation to u^h, each constraint has precisely 4 nonzero entries, corresponding to the vertices at the corner of the cell.  These entries are equal to the integral of the corresponding nodal basis function over the part of the domain boundary intersection the cell.  To emphasize, a constraint couples together the 4 degrees of freedom at the corners of the corresponding cell; this sparsity pattern will be important later.
+
+Slide 23 (Dirichlet, saddle-point system)
+Discretizing the constraints as we've described and discretizing the energy as for the Neumann case yields the following discrete quadratic program.  We may formulate this as an equivalent saddle-point system with an additional discrete Lagrange multiplier.  One could solve this saddle-point system directly, but, in the next few slides, we will show how a slight modification to the constraints can easily give a symmetric positive definite system.
+
+Slide 24 (Dirichlet, fundamental basis)
+We can reduce the saddle-point system to a symmetric positive definite system using a null-space method.  That is, if Z is a matrix whose columns form a basis for the null space of the constraints, and we can find *any* particular solution to the constraints, then the problem reduces to solving a symmetric positive definite system for Z^t*A*Z.  Following Brezzi and Golub, one can obtain such a Z through a fundamental basis of the constraint matrix by partition the constraint matrix B into a leading square m-by-m block B_m and a trailing block B_{n-m}.  Z and c then looks as follows.  The trick, then, is to order the constraints and the degrees of freedom in such a way that the leading B_m block is easily invertible.
+
+Slide 25 (Dirichlet, upper triangular B_m)
+We can arrange for such a B_m by ordering the lower-left degrees of freedom of each constraint first and lexicographically, and likewise ordering the constraints lexicographically.  This gives an upper triangular B_m.  Unfortunately, its condition number grows exponentially, so this is not a practical solution.
+
+Slide 26 (Dirichlet, aggregation)
+It turns out we can actually obtain a *diagonal* B_m, but we have to relax our constraints a little bit by combining, or aggregating, groups of constraints together.  So instead of enforcing the integrals of u and p over *each* grid cell to coincide, we enforce the integrals over a few adjacent grid cells at a time to be equal.  This is equivalent to reducing the number of constraint equations by summing groups of equations together.  What this affords us, if this aggregation is done correctly, is the existence within each constraint of a representative degree of freedom which participates in only that one constraint.  By ordering these representative degrees of freedom first, and the corresponding constraints in the same order, we can obtain a diagonal B_m.
+
+Slide 27 (Dirichlet, double-wide constraints)
+An example of a very simple aggregation scheme is to combine constraints that lie within the same cell on the doubly-coarse grid, and choose the center degree of freedom as the representative of the aggregate constraint.  We call these constraints double-wide constraints.  Each double-wide constraint enforces the equality between the integrals of u and p over the part of the domain boundary within a grid cell in the doubly-coarse grid.
+
+Slide 28 (Dirichlet, Aggregation algorithm)
+We use a somewhat more sophisticated aggregation algorithm that gives us more control on the conditioning of the final Z^t*A*Z matrix.  The main idea is to select the representative degrees of freedom first, then build an aggregate constraint around each representative degree of freedom.  To control conditioning, we consider boundary degrees of freedom for selection as representives in descending weight order.  The weight of a degree of freedom is the sum of its column in the single-wide constraint matrix, which would end up being the diagonal entry in the B_m block corresponding to the degree of freedom.  We have also found the restricting representatives to virtual degrees of freedom seems to improve conditioning.
+To summarize, we first form the single-wide constraints.  Then we aggregate these single-wide constraints into aggregate constraints, and order the representative degrees of freedom first to obtain a leading diagonal B_m block in the aggregate constraint matrix.  This allows us to easily apply the null-space method to solve the saddle-point system.
+
+Slide 29 (outline, interface)
+We'll see now how our embedded interface discretization is not significantly more difficult than our embedded domain discretizations.
+
+Slide 30 (interface, variational)
+As before, we use a variational formulation of the interface problem.  This yields a constrained minimization problem, where the jump in the solution shows up in the constraint, analogous to the Dirichlet boundary condition; and the jump in the normal derivative of the solution shows up in the right-hand side, analogous to the Neumann boundary condition.  The quadratic term in the energy is the sum of an interior Neumann energy term and an exterior Neumann energy term.  Thus, the quadratic term decouples the interior and exterior; the coupling between these regions is effected through the constraints.
+
+Slide 31 (interface, discretization)
+Our discretization can be viewed as two embedded domain discretizations, one for the interior and one for the exterior.  The grid cells intersecting the interface are duplicated between the interior and exterior discretization.  In other words, the interior and exterior discretizations overlap geometrically on precisely those grid cells through which the interface passes.  The Hessian of the energy for the interface system will be block diagonal, with each block corresponding to the energy from a Neumann problem on each side of the interface.
+
+Slide 32 (interface, constraints)
+As for the Dirichlet case, we enforce the constraints weakly, with, initially, one discrete constraint per interfacial grid cell.  Each constraint equation expresses that the integral in the jump in the approximate solution over the part of the interface intersecting the grid cell should equal the integral of the prescribed interface jump condition.  This couples together 8 degrees of freedom, 4 from the interior discretization and 4 from the exterior discretization.  Indeed, the constraint matrix can be partitioned into two blocks, one which corresponds to an exterior Dirichlet discretization, and one which corresponds to an interior Dirichlet discetization.  The interior block is negated, since the jump in u is the difference between the exterior part and the interior part.
+
+Slide 33 (interface, saddle-point system)
+Again, as for the Dirichlet case, the discretization yields a saddle-point system, and, again, we use the same null-space and fundamental basis method to reduce the saddle-point system to a symmetric positive definite system.
+
+Slide 34 (interface, double-wide constraints)
+The use of double-wide constraints, or the use of an alternative aggregation algorithm, carries over with almost no change from the Dirichlet description.  In fact, the picture I'm using to depict the double-wide constraints is identical.
+
+Slide 35 (outline, numerical results)
+We will now briefly cover some numerical results.
+
+Slide 36 (numerical results, flower)
+This interface example uses a piecewise-constant beta with ratio 10, and we get an approximate convergence order of 1.94.
+
+Slide 37 (numerical results, weird shape)
+This is interface example has spatially varying beta which is still discontinuous across the interface, and we get an approximate convergence order of 1.90.
+
+Slide 38 (future work, geometry)
+One of the remaining avenues of research is to deal with complicated geometry on relatively coarse grids.  Currently, our current vertex duplication strategy may couple together degrees of freedom which logically lie in disjoint material regions of a cell.  A more sophisticated cutting algorithm would give us the degrees of freedom necessary accurately resolve the solution even on such coarse grids.
+
+Slide 39 (future work, etc.)
+We would like to investigate dealing with kinks or corners in the domain boundary and interface.  The challenge here is to handle solutions that lose regularity near the kink or corner.
+We have been fairly successful so far developing multigrid algorithms to solve the linear systems, but more work can be done to improve their efficiency.
+We will be shortly submitting a paper providing the details of this method in three dimensions.
+We are currently working on applying this method to computational fluid dynamics problems.
+
+Slide 40 (3D results)
+This shows an three-dimensional interface example, where the interface is a thickened trefoil know.  We have actually completed many more examples since these slides were made.
+
+Slide 41 (Acknowledgments)
+We've had a number of coathors over the last two years on this project, as well as a number of additional contributors, and we'd like to thank them.
