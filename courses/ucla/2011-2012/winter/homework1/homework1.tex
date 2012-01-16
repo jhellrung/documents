@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 1}
+\date{January 18, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] (Strikwerda 1.1.3) Solve the initial value problem for
+\begin{equation*}
+u_t + \frac{1}{1 + \frac{1}{2} \cos x} u_x = 0
+\end{equation*}
+Show that the solution is given by $u(t,x) = u_0(\xi)$, where $\xi$ is the unique solution of
+\begin{equation*}
+\xi + \frac{1}{2} \sin \xi = x + \frac{1}{2} \sin x - t.
+\end{equation*}
+
+\item[2.] Solve the initial value problem
+\begin{equation*}
+u_t + \left( \sin t \right) u_x = \frac{1}{1 + t^2}, \quad u(0,x) = u_0(x), \quad x \in \mathbb{R}, \quad t > 0.
+\end{equation*}
+
+\item[3.] Consider the first order system of PDEs of the form
+\begin{equation*}
+\vec{u}_t + A \vec{u}_x = 0, \quad \vec{u}(0,x) = \vec{u}_0(x), \quad x \in [0,1], \quad t > 0.
+\end{equation*}
+\begin{itemize}
+\item[(a)] Give the solution to the initial value problem when
+\begin{equation*}
+A = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}.
+\end{equation*}
+\item[(b)] Describe appropriate boundary conditions at $x = 0$ and/or $x = 1$, if possible, which make the initial boundary value problem in (a) well-posed. Try to be as general as possible. How should such boundary conditions be presented to put the solution in a simple form?
+\item[(c)] Give the solution to the initial value problem when
+\begin{equation*}
+A = \begin{pmatrix} 2 & 3 \\ 3 & 2 \end{pmatrix}.
+\end{equation*}
+\item[(d)] Describe appropriate boundary conditions at $x = 0$ and/or $x = 1$, if possible, which make the initial boundary value problem in (c) well-posed. Try to be as general as possible. How should such boundary conditions be presented to put the solution in a simple form?
+\end{itemize}
+
+\item[4.] Derive the leading term of the local truncation error for the following finite difference schemes used to approximate solutions to the equation $u_t + a u_x = 0$.
+\begin{itemize}
+\item[(a)]
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + a \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0.
+\end{equation*}
+\item [(b)]
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + a \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0.
+\end{equation*}
+\end{itemize}
+
+\item[5.] Determine the stability region $\Lambda$ for each of the finite difference schemes in Problem 4.
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+\item[1.] Implement the finite difference schemes in Problem 4.\ in the Theory section for $x \in [0,1]$, $t \in [0,T]$ for some final time $T$, $u(x,0) = u_0(x)$, and \emph{periodic} boundary conditions.
+\item[2.] Investigate the convergence of each scheme for $a = 1$ and $T = 1$. Use an appropriate relation between $k$ and $h$ to ensure convergence. Try using both a smooth initial condition (e.g., $u_0(x) = \sin(2 \pi x)$) and a non-smooth initial condition (e.g., $u_0(x) = 1 - 2 \lvert x - 1/2 \rvert$). Use the discrete $L^2$ norm to measure the error between your numerical solution and the true solution:
+\begin{equation*}
+\left\lVert w \right\rVert_h = \left( h \sum_m \left\lvert w_m \right\rvert^2 \right)^{1/2}.
+\end{equation*}
+[Note: Due to periodicity, be sure to avoid double-counting the contributions at $x = 0$ and $x = 1$!] Plot the numerical solutions from each scheme at $t = T$ when $h = 1/100$. Which scheme do you think is better and why?
+\end{itemize}
+
+\end{document}
