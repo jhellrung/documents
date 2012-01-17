@@ -1,0 +1,188 @@
+Slide 1 (title)
+Greetings, I'm Jeff.  I am currently doing research in the mathematics department at UCLA, where I'm expecting to finish my doctorate this academic year.  I will present some of my research in embedded methods.
+
+Slide 2 (outline)
+The general outline of the talk will go as follows.  I'll begin by giving a very brief synopsis of my personal background.  I'll then talk about some of the work I did on a mesh cutting algorithm, and some of the projects I applied this toward.  Finally, I'll discuss a relatively new second order numerical method for embedded domain and embedded interface Poisson problems.
+
+Slide 3 (outline)
+
+Slide 4 (personal background)
+I originally grew up in a small surburban town just north of Salt Lake City, UT, before moving down to the Los Angeles area for college.  I receive my bachelor's in mathematics from Harvey Mudd College and have since been studying at UCLA.  The last few summers have been devoted to research, but prior to that, I interned at a variety of companies doing a broad range of technical work.
+
+Slide 5 (outline)
+I'll now talk about mesh cutting and how we applied it to fracture.
+
+Slide 6 (background)
+My first research work at UCLA centered on a then-recently published mesh cutting algorithm.  The algorithm allows one to cut an unstructure tetrahedralized volume with an arbitrary, non-manifold, self-intersecting triangulated surface.  Further, the algorithm supports dynamic cutting, where the volume may be deformed and recut several times.
+
+Slide 7 (examples)
+This first example shows a few frames of a single tetrahedron being sliced with multiple cutting planes.
+
+Slide 8 (examples)
+This second example shows a few frames of the SIGGRAPH logo being cut out of a cube.
+
+Slide 9 (general idea)
+The general idea of the algorithm is to allow tetrahedral elements to have void regions.  When an element is cut, it gets duplicated, with the material partitioned out to each of the duplicates.  As you might imagine, the mechanisms behind this duplication and division process requires a significant amount of computational geometry and intelligent organization of data structures.
+
+Slide 10 (improvements)
+In preparation for applying the cutting algorithm to a number of projects, I improved the efficiency and robustness of our working implementation.  I added some spatial acceleration structures; reworked some looping structures and lower level algorithms to lower the overall computational complexity of some stages; and added an infrastruture to adaptively utilize exact arithmetic to guarantee robustness in geometric computations.  The latter was necessary as we had observed that round-off error too frequently caused self-inconsistency in the internal data structures.
+
+Slide 11 (outline)
+That was a very brief introduction to the cutting algorithm, meant to just give you a flavor for what it's about.  I'll now cover several applications.
+
+Slide 12 (embedding surface meshes)
+A natural application is to embed a higher resolution triangulated surface inside a lower resolution tetrahedralized volume.  This allows one to simulate a visually detailed model with a relatively low number of degrees of freedom, lower than one would use if one used a conforming mesh.  This is attractive for visual effects applications.
+
+Slide 13 (fracture dynamics)
+While interning at Disney Animation I created a Maya plugin front-end to allow artists to fracture their models along randomly generated or artist-specified grain boundaries.  We published and presented the details of this procedure in a SIGGRAPH sketch.
+
+Slide 14 (fracture dynamics)
+The results of this work were used in Disney's feature length animated film BOLT, specifically to shatter Rhino's hamster ball.
+
+Slide 15 (virtual surgery)
+We've applied the cutting algorithm to a real-time virtual surgery simulator, where the user can interactively slice and pull simulated flesh.
+
+Slide 16 (crack propagation)
+Lastly, I helped apply the cutting algorithm to crack propagation.  The main idea in this publication is to use a higly refined, secondary quadrature mesh to accurately integrate the singular crack tip enrichment functions.  We used the cutting algorithm to automate the duplication of degrees of freedom along the crack and near crack tips within the simulation mesh.
+
+Slide 17 (simulation mesh)
+Here is an example of a static crack and the underlying simulation mesh.  We used the cutting algorithm to automate the duplication of degrees of freedom along the crack and near the crack tips.
+
+Slide 18 (quadrature mesh)
+Here we depict the quadrature mesh, which, to emphasize, is only used for integration purposes and does not introduce new degrees of freedom.
+
+Slide 19 (stress field)
+Here we plot the computed stress field for this example.
+
+Slide 20 (crack propagation)
+One can use the accurately computed stresses to propagate a crack front.  Here are a few pictures showing a crack propagating between two holes in the domain.
+
+Slide 21 (outline)
+We will now transition to some of my more recent work on embedded domain and embedded interface Poisson problems.
+
+Slide 22 (equations)
+To be explicit about the notation, we wish to solve for the unknown u satisfying the given Poisson equation, where beta can be spatially varying.  Although we discretize the problem over a regular Cartesian grid, we assume that the boundary of Omega and the interface Gamma do not conform to the grid, and are thus embedded within the grid.  Further, all of u, du/dx, and beta may be discontinuous across the interface Gamma.
+
+Slide 23 (applications)
+Several applications motivate the study of these types of Poisson problems.  Irregular domain problems arise whenever one wishes to avoid meshing the domain, e.g., when the domain is specified as a level set.  Perhaps more importantly, interfacial Poisson problems arise in the simulation of multi-material interactions and in the simulation of elastic interfaces immersed in an incompressible fluid.
+
+Slide 24,25 (previous work)
+There's been a lot of previous work already toward developing numerical methods to solve both embedded domain and embedded interface Poisson problems.  We feel the feature set of our method puts it in a unique position.  Specifically, our method is second order in L^{\infty}, is straightforward to implement, and yields a symmetric positive definite linear system with a sparsity pattern largely identical to the standard finite difference Poisson stencil.  Further, we capture all types of boundary and jump conditions in a unifying framework.
+
+Slide 26 (outline)
+We will begin by describing our discretization for embedded domain problems with Neumann boundary conditions.  As we will see, the discussion will naturally transition from Neumann boundary conditions to Dirichlet boundary conditions to interface jump conditions, in the sense that the latter two build on the previous.
+
+Slide 27 (Neumann boundary conditions)
+We base our discretization on a variational formulation.  We do this for a number of reasons.  First, it shifts the Neumann boundary conditions to the right-hand side.  More importantly, it naturally yields a symmetric discretization, due to the symmetry in the quadratic term of the energy.  Lastly, it gives us the framework to define the denser stencil near the boundary necessary to retain accuracy.
+
+Slide 28 (domain embedding)
+Our discretization consists of embedding the domain into a regular Cartesian grid, keeping those grid cells, the grayed cells, that intersect the domain; these cells comprise the computational domain, C^h.  As we will see, our discretization distinguishes between interior grid cells and boundary grid cells, which are those grid cells in the computational domain which intersect the domain boundary.  It will also be useful to distinguish between material and virtual degrees of freedom; and between material and virtual regions within a boundary grid cell.  As shown in the figure, material degrees of freedom geometrically lie within the domain, while virtual degrees of freedom geometrically lie outside the domain.  A boundary grid cell is partitioned into a material region, the part that intersects the domain; and a virtual region, the complement.
+
+Slide 29 (discretization)
+Given the preceding domain embedding, our solution space V^h consists of piecewise-multilinear functions over each grid cell in the computational domain.  Thus, we can decompose our solution into a linear combination of the standard multilinear nodal basis functions, and define a discrete energy corresponding to the continuous energy as shown.  Differentiating this discrete energy will yield a linear system for the u_i degrees of freedom.
+
+The energy discretization is defined cell-wise, and the quadratic term of the energy is discretized differently depending on if a grid cell is an interior grid cell or a boundary grid cell.  The energy discretization over interior grid cells will yield the standard finite-difference Poisson stencil, while the energy discretization over boundary grid cells will yield a denser stencil.
+
+Slide 30 (interior grid cells)
+We base the energy discretization over an interior grid cell on finite differences.  For example, to approximate the square of the x-derivative of u, we average the squared finite difference approximations across x-oriented edges of the grid cell.  We approximate the square of the y-derivative and, if in 3D, the z-derivative similarly.  We account for the beta term by using some appropriate cell-average of beta, depending on how beta is specified.  This energy discretization only couples together degrees of freedom which share an edge, hence yields the standard finite difference Poisson stencil over the entire interior of the computational domain.
+
+Slide 31 (boundary grid cells)
+In contrast to the preceding slide, we base the energy discretization over a boundary grid cell on the multilinear representation of the approximate solution.  Here, again, the N_i and N_j functions are the standard multilinear nodal basis functions.  We again account for the beta term using some appropriate cell-average of beta.  This energy discretization ends up coupling together all degrees of freedom within a boundary grid cell, hence yields a denser stencil along the boundary.
+
+Slide 32 (linear terms)
+We likewise discretize the linear terms of the energy based on the multilinear nodal basis functions, giving the following expressions.
+
+Slide 33 (linear system)
+Now that we have an analytic expression of the discrete energy in terms of the u_i degrees of freedom, we can solve the discrete minimization problem by setting the derivative of the energy to 0, yielding a symmetric semi-definite linear system, with a null-space consisting of constant functions.
+
+Slide 34 (stencil visualization)
+Here we present a graphical representation of the difference between the A matrix stencils at fully interior degrees of freedom, which are squared; and boundary degrees of freedom, which are circled.  A fully interior degree of freedom is only involved in interior grid cell energy discretizations, hence it only directly couples with its edge-wise neighbors.  On the other hand, a boundary degree of freedom will generally have a denser stencil by virtue of using the e-tilde boundary grid cell energy discretization.
+
+Slide 35 (outline)
+We will now see how our embedded Neumann discretization extends to our embedded Dirichlet discretization.
+
+Slide 36 (Dirichlet boundary conditions)
+We again use a variational formulation, which now becomes a constrained minimization problem.  The Dirichlet boundary conditions are enforced weakly and stipulate that, on the domain boundary, the integrals of the solution u and the prescribed Dirichlet data p against any test function mu should agree.
+
+Slide 37 (discretization)
+The solution space and energy are discretized almost exactly as for Neumann boundary conditions, so the remaining discussion focuses entirely on the treatment of the Dirichlet constraints.  Generally speaking, we discretize the Dirichlet constraints by enforcing them over all test functions in some finite dimensional discrete Lagrange multiplier space.
+
+Slide 38 (single-cell constraints)
+We begin by considering the following discrete Lagrange multiplier space Lambda^h_1: The set of piecewise functions constant over each boundary grid cell.  That is, Lambda^h_1 is spanned by the set of characteristic functions over the intersection of a grid cell and the domain boundary.
+
+Slide 39 (geometric interpretation)
+Taking the characteristic functions one by one, we see that this discretization yields an equivalent set of constraints, one for each boundary grid cell.  We call these single-cell constraints.  The single-cell constraint associated with a given boundary grid cell stipulates that the integrals of the approximate solution and the prescribed Dirichlet data over the intersection of the domain boundary and the grid cell must agree.  If we expand u^h out into its multilinear representation, we see that the single-cell constraints may be expressed as an underdetermined linear system.  Here, m denotes the number of single-cell constraints and n denotes the number of degrees of freedom.  Since each single-cell constraint is associated with a boundary grid cell, m likewise denotes the number boundary grid cells.
+
+Slide 40 (visualization)
+Each row of the constraint matrix corresponds to a single-cell constraint, and each such row has precisely 4 or 8, depending on 2D or 3D, nonzero entries corresponding to the multilinear nodal basis functions with support overlapping the corresponding boundary grid cell.  Thus, the B_{ij} entry in the constraint matrix is equal to the integral of the j^{th} multilinear nodal basis function over intersection of the domain boundary and the i^{th} boundary grid cell.  To emphasize, each single-cell constraint couples together all 4 or 8 corners of the corresponding boundary grid cell; this sparsity pattern will be important later.
+
+Slide 41 (saddle-point system)
+Discretizing the Dirichlet constraints as described and discretizing the energy as for Neumann boundary conditions yields a discrete quadratic program.  We may formulate this as an equivalent saddle-point system with a discrete Lagrange multiplier.  One could solve this saddle-point system directly, but we will see how, with a slight modification to the constraints, one can reduce to a symmetric positive definite system.
+
+Slide 42 (fundamental basis)
+A null-space method is one way to reduce the saddle-point system to an SPD system.  If we can find a matrix Z whose columns form a basis for the null space of the constraint matrix B, then we can reduce the saddle-point system to an SPD system for Z^T*A*Z.  Generally speaking, it is easy to find the requisite particular solution c to the constraint system that enters into this reduction.
+
+One way to obtain such a Z is through a fundamental basis of the constraint matrix B, where B is partitioned into a leading square m-by-m block B_m and a trailing m-by-(n-m) block B_{n-m}.  One then defines Z and c as shown.  The trick, then, is to arrange, through a judicious ordering of the constraints and of the degrees of freedom, for an easily invertible leading B_m block.
+
+Slide 43 (fundamental basis)
+Unfortunately, the single-cell constraint matrix does not possess such a desireable reordering.  The solution is to relax our single-cell constraint system by combining, or aggregating, groups of constraints.  Done smartly, one can obtain a diagonal leading block in the aggregate constraint matrix.
+
+Slide 44 (representative dofs)
+The general idea is to arrange for each aggregate constraint to possess a representative degree of freedom, a degree of freedom which participates in only that one constraint.  Ordering these representative degrees of freedom first yields a diagonal leading block in the aggregate constraint matrix.
+
+Slide 45 (constraint aggregation overview)
+This motivates the following general algorithm to aggregate the single-cell constraints, which can be broken down into two high-level stages.  First, we select an independent set of degrees of freedom with respect to the single-cell constraint system.  Second, we associate each single-cell constraint to the nearest independent dof and then sum all associated single-cell constraints into an aggregate constraint.  The independent dofs will be precisely the representative dofs discussed in the previous slide.
+
+Slide 46 (adjacency graph)
+Recall that a single-cell constraint couples together all 4 or 8 of its contained degrees of freedom.  Thus, two degrees of freedom are adjacent if they share a common boundary grid cell.
+
+Slide 47,48,49,50 (selecting independent dofs)
+Given the adjacency structure induced by the single-cell constraints, we can go about selecting an independent set of degrees of freedom any number of ways.  For example, we may select independent dofs greedily, one-by-one.
+
+Slide 51 (association of single-cell constraints)
+Next, we associate each single-cell constraint to the nearest independent degree of freedom.  Note that if a single-cell constraint actually contains an independent degree of freedom i, the nearest independent degree of freedom must, necessarily, be i, hence it will be associated with i.
+
+Slide 52 (summing rows)
+We sum each group of associated single-cell constraints together to give a single aggregate constraint.  As an example, here we depict a group of three boundary grid cells all associated with the green degree of freedom.  We sum the three corresponding rows of B to generate one of row of B'.
+
+Slide 53 (leading diagonal B'_m block)
+Hopefully by now, you see how each independent degree of freedom is actually representative, and hence the aggregate constraint matrix allows for a reordering of the degrees of freedom to give a leading diagonal block.
+
+Slide 54 (recap)
+So, just to recap: We aggregate the single-cell constraints into aggregate constraints to form an alternate constraint system.  This constraint system admits a very simple fundamental basis, and we use this fundamental basis to reduce the saddle-point system into an SPD system.
+
+Slide 55 (accuracy)
+Clearly, since we're generally summing several single-cell constraints to form a single aggregate constraint, the number of aggregate constraints will be much smaller than the number of single-cell constraints.  In effect, the aggregate constraints enforce the Dirichlet boundary conditions looser than the single-cell constraints, hence one might expect a loss of accuracy.  Fortunately, aggregate constraints still give a second order accurate solution.  The loss of accuracy simply manifests itself in a larger error constant.
+
+Slide 56 (outline)
+We will now see how our treatment of interfacial jump conditions is a simple extension of our treatments of Neumann and Dirichlet boundary conditions.
+
+Slide 57,58 (jump conditions)
+Our variational formulation incorporates the interfacial jump conditions as shown.  The jump condition in the normal derivative of the solution moves to the right-hand side, as for Neumann boundary conditions, while the jump condition in the value of the solution become a constraint similar to that for Dirichlet boundary conditions.
+
+Slide 59 (interface embedding)
+We embed our interface into a background Cartesian grid similar to how we embed the domain boundary.  The discretization can be viewed as two embedded domain discretizations, one for the interior domain and one for the exterior domain.  Thus, all grid cells along the interface as well as all degrees of freedom on these grid cells are duplicated between the interior discretization and exterior discretization.
+
+Slide 60 (discretization)
+The quadratic term of the energy is a sum of an interior energy term and an exterior energy term, and thus the interior and exterior degrees of freedom are decoupled with respect to this quadratic term.  The coupling between these regions is effected through the jump constraints.  As for Dirichlet boundary conditions, we discretize the jump constraints per interfacial grid cell, stipulating that, over the intersection of the interface and each interfacial grid cell, the integrals of the jump in u^h and the prescribed jump data must agree.
+
+Slide 61 (visualization)
+Each single-cell interfacial jump constraint couples together 8 or 16 degrees of freedom, half interior degrees of freedom and half exterior degrees of freedom.  Indeed, the corresponding constraint matrix can be partitioned into two blocks, one which corresponds to an interior Dirichlet constraint matrix and one which corresponds to an exterior Dirichlet constraint matrix.  The interior block is negated, since the jump in u is the the exterior value minus the interior value.
+
+Slide 62 (discretization)
+Again, as for the Dirichlet case, the discretization yields a saddle-point system.  The constraint aggregation algorithm described for Dirichlet constraints carries over with almost no change to interface jump constraints, hence we may use aggregated constraints to reduce the problem to a symmetric positive definite system.
+
+Slide 63 (outline)
+We will now briefly cover one of our many numerical results.
+
+Slide 64 (numerical results)
+Our numerical results confirm second order accuracy of u in L^{\infty} and first order accuracy of grad u in L^{\infty}.  We show an interface example from the paper, where the interface is a trefoil knot tube.  We use the given Poisson coefficients beta^- and beta^+, and set boundary conditions, jump conditions, and forcing terms according to the given exact solution.
+
+Slide 65 (numerical example)
+We computed an approximate solution for a variety of grid resolutions and observed an approximate numerical order of convergence of 1.938 in the solution and of 1.023 in the gradient.  Pictured are a plot of the interface and of z-slices of the approximate solution, clearly showing the sharp jumps along the interface.
+
+Slide 66 (future work)
+There's a lot of potential future research avenues to explore within the context of this numerical method.  We developed a relatively simple multigrid algorithm to solve the Z^T*A*Z SPD system, but I have some ideas how it could be improved.  Incidentally, my ideas to improve the multigrid algorithm may also lead to an alternate, denser discretization of the constraints that could improve accuracy.  Lastly, we're currently trying to apply this discretization to computational fluid dynamics.
+
+Slide 67 (acknowledgments)
+Obviously none of the preceding work would have been possible without a large number of people.  In addition to the coauthors of the aforementioned publications, the following individuals contributed in one way or another to the research I presented.

@@ -1,0 +1,244 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\title{Math 269A HW 1 Solutions}
+\date{2011 Fall}
+\author{Jeffrey Hellrung}
+
+\begin{document}
+
+\maketitle
+
+\section{Pen (or Pencil) and Paper}
+
+\begin{itemize}
+
+\item[1.] Consider the problem
+\begin{equation*}
+\frac{d\mathbf{u}}{dt} = \begin{pmatrix} -2 & 1 \\ \epsilon & -2 \end{pmatrix} \mathbf{u}, \quad \epsilon > 0.
+\end{equation*}
+Derive an estimate of the form
+\begin{equation*}
+\lVert \mathbf{u}(t) \rVert_{\infty} \leq K \lVert \mathbf{u}(0) \rVert_{\infty}.
+\end{equation*}
+Discuss the effect of the parameter $\epsilon$ in your estimate. What is the smallest constant $K$?
+
+{\bf Solution}
+
+Let
+\begin{equation*}
+\mathbf{A} := \begin{pmatrix} -2 & 1 \\ \epsilon & -2 \end{pmatrix}.
+\end{equation*}
+One finds eigenvalue-eigenvector pairs of $\mathbf{A}$ to be
+\begin{equation*}
+\left( \lambda^{\pm}, \mathbf{v}^{\pm} \right) := \left( -2 \pm \sqrt{\epsilon}, \begin{pmatrix} 1 \\ \pm \sqrt{\epsilon} \end{pmatrix} \right),
+\end{equation*}
+from which we derive the solution $\mathbf{u}(t)$ to be given by
+\begin{equation*}
+\mathbf{u}(t) = \frac{1}{2 \sqrt{\epsilon}} \begin{pmatrix} \sqrt{\epsilon} \left( e^{\lambda^+t} + e^{\lambda^-t} \right) & e^{\lambda^+t} - e^{\lambda^-t} \\ \epsilon \left( e^{\lambda^+t} - e^{\lambda^-t} \right) & \sqrt{\epsilon} \left( e^{\lambda^+t} + e^{\lambda^-t} \right) \end{pmatrix} \mathbf{u}(0).
+\end{equation*}
+Note that we must have $\epsilon < 4$ for a decaying solution.
+
+We can bound the solution in the infinity-norm as
+\begin{align*}
+\lVert \mathbf{u}(t) \rVert_{\infty}
+& \leq \frac{1}{2 \sqrt{\epsilon}} \max \left\{ \sqrt{\epsilon} \left( e^{\lambda^+t} + e^{\lambda^-t} \right) + e^{\lambda^+t} - e^{\lambda^-t}, \epsilon \left( e^{\lambda^+t} - e^{\lambda^-t} \right) + \sqrt{\epsilon} \left( e^{\lambda^+t} + e^{\lambda^-t} \right) \right\} \lVert \mathbf{u}(0) \rVert_{\infty} \\
+& = \left( \frac{1}{2} \left( e^{\lambda^+t} + e^{\lambda^-t} \right) + \frac{1}{2} \max \left\{ \sqrt{\epsilon}, \frac{1}{\sqrt{\epsilon}} \right\} \left( e^{\lambda^+t} - e^{\lambda^-t} \right) \right) \lVert \mathbf{u}(0) \rVert_{\infty}.
+\end{align*}
+One finds this latter expression monotically decreases in $t$ when $\epsilon \leq 2$ (hence one may take $K$ = 1), but when $\epsilon > 2$, we find a maximum at
+\begin{equation*}
+t^* = \frac{1}{2 \sqrt{\epsilon}} \log \frac{\sqrt{\epsilon} + (\epsilon - 2)}{\sqrt{\epsilon} - (\epsilon - 2)}
+\end{equation*}
+which necessitates $K > 1$.
+
+\item[2.] Consider the problem
+\begin{equation*}
+\frac{d\mathbf{u}}{dt} = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix} \mathbf{u}, \quad t > 0, \quad \mathbf{u}(0) = \mathbf{f}.
+\end{equation*}
+Prove that the leap frog method converges for this problem and provide an upper bound for the magnitude of the error in terms of $\mathbf{f}$, the truncation error of the method used in the first step, and higher derivatives of the solution.
+
+{\bf Solution}
+
+The leap frog method is given by
+\begin{equation*}
+\frac{\mathbf{u}^{n+1} - \mathbf{u}^{n-1}}{2 \Delta t} = \mathbf{A} \mathbf{u}^n, \quad \mathbf{A} := \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}.
+\end{equation*}
+Since
+\begin{align*}
+\frac{\mathbf{u} \left( t^{n+1} \right) - \mathbf{u} \left( t^{n-1} \right)}{2 \Delta t}
+& = \frac{d \mathbf{u}}{dt} \left( t^n \right) + \frac{1}{6} \mathbf{u}^{(3)} \left( t^n \right) \Delta t^2 + \mathcal{O} \left( \Delta t^4 \right) \\
+& = \mathbf{A} \mathbf{u} \left( t^n \right) + \frac{1}{6} \mathbf{u}^{(3)} \left( t^n \right) \Delta t^2 + \mathcal{O} \left( \Delta t^4 \right) \\
+\end{align*}
+we obtain the following difference equation for the error $\mathbf{e}^n := \mathbf{u} \left( t^n \right) - \mathbf{u}^n$:
+\begin{equation*}
+\mathbf{e}^{n+1} = \mathbf{e}^{n-1} + 2 \Delta t \mathbf{A} \mathbf{e}^n + \frac{1}{3} \mathbf{u}^{(3)} \left( t^n \right) \Delta t^3 + \mathcal{O} \left( \Delta t^5 \right).
+\end{equation*}
+To solve the above difference equation, we first reformulate it as a first order difference equation:
+\begin{equation*}
+\mathbf{E}^n = \mathcal{A} \mathbf{E}^{n-1} + \mathbf{C}^n
+\end{equation*}
+where
+\begin{equation*}
+\mathbf{E}^n := \begin{pmatrix} \mathbf{e}^{n+1} \\ \mathbf{e}^n \end{pmatrix}, \quad \mathcal{A} := \begin{pmatrix} 2 \Delta t \mathbf{A} & \mathbf{I}_{2 \times 2} \\ \mathbf{I}_{2 \times 2} & \mathbf{0}_{2 \times 2} \end{pmatrix}, \quad \mathbf{C}^n := \begin{pmatrix} \frac{1}{3} \mathbf{u}^{(3)} \left( t^n \right) \Delta t^3 + \mathcal{O} \left( \Delta t^5 \right) \\ \mathbf{0}_{2} \end{pmatrix}.
+\end{equation*}
+One can easily verify then that
+\begin{equation*}
+\mathbf{E}^n = \mathcal{A}^n \mathbf{E}^0 + \sum_{k = 0}^{n-1} \mathcal{A}^k \mathbf{C}^{n-k}.
+\end{equation*}
+It follows that
+\begin{align*}
+\left\lVert \mathbf{e}^{n+1} \right\rVert
+& \leq \left\lVert \mathbf{E}^n \right\rVert \\
+& \leq \left\lVert \mathcal{A}^n \right\rVert \left\lVert \mathbf{E}^0 \right\rVert + \left( \max_{n} \left\lVert \mathbf{C}^n \right\rVert \right) \sum_{k = 0}^{n-1} \left\lVert \mathcal{A}^k \right\rVert \\
+& = \left\lVert \mathcal{A}^n \right\rVert \left\lVert \mathbf{e}^1 \right\rVert + \left( \frac{1}{3} \left\lVert \mathbf{u}^{(3)} \right\rVert \Delta t^3 + \mathcal{O} \left( \Delta t^5 \right) \right) \sum_{k = 0}^{n-1} \left\lVert \mathcal{A}^k \right\rVert.
+\end{align*}
+It now remains to bound $\left\lVert \mathcal{A}^k \right\rVert$. For this, it is sufficient to consider, specifically, $\left\lVert \mathcal{A} \right\rVert_{\infty} = 1 + 2 \Delta t$. This gives
+\begin{equation*}
+\left\lVert \mathcal{A}^n \right\rVert_{\infty} \leq \left\lVert \mathcal{A} \right\rVert_{\infty}^n \leq e^{2 \Delta t n}
+\end{equation*}
+and
+\begin{equation*}
+\sum_{k = 0}^{n-1} \left\lVert \mathcal{A}^k \right\rVert_{\infty} \leq \sum_{k = 0}^{n-1} \left\lVert \mathcal{A} \right\rVert_{\infty}^k \leq n e^{2 \Delta t n}.
+\end{equation*}
+This finally gives the bound
+\begin{equation*}
+\left\lVert \mathbf{u} \left( t^{n+1} \right) - \mathbf{u}^{n+1} \right\rVert \leq e^{2 \Delta t n} \left\lVert \mathbf{e}^1 \right\rVert_{\infty} + n e^{2 \Delta t n} \left( \frac{1}{3} \left\lVert \mathbf{u}^{(3)} \right\rVert_{\infty} \Delta t^3 + \mathcal{O} \left( \Delta t^5 \right) \right).
+\end{equation*}
+
+\item[3.] Derive a one-step formula for RK3 in the form
+\begin{equation*}
+v^{n+1} = P(z) v^n,
+\end{equation*}
+i.e., specify $P(z)$.
+
+{\bf Solution}
+
+For any RK3 method, $P(z) = 1 + z + \frac{1}{2} z^2 + \frac{1}{6} z^3$.
+
+\item[4.] Consider the system
+\begin{equation} \label{eq:4u}
+\frac{\partial \mathbf{u}}{\partial t} = \mathbf{A}(t) \mathbf{u} + \mathbf{F}(t), \quad t > t_0, \quad \mathbf{u} \left( t_0 \right) = \mathbf{u}_0
+\end{equation}
+and the homogeneous version
+\begin{equation} \label{eq:4v}
+\frac{\partial \mathbf{v}}{\partial t} = \mathbf{A}(t) \mathbf{v}, \quad t > t_0, \quad \mathbf{v} \left( t_0 \right) = \mathbf{v}_0.
+\end{equation}
+\eqref{eq:4v} has a unique solution for each $\mathbf{v}_0$, specifically, $\mathbf{v}(t) = \mathbf{S} \left( t,t_0 \right) \mathbf{v}_0$.
+
+\begin{itemize}
+\item[a.] Show the following.
+\begin{itemize}
+\item[(i)] $\mathbf{S} \left( t_0, t_0 \right) = \mathbf{I}$
+\item[(ii)] $\mathbf{S} \left( t_2, t_0 \right) = \mathbf{S} \left( t_2, t_1 \right) \mathbf{S} \left( t_1, t_0 \right)$
+\item[(iii)] $\left\lVert \mathbf{S} \left( t, t_0 \right) \right\rVert_2^2 \leq K e^{\alpha \left( t - t_0 \right)}$ for $\alpha = \max_t \rho \left( A^* + A \right)$
+\item[(iv)] $\frac{\partial \mathbf{S}}{\partial t} \left( t, t_0 \right) = \mathbf{A}(t) \mathbf{S} \left( t, t_0 \right)$
+\item[(v)] $\frac{\partial \mathbf{S}}{\partial t_0} \left( t, t_0 \right) = -\mathbf{S} \left( t, t_0 \right) \mathbf{A} \left( t_0 \right)$
+\end{itemize}
+\item[b.] Show that the solution $\mathbf{u}(t)$ satisfies
+\begin{equation*}
+\mathbf{u}(t) = \mathbf{S} \left( t, t_0 \right) \mathbf{u}_0 + \int_{t_0}^t \mathbf{S}(t,\tau) \mathbf{F}(\tau) d\tau.
+\end{equation*}
+\item[c.] Show that
+\begin{equation*}
+\left\lVert \mathbf{u}(t) \right\rVert_2 \leq \left\lVert \mathbf{u}_0 \right\rVert_2 e^{\frac{\alpha}{2} \left( t - t_0 \right)} + \phi^* \left( t, t_0 \right) \max_{t_0 \leq \tau \leq t} \left\lVert \mathbf{F}(t) \right\rVert_2
+\end{equation*}
+where
+\begin{equation*}
+\phi^* \left( t, t_0 \right) = \begin{cases} \frac{2}{\alpha} \left( e^{\frac{\alpha}{2} \left( t - t_0 \right)} - 1 \right), & \alpha \neq 0 \\ t - t_0, & \alpha = 0 \end{cases}.
+\end{equation*}
+\end{itemize}
+
+{\bf Solution}
+
+\begin{itemize}
+\item[a.]
+\begin{itemize}
+\item[(i)] Since $\mathbf{v}(0) = \mathbf{v}_0$ and $\mathbf{v}(t) = \mathbf{S} \left( t, t_0 \right) \mathbf{v}_0$ for all $t \geq t_0$ (so, specifically, when $t = t_0$), we must have $\mathbf{v}_0 = \mathbf{S} \left( t_0, t_0 \right) \mathbf{v}_0$ for all $\mathbf{v}_0$, hence $\mathbf{S} \left( t_0, t_0 \right) = \mathbf{I}$.
+\item[(ii)] By uniqueness, $\mathbf{S} \left( t_2, t_0 \right) \mathbf{v}_0 = \mathbf{v} \left( t_2 \right) = \mathbf{S} \left( t_2, t_1 \right) \mathbf{v} \left( t_1 \right)$, and $\mathbf{v} \left( t_1 \right) = \mathbf{S} \left( t_1, t_0 \right) \mathbf{v}_0$. Thus, $\mathbf{S} \left( t_2, t_0 \right) \mathbf{v}_0 = \mathbf{S} \left( t_2, t_1 \right) \mathbf{S} \left( t_1, t_0 \right) \mathbf{v}_0$ for all $\mathbf{v}_0$, hence $\mathbf{S} \left( t_2, t_0 \right) = \mathbf{S}\left( t_2, t_1 \right) \mathbf{S} \left( t_1, t_0 \right)$.
+\item[(iii)] Observe that
+\begin{equation*}
+\frac{\partial}{\partial t} \lVert \mathbf{v} \rVert_2^2 = 2 \mathbf{v} \cdot \frac{\partial \mathbf{v}}{\partial t} = 2 \mathbf{v} \cdot \mathbf{A} \mathbf{v} = \mathbf{v} \cdot \left( \mathbf{A} + \mathbf{A}^* \right) \mathbf{v} \leq \rho \left( \mathbf{A} + \mathbf{A}^* \right) \lVert \mathbf{v} \rVert_2^2
+\end{equation*}
+(since $\mathbf{A} + \mathbf{A}^*$ is self-adjoint). Thus, by Gronwall's inequality,
+\begin{equation*}
+\lVert \mathbf{v}(t) \rVert_2^2 \leq \left\lVert \mathbf{v}_0 \right\rVert_2^2 \exp \left( \int_{t_0}^t \rho \left( \mathbf{A}(s) + \mathbf{A}(s)^* \right) ds \right) \leq \left\lVert \mathbf{v}_0 \right\rVert_2^2 e^{\alpha \left( t - t_0 \right)}
+\end{equation*}
+where $\alpha = \max_{t_0 \leq s \leq t} \rho \left( \mathbf{A}(s) + \mathbf{A}(s)^* \right)$. Using this, we obtain
+\begin{equation*}
+\left\lVert \mathbf{S} \left( t, t_0 \right) \mathbf{v}_0 \right\rVert_2 = \left\lVert \mathbf{v}(t) \right\rVert_2 \leq \left\lVert \mathbf{v}_0 \right\rVert_2 e^{\frac{1}{2} \alpha \left( t - t_0 \right)}
+\end{equation*}
+and hence
+\begin{equation*}
+\left\lVert \mathbf{S} \left( t, t_0 \right) \right\rVert_2 = \max \left\{ \left\lVert \mathbf{S} \left( t, t_0 \right) \mathbf{v}_0 \right\rVert_2 : \left\lVert \mathbf{v}_0 \right\rVert_2 = 1 \right\} \leq e^{\frac{\alpha}{2} \left( t - t_0 \right)}.
+\end{equation*}
+\item[(iv)] Starting with $\mathbf{v}(t) = \mathbf{S}(t,s) \mathbf{v}(s)$ and differentiating with respect to $t$ yields $\frac{\partial \mathbf{v}}{\partial t}(t) = \frac{\partial \mathbf{S}}{\partial t}(t,s) \mathbf{v}(s)$. But we also have that $\frac{\partial \mathbf{v}}{\partial t}(t) = \mathbf{A}(t) \mathbf{v}(t) = \mathbf{A}(t) \mathbf{S}(t,s) \mathbf{v}(s)$. Hence, $\frac{\partial \mathbf{S}}{\partial t}(t,s) \mathbf{v}(s) = \mathbf{A}(t) \mathbf{S}(t,s) \mathbf{v}(s)$ for all $\mathbf{v}(s)$, from which we conclude that $\frac{\partial \mathbf{S}}{\partial t}(t,s) = \mathbf{A}(t) \mathbf{S}(t,s)$.
+\item[(v)] Starting with $\mathbf{v}(t) = \mathbf{S}(t,s) \mathbf{v}(s)$ and differentiating with respect to $s$ yields
+\begin{equation*}
+\mathbf{0} = \frac{\partial \mathbf{S}}{\partial s}(t,s) \mathbf{v}(s) + \mathbf{S}(t,s) \frac{\partial \mathbf{v}}{\partial s}(s) = \frac{\partial \mathbf{S}}{\partial s}(t,s) + \mathbf{S}(t,s) \mathbf{A}(s) \mathbf{v}(s),
+\end{equation*}
+which must hold for all $\mathbf{v}(s)$, hence $\frac{\partial \mathbf{S}}{\partial s}(t,s) = -\mathbf{S}(t,s) \mathbf{A}(s)$.
+\end{itemize}
+\item[b.] Indeed, if $\mathbf{u}(t) = \mathbf{S} \left( t, t_0 \right) \mathbf{u}_0 + \int_{t_0}^t \mathbf{S}(t,\tau) \mathbf{F}(\tau) d\tau$, then
+\begin{equation*}
+\mathbf{u} \left( t_0 \right) = \mathbf{S} \left( t_0, t_0 \right) \mathbf{u}_0 + 0 = \mathbf{u}_0
+\end{equation*}
+and
+\begin{align*}
+\frac{\partial \mathbf{u}}{\partial t}(t)
+& = \frac{\partial \mathbf{S}}{\partial t} \left( t, t_0 \right) \mathbf{u}_0 + \int_{t_0}^t \frac{\partial \mathbf{S}}{\partial t}(t,\tau) \mathbf{F}(\tau) d\tau + \mathbf{S}(t,t) \mathbf{F}(t) \\
+& = \mathbf{A}(t) \mathbf{S} \left( t, t_0 \right) \mathbf{u}_0 + \int_{t_0}^t \mathbf{A}(t) \mathbf{S}(t,\tau) \mathbf{F}(\tau) d\tau + \mathbf{F}(t) \\
+& = \mathbf{A}(t) \left( \mathbf{S} \left( t, t_0 \right) \mathbf{u}_0 + \int_{t_0}^t \mathbf{S}(t,\tau) \mathbf{F}(\tau) d\tau \right) + \mathbf{F}(t) \\
+& = \mathbf{A}(t) \mathbf{u}(t) + \mathbf{F}(t), 
+\end{align*}
+as desired.
+\item[c.] This inequality follows directly from the expression for $\mathbf{u}(t)$ in {b.} and the bound on $\left\lVert \mathbf{S} \left( t, t_0 \right) \right\rVert_2$ in {a.~(iii)}:
+\begin{align*}
+\left\lVert \mathbf{u}(t) \right\rVert_2
+& \leq \left\lVert \mathbf{S} \left( t, t_0 \right) \right\rVert_2 \left\lVert \mathbf{u}_0 \right\rVert_2 + \int_{t_0}^t \left\lVert \mathbf{S}(t,\tau) \right\rVert_2 d\tau \max_{t_0 \leq \tau \leq t} \left\lVert \mathbf{F}(\tau) \right\rVert_2 \\
+& \leq e^{\frac{\alpha}{2} \left( t - t_0 \right)} \left\lVert \mathbf{u}_0 \right\rVert_2 + \phi^* \left( t, t_0 \right) \max_{t_0 \leq \tau \leq t} \left\lVert \mathbf{F}(\tau) \right\rVert_2
+\end{align*}
+as
+\begin{equation*}
+\int_{t_0}^t e^{\frac{\alpha}{2} \left( \tau - t_0 \right)} d\tau = \begin{cases} \frac{2}{\alpha} \left( e^{\frac{\alpha}{2} \left( t - t_0 \right)} - 1 \right), & \alpha \neq 0 \\ t - t_0, & \alpha = 0 \end{cases} =: \phi^* \left( t, t_0 \right).
+\end{equation*}
+\end{itemize}
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] Write a program to solve
+\begin{equation*}
+\frac{d \mathbf{u}}{dt} = \begin{pmatrix} -2 & 1 \\ \epsilon & -2 \end{pmatrix} \mathbf{u}, \quad \epsilon > 0
+\end{equation*}
+using the forward Euler method.  Run it with initial data $\mathbf{u}(0) = (1,3)^t$, $\Delta t = 0.01$, and enough steps to reach $T = 3.0$. Display your results for $\epsilon = 5, 4, 0.1, 0$. Discuss your numerical observations with respect to the bounds derived in the Pen and Paper problem.
+
+{\bf Solution}
+
+We expect an exponentially increasing solution when $\epsilon = 5$, a solution which approaches a non-zero steady-state when $\epsilon = 4$, and exponentially decaying solutions when $\epsilon = 0.1$ or $\epsilon = 0$.
+
+\item[2.] Write a program to solve
+\begin{equation*}
+\frac{d \mathbf{u}}{dt} = \begin{pmatrix} a & 1 \\ -1 & a \end{pmatrix} \mathbf{u}, \quad t > 0
+\end{equation*}
+with the leap frog method. Use the forward Euler method for the first step. (a) Demonstrate the order of accuracy is $2$ if $a = 0$. (b) Study the solutions for $a < 0$ and explain the numerical behavior.
+
+{\bf Solution}
+
+(a) One can demonstrate the order of accuracy by computing a numerical solution for a spectrum of time step sizes $\Delta t$, plotting the logarithm of the error at some fixed final time $T$ versus the logarithm of the time step size $\Delta t$, and verifying that the slope of a line through these plotted points is $-2$. (b) When $a < 0$, leap frog introduces artificial oscillations into the numerical solution that quickly become unstable.
+
+\item[3.] Write a program that plots the boundary of the region $\left\{ z \in \mathbb{C} : \left\lvert P(z) \right\rvert \leq 1 \right\}$ for RK3.
+
+{\bf Solution}
+
+One easy way to do this is to plot $z(\theta)$, where $z(\theta)$ is defined implitly as the solution to $P(z(\theta)) = e^{i \theta}$, $\theta \in [0, 2\pi]$.
+
+\end{itemize}
+
+\end{document}
