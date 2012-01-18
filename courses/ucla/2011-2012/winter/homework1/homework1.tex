@@ -71,11 +71,11 @@ A = \begin{pmatrix} 2 & 3 \\ 3 & 2 \end{pmatrix}.
 
 \begin{itemize}
 \item[1.] Implement the finite difference schemes in Problem 4.\ in the Theory section for $x \in [0,1]$, $t \in [0,T]$ for some final time $T$, $u(x,0) = u_0(x)$, and \emph{periodic} boundary conditions.
-\item[2.] Investigate the convergence of each scheme for $a = 1$ and $T = 1$. Use an appropriate relation between $k$ and $h$ to ensure convergence (if possible). Try using both a smooth initial condition (e.g., $u_0(x) = \sin(2 \pi x)$); a non-smooth initial condition (e.g., $u_0(x) = 1 - 2 \abs{x - 1/2}$); and a discontinuous initial condition (e.g., $u_0(x) = 0$ if $\abs{x - 1/2} > 1/4$ and $u_0(x) = 1$ if $\abs{x - 1/2} < 1/4$). Use the discrete $L^2$ norm to measure the error between your numerical solution and the true solution:
+\item[2.] Investigate the convergence of each scheme for $a = 1$ and $T = 1$. Set $k/h =: \lambda$ to be constant, and demonstrate which values of $\lambda$ cause the scheme to converge and which to diverge. If no such $\lambda$ gives convergence, find an alternate relation between $k$ and $h$ which does ensure convergence (if possible). Try using both a smooth initial condition (e.g., $u_0(x) = \sin(2 \pi x)$); a non-smooth initial condition (e.g., $u_0(x) = 1 - 2 \abs{x - 1/2}$); and a discontinuous initial condition (e.g., $u_0(x) = 0$ if $\abs{x - 1/2} > 1/4$ and $u_0(x) = 1$ if $\abs{x - 1/2} < 1/4$). Use the discrete $L^2$ norm to measure the error between your numerical solution and the true solution:
 \begin{equation*}
 \norm{w}_h = \left( h \sum_m \abs{w_m}^2 \right)^{1/2}.
 \end{equation*}
-[Note: Due to periodicity, be sure to avoid double-counting the contributions at $x = 0$ and $x = 1$!] Plot the numerical solutions from each scheme at $t = T$ when $h = 1/100$. Which scheme do you think is better and why?
+[Note: Due to periodicity, be sure to avoid double-counting the contributions at $x = 0$ and $x = 1$!] Plot the numerical solutions from each scheme at $t = T$ when $h = 1/100$. Summarize your results. Which scheme do you think is better and why?
 \end{itemize}
 
 \end{document}
