@@ -2,5 +2,6 @@
 *.bbl
 *.blg
 *.dvi
+*.gz
 *.log
 *.ps
