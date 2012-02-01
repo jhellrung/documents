@@ -1,0 +1,76 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 2}
+\date{February 1, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] (Strikwerda 2.1.9.) Finite Fourier Transforms. For a function $v_m$ defined on the integers, $m = 0, 1, \dotsc, M-1$, we can define the Fourier transform as
+\begin{equation*}
+\hat{v}_{\ell} = \sum_{m=0}^{M-1} e^{-2 i \pi \ell m / M} v_m \quad \text{for } \ell = 0, \dotsc, M-1.
+\end{equation*}
+For this transform prove the Fourier inversion formula
+\begin{equation*}
+v_m = \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell},
+\end{equation*}
+and the Pareseval's relation
+\begin{equation*}
+\sum_{m=0}^{M-1} \abs{v_m}^2 = \frac{1}{M} \sum_{\ell=0}^{M-1} \abs{\hat{v}_{\ell}}^2.
+\end{equation*}
+Note that $v_m$ and $\hat{v}_{\ell}$ can be defined for all integers by making them periodic with period $M$.
+
+\item[2.] Prove convergence for the Beam-Warming scheme
+\begin{equation*}
+u^{n+1}_m = u^n_m - \frac{ak}{2h} \left( 3 u^n_m - 4 u^n_{m-1} + u^n_{m-2} \right) + \frac{a^2 k^2}{2h^2} \left( u^n_m - 2 u^n_{m-1} + u^n_{m-2} \right)
+\end{equation*}
+used to approximate solutions to $u_t + au_x = 0$ for $a > 0$.
+
+\item[3.] (Strikwerda 2.2.4.) Show that the box scheme
+\begin{equation*}
+\frac{1}{2k} \left( \left( v^{n+1}_m + v^{n+1}_{m+1} \right) - \left( v^n_m + v^n_{m+1} \right) \right) + \frac{a}{2h} \left( \left( v^{n+1}_{m+1} - v^{n+1}_m \right) + \left( v^n_{m+1} - v^n_m \right) \right) = f^n_m
+\end{equation*}
+is consistent with the one-way wave equation $u_t + au_x = f$ and is stable for all values of $\lambda$.
+
+\item[4.] (Strikwerda 2.2.6.) Determine the stability of the following scheme, sometimes called the Euler backward scheme, for $u_t + au_x = f$:
+\begin{align*}
+v^{n+1/2}_m & = v^n_m - \frac{a \lambda}{2} \left( v^n_{m+1} - v^n_{m-1} \right) + k f^n_m, \\
+v^{n+1}_m & = v^n_m - \frac{a \lambda}{2} \left( v^{n+1/2}_{m+1} - v^{n+1/2}_{m-1} \right) k f^{n+1}_m.
+\end{align*}
+The variable $v^{n+1/2}$ is a temporary variable, as is $\tilde{v}$ in Example 2.2.5.
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] (Strikwerda 2.3.3.) Solve the initial value problem for equation
+\begin{equation*}
+u_t + \left( 1 + \frac{1}{4} \left( 3 - x \right) \left( 1 + x \right) \right) u_x = 0
+\end{equation*}
+on the interval $[-1,3]$ with the Lax-Friedrichs scheme (2.3.1) with $\lambda$ equal to $0.8$. Demonstrate that the instability phenomena occur where $\abs{a(t,x) \lambda}$ is greater than $1$ and where there are discontinuities in the solution. Use the same initial data as in Exercise 2.3.1. Specify the solution to be $0$ at both boundaries. Compute up to the time of $0.2$ and use successively smaller values of $h$ to show the location of the instability.
+
+\item[2.] Investigate (via numerical evidence) the convergence (or lack thereof) of the forward-time central-space scheme
+\begin{equation*}
+\frac{1}{k} \left( u^{n+1}_m - u^n_m \right) + \frac{a}{2h} \left( u^n_{m+1} - u^n_{m-1} \right) = 0
+\end{equation*}
+in the $L^{\infty}$-norm. Use the same scenarios from Homework 1, e.g., compare your results using smooth, continuous-but-non-smooth, and discontinuous initial conditions. Be sure to restrict the relation between $k$ and $h$ appropriately. Compare convergence in the $L^{\infty}$-norm with convergence in the $L^2$-norm.
+
+\end{itemize}
+
+\end{document}
