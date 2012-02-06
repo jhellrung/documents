@@ -1,0 +1,229 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Theorem}
+
+\title{Sufficient Conditions for a Symmetric Definite Multigrid V-Cycle for Preconditioned Conjugate Gradient}
+\date{July, 2011}
+\author{Jeffrey Lee Hellrung, Jr.}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We give sufficient yet very general conditions on the relaxer in a multigrid v-cycle to ensure symmetry and definiteness of the v-cycle when viewed as a linear operator on the right-hand side. Symmetry and definiteness of the v-cycle are necessary when it is used as a preconditioner for conjugate gradient. We additionally show that a wide variety of common relaxers indeed satisfy these sufficient conditions.
+\end{abstract}
+
+\section{Introduction}
+
+Let us consider the solution to the linear system $A x = b$ for symmetric $A$ with initial guess $x = x_0$. Let $\widetilde{A}$ denote a symmetric matrix. Typically, $\widetilde{A}$ will be an approximate inverse to $A$; for example, in a multigrid context, $\widetilde{A}$ may be an approximate or exact coarse grid inverse conjugated with restriction and prolongation operators. We will make additional assumptions on $A$ and $\widetilde{A}$ later as needed.
+
+A \emph{relaxer} is given by a pair of matrices $\left( S, T \right)$ such that the \emph{action} of the relaxer is effected by $x \mapsto S x + T b$. Examples of such relaxers are those derived from a splitting $A = P - Q$ with $P$ invertible in which $S = P^{-1} Q$ and $T = P^{-1}$; we will investigate this class of relaxers in more detail later. We borrow the term ``relaxer'' from multigrid theory, where the term ``smoother'' is also used, even though we will not be directly concerned with any actual relaxation (or smoothing) properties.
+
+Given $\widetilde{A}$ and given a \emph{pre-relaxer} $\left( S_0, T_0 \right)$ and \emph{post-relaxer} $\left( S_1, T_1 \right)$ (together referred to as a \emph{relaxer pair}), a complete \emph{cycle} is given by
+\begin{equation} \label{eq:cycle}
+\begin{split}
+x^{(1)} & \leftarrow S_0 x_{\text{in}} + T_0 b; \quad \text{(pre-relaxation)} \\
+x^{(2)} & \leftarrow x^{(1)} + \widetilde{A} \left( b - A x^{(1)} \right); \quad \text{($\widetilde{A}$-correction)} \\
+x_{\text{out}} & \leftarrow S_1 x^{(2)} + T_1 b; \quad \text{(post-relaxation)}
+\end{split}
+\end{equation}
+or, taken altogether,
+\begin{subequations} \label{eq:LM}
+\begin{align}
+x_{\text{out}}
+  & \leftarrow S_1 \left( I - \widetilde{A} A \right) S_0 x_{\text{in}} + \left( S_1 \left( \widetilde{A} - \widetilde{A} A T_0 + T_0 \right) + T_1 \right) b \\
+  & =: L x_{\text{in}} + M b,
+\end{align}
+\end{subequations}
+where $I$ denotes the identity matrix. The \emph{iteration matrix} of the cycle \eqref{eq:cycle} is thus $M$ (via setting $x_{\text{in}} = 0$). For brevity of exposition, we say that a relaxer pair $\left\{ \left( S_i, T_i \right) \right\}_{i = 0,1}$ and the corresponding cycle \eqref{eq:cycle} are symmetric/(semi-)definite precisely when the corresponding iteration matrix $M$ \eqref{eq:LM} is symmetric/(semi-)definite.
+
+\section{Symmetry}
+
+We first investigate the conditions under which the cycle \eqref{eq:cycle} is symmetric. The next theorem gives relatively simple such sufficient conditions.
+
+\begin{theorem} \label{thm:symmetry}
+The iteration matrix $M$ \eqref{eq:LM} of the cycle \eqref{eq:cycle} is symmetric if
+\begin{itemize}
+\item[(S0)] $S_1 + T_0^t A = I$; and
+\item[(S1)] $T_0 + T_1 = \left( T_0 + T_1 \right)^t$.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Condition (S0) allows us to write
+\begin{subequations}
+\begin{align*}
+M & = S_1 \left( \widetilde{A} - \widetilde{A} A T_0 + T_0 \right) + T_1 \\
+  & = S_1 \widetilde{A} \left( I - A T_0 \right) + S_1 T_0 + T_1 \\
+  & = S_1 \widetilde{A} S_1^t + \left( I - T_0^t A \right) T_0 + T_1 \\
+  & = S_1 \widetilde{A} S_1^t + \left( T_0 + T_1 \right) - T_0^t A T_0,
+\end{align*}
+\end{subequations}
+which is clearly symmetric given condition (S1) and the symmetry of $A$ and $\widetilde{A}$.
+\end{proof}
+
+Conditions (S0) and (S1) in Theorem \ref{thm:symmetry} are actually more general than necessary, as we are typically only interested in \emph{consistent} relaxers, that is, those satisfying $S + T A = I$ (i.e., $S x + T b = x$ whenever $x$ satisfies $A x = b$). In this context, condition (S0) is equivalent to $T_0 = T_1^t$ whenever $A$ is invertible. As this simple transpose relation additionally implies condition (S1), we will, from now on, assume $T_0 = T_1^t$ for all subsequent relaxer pairs $\left\{ \left( S_i, T_i \right) \right\}_{i = 0,1}$, and by Theorem \ref{thm:symmetry} all such relaxer pairs are symmetric. Together with the consistency relation $S_i + T_i A = I$, we see that such symmetric relaxer pairs are entirely determined by the matrix $R := T_0$ via the relations
+\begin{subequations} \label{eq:RST}
+\begin{align}
+\left( S_0, T_0 \right) & := \left( I - R A, R \right), \\
+\left( S_1, T_1 \right) & := \left( I - R^t A, R^t \right).
+\end{align}
+\end{subequations}
+Expressing $L$ and $M$ in terms of $R$ then gives
+\begin{subequations} \label{eq:RLM}
+\begin{align}
+L & = \left( I - R^t A \right) \left( I - \widetilde{A} A \right), \\
+M & = \left( I - R^t A \right) \widetilde{A} \left( I - A R \vphantom{I - R^t A} \right) + \left( R + R^t - R^t A R \right).
+\end{align}
+\end{subequations}
+
+\section{Composition}
+
+We are also interested in symmetry-preserving compositions of symmetric relaxer pairs. We compose two relaxer pairs $\left\{ \left( S^a_i, T^a_i \right) \right\}_{i = 0,1}$ and $\left\{ \left( S^b_i, T^b_i \right) \right\}_{i = 0,1}$ (specified by $R^a$ and $R^b$, respectively, via \eqref{eq:RST}) into a \emph{composed cycle} as
+\begin{equation} \label{eq:composed_cycle}
+\begin{split}
+x^{(1)} & \leftarrow S^a_0 x_{\text{in}} + T^a_0 b; \quad \text{($a$-pre-relaxation)} \\
+x^{(2)} & \leftarrow S^b_0 x^{(1)} + T^b_0 b; \quad \text{($b$-pre-relaxation)} \\
+x^{(3)} & \leftarrow x^{(2)} + \widetilde{A} \left( b - A x^{(2)} \right); \quad \text{($\widetilde{A}$-correction)} \\
+x^{(4)} & \leftarrow S^b_1 x^{(3)} + T^b_1 b; \quad \text{($b$-post-relaxation)} \\
+x_{\text{out}} & \leftarrow S^a_1 x^{(4)} + T^a_1 b; \quad \text{($a$-post-relaxation)}
+\end{split}
+\end{equation}
+giving a \emph{composed relaxer pair}
+\begin{subequations} \label{eq:composed_relaxer_pair}
+\begin{align}
+\left( S_0, T_0 \right) & := \left( S^b_0 S^a_0, S^b_0 T^a_0 + T^b_0 \right), \\
+\left( S_1, T_1 \right) & := \left( S^a_1 S^b_1, S^a_1 T^b_1 + T^a_1 \right).
+\end{align}
+\end{subequations}
+This composed relaxer pair can be specified by
+\begin{equation} \label{eq:composed_R}
+R := R^a + R^b - R^b A R^a,
+\end{equation}
+i.e., one can quickly verify that with the above $R$, $\left\{ \left( S_i, T_i \right) \right\}_{i = 0,1}$ from \eqref{eq:composed_relaxer_pair} are given by the relations \eqref{eq:RST}. Theorem \ref{thm:symmetry} thus implies that the composed cycle \eqref{eq:composed_cycle} is also symmetric, with no additional assumptions necessary on the component relaxer pairs.
+
+In summary, composing any number of symmetric relaxer pairs (including iterating a single pre-relaxer and post-relaxer a fixed number of times) preserves symmetry in the iteration matrix as long as one simply reverses the application order of the post-relaxers relative to the corresponding pre-relaxers.
+
+\section{Definiteness}
+
+We now turn to the issue of definiteness of the cycle \eqref{eq:cycle}. Here, we use the term ``definite'' to mean (consistently) either ``positive definite'' or ``negative definite'', as the following discussion applies to either case.
+
+Assuming that $\widetilde{A}$ is semi-definite, it is clear from \eqref{eq:RLM} that $M$ will be (semi-)definite if $W := R + R^t - R^t A R$ is (semi-)definite. This is actually not so hard to verify for common relaxer pairs given additional assumptions on $A$, as we will see later. However, it is less trivial to deduce the definiteness of the composed cycle \eqref{eq:composed_cycle}, which the following theorem addresses.
+
+\begin{theorem}
+Suppose $W^z := R^z + \left( R^z \right)^t - \left( R^z \right)^t A R^z$ is semi-definite, $z = a,b$. Then $W := R + R^t - R^t A R$, with $R$ as defined in \eqref{eq:composed_R}, is also semi-definite.
+\end{theorem}
+
+\begin{proof}
+Some algebraic manipulations, after substituting $R = R^a + R^b - R^b A R^a$, give
+\begin{equation} \label{eq:composed_R_definiteness}
+W = W^a + \left( I - \left( R^a \right)^t A \right) W^b \left( I - A R^a \vphantom{I - \left( R^a \right)^t A} \right),
+\end{equation}
+which is clearly semi-definite given that $W^a$ and $W^b$ are semi-definite.
+\end{proof}
+In other words, the composed cycle \eqref{eq:composed_cycle} is semi-definite as long as the component relaxer pairs are themselves semi-definite. Thus, semi-definite relaxer pairs are closed under composition.
+
+Upon closer inspection of \eqref{eq:composed_R_definiteness}, we see that $W$ could easily be \emph{strictly} definite within a variety of situations. For example, if $W^a$ is strictly definite; or if $W^b$ is strictly definite and the null spaces of $W^a$ and $I - A R^a$ trivially intersect; then $W$ will be strictly definite as well.
+
+\section{Examples}
+
+\subsection{Trivial Relaxer}
+
+The \emph{trivial relaxer} is given by $\left( S, T \right) = \left( I, 0 \right)$, and taking $R = 0$ in \eqref{eq:RST} yields a trivial pre-relaxer and trivial post-relaxer. Regarding definiteness, clearly $W = R + R^t - R^t A R = 0$ is semi-definite.
+
+\subsection{Exact Relaxer}
+
+At the other end of the spectrum opposite the trivial relaxer is the \emph{exact relaxer} given by $\left( S, T \right) = \left( 0, A^{-1} \right)$. Taking $R = A^{-1}$ in \eqref{eq:RST} yields an exact pre-relaxer and post-relaxer.  Regarding definiteness, clearly $W = R + R^t - R^t A R = A^{-1}$ is definite whenever $A$ is definite. The exact relaxer is obviously not very interesting in isolation, but it may be used as a component to a block relaxer (below), yielding a \emph{box relaxer}.
+
+\subsection{Splitting $A = P - Q$}
+
+As mentioned earlier, an example of a relaxer is derived from a splitting $A = P - Q$ with $P$ invertible in which $S = P^{-1} Q$ and $T = P^{-1}$. Taking $R = P^{-1}$ gives the symmetric relaxer pair
+\begin{align*}
+\left( S_0, T_0 \right) & = \left( I - R A, R \right) = \left( P^{-1} Q, P^{-1} \right), \\
+\left( S_1, T_1 \right) & = \left( I - R^t A, R^t \right) = \left( P^{-t} Q^t, P^{-t} \right).
+\end{align*}
+Thus, if $\left( S_0, T_0 \right)$ is derived from a splitting $A = P - Q$, $\left( S_1, T_1 \right)$ is derived from the transposed splitting $A = P^t - Q^t$. Regarding definiteness, we require
+\begin{equation*}
+W = R + R^t - R^t A R = P^{-1} + P^{-t} - P^{-t} A P^{-1} = P^{-t} \left( P + P^t - A \right) P^{-t}
+\end{equation*}
+to be (semi-)definite, which is equivalent to $W_P := P + P^t - A$ being (semi-)definite. This latter expression is often easier to analyze.
+
+\subsubsection{Jacobi}
+
+The Jacobi method uses $P = D$ and $Q = D - A$, where $D$ is the diagonal component of $A$. Thus, $W_P = P + P^t - A = 2 D - A$ is definite if, for example, $A$ is strictly or irreducibly diagonally dominant and all its diagonal entries are like-signed.
+
+The weighted Jacobi method uses $P = \frac{1}{\omega} D$ and $Q = \frac{1}{\omega} D - A$, where $0 < \omega \leq 1$ ($\omega = 1$ reduces to the simple Jacobi method described above). Thus, $W_P = P + P^t - A = \frac{2}{\omega} D - A$ is definite if, for example, again, $A$ is strictly or irreducibly diagonally dominant and all its diagonal entries are like-signed.
+
+\subsubsection{Gauss-Seidel}
+
+The Gauss-Seidel method uses $P = D - L$ and $Q = L^t$, where $D$ is the diagonal component of $A$ and $L$ is the negative of the strictly lower triangular component of $A$ (hence $L^t$ is the negative of the strictly upper triangular component of $A$). Thus, $W_P = P + P^t - A = D$ is definite precisely when all diagonal entries of $A$ are like-signed.
+
+The weighted Gauss-Seidel method, also known as the SOR (Successive Over-Relaxation) method, uses $P = \frac{1}{\omega} D - L$ and $Q = \frac{1 - \omega}{\omega} D + L^t$, where $0 < \omega < 2$ ($\omega = 1$ reduces to the simple Gauss-Seidel method described above). Thus, $W_P = P + P^t - A = \frac{2 - \omega}{\omega} D$ is definite precisely when, again, all diagonal entries of $A$ are like-signed.
+
+\subsubsection{SSOR}
+
+The SSOR (Symmetric Successive Over-Relaxation) method uses
+\begin{align*}
+P & =  \frac{\omega}{2} \left( \frac{1}{\omega} D - L \right) D^{-1} \left( \frac{1}{\omega} D - L^t \right), \\
+Q & = P - A,
+\end{align*}
+where $D$ is the diagonal component of $A$; $L$ is the negative of the strictly lower triangular component of $A$; and $0 < \omega \leq 1$. Thus,
+\begin{equation*}
+W_P = P + P^t - A = \frac{1 - \omega}{\omega} D + \frac{1}{\omega} L D^{-1} L^t
+\end{equation*}
+is definite precisely when, as for the Gauss-Seidel method, all diagonal entries of $A$ are like-signed.
+
+\subsection{Kaczmarz Relaxer}
+
+The Kaczmarz method is given by
+\begin{align*}
+x & \mapsto x + \omega \frac{y^t \left( b - A x \right)}{\left( A y \right)^t \left( A y \right)} A y \\
+  & = \left( I - \frac{\omega}{y^t A^2 y} A y y^t A \right) x + \left( \frac{\omega}{y^t A^2 y} A y y^t \right) b \\
+  & = S x + T b
+\end{align*}
+for $\omega > 0$ and some vector $y$ (typically, $y$ is chosen as one of the standard basis vectors, thus selecting out a row/column of $A$). Thus, taking
+\begin{equation*}
+R = \frac{\omega}{y^t A^2 y} A y y^t
+\end{equation*}
+yields a symmetric relaxer pair corresponding to the Kaczmarz method, but it is not clear if and when this is definite.
+
+\subsection{Block Relaxer}
+
+Let us consider a \emph{block relaxer}, in which the scalar variables are partitioned and separate relaxers are applied to each partition independently. To be precise, let our solution vector $x \in \mathbf{F}^{m + n}$ and let
+\begin{align*}
+J_m & = \begin{pmatrix} I_{mm} & 0_{mn} \end{pmatrix} \in \mathbf{F}^{m \times (m + n)}, &
+K_m & = J_m^t J_m = \begin{pmatrix} I_{mm} & 0_{mn} \\ 0_{nm} & 0_{nn} \end{pmatrix} \in \mathbf{F}^{(m + n) \times (m + n)}, \\
+J_n & = \begin{pmatrix} 0_{nm} & I_{nn} \end{pmatrix} \in \mathbf{F}^{n \times (m + n)}, &
+K_n & = J_n^t J_n = \begin{pmatrix} 0_{mm} & 0_{mn} \\ 0_{nm} & I_{nn} \end{pmatrix} \in \mathbf{F}^{(m + n) \times (m + n)}, \\
+\end{align*}
+where $I_{rc}$ denotes a $r \times c$ identity matrix and $0_{rc}$ denotes a $r \times c$ zero matrix. Now consider component relaxer pairs $\left\{ \left( S^m_i, T^m_i \right) \right\}_{i = 0,1}$ and $\left\{ \left( S^n_i, T^n_i \right) \right\}_{i = 0,1}$ (specified by $R^m$ and $R^n$, respectively, via \eqref{eq:RST}) separately applied to $J_m A J_m^t$ and $J_n A J_n^t$. Taking $R = J_m^t R^m J_m + J_n^t R^n J_n$ gives the relaxer pair
+\begin{align*}
+S_0 & = I - R A
+      = I - \left( J_m^t R^m J_m + J_n^t R^n J_n \right) A \\
+    & = J_m^t \left( S^m_0 J_m + T^m_0 J_m A K_n \right)
+      + J_n^t \left( S^n_0 J_n + T^n_0 J_n A K_m \right),\\
+T_0 & = R
+      = J_m^t R^m J_m + J_n^t R^n J_n \\
+    & = J_m^t T^m_0 J_m + J_n^t T^n_0 J_n, \\
+S_1 & = I - R^t A
+      = I - \left( J_m^t \left( R^m \right)^t J_m + J_n^t \left( R^n \right)^t J_n \right) A \\
+    & = J_m^t \left( S^m_1 J_m + T^m_1 J_m A K_n \right)
+      + J_n^t \left( S^n_1 J_n + T^n_1 J_n A K_m \right),\\
+T_1 & = R^t
+      = J_m^t \left( R^m \right)^t J_m + J_n^t \left( R^n \right)^t J_n \\
+    & = J_m^t T^m_1 J_m + J_n^t T^n_1 J_n. \\
+\end{align*}
+Regarding definiteness, assume that $W^z = R^z + \left( R^z \right)^t - \left( R^z \right)^t J_z A J_z^t R^z$ is semi-definite, $z = m,n$. Unfortunately,
+\begin{align*}
+W & = R + R^t - R^t A R \\
+  & = J_m^t W^m J_m + J_n^t W^n J_n - \left( J_m^t \left( R^m \right)^t J_m A J_n^t R^n J_n + J_n^t \left( R^n \right)^t J_n A J_m^t R^m J_m \right).
+\end{align*}
+will generally not also be semi-definite without some additional assumptions on $R^m$, $R^n$, and/or $A$. However, a common case where $W$ \emph{is} semi-definite is $R^n = 0$, corresponding to $\left\{ \left( S^n_i, T^n_i \right) \right\}_{i = 0,1}$ being trivial relaxers. In this case, $\left\{ \left( S_i, T_i \right) \right\}_{i = 0,1}$ effectively amount to an identity operation with respect to the last $n$ variables of $x$.
+
+\end{document}
