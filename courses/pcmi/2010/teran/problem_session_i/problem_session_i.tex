@@ -1,0 +1,123 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+\title{Simluation of Elasticity, Biomechanics, and Virtual Surgery \\
+       Problem Session I}
+\date{July 13, 2010}
+\author{Joseph Teran (UCLA) \and
+        Jeffrey Hellrung (UCLA)}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This problem session will give a brief introduction to the numerical solution of (variable coefficient) Poisson's equation:
+
+\begin{subequations}\label{poisson}
+\begin{align}
+-\nabla \cdot \left( \beta \nabla u \right) & = f \quad \in \Omega \\
+u & = p \quad \in \partial \Omega_d \\
+\beta \nabla u \cdot \hat{n} & = q \quad \in \partial \Omega_n
+\end{align}
+\end{subequations}
+
+Here, \(\Omega \subset \mathbb{R}^d\) is open; \(\partial \Omega_d\) and \(\partial \Omega_n\) partition the boundary of \(\Omega\) and define where {\em Dirichlet} (\(d\)) and {\em Neumann} (\(n\)) conditions are applied, respectively; \(\hat{n}\) is the outward-pointing normal on \(\partial \Omega_n\); \(\beta, f : \Omega \to \mathbb{R}\), \(p : \partial \Omega_d \to \mathbb{R}\), and \(q : \partial \Omega_q \to \mathbb{R}\) are given, and \(\beta\) is bounded below by some positive number; and the goal is to solve for the unknown function \(u : \Omega \to \mathbb{R}\).  For now, we'll ignore the details of the function spaces that \(u\), \(\beta\), \(f\), \(p\), and \(q\) are assumed to belong in.
+
+For the numerical solution of eqs \eqref{poisson}, we'll use a discretization based on the Finite Element Method (FEM).  Briefly, an FEM discretization focuses on the weak formulation of the partial differential equation.  The derivation involves multiplying the differential equation by a test function (chosen from some suitable function space), integrating by parts, and applying boundary conditions:
+
+\begin{subequations}
+\begin{align}
+& -\nabla \cdot \left( \beta \nabla u \right) = f \\
+\Rightarrow & \int_{\Omega} -\nabla \cdot \left( \beta \nabla u \right) v = \int_{\Omega} f v \\
+\Rightarrow & \int_{\Omega} \beta \nabla u \cdot \nabla v =
+    \int_{\Omega} f v + \int_{\partial \Omega} \left( \beta \nabla u \cdot \hat{n} \right) v \label{weakc} \\
+\Rightarrow & \int_{\Omega} \beta \nabla u \cdot \nabla v = \int_{\Omega} f v + \int_{\partial \Omega_n} q v \label{weakd}
+\end{align}
+\end{subequations}
+
+where the derivation from \eqref{weakc} to \eqref{weakd} is possible by stipulating that \(v \equiv 0\) on \(\partial \Omega_d\).
+
+We then suppose that \(u\) can be approximated by a function in a finite-dimensional function space (the {\em (discretized) solution space}) (e.g., piecewise linear functions over some tessellation of \(\Omega\)), i.e., \(u \approx \tilde{u} = \sum_j u_j e_j\) for basis elements \(\left\{ e_j \right\}\).  Likewise, \(v\) is selected from some other (often related) finite-dimensional function space (the {\em (discretized) test space}), thus giving a system of equations for the coefficients \(u_j\).  For example, if \(v\) is taken from the same space as \(\tilde{u}\), and we let \(v\) be, in turn, each of the basis functions, then we obtain
+
+\begin{equation}\label{eqi}
+\sum_j \left( \int_{\Omega} \beta \nabla e_j \cdot \nabla e_i \right) u_j = \int_{\Omega} f e_i + \int_{\partial \Omega_n} q e_i
+\end{equation}
+
+for all \(i\), which may be expressed as a linear system of equations:
+
+\begin{equation}\label{linearsystemi}
+A \vec{x} = \vec{b},
+\end{equation}
+
+where
+
+\begin{subequations}\label{linearsystemii}
+\begin{align}
+A_{ij} & = \int_{\Omega} \beta \nabla e_i \cdot \nabla e_j \label{Aij} \\
+\vec{x}_i & = u_i \\
+\vec{b}_i & = \int_{\Omega} f e_i + \int_{\partial \Omega_n} q e_i \label{bi}
+\end{align}
+\end{subequations}
+
+Strictly speaking, the above is only correct if \(v\) varies {\em precisely} throughout the same function space which \(\tilde{u}\) belongs to.  This is generally not the case.  For example, in the presence of Dirichlet boundary conditions, \(\tilde{u}\) will generally be nonzero along \(\Omega_d\), however \(v\) will be chosen from a function space which vanishes along \(\Omega_d\) (hence these functions spaces will only align under homogeneous Dirichlet boundary conditions).  How this manifests itself in the linear system will be investigated in the exercises.
+
+Note that the sparsity of \(A\) is directly related to the overlap of the supports of the \(e_j\)'s.  Typically we choose the \(e_j\)'s such that the support of one basis element overlaps the supports of only a small constant number of other basis elements, in which case \(A\) will have a number of nonzero entries proportional to the number of basis elements.
+
+Let's now focus on dimension \(d = 1\) and use {\em linear finite elements}.  Let \(\Omega\) be an interval \((a,b)\), and let \(\{x_j\}\) be grid points in \((a,b)\), with \(a = x_0 < x_1 < \dotsm < x_n = b\).  Often times, the \(x_j\)'s will be equally spaced, which makes the analysis simpler, but it's not necessary.  We'll take \(\tilde{u}\) (the discretized solution) and \(v\) (the discretized test function) to be continuous and {\em piecewise linear} on each segment \((x_{j-1}, x_j)\), with \(v(a)\) and/or \(v(b)\) vanishing if a Dirichlet condition is specified at \(a\) and/or \(b\), respectively.  This space of continuous piecewise linear functions is spanned by the {\em nodal basis functions} (also called ``hat'' functions, because of the shape of their graphs) \(e_j\), (uniquely) defined such that
+
+\begin{equation}\label{ej}
+e_j(x_k) = \delta_{jk} = \begin{cases} 1, & j = k \\ 0, & j \neq k \end{cases}
+\end{equation}
+
+\section{Exercises}
+
+Unless otherwise noted, assume 1-dimensional linear finite elements with the basis \(\{e_j\}\) given by \eqref{ej}, although these results extend to higher order and higher dimensional finite elements.
+
+\begin{enumerate}
+
+\item Here is one way to incorporate the Dirichlet boundary conditions into eqs \eqref{linearsystemii}.  For concreteness, suppose \(\Omega_d = \{a\}\) (with \(\Omega = (a,b)\)).  Then we still have \(\tilde{u} = \sum_{j = 0}^n u_j e_j\), but our space of test functions \(\{v\}\) is slightly smaller, \(\operatorname{span} \{ e_1, \dotsc, e_n \}\), to ensure that \(v(a) = 0\).  Thus we obtain \(n\) equations of the form \eqref{eqi}, plus one more equation from the Dirichlet boundary condition (\(u_0 = u(a)\)).  This (ostensibly) gives enough equations to solve for the \(n + 1\) coefficients \(\{u_j\}\).
+
+Another way to conceptually incorporate the Dirichlet boundary conditions is to consider the function \(w = u - u(a) e_0\), which satisfies a similar Poisson problem as \(u\) but now with homogeneous Dirichlet boundary conditions.  Thus, the space of test functions \(\{v\}\) and the solution space of \(w\) coincide, and one may use eqs \eqref{linearsystemii} directly.
+
+In practice, one can actually just ignore the Dirichlet boundary conditions when initially computing the entries of \(A\) and \(\vec{b}\) (i.e., just use \eqref{Aij} and \eqref{bi}), then ``correct'' \(A\) and \(\vec{b}\) to account for the Dirichlet boundary conditions afterwards.  Describe a {\em simple} algorithm to effect this ``correction'' procedure.  Try to keep \(A\) symmetric.
+
+\item Show that the linear system \eqref{linearsystemi} has a unique solution if one specifies Dirichlet boundary conditions at either \(x = a\) or \(x = b\) or both (i.e., \(u(a) = u_a\) and/or \(u(b) = u_b\)).  For simplicity, you may assumed \(\beta \equiv 1\).  What happens if both boundary conditions are Neumann?  Specifically address the conditions which \(\vec{b}\) must satisfy, how this translates into a condition on \(f\), and ``how uniquely'' \(\tilde{u}\) is determined.
+
+\item Compute the integral in \eqref{Aij} when \(\beta \equiv 1\).  If you wish, for simplicitly, you may assume the \(x_j\)'s are equally spaced, i.e., \(x_j = a + j h\), where \(h = (b - a)/n\).  What is the structure of the matrix \(A\) (e.g., describe the sparsity)?
+
+\item Give an expression to reasonably approximate the integrals in \eqref{Aij} and \eqref{bi} for arbtrary \(\beta\), \(f\), and \(q\) (assume \(\beta\) and \(f\) are sufficiently ``well-behaved'').  You may have to consider boundary and interior grid vertices separately.
+
+\item Write some code (e.g., a Matlab script) to solve the following boundary value problem using linear finite elements:
+
+\begin{subequations}
+\begin{align}
+-\left( \left( 1 + x \right) u'(x) \right)' & = \left( 1 + x \right)^{-2} \quad x \in (0, 1) \\
+u(0) & = 1 \\
+\left( 1 + (1) \right) u'(1) & = -1/2
+\end{align}
+\end{subequations}
+
+\item The FEM terminology for the matrix \(A\) in \eqref{linearsystemi} is the {\em (global) stiffness matrix} (the meaning of the term ``global'' will become obvious shortly).  With 1-dimensional linear finite elements, it is relatively straightforward to compute the entries of the stiffness matrix, even given that one has to account for differences between boundary and interior grid vertices.  However, the situation becomes more complicated with higher order or higher dimensional finite elements, and it becomes tedious to consider all the special boundary cases.  As such, it is common practice to assemble the global stiffness matrix element by element (i.e., cell by cell), with each element contributing to several entries of the global stiffness matrix.  The collection of these contributions from a single element may be put into a small matrix, the {\em local stiffness matrix} for that element.  The computation of the local stiffness matrix is identical to that of the global stiffness matrix upon replacing the integrations over \(\Omega\) with integrations localized over the element.  For example, back to 1-dimensional linear finite elements, the local stiffness matrix over \(I_j = (x_{j-1}, x_j)\) would consist of \(2^2\) (nonzero) entries (since only \(2\) basis functions are supported on \(I_j\)).  Each of these entries would be added to accumulated global stiffness matrix entries:
+
+\begin{subequations}
+\begin{align}
+A_{j-1,j-1}          & +\!\!= \int_{I_j} \beta \nabla e_{j-1} \cdot \nabla e_{j-1} \\
+A_{j-1,j}, A_{j,j-1} & +\!\!= \int_{I_j} \beta \nabla e_{j-1} \cdot \nabla e_j \\
+A_{jj}               & +\!\!= \int_{I_j} \beta \nabla e_j \cdot \nabla e_j
+\end{align}
+\end{subequations}
+
+This suggests the following procedure to build the (global) stiffness matrix \(A\).  First, initialize the sparsity pattern of \(A\) (with zeros).  Then iterate through each element and add the contributions of the element's local stiffness matrix to the corresponding entries in \(A\).
+
+Verify this procedure computes the same stiffness matrix as before, and modify your program from Exercise 5 to build the stiffness matrix in this fashion.
+
+\end{enumerate}
+
+\end{document}
