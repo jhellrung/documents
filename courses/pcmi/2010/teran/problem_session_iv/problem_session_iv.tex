@@ -303,11 +303,10 @@ for k = 1:size(tris,1)
     c2    = (lambda * rJ - mu) * drJ;
     for i = 1:2
         for j = 1:2
+            dPik_dFjm = c1 * dJ_dF(i,:)' * dJ_dF(:,j)';
             if(i == j)
                 dPik_dFjm(i,i) += mu;
-            end
-            dPik_dFjm = c1 * dJ_dF(i,:)' * dJ_dF(:,j)';
-            if(i != j)
+            else
                 dPik_dFjm(i,j) += c2;
                 dPik_dFjm(j,i) -= c2;
             end
@@ -355,7 +354,7 @@ delta_u = reshape(dq_du \ reshape(-q', [2*n 1]), [2 n])';
 
 \subsection{The Full Newton Method}
 
-The entire solve procedure for a single timme-step looks as follows.
+The entire solve procedure for a single time-step looks as follows.
 
 \begin{verbatim}
 function u = solve( ...
