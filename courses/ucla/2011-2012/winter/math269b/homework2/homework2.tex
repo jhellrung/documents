@@ -49,7 +49,7 @@ is consistent with the one-way wave equation $u_t + au_x = f$ and is stable for 
 \item[4.] (Strikwerda 2.2.6.) Determine the stability of the following scheme, sometimes called the Euler backward scheme, for $u_t + au_x = f$:
 \begin{align*}
 v^{n+1/2}_m & = v^n_m - \frac{a \lambda}{2} \left( v^n_{m+1} - v^n_{m-1} \right) + k f^n_m, \\
-v^{n+1}_m & = v^n_m - \frac{a \lambda}{2} \left( v^{n+1/2}_{m+1} - v^{n+1/2}_{m-1} \right) k f^{n+1}_m.
+v^{n+1}_m & = v^n_m - \frac{a \lambda}{2} \left( v^{n+1/2}_{m+1} - v^{n+1/2}_{m-1} \right) + k f^{n+1}_m.
 \end{align*}
 The variable $v^{n+1/2}$ is a temporary variable, as is $\tilde{v}$ in Example 2.2.5.
 
