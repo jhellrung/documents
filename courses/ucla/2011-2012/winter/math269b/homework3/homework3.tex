@@ -1,0 +1,67 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 3}
+\date{February 17, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] [Dispersion/dissipation problem from Strikwerda]
+
+\item[2.] Derive the stability condition for the backward-time forward-space scheme
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{h} \left( v^{n+1}_{m+1} - v^{n+1}_m \right) = 0
+\end{equation*}
+used to approximate solutions to $u_t + a u_x = 0$. Give an example of an initial condition $v^0_m$ and an explicit expression for $v^n_m$ that demonstrate unstable behavior for a particular $\lambda$ (your choice) which fails to satisfy the stability condition. Does the growth in your example agree with your theoretical amplification factor?
+
+\item[3.] Prove that numerical solutions to the Lax-Friedrichs scheme
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + \frac{a}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0
+\end{equation*}
+converge to solutions to the corresponding modified equation
+\begin{equation*}
+u_t + a u_x = \frac{h^2}{2k} \left( 1 - \left( \frac{a k}{h} \right)^2 \right) u_{xx}
+\end{equation*}
+to second order accuracy in $\ell^{\infty}$. I.e., show that $\abs{v^n_m - u_{k,h} \left( t_n,x_m \right)} \to 0$ as $h,k \to 0$ (according to the stability criterion), where the subscripts on $u_{k,h}$ only indicate that the solution to the modified equation is parameterized by $k,h$.
+
+\item[4.] (Strikwerda 4.1.2.) Show that the $(2,2)$ leapfrog scheme for $u_t + a u_{xxx} = f$ (see (2.2.15)) given by
+\begin{equation*}
+\frac{v^{n+1}_m - v^{n-1}_m}{2k} + a \delta^2 \delta_0 v^n_m = f^n_m,
+\end{equation*}
+with $\nu = k / h^3$ constant, is stable if and only if
+\begin{equation*}
+\abs{a \nu} < \frac{2}{3^{3/2}}.
+\end{equation*}
+
+\item[5.] (Strikwerda 3.2.1.) Show that the (forward-backward) MacCormack scheme
+\begin{align*}
+\tilde{v}^{n+1}_m & = v^n_m - a \lambda \left( v^n_{m+1} - v^n_m \right) + k f^n_m, \\
+v^{n+1}_m & = \frac{1}{2} \left( v^n_m + \tilde{v}^{n+1}_m - a \lambda \left( \tilde{v}^{n+1}_m - \tilde{v}^{n+1}_{m-1} \right) + k f^{n+1}_m \right)
+\end{align*}
+is a second-order accurate scheme for the one-way wave equation (1.1.1). Show that for $f = 0$ it is identical to the Lax-Wendroff scheme (3.1.1).
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] For the one-way wave equation $u_t + a u_x = 0$, investigate how close the numerical solution to a finite difference scheme is to the solution to the corresponding modified equation. To be concrete, suppose a pulse initial condition $u_0(x) = \frac{1}{2} \left( 1 + \abs{x}/x \right)$, $x \in [-1,1]$, and periodic boundary conditions. Take $a = 1$, $k/h = 0.5$, and final time $T = 0.5$. Compare the following finite difference schemes: upwinding, Lax-Friedrichs, and Lax-Wendroff. Also, include a derivation of the respective corresponding modified equations. You may find solutions to the modified equations using any appropriate method (i.e., analytically or to a sufficiently high accuracy numerically).
+
+\end{itemize}
+
+\end{document}
