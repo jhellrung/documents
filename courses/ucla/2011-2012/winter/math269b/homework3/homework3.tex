@@ -20,13 +20,21 @@
 
 \begin{itemize}
 
-\item[1.] [Dispersion/dissipation problem from Strikwerda]
+\item[1.] (Strikwerda 5.1.2.) Show that the modified leapfrog scheme (5.1.6) is stable for $\epsilon$ satisfying
+\begin{equation*}
+0 < \epsilon \leq 1 \quad \text{if} \quad 0 < a^2 \lambda^2 \leq \frac{1}{2}
+\end{equation*}
+and
+\begin{equation*}
+0 < \epsilon \leq 4 a^2 \lambda^2 \left( 1 - a^2 \lambda^2 \right) \quad \text{if} \quad \frac{1}{2} \leq a^2 \lambda^2 < 1.
+\end{equation*}
+Note that these limits are not sharp. It is possible to choose $\epsilon$ larger than these limits and still have the scheme be stable.
 
 \item[2.] Derive the stability condition for the backward-time forward-space scheme
 \begin{equation*}
 \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{h} \left( v^{n+1}_{m+1} - v^{n+1}_m \right) = 0
 \end{equation*}
-used to approximate solutions to $u_t + a u_x = 0$. Give an example of an initial condition $v^0_m$ and an explicit expression for $v^n_m$ that demonstrate unstable behavior for a particular $\lambda$ (your choice) which fails to satisfy the stability condition. Does the growth in your example agree with your theoretical amplification factor?
+used to approximate solutions to $u_t + a u_x = 0$ with, say, $x \in [0,1]$ and periodic boundary conditions. Give an example of an initial condition $v^0_m$ and an explicit expression for $v^n_m$ that demonstrate unstable behavior for a particular $\lambda$ (your choice) which fails to satisfy the stability condition. Does the growth in your example agree with your theoretical amplification factor?
 
 \item[3.] Prove that numerical solutions to the Lax-Friedrichs scheme
 \begin{equation*}
