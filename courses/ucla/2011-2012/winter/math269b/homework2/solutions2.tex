@@ -1,0 +1,134 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 2 - Solutions}
+\date{February 13, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] (Strikwerda 2.1.9.) Finite Fourier Transforms. For a function $v_m$ defined on the integers, $m = 0, 1, \dotsc, M-1$, we can define the Fourier transform as
+\begin{equation*}
+\hat{v}_{\ell} = \sum_{m=0}^{M-1} e^{-2 i \pi \ell m / M} v_m \quad \text{for } \ell = 0, \dotsc, M-1.
+\end{equation*}
+For this transform prove the Fourier inversion formula
+\begin{equation*}
+v_m = \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell},
+\end{equation*}
+and the Parseval's relation
+\begin{equation*}
+\sum_{m=0}^{M-1} \abs{v_m}^2 = \frac{1}{M} \sum_{\ell=0}^{M-1} \abs{\hat{v}_{\ell}}^2.
+\end{equation*}
+Note that $v_m$ and $\hat{v}_{\ell}$ can be defined for all integers by making them periodic with period $M$.
+
+\textbf{Solution}
+
+Substituting in for $\hat{v}_{\ell}$ and swapping the order of summation yields
+\begin{align*}
+  & \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell} \\
+= & \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \sum_{m'=0}^{M-1} e^{-2 i \pi \ell m' / M} v_{m'} \\
+= & \frac{1}{M} \sum_{m'=0}^{M-1} v_{m'} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell \left( m - m' \right) / M}.
+\end{align*}
+Now, if $m \neq m'$, then
+\begin{equation*}
+\sum_{\ell=0}^{M-1} e^{2 i \pi \ell \left( m - m' \right) / M} = \frac{1 - e^{2 i \pi M \left( m - m' \right) / M}}{1 - e^{2 i \pi \left( m - m' \right) / M}} = 0;
+\end{equation*}
+on the other hand, if $m = m'$, then the summand is identically $1$ and hence the sum is $M$. The result follows immediately:
+\begin{equation*}
+\frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell} = v_m.
+\end{equation*}
+Regarding the Parseval's relation,
+\begin{align*}
+\sum_{m=0}^{M-1} \abs{v_m}^2
+& = \frac{1}{M^2} \sum_{m=0}^{M-1} \abs{\sum_{\ell=0}^{M-1} e^{2 \pi i \ell m / M} \hat{v}_{\ell}}^2 \\
+& = \frac{1}{M^2} \sum_{m=0}^{M-1} \left( \sum_{\ell=0}^{M-1} e^{2 \pi i \ell m / M} \hat{v}_{\ell} \right) \left( \overline{\sum_{\ell=0}^{M-1} e^{2 \pi i \ell m / M} \hat{v}_{\ell}} \right) \\
+& = \frac{1}{M^2} \sum_{\ell=0}^{M-1} \sum_{\ell'=0}^{M-1} \sum_{m=0}^{M-1} e^{2 \pi i \left( \ell - \ell' \right) m / M} \hat{v}_{\ell} \overline{\hat{v}_{\ell}} \\
+& = \frac{1}{M} \sum_{\ell=0}^{M-1} \abs{\hat{v}_{\ell}}^2,
+\end{align*}
+as desired.
+
+\item[2.] Prove convergence for the Beam-Warming scheme
+\begin{equation*}
+u^{n+1}_m = u^n_m - \frac{ak}{2h} \left( 3 u^n_m - 4 u^n_{m-1} + u^n_{m-2} \right) + \frac{a^2 k^2}{2h^2} \left( u^n_m - 2 u^n_{m-1} + u^n_{m-2} \right)
+\end{equation*}
+used to approximate solutions to $u_t + au_x = 0$ for $a > 0$.
+
+\textbf{Solution}
+
+We rewrite the difference operator as
+\begin{equation*}
+P_{k,h} u^n_m = \frac{1}{k} \left( u^{n+1}_m - u^n_m \right) + \frac{1}{2h} \left( 3 u^n_m - 4 u^n_{m-1} + u^n_{m-2} \right) - \frac{a^2 k}{2h^2} \left( u^n_m - 2 u^n_{m-1} + u^n_{m-2} \right).
+\end{equation*}
+Its symbol is thus
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h} \left( 3 - 4 e^{-ih\xi} + e^{-2ih\xi} \right) - \frac{a^2 k}{2h^2} \left( 1 - 2 e^{-ih\xi} + e^{-2ih\xi} \right) \\
+               & = \left( 1 + \frac{k}{2} \left( s - i a \xi \right) \right) \left( s + i a \xi \right) + O \left( k^2 + kh + h^2 \right);
+\end{align*}
+since the symbol of the differential operator $P = \partial_t + a \partial_x$ is $p = s + i a \xi$, this demonstrates that $P_{k,h}$ is consistent with $P$ (to second order if $k/h = O(1)$).
+
+Regarding stability, we substitute $g = e^{sk}$ and solve $p_{k,h} = 0$ for $g$, giving
+\begin{align*}
+g & = 1 + \frac{1}{2} a \lambda \left( 3 - 4 e^{-i \theta} + e^{-2 i \theta} \right) - \frac{1}{2} a^2 \lambda^2 \left( 1 - 2 e^{-i \theta} + e^{-2 i \theta} \right) \\
+  & = \dotsc
+\end{align*}
+
+\item[3.] (Strikwerda 2.2.4.) Show that the box scheme
+\begin{equation*}
+\frac{1}{2k} \left( \left( v^{n+1}_m + v^{n+1}_{m+1} \right) - \left( v^n_m + v^n_{m+1} \right) \right) + \frac{a}{2h} \left( \left( v^{n+1}_{m+1} - v^{n+1}_m \right) + \left( v^n_{m+1} - v^n_m \right) \right) = f^n_m
+\end{equation*}
+is consistent with the one-way wave equation $u_t + au_x = f$ and is stable for all values of $\lambda$.
+
+\textbf{Solution}
+
+The symbols corresponding to the difference operators $P_{k,h}$ and $R_{k,h}$ are
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{2k} \left( e^{sk} - 1 \right) \left( e^{ih\xi} + 1 \right) + \frac{a}{2h} \left( e^{sk} + 1 \right) \left( e^{ih\xi} - 1 \right) \\
+               & = \frac{1}{2k} \left( sk + \frac{1}{2} s^2 k^2 + O \left( k^3 \right) \right) \left( 2 + i h \xi + O \left( h^2 \right) \right) \\
+               & \quad {} + \frac{a}{2h} \left( 2 + s k + O \left( k^2 \right) \right) \left( i h \xi - \frac{1}{2} h^2 \xi^2 + O \left( h^3 \right) \right) \\
+               & = \left( 1 + \frac{1}{2} \left( sk + i h \xi \right) \right) \left( s + i a \xi \right) + O \left( h^2 + h k + k^2 \right); \\
+r_{k,h}(s,\xi) & \equiv 1.
+\end{align*}
+
+\item[4.] (Strikwerda 2.2.6.) Determine the stability of the following scheme, sometimes called the Euler backward scheme, for $u_t + au_x = f$:
+\begin{align*}
+v^{n+1/2}_m & = v^n_m - \frac{a \lambda}{2} \left( v^n_{m+1} - v^n_{m-1} \right) + k f^n_m, \\
+v^{n+1}_m & = v^n_m - \frac{a \lambda}{2} \left( v^{n+1/2}_{m+1} - v^{n+1/2}_{m-1} \right) + k f^{n+1}_m.
+\end{align*}
+The variable $v^{n+1/2}$ is a temporary variable, as is $\tilde{v}$ in Example 2.2.5.
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] (Strikwerda 2.3.3.) Solve the initial value problem for equation
+\begin{equation*}
+u_t + \left( 1 + \frac{1}{4} \left( 3 - x \right) \left( 1 + x \right) \right) u_x = 0
+\end{equation*}
+on the interval $[-1,3]$ with the Lax-Friedrichs scheme (2.3.1) with $\lambda$ equal to $0.8$. Demonstrate that the instability phenomena occur where $\abs{a(t,x) \lambda}$ is greater than $1$ and where there are discontinuities in the solution. Use the same initial data as in Exercise 2.3.1. Specify the solution to be $0$ at both boundaries. Compute up to the time of $0.2$ and use successively smaller values of $h$ to show the location of the instability.
+
+\item[2.] Investigate (via numerical evidence) the convergence (or lack thereof) of the forward-time central-space scheme
+\begin{equation*}
+\frac{1}{k} \left( u^{n+1}_m - u^n_m \right) + \frac{a}{2h} \left( u^n_{m+1} - u^n_{m-1} \right) = 0
+\end{equation*}
+in the $L^{\infty}$-norm. Use the same scenarios from Homework 1, e.g., compare your results using smooth, continuous-but-non-smooth, and discontinuous initial conditions. Be sure to restrict the relation between $k$ and $h$ appropriately. Compare convergence in the $L^{\infty}$-norm with convergence in the $L^2$-norm.
+
+\end{itemize}
+
+\end{document}
