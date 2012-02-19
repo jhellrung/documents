@@ -22,11 +22,11 @@
 
 \item[1.] (Strikwerda 2.1.9.) Finite Fourier Transforms. For a function $v_m$ defined on the integers, $m = 0, 1, \dotsc, M-1$, we can define the Fourier transform as
 \begin{equation*}
-\hat{v}_{\ell} = \sum_{m=0}^{M-1} e^{-2 i \pi \ell m / M} v_m \quad \text{for } \ell = 0, \dotsc, M-1.
+\hat{v}_{\ell} = \sum_{m=0}^{M-1} e^{-2i\pi\ell m/M} v_m \quad \text{for} \ell = 0, \dotsc, M-1.
 \end{equation*}
 For this transform prove the Fourier inversion formula
 \begin{equation*}
-v_m = \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell},
+v_m = \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2i\pi\ell m/M} \hat{v}_{\ell},
 \end{equation*}
 and the Parseval's relation
 \begin{equation*}
@@ -38,27 +38,27 @@ Note that $v_m$ and $\hat{v}_{\ell}$ can be defined for all integers by making t
 
 Substituting in for $\hat{v}_{\ell}$ and swapping the order of summation yields
 \begin{align*}
-  & \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell} \\
-= & \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \sum_{m'=0}^{M-1} e^{-2 i \pi \ell m' / M} v_{m'} \\
-= & \frac{1}{M} \sum_{m'=0}^{M-1} v_{m'} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell \left( m - m' \right) / M}.
+  & \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2i\pi\ell m/M} \hat{v}_{\ell} \\
+= & \frac{1}{M} \sum_{\ell=0}^{M-1} e^{2i\pi\ell m/M} \sum_{m'=0}^{M-1} e^{-2i\pi\ell m'/M} v_{m'} \\
+= & \frac{1}{M} \sum_{m'=0}^{M-1} v_{m'} \sum_{\ell=0}^{M-1} e^{2i\pi\ell \left( m - m' \right) / M}.
 \end{align*}
 Now, if $m \neq m'$, then
 \begin{equation*}
-\sum_{\ell=0}^{M-1} e^{2 i \pi \ell \left( m - m' \right) / M} = \frac{1 - e^{2 i \pi M \left( m - m' \right) / M}}{1 - e^{2 i \pi \left( m - m' \right) / M}} = 0;
+\sum_{\ell=0}^{M-1} e^{2i\pi\ell \left( m - m' \right) /M} = \frac{1 - e^{2i\pi M \left( m - m' \right) /M}}{1 - e^{2i\pi \left( m - m' \right) /M}} = 0;
 \end{equation*}
 on the other hand, if $m = m'$, then the summand is identically $1$ and hence the sum is $M$. The result follows immediately:
 \begin{equation*}
-\frac{1}{M} \sum_{\ell=0}^{M-1} e^{2 i \pi \ell m / M} \hat{v}_{\ell} = v_m.
+\frac{1}{M} \sum_{\ell=0}^{M-1} e^{2i\pi\ell m/M} \hat{v}_{\ell} = v_m.
 \end{equation*}
 Regarding the Parseval's relation,
 \begin{align*}
 \sum_{m=0}^{M-1} \abs{v_m}^2
-& = \frac{1}{M^2} \sum_{m=0}^{M-1} \abs{\sum_{\ell=0}^{M-1} e^{2 \pi i \ell m / M} \hat{v}_{\ell}}^2 \\
-& = \frac{1}{M^2} \sum_{m=0}^{M-1} \left( \sum_{\ell=0}^{M-1} e^{2 \pi i \ell m / M} \hat{v}_{\ell} \right) \left( \overline{\sum_{\ell=0}^{M-1} e^{2 \pi i \ell m / M} \hat{v}_{\ell}} \right) \\
-& = \frac{1}{M^2} \sum_{\ell=0}^{M-1} \sum_{\ell'=0}^{M-1} \sum_{m=0}^{M-1} e^{2 \pi i \left( \ell - \ell' \right) m / M} \hat{v}_{\ell} \overline{\hat{v}_{\ell}} \\
+& = \frac{1}{M^2} \sum_{m=0}^{M-1} \abs{\sum_{\ell=0}^{M-1} e^{2i\pi\ell m/M} \hat{v}_{\ell}}^2 \\
+& = \frac{1}{M^2} \sum_{m=0}^{M-1} \left( \sum_{\ell=0}^{M-1} e^{2i\pi\ell m/M} \hat{v}_{\ell} \right) \left( \overline{\sum_{\ell'=0}^{M-1} e^{2i\pi\ell'm/M} \hat{v}_{\ell'}} \right) \\
+& = \frac{1}{M^2} \sum_{\ell=0}^{M-1} \sum_{\ell'=0}^{M-1} \sum_{m=0}^{M-1} e^{2i\pi \left( \ell - \ell' \right) m/M} \hat{v}_{\ell} \overline{\hat{v}_{\ell'}} \\
 & = \frac{1}{M} \sum_{\ell=0}^{M-1} \abs{\hat{v}_{\ell}}^2,
 \end{align*}
-as desired.
+as desired (since, when $\ell \neq \ell'$, the inner sum over $m$ sums out to $0$).
 
 \item[2.] Prove convergence for the Beam-Warming scheme
 \begin{equation*}
@@ -70,21 +70,40 @@ used to approximate solutions to $u_t + au_x = 0$ for $a > 0$.
 
 We rewrite the difference operator as
 \begin{equation*}
-P_{k,h} u^n_m = \frac{1}{k} \left( u^{n+1}_m - u^n_m \right) + \frac{1}{2h} \left( 3 u^n_m - 4 u^n_{m-1} + u^n_{m-2} \right) - \frac{a^2 k}{2h^2} \left( u^n_m - 2 u^n_{m-1} + u^n_{m-2} \right).
+P_{k,h} u^n_m = \frac{1}{k} \left( u^{n+1}_m - u^n_m \right) + \frac{a}{2h} \left( 3 u^n_m - 4 u^n_{m-1} + u^n_{m-2} \right) - \frac{a^2k}{2h^2} \left( u^n_m - 2 u^n_{m-1} + u^n_{m-2} \right).
 \end{equation*}
 Its symbol is thus
 \begin{align*}
 p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
-               & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h} \left( 3 - 4 e^{-ih\xi} + e^{-2ih\xi} \right) - \frac{a^2 k}{2h^2} \left( 1 - 2 e^{-ih\xi} + e^{-2ih\xi} \right) \\
-               & = \left( 1 + \frac{k}{2} \left( s - i a \xi \right) \right) \left( s + i a \xi \right) + O \left( k^2 + kh + h^2 \right);
+               & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h} \left( 3 - 4 e^{-ih\xi} + e^{-2ih\xi} \right) - \frac{a^2k}{2h^2} \left( 1 - 2 e^{-ih\xi} + e^{-2ih\xi} \right) \\
+               & = \frac{1}{k} \left( sk + \frac{1}{2} s^2 k^2 + O \left( k^2 \right) \right) + \frac{a}{2h} \left( 2ih\xi + O \left( h^3 \right) \right) - \frac{a^2k}{2h^2} \left( -h^2 \xi^2 + O \left( h^3 \right) \right) \\
+               & = \left( 1 + \frac{k}{2} \left( s - ia\xi \right) \right) \left( s + ia\xi \right) + O \left( k^2 + kh + h^2 \right);
 \end{align*}
-since the symbol of the differential operator $P = \partial_t + a \partial_x$ is $p = s + i a \xi$, this demonstrates that $P_{k,h}$ is consistent with $P$ (to second order if $k/h = O(1)$).
-
-Regarding stability, we substitute $g = e^{sk}$ and solve $p_{k,h} = 0$ for $g$, giving
+since the symbol of the differential operator $P = \partial_t + a \partial_x$ is $p = s + ia\xi$, this demonstrates that $P_{k,h}$ is consistent with $P$ (to second order if $k/h = O(1)$). Incidentally, it also suggests that the symbol $r_{k,h}$ of the difference operator $R_{k,h}$ should be (for example)
 \begin{align*}
-g & = 1 + \frac{1}{2} a \lambda \left( 3 - 4 e^{-i \theta} + e^{-2 i \theta} \right) - \frac{1}{2} a^2 \lambda^2 \left( 1 - 2 e^{-i \theta} + e^{-2 i \theta} \right) \\
-  & = \dotsc
+r_{k,h}(s,\xi) & = 1 + \frac{k}{2} \left( s - ia\xi \right) + O \left( k^2 + kh + h^2 \right) \\
+               & = \frac{1}{2} \left( e^{sk} + 1 \right) - \frac{ak}{2h} \left( 1 - e^{-ih\xi} \right),
 \end{align*}
+giving
+\begin{equation*}
+R_{k,h} f^n_m = \frac{1}{2} \left( f^{n+1}_m + f^n_m \right) - \frac{ak}{2h} \left( f^n_m - f^n_{m-1} \right).
+\end{equation*}
+
+Regarding stability, we substitute $g := e^{sk}$ and solve $p_{k,h} = 0$ for $g$, giving
+\begin{align*}
+g & = 1 - \frac{ak}{2h} \left( 3 - 4 e^{-i\theta} + e^{-2i\theta} \right) + \frac{a^2k^2}{2h^2} \left( 1 - 2 e^{-i\theta} + e^{-2i\theta} \right) \\
+  & = 1 - e^{-i\theta} \frac{ak}{2h} \left( \left( 3 - \frac{ak}{h} \right) e^{i\theta} - 2 \left( 2 - \frac{ak}{h} \right) + \left( 1 - \frac{ak}{h} \right) e^{-i\theta} \right) \\
+  & = 1 + e^{-i\theta} \frac{ak}{h} \left( \left( 2 - \frac{ak}{h} \right) \left( 1 - \cos \theta \right) - i \sin \theta \right) \\
+  & = e^{-i\theta} \left( \cos \theta + \frac{ak}{h} \left( 2 - \frac{ak}{h} \right) \left( 1 - \cos \theta \right) + i \left( 1 - \frac{ak}{h} \right) \sin \theta \right) \\
+  & = e^{-i\theta} \left( 1 - \left( 1 - \frac{ak}{h} \right)^2 \left( 1 - \cos \theta \right) + i \left( 1 - \frac{ak}{h} \right) \sin \theta \right).
+\end{align*}
+If we let $\alpha = 1 - ak/h$, then
+\begin{align*}
+\abs{g}^2 & = \abs{1 - \alpha^2 \left( 1 - \cos \theta \right) + i \alpha \sin \theta}^2 \\
+          & = 1 + \alpha^4 \left( 1 - \cos \theta \right)^2 + \alpha^2 \sin^2 \theta - 2 \alpha^2 \left( 1 - \cos \theta \right) \\
+          & = 1 - \alpha^2 \left( 1 - \cos \theta \right)^2 \left( 1 - \alpha^2 \right),
+\end{align*}
+hence $\abs{g} \leq 1$ if and only if $\abs{\alpha} \leq 1$, which is equivalent to $0 \leq ak/h \leq 2$.
 
 \item[3.] (Strikwerda 2.2.4.) Show that the box scheme
 \begin{equation*}
@@ -99,17 +118,58 @@ The symbols corresponding to the difference operators $P_{k,h}$ and $R_{k,h}$ ar
 p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
                & = \frac{1}{2k} \left( e^{sk} - 1 \right) \left( e^{ih\xi} + 1 \right) + \frac{a}{2h} \left( e^{sk} + 1 \right) \left( e^{ih\xi} - 1 \right) \\
                & = \frac{1}{2k} \left( sk + \frac{1}{2} s^2 k^2 + O \left( k^3 \right) \right) \left( 2 + i h \xi + O \left( h^2 \right) \right) \\
-               & \quad {} + \frac{a}{2h} \left( 2 + s k + O \left( k^2 \right) \right) \left( i h \xi - \frac{1}{2} h^2 \xi^2 + O \left( h^3 \right) \right) \\
-               & = \left( 1 + \frac{1}{2} \left( sk + i h \xi \right) \right) \left( s + i a \xi \right) + O \left( h^2 + h k + k^2 \right); \\
+               & \quad {} + \frac{a}{2h} \left( 2 + sk + O \left( k^2 \right) \right) \left( ih\xi - \frac{1}{2} h^2 \xi^2 + O \left( h^3 \right) \right) \\
+               & = \left( 1 + \frac{1}{2} \left( sk + ih\xi \right) \right) \left( s + ia\xi \right) + O \left( h^2 + h k + k^2 \right); \\
 r_{k,h}(s,\xi) & \equiv 1.
 \end{align*}
+Since the symbol of the differential operator $P = \partial_t + a \partial_x$ is $p = s + ia\xi$, this shows that the box scheme as given by the difference operators $P_{k,h}$ and $R_{k,h}$ is consistent with $P$ to first order in $k$ and $h$. It also shows that we can actually achieve second order accuracy by modifying $r_{k,h}$ to
+\begin{align*}
+r'_{k,h}(s,\xi) & = 1 + \frac{1}{2} \left( sk + ih\xi \right) + O \left( k^2 + k h + h^2 \right) \\
+                & = \frac{1}{4} \left( 1 + e^{sk} \right) \left( 1 + e^{ih\xi} \right),
+\end{align*}
+giving
+\begin{equation*}
+R'_{k,h} f^n_m = \frac{1}{4} \left( f^n_m + f^{n+1}_m + f^n_{m+1} + f^{n+1}_{m+1} \right).
+\end{equation*}
+
+Regarding stability, we substitute $g := e^{sk}$ and solve $p_{k,h} = 0$ for $g$, giving
+\begin{align*}
+g & = \frac{e^{i \theta} + 1 - a \lambda \left( e^{i\theta} - 1 \right)}{e^{i\theta} + 1 + a\lambda \left( e^{i\theta} - 1 \right)} \\
+  & = \frac{e^{i\theta/2} + e^{-i\theta/2} - a \lambda \left( e^{i\theta/2} - e^{-i\theta/2} \right)}{e^{i\theta/2} + e^{-i\theta/2} + a \lambda \left( e^{i\theta/2} - e^{-i\theta/2} \right)},
+\end{align*}
+which clearly shows that $\abs{g} \equiv 1$ (the numerator and denominator are complex conjugates).
 
 \item[4.] (Strikwerda 2.2.6.) Determine the stability of the following scheme, sometimes called the Euler backward scheme, for $u_t + au_x = f$:
 \begin{align*}
-v^{n+1/2}_m & = v^n_m - \frac{a \lambda}{2} \left( v^n_{m+1} - v^n_{m-1} \right) + k f^n_m, \\
-v^{n+1}_m & = v^n_m - \frac{a \lambda}{2} \left( v^{n+1/2}_{m+1} - v^{n+1/2}_{m-1} \right) + k f^{n+1}_m.
+v^{n+1/2}_m & = v^n_m - \frac{a\lambda}{2} \left( v^n_{m+1} - v^n_{m-1} \right) + k f^n_m, \\
+v^{n+1}_m & = v^n_m - \frac{a\lambda}{2} \left( v^{n+1/2}_{m+1} - v^{n+1/2}_{m-1} \right) + k f^{n+1}_m.
 \end{align*}
 The variable $v^{n+1/2}$ is a temporary variable, as is $\tilde{v}$ in Example 2.2.5.
+
+\textbf{Solution}
+
+The symbol $p^{1/2}_{k,h}$ of the difference operator $P^{1/2}_{k,h}$ of the first half-step is
+\begin{align*}
+p^{1/2}_{k,h}(s,\xi) & = P^{1/2}_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+                      & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h} \left( e^{ih\xi} - e^{-ih\xi} \right);
+\end{align*}
+the symbol $p_{k,h}$ of the full difference operator $P_{k,h}$ is then
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h} \left( e^{ih\xi} - e^{-ih\xi} \right) v^{n+1/2} \left( e^{imh\xi} \right) \\
+               & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h}\left( e^{ih\xi} - e^{-ih\xi} \right) \left( 1 - \frac{a\lambda}{2} \left( e^{ih\xi} - e^{-ih\xi} \right) \right).
+\end{align*}
+Substituting $g := e^{sk}$ and solving $p_{k,h} = 0$ for $g$ yields
+\begin{align*}
+g & = 1 - \frac{a\lambda}{2} \left( e^{i\theta} - e^{-i\theta} \right) \left( 1 - \frac{a\lambda}{2} \left( e^{i\theta} - e^{-i\theta} \right) \right) \\
+  & = 1 - a \lambda i \sin \theta - a^2 \lambda^2 \sin^2 \theta,
+\end{align*}
+hence
+\begin{align*}
+\abs{g}^2 & = \left( 1 - a^2 \lambda^2 \sin^2 \theta \right)^2 + a^2 \lambda^2 \sin^2 \theta \\
+          & = 1 - a^2 \lambda^2 \sin^2 \theta \left( 1 - a^2 \lambda^2 \sin^2 \theta \right)
+\end{align*}
+from which we conclude that $\abs{g} \leq 1$ (independent of $\theta$) if and only if $\abs{a\lambda} \leq 1$.
 
 \end{itemize}
 
