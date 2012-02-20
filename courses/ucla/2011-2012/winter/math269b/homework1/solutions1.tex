@@ -1,0 +1,221 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 1 (Solutions)}
+\date{January 30, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] (Strikwerda 1.1.3.) Solve the initial value problem for
+\begin{equation*}
+u_t + \frac{1}{1 + \frac{1}{2} \cos x} u_x = 0
+\end{equation*}
+Show that the solution is given by $u(t,x) = u_0(\xi)$, where $\xi$ is the unique solution of
+\begin{equation*}
+\xi + \frac{1}{2} \sin \xi = x + \frac{1}{2} \sin x - t.
+\end{equation*}
+
+\textbf{Solution}
+
+We use the method of characteristics, in which we use the change of variables $\tau = \tau(t,x)$, $\xi = \xi(t,x)$, and $\tilde{u}(\tau,\xi) = u \left( t(\tau,\xi), x(\tau,\xi) \right)$. Then
+\begin{equation*}
+\tilde{u}_{\tau} = u_t t_{\tau} + u_x x_{\tau} = u_t + a(t,x) u_x \equiv 0
+\end{equation*}
+if
+\begin{equation*}
+t_{\tau} \equiv 1, \quad x_{\tau} = a(t,x),
+\end{equation*}
+where
+\begin{equation*}
+a(t,x) := \frac{1}{1 + \frac{1}{2} \cos x}.
+\end{equation*}
+We may solve the equation $t_{\tau} \equiv 1$ as $t = \tau$, while the equation for $x_{\tau}$ is an ordinary differential equation in $x= x(\tau)$:
+\begin{equation*}
+\frac{dx}{d\tau} = \frac{1}{1 + \frac{1}{2} \cos x}, \quad x(\tau = 0) = \xi.
+\end{equation*}
+Via separation of variables, we obtain an implicit relation among $x$, $\tau = t$, and $\xi$:
+\begin{equation*}
+x + \frac{1}{2} \sin x - \xi - \frac{1}{2} \sin \xi = \tau = t.
+\end{equation*}
+For each fixed $\xi$, we have $\tilde{u}_{\tau} = 0$, hence $\tilde{u}(\tau,\xi) = \tilde{u}(0,\xi) = u(0,\xi) = u_0(\xi)$. It follows that $u(t,x) = u_0(\xi)$, where $\xi = \xi(t,x)$ satisfies
+\begin{equation*}
+\xi + \frac{1}{2} \sin \xi = x + \frac{1}{2} \sin x - t.
+\end{equation*}
+Note that the mapping $\xi \mapsto \xi + \frac{1}{2} \sin \xi$ is an automorphism on $\mathbb{R}$ (its derivative is uniformly bounded away from $0$), hence such a $\xi$ always exists and is unique.
+
+\item[2.] Solve the initial value problem
+\begin{equation*}
+u_t + \left( \sin t \right) u_x = \frac{1}{1 + t^2}, \quad u(0,x) = u_0(x), \quad x \in \mathbb{R}, \quad t > 0.
+\end{equation*}
+
+We use the method of characteristics, in which we use the change of variables $\tau = \tau(t,x)$, $\xi = \xi(t,x)$, and $\tilde{u}(\tau,\xi) = u \left( t(\tau,\xi), x(\tau,\xi) \right)$. Then
+\begin{equation*}
+\tilde{u}_{\tau} = u_t t_{\tau} + u_x x_{\tau} = u_t + a(t,x) u_x = f(t,x)
+\end{equation*}
+if
+\begin{equation*}
+t_{\tau} \equiv 1, \quad x_{\tau} = a(t,x),
+\end{equation*}
+where
+\begin{equation*}
+a(t,x) := \sin t, \quad f(t,x) := \frac{1}{1 + t^2}.
+\end{equation*}
+We may solve the equation $t_{\tau} \equiv 1$ as $t = \tau$, while the equation for $x_{\tau}$ is an ordinary differential equation in $x= x(\tau)$:
+\begin{equation*}
+\frac{dx}{d\tau} = \sin t = \sin \tau, \quad x(\tau = 0) = \xi.
+\end{equation*}
+This easily solves to
+\begin{equation*}
+x(\tau,\xi) = \xi + \int_0^{\tau} \sin \tau' d\tau' = 1 - \cos \tau + \xi.
+\end{equation*}
+For each fixed $\xi$, we have
+\begin{equation*}
+\tilde{u}_{\tau} = \frac{1}{1 + t^2} = \frac{1}{1 + \tau^2}, \quad \tilde{u}(0,\xi) = u(0,\xi) = u_0(\xi),
+\end{equation*}
+which easily solves to
+\begin{equation*}
+\tilde{u}(\tau,\xi) = \tilde{u}(0,\xi) + \int_0^{\tau} \frac{1}{1 + \left( \tau' \right)^2} d\tau' = \arctan \tau + u_0(\xi).
+\end{equation*}
+It follows that
+\begin{equation*}
+u(t,x) = \arctan t + u_0 \left( \cos t + x + 1 \right).
+\end{equation*}
+
+\item[3.] Consider the first order system of PDEs of the form
+\begin{equation*}
+\vec{u}_t + A \vec{u}_x = 0, \quad \vec{u}(0,x) = \vec{u}_0(x), \quad x \in [0,1], \quad t > 0.
+\end{equation*}
+\begin{itemize}
+\item[(a)] Give the solution to the initial value problem when
+\begin{equation*}
+A = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}.
+\end{equation*}
+\item[(b)] Describe appropriate boundary conditions at $x = 0$ and/or $x = 1$, if possible, which make the initial boundary value problem in (a) well-posed. Try to be as general as possible. How should such boundary conditions be presented to put the solution in a simple form?
+\item[(c)] Give the solution to the initial value problem when
+\begin{equation*}
+A = \begin{pmatrix} 2 & 3 \\ 3 & 2 \end{pmatrix}.
+\end{equation*}
+\item[(d)] Describe appropriate boundary conditions at $x = 0$ and/or $x = 1$, if possible, which make the initial boundary value problem in (c) well-posed. Try to be as general as possible. How should such boundary conditions be presented to put the solution in a simple form?
+\end{itemize}
+
+\textbf{Solution}
+
+\begin{itemize}
+\item[(a)] The eigenvalues and corresponding eigenvectors of $A$ are
+\begin{equation*}
+\lambda_{\pm} = 2 \pm 1, \quad \vec{u}_{\pm} = \begin{pmatrix} 1 \\ \pm 1 \end{pmatrix},
+\end{equation*}
+leading to the general solution
+\begin{equation*}
+\vec{u}(t,x) = \begin{pmatrix} \vec{u}_+ & \vec{u}_- \end{pmatrix} \begin{pmatrix} c_+ \left( x - \lambda_+ t \right) \\ c_- \left( x - \lambda_- t \right) \end{pmatrix},
+\end{equation*}
+where the scalar functions $c_{\pm}$ are determined by the initial conditions and boundary conditions.
+\item[(b)] Since both $\lambda_{\pm} > 0$, boundary conditions must only be specified at the $x = 0$ boundary. A simple way to present these boundary conditions is to simply specify $c_{\pm}$ when $x = 0$, i.e., $c_{\pm} \left( -\lambda_{\pm} t \right) = g^0_{\pm}(t)$ for $t > 0$.
+\item[(c)] $A$ here has the same eigenvectors as in (a) but now with eigenvalues $\lambda_{\pm} = 2 \pm 3$. Otherwise, the solution takes the same general form.
+\item[(d)] This time, $\lambda_+ > 0$ but $\lambda_- < 0$, so boundary conditions must be specified at both the $x = 0$ boundary and the $x = 1$ boundary. A simple way to present these boundary conditions is to specify $c_+$ when $x = 0$ in terms of $t$ and $c_-$, and vice versa, to specify $c_-$ when $x = 1$ in terms of $t$ and $c_+$:
+\begin{align*}
+c_+ \left( -\lambda_+ t \right) & = g^0_+ \left( t, c_- \left( -\lambda_- t \right) \right), \\
+c_- \left( 1 - \lambda_- t \right) & = g^1_- \left( t, c_+ \left( 1 - \lambda_+ t \right) \right),
+\end{align*}
+for $t > 0$.
+
+\end{itemize}
+
+\item[4.] Derive the leading term of the local truncation error for the following finite difference schemes used to approximate solutions to the equation $u_t + a u_x = 0$.
+\begin{itemize}
+\item[(a)]
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + a \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0.
+\end{equation*}
+\item [(b)]
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + a \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0.
+\end{equation*}
+\end{itemize}
+
+\textbf{Solution}
+
+Unless otherwise noted, all functions are evaluated at a common point $(t,x)$.
+
+\begin{itemize}
+\item[(a)] We use the following Taylor expansions about $(t,x)$:
+\begin{align*}
+\phi(t+k,x) & = \phi + k \phi_t + \frac{1}{2} k^2 \phi_{tt} + O \left( k^3 \right); \\
+\phi(t,x \pm h) & = \phi \pm h \phi_x + \frac{1}{2} h^2 \phi_{xx} \pm \frac{1}{6} h^3 \phi_{xxx} + \frac{1}{24} h^4 \phi_{xxxx} + O \left( h^5 \right).
+\end{align*}
+Thus,
+\begin{align*}
+P_{k,h} \phi & = \frac{1}{k} \left( \phi(t+k,x) - \phi \right) + a \frac{1}{2h} \left( \phi(t,x+h) - \phi(t,x-h) \right) \\
+             & = \phi_t + a \phi_x + \frac{1}{2} k \phi_{tt} + \frac{1}{6} h^2 \phi_{xxx} + O \left( k^2 + h^4 \right),
+\end{align*}
+which agrees with $P \phi = \left( \partial_t + a \partial_x \right) \phi$ up to a truncation error of
+\begin{equation*}
+P_{k,h} \phi - P \phi = \frac{1}{2} k \phi_{tt} + \frac{1}{6} h^2 \phi_{xxx} + O \left( k^2 + h^4 \right).
+\end{equation*}
+\item[(b)] Using the same Taylor expansions as above,
+\begin{align*}
+P_{k,h} \phi & = \frac{1}{k} \left( \phi(t+k,x) - \frac{1}{2} \left( \phi(t,x+h) + \phi(t,x-h) \right) \right) + a \frac{1}{2h} \left( \phi(t,x+h) - \phi(t,x-h) \right) \\
+             & = \phi_t + a \phi_x + \frac{1}{2} k \phi_{tt} - \frac{1}{2} \frac{h^2}{k} \phi_{xx} + O \left( k^2 + h^2 \right),
+\end{align*}
+which agrees with $P \phi$ up to a truncation error of
+\begin{equation*}
+P_{k,h} \phi - P \phi = \frac{1}{2} k \phi_{tt} - \frac{1}{2} \frac{h^2}{k} \phi_{xx} + O \left( k^2 + h^2 \right).
+\end{equation*}
+\end{itemize}
+
+\item[5.] Determine the stability region $\Lambda$ for each of the finite difference schemes in Problem 4.
+
+\textbf{Solution}
+
+\begin{itemize}
+\item[(a)] The amplification factor $g$ satisfies the equation
+\begin{equation*}
+\frac{1}{k} \left( g - 1 \right) + a \frac{1}{2h} \left( e^{i\theta} - e^{-i\theta} \right) = 0,
+\end{equation*}
+so
+\begin{equation*}
+g = 1 - i \frac{ak}{h} \sin \theta,
+\end{equation*}
+so $\abs{g}^2 = 1 + \frac{a^2k^2}{h^2} \sin^2 \theta \leq 1 + O(k)$ if and only if $k = O \left( h^2 \right)$.
+\item[(b)] The amplification factor $g$ satisfies the equation
+\begin{equation*}
+\frac{1}{k} \left( g - \frac{1}{2} \left( e^{i\theta} + e^{-i\theta} \right) \right) + a \frac{1}{2h} \left( e^{i\theta} - e^{-i\theta} \right) = 0,
+\end{equation*}
+so
+\begin{equation*}
+g = \cos \theta - i \frac{ak}{h} \sin \theta,
+\end{equation*}
+so $\abs{g} \leq 1$ if and only if $\abs{ak/h} \leq 1$.
+\end{itemize}
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] Implement the finite difference schemes in Problem 4.\ in the Theory section for $x \in [0,1]$, $t \in [0,T]$ for some final time $T$, $u(x,0) = u_0(x)$, and \emph{periodic} boundary conditions.
+
+\item[2.] Investigate the convergence of each scheme for $a = 1$ and $T = 1$. Set $k/h =: \lambda$ to be constant, and demonstrate which values of $\lambda$ cause the scheme to converge and which to diverge. If no such $\lambda$ gives convergence, find an alternate relation between $k$ and $h$ which does ensure convergence (if possible). Try using both a smooth initial condition (e.g., $u_0(x) = \sin(2 \pi x)$); a non-smooth initial condition (e.g., $u_0(x) = 1 - 2 \abs{x - 1/2}$); and a discontinuous initial condition (e.g., $u_0(x) = 0$ if $\abs{x - 1/2} > 1/4$ and $u_0(x) = 1$ if $\abs{x - 1/2} < 1/4$). Use the discrete $L^2$ norm to measure the error between your numerical solution and the true solution:
+\begin{equation*}
+\norm{w}_h = \left( h \sum_m \abs{w_m}^2 \right)^{1/2}.
+\end{equation*}
+[Note: Due to periodicity, be sure to avoid double-counting the contributions at $x = 0$ and $x = 1$!] Plot the numerical solutions from each scheme at $t = T$ when $h = 1/100$. Summarize your results. Which scheme do you think is better and why?
+
+\end{itemize}
+
+\end{document}
