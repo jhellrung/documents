@@ -1,0 +1,50 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 4}
+\date{February 28, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] Solve the heat equation $u_t = b u_{xx}$ on a \emph{periodic} domain $I \subset \mathbb{R}$. How does $\int_I u(t,x) dx$ vary with time $t$?
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] Solve $u_t + a u_x = 0$ numerically using the Lax-Friedrichs scheme. Take $a = 1$, $T = 1$, $x \in [0,1]$ with periodic boundary conditions, and $u_0(x) = \sin 2 \pi x$. For each fixed $\lambda$ within a decreasing sequence of $\lambda$s (each satisfying the stability criterion), demonstrate convergence with $k/h =: \lambda$ by plotting the logarithm of the $L^2$-norm of the error (between the analytic solution and the numerical solution) versus the logarithm of $h$. Verify that the slope suggested by your plot agrees with theory, and estimate the error constant $C_{\lambda}$ in the relation $\text{error} = C_{\lambda} h^p$. Use enough values of $\lambda$ to estimate the relation between $C_{\lambda}$ and $\lambda$. What appears to happen to $C_{\lambda}$ as $\lambda \to 0+$, i.e., as you shrink $k$ relative to $h$? What happens if, instead of taking $k = \lambda h$, you take $k = h^2$? Explain your numerical results in the context of the theoretical convergence analysis of the Lax-Friedrichs scheme.
+
+\item[2.] Write a function implementing the Thomas algorithm presented in Strikwerda 3.5. Specifically, we solve the system of equations
+\begin{equation*}
+a_i w_{i-1} + b_i w_i + c_i w_{i+1} = d_i, \quad i = 1, \dotsc, m-1,
+\end{equation*}
+with $w_0 = \beta_0$ and $w_m = \beta_m$. The solution is given by
+\begin{equation*}
+w_i = p_{i+1} w_{i+1} + q_{i+1}
+\end{equation*}
+where $p_{i+1}$ and $q_{i+1}$ are defined recursively by
+\begin{align*}
+p_{i+1} & = -\left( a_i p_i + b_i \right)^{-1} c_i, \\
+q_{i+1} & = \left( a_i p_i + b_i \right)^{-1} \left( d_i - a_i q_i \right),
+\end{align*}
+and with $p_1$ and $q_1$ determined by the boundary conditions. For the next homework, be prepared to utilize your function implementing the Thomas algorithm to write a function which solves \emph{periodic} tridiagonal systems.
+
+\end{itemize}
+
+\end{document}
