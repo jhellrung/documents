@@ -12,7 +12,7 @@
 \begin{document}
 
 \title{Math 269B, 2012 Winter, Homework 4}
-\date{February 28, 2012}
+\date{February 29, 2012}
 \author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
 \maketitle
 
@@ -34,11 +34,12 @@ Show that if $u_0$ is nonnegative, then
 \norm{u(t,\cdot)}_1 = \norm{u_0}_1.
 \end{equation*}
 
-\item[3.] Continuing from the previous problem, show the relation
-\begin{equation*}
-\lim_{M^-,M^+ \to \infty} \frac{1}{M^+ + M^-} \int_{-M^-}^{M^+} u(t,x) dx = \lim_{M^-,M^+ \to \infty} \frac{1}{M^+ + M^-} \int_{-M^-}^{M^+} u_0(x) dx,
-\end{equation*}
-provided the limit on the right exists.
+\item[3.] Determine the stability and accuracy of the following combination of the Lax-Wendroff and Backward -Time Central-Space schemes to solve $u_t + a u_x = b u_{xx}$ (with $b > 0$):
+\begin{align*}
+0 & = P_{k,h} v^n_m \\
+  & = \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) - \frac{a^2k}{2h^2} \left( v^n_{m+1} - 2 v^n_m + v^n_{m-1} \right) \\
+  & \quad {} - \frac{b}{h^2} \left( v^{n+1}_{m+1} - 2 v^{n+1}_m + v^{n+1}_{m-1} \right).
+\end{align*}
 
 \end{itemize}
 
@@ -48,7 +49,9 @@ provided the limit on the right exists.
 
 \item[1.] Solve $u_t + a u_x = 0$ numerically using the Lax-Friedrichs scheme. Take $a = 1$, $T = 1$, $x \in [0,1]$ with periodic boundary conditions, and $u_0(x) = \sin 2 \pi x$. For each fixed $\lambda$ within a decreasing sequence of $\lambda$s (each satisfying the stability criterion), demonstrate convergence with $k/h =: \lambda$ by plotting the logarithm of the $L^2$-norm of the error (between the analytic solution and the numerical solution) versus the logarithm of $h$. Verify that the slope suggested by your plot agrees with theory, and estimate the error constant $C_{\lambda}$ in the relation $\text{error} = C_{\lambda} h^p$. Use enough values of $\lambda$ to estimate the relation between $C_{\lambda}$ and $\lambda$. What appears to happen to $C_{\lambda}$ as $\lambda \to 0+$, i.e., as you shrink $k$ relative to $h$? What happens if, instead of taking $k = \lambda h$, you take $k = h^2$? Explain your numerical results in the context of the theoretical convergence analysis of the Lax-Friedrichs scheme.
 
-\item[2.] Write a function implementing the Thomas algorithm presented in Strikwerda 3.5. Specifically, we solve the system of equations
+\item[2.] Implement the scheme from problem 3 in the Theory section and confirm numerically the theoretical rate of convergence.
+
+\item[3.] Write a function implementing the Thomas algorithm presented in Strikwerda 3.5. Specifically, we solve the system of equations
 \begin{equation*}
 a_i w_{i-1} + b_i w_i + c_i w_{i+1} = d_i, \quad i = 1, \dotsc, m-1,
 \end{equation*}
