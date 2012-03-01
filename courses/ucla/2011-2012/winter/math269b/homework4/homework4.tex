@@ -49,7 +49,7 @@ Show that if $u_0$ is nonnegative, then
 
 \item[1.] Solve $u_t + a u_x = 0$ numerically using the Lax-Friedrichs scheme. Take $a = 1$, $T = 1$, $x \in [0,1]$ with periodic boundary conditions, and $u_0(x) = \sin 2 \pi x$. For each fixed $\lambda$ within a decreasing sequence of $\lambda$s (each satisfying the stability criterion), demonstrate convergence with $k/h =: \lambda$ by plotting the logarithm of the $L^2$-norm of the error (between the analytic solution and the numerical solution) versus the logarithm of $h$. Verify that the slope suggested by your plot agrees with theory, and estimate the error constant $C_{\lambda}$ in the relation $\text{error} = C_{\lambda} h^p$. Use enough values of $\lambda$ to estimate the relation between $C_{\lambda}$ and $\lambda$. What appears to happen to $C_{\lambda}$ as $\lambda \to 0+$, i.e., as you shrink $k$ relative to $h$? What happens if, instead of taking $k = \lambda h$, you take $k = h^2$? Explain your numerical results in the context of the theoretical convergence analysis of the Lax-Friedrichs scheme.
 
-\item[2.] Implement the scheme from problem 3 in the Theory section and confirm numerically the theoretical rate of convergence.
+\item[2.] Implement the scheme from problem 3 in the Theory section and confirm numerically the theoretical rate of convergence. Use convenient (but non-trivial) initial and boundary conditions such that the solution takes a simple form.
 
 \item[3.] Write a function implementing the Thomas algorithm presented in Strikwerda 3.5. Specifically, we solve the system of equations
 \begin{equation*}
