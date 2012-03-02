@@ -64,6 +64,39 @@ used to approximate solutions to $u_t + a u_x = 0$ with, say, $x \in [0,1]$ and 
 
 \textbf{Solution}
 
+Our difference operator is
+\begin{equation*}
+P_{k,h} v^n_m = \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{h} \left( v^{n+1}_{m+1} - v^{n+1}_m \right)
+\end{equation*}
+which has symbol
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{h} e^{sk} \left( e^{ih\xi} - 1 \right).
+\end{align*}
+We determine stability by finding the roots of the symbol as a function of $g := e^{sk}$, yielding
+\begin{equation*}
+g = \frac{1}{1 + a \lambda \left( e^{i\theta} - 1 \right)}
+\end{equation*}
+where $\lambda := k/h$ and $\theta := h \xi$. We find that
+\begin{equation*}
+\abs{g}^{-2} = 1 + 2 a \lambda \left( a \lambda - 1 \right) \left( 1 - \cos \theta \right),
+\end{equation*}
+hence the scheme is stable ($\abs{g} \leq 1$) if and only if $a \leq 0$ or $a \lambda \geq 1$.
+
+If, for example, $a \lambda = \frac{1}{4}$, then
+\begin{equation*}
+\abs{g}^{-2} = 1 - \frac{3}{8} \left( 1 - \cos \theta \right) = \frac{5}{8} + \frac{3}{8} \cos \theta.
+\end{equation*}
+Choosing, for example, $\theta = \pi$ ought to give an amplication factor of exactly $g = 2$ of the pure mode $v_m = e^{i \theta m} = (-1)^m$. Indeed, one can quickly verify that $v^n_m = 2^n (-1)^m$ satisfies the difference equation:
+\begin{align*}
+k P_{k,h} v^n_m
+ & = v^{n+1}_m - v^n_m + a \lambda \left( v^{n+1}_{m+1} - v^{n+1}_m \right) \\
+ & = 2^{n+1} (-1)^m - 2^n (-1)^m + \frac{1}{4} \left( 2^{n+1} (-1)^{m+1} - 2^{n+1} (-1)^m \right) \\
+ & = 2^n (-1)^m \left( 2 - 1 + \frac{1}{4} \left( -2 -2 \right) \right) \\
+ & = 0.
+\end{align*}
+One final remark: Notice that if $a \lambda = \frac{1}{2}$, $\abs{g}$ is \emph{unbounded} near $\theta = \pi$. This corresponds to a null space in the resulting system of equations for $v^{n+1}$ induced by the difference operator, and this null space is spanned precisely by the mode corresponding to $\theta = \pi$, $v_m = (-1)^m$.
+
 \item[3.] Prove that numerical solutions to the Lax-Friedrichs scheme
 \begin{equation*}
 \frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + \frac{a}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0
