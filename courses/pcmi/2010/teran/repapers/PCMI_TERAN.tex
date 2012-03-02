@@ -116,7 +116,7 @@ Los Angeles, CA 90095-1555}
 This short lecture series will cover the simulation of elastic materials characteristic of biological soft tissues. The target application is virtual surgery. This relatively new field places some unique constraints on the types of algorithms needed for simulation. First and foremost, the simulation must go very fast, nearly unprecedentedly so in fact. We must run traditional scientific computing applications in real-time to provide the functionality needed for a surgical simulator. Specifically, we must update the state of the simulation every thirtieth of a second in order to provide an interactive environment. This is highly non-trivial as such steps usually require the solution of large linear systems of equations, a task that can be notoriously time consuming. Furthermore, these simulations must be abnormally robust to user input. Many of us have played video games. The presence of a bug or some source of unexpected behavior is unacceptable as it degrades the user experience and can render the environment non-interactive. Satisfying these two constraints as well as a tutorial in basic simulation of elasticity will be the primary focus of this lecture series.
 
 \begin{figure}
-\includegraphics[width=\columnwidth]{images/clift_lip_image}
+%\includegraphics[width=\columnwidth]{images/clift_lip_image}
 \caption{Surgical simulation will ideally be used to provide a virtual environment of prototyping procedures as well as for research and development of novel procedures. The images show a subject specific simulated cleft lip and palate repair. Elastic simulation of soft tissues is the primary algorithmic challenge in providing such technologies.}
 \label{cleft}
 \end{figure}
@@ -140,7 +140,7 @@ $$
 $$
 Index notation for derivatives will be helpful for compactness of expressions. E.g. $F_{ij}=\frac{\partial\phi_i}{\partial{X}_j}=\phi_{i,j}$ and $\frac{\partial{u}_i}{\partial{X}_j}=u_{i,j}$
 \begin{figure}
-\includegraphics[width=\columnwidth]{images/continuum}
+%\includegraphics[width=\columnwidth]{images/continuum}
 \caption{We will be solving for the mapping between the current configuration and a rest configuration. Stresses will arise via elasticity to resist changes in shape induced by this motion.}
 \label{phi}
 \end{figure}
@@ -168,8 +168,8 @@ The equations are not yet closed because we still need to determine a relationsh
 $$
 \Psi:\mathbb{R}^{2\times2}\rightarrow\mathbb{R} \ \ \textrm{and} \ \ \mathbf{P}=\frac{\partial\Psi}{\partial\mathbf{F}}
 $$
-In index notation this is, $P_{ij}=\Psi_{,ij}$. In general, the indices following the comma refer to partial differentiation.\\
-\\
+In index notation this is, $P_{ij}=\Psi_{,ij}$. In general, the indices following the comma refer to partial differentiation.
+
 The most simplistic model for elasticity is isotropic linear elaticity. In this case, we have
 $$
 \epsilon_{ij}=\frac{1}{2}(F_{ij}+F_{ji})-\delta_{ij}=\frac{1}{2}(\frac{\partial{u}_i}{\partial{X}_j}+\frac{\partial{u}_j}{\partial{X}_i}) \ \ \textrm{and} \ \ \Psi(\mathbf{F})=\mu\epsilon_{ij}\epsilon_{ij}+\frac{\lambda}{2}\epsilon_{kk}^2.
@@ -178,8 +178,8 @@ We are using the convention that repeated indices are summed here and $\delta_{i
 $$
 P_{ij}=\Psi_{,ij}=2\mu\epsilon_{ij}+\lambda\epsilon_{kk}\delta_{ij} \ \ \textrm{or} \ \ \mathbf{P}=2\mu\epsilon+\lambda\textrm{Tr}(\epsilon)\mathbf{I}.
 $$
-This relationship between the stress and the displacement mapping is enough to close our governing system of equations. I will not give too much motivation for these equations, but note that $\epsilon$ is zero when $\mathbf{F}$ is skew-symmetric. Also, note that if the displacement is spatially constant, then $\frac{\partial\mathbf{u}}{\partial\mathbf{X}}=-\mathbf{I}$ and hence $\epsilon=\mathbf{P}=\mathbf{0}$. $\epsilon$ is a measure of the strain (or change of shape) in the material. Ideally, we'd like a measure that was invariant under rigid motions $\phi$. Unfortunately, the motions just described are only approximately rigid. The approximation is valid if we assume that the deformation is very small. In fact, we can only say that linear elasticity is valid if the deformation is very small. Otherwise, it is not a very good model. That is, it does not accurately describe any elastic materials observed in nature unless the strain is very small. A more general expression of a rigid body motion is that the deformation gradient is orthogonal. I.e. that $\mathbf{F}^T\mathbf{F}=\mathbf{I}$. In fact, more appropriate strain measures for large deformation elasticity are the left and right Cauchy-Green strain tensors: $\mathbf{G}=\mathbf{F}^T\mathbf{F}-\mathbf{I}$ and  $\mathbf{G}=\mathbf{F}\mathbf{F}^T-\mathbf{I}$ respectfully. Note that this measure is quadratic in the deformation. This will lead to nonlinear governing equations and complicate considerably the process of running our simulation. In other words, if we want to simulate large tissues that undergo significant deformation (as we would need in virtual surgery), we'll be stuck with nonlinear governing equations.\\
-\\
+This relationship between the stress and the displacement mapping is enough to close our governing system of equations. I will not give too much motivation for these equations, but note that $\epsilon$ is zero when $\mathbf{F}$ is skew-symmetric. Also, note that if the displacement is spatially constant, then $\frac{\partial\mathbf{u}}{\partial\mathbf{X}}=-\mathbf{I}$ and hence $\epsilon=\mathbf{P}=\mathbf{0}$. $\epsilon$ is a measure of the strain (or change of shape) in the material. Ideally, we'd like a measure that was invariant under rigid motions $\phi$. Unfortunately, the motions just described are only approximately rigid. The approximation is valid if we assume that the deformation is very small. In fact, we can only say that linear elasticity is valid if the deformation is very small. Otherwise, it is not a very good model. That is, it does not accurately describe any elastic materials observed in nature unless the strain is very small. A more general expression of a rigid body motion is that the deformation gradient is orthogonal. I.e. that $\mathbf{F}^T\mathbf{F}=\mathbf{I}$. In fact, more appropriate strain measures for large deformation elasticity are the left and right Cauchy-Green strain tensors: $\mathbf{G}=\mathbf{F}^T\mathbf{F}-\mathbf{I}$ and  $\mathbf{G}=\mathbf{F}\mathbf{F}^T-\mathbf{I}$ respectfully. Note that this measure is quadratic in the deformation. This will lead to nonlinear governing equations and complicate considerably the process of running our simulation. In other words, if we want to simulate large tissues that undergo significant deformation (as we would need in virtual surgery), we'll be stuck with nonlinear governing equations.
+
 Arguably, the most simplistic model for large defromation elasticity is the {\bf Neo-Hookean} model. The hyperelastic strain energy density for such materials is given by the following equation
 $$
 \Psi(\mathbf{F})=\frac{\mu}{2}\left(F_{ij}F_{ji}-2\right)-\mu\textrm{log}(J)+\frac{\lambda}{2}\textrm{log}(J)^2
@@ -197,7 +197,7 @@ $$
 $$
 The Young's modulus is a measure of the stiffness of the material and should be larger than zero (typically around 1000 for our exercises). The Poisson's ratio is a measure of the incompressibility of the material and should be between 0 and $\frac{1}{2}$ (with $\nu=\frac{1}{2}$ being the limit of an incompressible material, note that $\lambda$ goes to $\infty$ in this case).\\
 \begin{figure}
-\includegraphics[width=.5\columnwidth]{images/muscle_biomechanics_2005}
+%\includegraphics[width=.5\columnwidth]{images/muscle_biomechanics_2005}
 \caption{Constitutive models for muscle, tendon, ligament and many other tissues must be anisotropic to accurately reflect the natural fibrous structure of these materials. In such cases, we must represent a fiber field defined over the material configuration of the material as shown above in a rectis femoris muscle.}
 \label{fibers}
 \end{figure}
@@ -207,9 +207,9 @@ $$
 \Psi(\mathbf{F})=\Psi_\textrm{iso}(\mathbf{F})+\Psi_\textrm{fiber}(\mathbf{g^TF^TFg}).
 $$
 \begin{figure}
-\includegraphics[width=\columnwidth]{images/muscles}
+%\includegraphics[width=\columnwidth]{images/muscles}
 \caption{Simulation of elasticity for the musculoskeletal system.}
-\label{fibers}
+%\label{fibers}
 \end{figure}
 \section*{Equilibrium and weak form}
 We can get an idea for how to treat the spatial discretization of the PDE by first considering elastic equilibrium (or quasistatic) problems where the inertia terms in the governing equations are negligible (see \cite{TeranQuas05} for more details). In this case we can solve directly for the displacement (i.e. we don't need to store the velocities as well). Ignoring the inertia, our governing equations are then
@@ -226,8 +226,8 @@ $$
 $$
 \int_{\mathbf{B}_0}w_{i,j}P_{ij}d\mathbf{X}=\int_{\partial\mathbf{B}_0}w_iP_{ij}n_jdS(\mathbf{X})+\int_{\mathbf{B}_0}w_if^\textrm{ext}_id\mathbf{X}.
 $$
-We'd then just assume that the bottom equations hold for all suitable $\mathbf{w}$ for the weak form. Furthermore, the quantity $P_{ij}n_j$ would be supplied as a boundary condition (this would be the external loading on the material). A FEM discretization would then be done by setting up a space of interpolating functions over a mesh and considering the weak form over this finite dimensional space.\\
-\\
+We'd then just assume that the bottom equations hold for all suitable $\mathbf{w}$ for the weak form. Furthermore, the quantity $P_{ij}n_j$ would be supplied as a boundary condition (this would be the external loading on the material). A FEM discretization would then be done by setting up a space of interpolating functions over a mesh and considering the weak form over this finite dimensional space.
+
 \subsection*{1D elasticity}
 To provide an introductory example, I will cover the case of 1D elasticity (I will assume some basic knowledge of FEM). Here, we'll first assume the material is linearly elastic. In that case,
 $$
@@ -265,14 +265,14 @@ $$
 $$
 since $u(X)=u_iN_i(X)$ and $F(X)=\frac{\partial{u}}{\partial{X}}+1=u_i\frac{\partial{N_i}}{\partial{X}}(X)+1$. Note that the linearized system is just a spatially varying Poisson equation. However, it should be noted that for such equations we must typically require the coefficients remain positive throughout the domain. This will not always happen and can lead to difficulties with robustness. We will discuss this issue in the next section.
 \begin{figure}
-\includegraphics[width=\columnwidth]{images/elasticity_1d}
+%\includegraphics[width=\columnwidth]{images/elasticity_1d}
 \caption{The image at the left shows an acceptable solution for the deformation $\phi$ (namely, $\phi(X)=X^2$). The solution at the right shows one that would produce inverted material (namely, $\phi(X)=\textrm{sin}(2\pi{X})$).}
 \label{inversion}
 \end{figure}
 \section*{Inversion}
 The deformation mapping ($\phi$) must be a bijection (1-1 and onto) if we are to strictly apply the principles of continuum mechanics. This precludes many solutions you might otherwise expect to see. For example, for the 1D case, the solution must never have a derivative less than or equal to zero. I.e. many functions we are used to solving for (see Figure \ref{inversion}) are not, strictly speaking, allowable. Unfortunately, this constraint will not always be naturally achieved by our discretization. For some models (e.g. linear elasticity) it is OK that the discrete solution does not satisfy the inversion constraint. For others like Neo-Hookean, we would end up taking the natural log of a negative number. This log term is there to prevent excessive compression, however it has the consequence that our equations become incredibly stiff under compression. Such behavior can be very problematic numerically and must be avoided in surgical simulator. A general approach to improving robustness to discretely inverted (i.e. non-bijection) deformation mappings was developed in \cite{Irving06}. I will not go through all of the details for the sake of time, however I will show how we can apply the principles developed in this work to our simple Neo-Hookean model.\\
 \begin{figure}
-\includegraphics[width=\columnwidth]{images/buddha_gears}
+%\includegraphics[width=\columnwidth]{images/buddha_gears}
 \caption{These images show the the algorithm of \cite{Irving06} in action. This algorithm is based on removing the bijection constraint from continuum mechanics in the discrete setting to provide robustness to large deformation.}
 \label{inversion2}
 \end{figure}
@@ -288,7 +288,7 @@ F_{22} & -F_{12}\\
 $$
 In Figure \ref{inversion3}, we see the effect of this modification in 1D. This new model is well defined through inversion, but accurately reflects the original model when very near the undeformed configuration. We can make further adjustments to prevent problematic values of $\frac{\partial{P}}{\partial{F}}$ (e.g. we wanted this to be positive for our 1D example). The treatment of these terms is addressed in \cite{TeranQuas05}.
 \begin{figure}
-\includegraphics[width=\columnwidth]{images/invertible_neo_hookean}
+%\includegraphics[width=\columnwidth]{images/invertible_neo_hookean}
 \caption{The plots at the left are of the hyperelastic energy density of the 1D Neo-Hookean model. The plots at the right are of the 1D Neo-Hookean stresses. The blue curves are the unmodified Neo-Hookean model, the green curves result from replacing the log with it's cubic Taylor expansion around J=1. These are preferable for the sake of robustness.}
 \label{inversion3}
 \end{figure}
