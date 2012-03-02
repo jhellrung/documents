@@ -32,6 +32,30 @@ Note that these limits are not sharp. It is possible to choose $\epsilon$ larger
 
 \textbf{Solution}
 
+Continuing from the text, we find the amplification factors to be
+\begin{equation*}
+g_{\pm}(\theta) = -i a \lambda \sin \theta \pm \sqrt{1 - a^2 \lambda^2 \sin^2 \theta - \epsilon \sin^4 \frac{1}{2} \theta}.
+\end{equation*}
+If the expression under the $\sqrt{\cdot}$ is nonnegative, then
+\begin{equation*}
+\abs{g_{\pm}(\theta)}^2 = 1 - \epsilon \sin^4 \frac{1}{2} \theta \leq 1,
+\end{equation*}
+hence the scheme is stable. We thus wish to satisfy
+\begin{equation*}
+0 \leq 1 - a^2 \lambda^2 \sin^2 \theta - \epsilon \sin^4 \frac{1}{2} \theta =: \alpha(\theta).
+\end{equation*}
+We compute that
+\begin{equation*}
+\alpha'(\theta) = -\frac{1}{2} \sin \theta \left( \left( 4 a^2 \lambda^2 - \epsilon \right) \cos \theta + \epsilon \right),
+\end{equation*}
+and hence the extrema of $\alpha$ occur when $\sin \theta = 0$ or $\cos \theta = \epsilon / \left( \epsilon - 4 a^2 \lambda^2 \right)$. Values of $\theta$ satisfying $\sin \theta = 0$ give $\alpha = 1$ or $\alpha = 1 - \epsilon$, requiring that $\epsilon \leq 1$. Values of $\theta$ satisfying $\cos \theta = \epsilon / \left( \epsilon - 4 a^2 \lambda^2 \right)$ exist if and only if $\abs{\epsilon / \left( \epsilon - 4 a^2 \lambda^2 \right)} \leq 1$, which is equivalent to $\epsilon \leq 2 a^2 \lambda^2$. For such $\theta$, we get $\alpha = 1 - 4 a^4 \lambda^4 / \left( 4 a^2 \lambda^2 - \epsilon \right)$, and for this to be nonnegative, we must have $\epsilon \leq 4 a^2 \lambda^2 \left( 1 - a^2 \lambda^2 \right)$. In particular, we must have $\abs{a \lambda} < 1$.
+
+So far, we have deduced that, at a minimum, $0 < \epsilon \leq 1$. Furthermore, if $\epsilon \leq 2 a^2 \lambda^2$, then we must additionally satisfy $\epsilon \leq 4 a^2 \lambda^2 \left( 1 - a^2 \lambda^2 \right)$. Now, in the instance that $2 a^2 \lambda^2 \leq 4 a^2 \lambda^2 \left( 1 - a^2 \lambda^2 \right)$, we would automatically satisfy the second condition, and this latter inequality is equivalent to $a^2 \lambda^2 \leq \frac{1}{2}$. It follows that
+\begin{itemize}
+\item If $0 < a^2 \lambda^2 \leq \frac{1}{2}$, it is sufficient to take $0 < \epsilon \leq 1$.
+\item If $\frac{1}{2} \leq a^2 \lambda^2 < 1$, it is sufficient to take $0 < \epsilon \leq 4 a^2 \lambda^2 \left( 1 - a^2 \lambda^2 \right)$.
+\end{itemize}
+
 \item[2.] Derive the stability condition for the backward-time forward-space scheme
 \begin{equation*}
 \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{h} \left( v^{n+1}_{m+1} - v^{n+1}_m \right) = 0
