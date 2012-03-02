@@ -105,9 +105,21 @@ converge to solutions to the corresponding modified equation
 \begin{equation*}
 u_t + a u_x = \frac{h^2}{2k} \left( 1 - \left( \frac{a k}{h} \right)^2 \right) u_{xx}
 \end{equation*}
-to second order accuracy in $L^{\infty}$. I.e., show that $\abs{v^n_m - u_{k,h} \left( t_n,x_m \right)} \to 0$ as $h,k \to 0$ (according to the stability criterion), where the subscripts on $u_{k,h}$ only indicate that the solution to the modified equation is parameterized by $k,h$.
+to second order accuracy in $L^{\infty}$. I.e., show that $\abs{v^n - u_{k,h} \left( t_n, \cdot \right)}_{\infty} \to 0$ (with $t_n = T$) as $h,k \to 0$ (according to the stability criterion), where the subscripts on $u_{k,h}$ only indicate that the solution to the modified equation is parameterized by $k,h$.
 
 \textbf{Solution}
+
+The difference operator for the Lax-Friedrichs scheme is
+\begin{equation*}
+P_{k,h} v^n_m = \frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + \frac{a}{2h} \left( v^n_{m+1} - v^n_{m-1} \right)
+\end{equation*}
+which has symbol
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{k} \left( e^{sk} - \cos h \xi \right) + i \frac{a}{h} \sin h \xi \\
+               & = \frac{1}{k} \left( 1 + sk + \frac{1}{2} s^2 k^2 - 1 + \frac{1}{2} h^2 \xi^2 \right) + i \frac{a}{h} \left( h \xi \right) + O \left( k^2 + h^2 + h^4 k^{-1} \right) \\
+               & = s + i a \xi + \frac{k}{2} s^2 + \frac{h^2}{2k} \xi^2 + O \left( k^2 + h^2 + h^4 k^{-1} \right).
+\end{align*}
 
 \item[4.] (Strikwerda 4.1.2.) Show that the $(2,2)$ leapfrog scheme for $u_t + a u_{xxx} = f$ (see (2.2.15)) given by
 \begin{equation*}
