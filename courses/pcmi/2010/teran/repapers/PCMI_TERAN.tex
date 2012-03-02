@@ -1,0 +1,437 @@
+%-----------------------------------------------------------------------
+% Beginning of pcms-l.template
+%-----------------------------------------------------------------------
+% 
+%	This is a template file for pcms-l for use with 
+%       AMS-LaTeX to prepare lecture notes for PCMI.  
+% 
+% There are two format options for pcms-l.cls.  This template 
+% demonstrates the use of the 'article' format.    
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[article]{pcms-l}
+
+% Notice that the option is 'article'.
+
+%-----------------------------------------------------------------------
+%	Preamble
+%-----------------------------------------------------------------------
+
+% Please put all package calls in this preamble area.  
+%
+% If you need symbols beyond the basic set, uncomment this
+% command. 
+
+% \usepackage{amssymb}
+
+% If your article includes graphics, uncomment this command.
+
+\usepackage{graphicx}
+
+% If the article includes commutative diagrams, ...
+
+% \usepackage[cmtip,all]{xy}
+
+% Put all theorem-like declarations here.  For example, you 
+% might just uncommment all or part of the following.  
+
+% \theoremstyle{plain}
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}{Lemma}[section]
+% \newtheorem{proposition}{Proposition}[section]
+% \newtheorem{corollary}{Corollary}[section]
+ 
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}[section]
+% \newtheorem{example}{Example}[section]
+% \newtheorem{exercise}{Exercise}[lecture]
+
+% \theoremstyle{remark}
+% \newtheorem{remark}{Remark}[lecture]
+
+% To properly number equations, edit and uncomment  
+
+% \numberwithin{equation}{section}
+
+% Put all macro declarations here.  This means commands like
+
+% \newcommand{\boundary}{\delta}
+% \newcommand{\interior}{\ ^\circ}
+
+%-----------------------------------------------------------------------
+%	Here we begin the document proper.
+%-----------------------------------------------------------------------
+
+\begin{document}
+
+%-----------------------------------------------------------------------
+%	First the front matter.
+%-----------------------------------------------------------------------
+
+\frontmatter
+\tableofcontents
+
+%-----------------------------------------------------------------------
+%	The main matter.
+%-----------------------------------------------------------------------
+
+\mainmatter
+
+%-----------------------------------------------------------------------
+%	The title of the lecture series.  Modify and uncomment.
+%-----------------------------------------------------------------------
+
+\LectureSeries[The Mathematics of Image Processing]
+{Simulation of elasticity, biomechanics and virtual surgery \author{Joseph M. Teran}}
+
+% The short-title is used in headers.  If your real title is short
+% enough, this option is not needed.
+
+%-----------------------------------------------------------------------
+%	Author information.  Address and email is required.  
+%	Comment out those not used.
+%-----------------------------------------------------------------------
+
+\address{UCLA Mathematics Department
+Box 951555
+Los Angeles, CA 90095-1555}
+%\curraddr{}
+\email{jteran@math.ucla.edu}
+\date{July, 2010}
+%\thanks{}
+%\dedicatory{}
+
+%-----------------------------------------------------------------------
+%	Introductory material.	
+%-----------------------------------------------------------------------
+
+% Use \section*{} for the introduction, foreward, abstract, or whatever
+% the author wants to call a preliminary section of the manuscript.  
+% There can be more than one such sections.
+
+% Uncomment the following and edit to suit your purposes.
+
+\section*{Introduction}
+This short lecture series will cover the simulation of elastic materials characteristic of biological soft tissues. The target application is virtual surgery. This relatively new field places some unique constraints on the types of algorithms needed for simulation. First and foremost, the simulation must go very fast, nearly unprecedentedly so in fact. We must run traditional scientific computing applications in real-time to provide the functionality needed for a surgical simulator. Specifically, we must update the state of the simulation every thirtieth of a second in order to provide an interactive environment. This is highly non-trivial as such steps usually require the solution of large linear systems of equations, a task that can be notoriously time consuming. Furthermore, these simulations must be abnormally robust to user input. Many of us have played video games. The presence of a bug or some source of unexpected behavior is unacceptable as it degrades the user experience and can render the environment non-interactive. Satisfying these two constraints as well as a tutorial in basic simulation of elasticity will be the primary focus of this lecture series.
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{images/clift_lip_image}
+\caption{Surgical simulation will ideally be used to provide a virtual environment of prototyping procedures as well as for research and development of novel procedures. The images show a subject specific simulated cleft lip and palate repair. Elastic simulation of soft tissues is the primary algorithmic challenge in providing such technologies.}
+\label{cleft}
+\end{figure}
+
+\section*{Real-time computing}
+Real-time simulation refers to the ability to evolve the approximation to an initial boundary value problem in less than a thirtieth of a second. In other words, less than the time it would take to observe the solution on the screen. Traditionally, computation times required for a time step in such problems have been on the order of a few minutes or even a few hours, far short of the thirtieth of a second constraint. However, such performance should it be allowed would provided a controllable virtual environment where a user would have the ability to change the forcing and boundary conditions of a simulation in response to real-time observation of the solution. The application of such functionality for solid and fluid mechanics problems is engendering many new applications. For example, imagine an interactive virtual environment where the user interacts with a finite element simulation of biomechanical soft tissues. The governing equations dictate how the tissues respond to external influence from the users. This predictive ability would allow the user to push, pull or even cut/excise portions of the tissue in real time with full confidence that the real life counterpart would behave similarly. This ability could potentially revolutionize the process of training surgical residents and medics by providing a cost effective and scientific alternative to expensive cadaver based training. Imagine the ability to know the outcome of a surgical procedure before it is performed. Reconstructive surgery for severe trauma is unpredictable by the nature of the injuries. The surgeon must design the treatment procedure on a case-by case-basis. With the aid of a predictive simulator the surgeon could perform hypothetical surgical repairs in advance to determine the most likely successful approach. This would significantly reduce complication rates and lead to drastically improved quality of life. See \cite{SHTOC09} for further discussion of the potential benefits of surgical simulation.
+
+\section*{Continuum mechanics and elasticity}
+\subsection*{Kinematics}
+I will go through the basic continuum mechanics for describing the IBVPs for deformable objects as quickly as possible with an emphasis on only those details necessary for implementing a basic FEM type simulation (see the text \cite{BW08} for more details). We will quantify the deformation of the objects of interest in terms of the mapping ($\mathbf{\phi}$) between an initial (or material) $\mathbf{B}_0\in\mathbb{R}^2$ and current (or deformed) $\mathbf{B}_t\in\mathbb{R}^2$ configuration (we'll just be covering 2D for simplicity). Let's introduce the convention that points in $\mathbf{B}_0$ we label as $\mathbf{X}$ and points in $\mathbf{B}_t$ we label as $\mathbf{x}$ (see Figure \ref{phi}). I.e. $\mathbf{B}_0=\{\mathbf{X}\}$ and $\mathbf{B}_t=\{\mathbf{x}\}$ so
+$$
+\mathbf{\phi(.,t)}:\mathbf{B}_0\rightarrow\mathbf{B}_t \ \ \textrm{and} \ \ \phi(\mathbf{X},t)=\mathbf{x}
+$$
+It is also useful to talk about
+$$
+\mathbf{u(.,t)}:\mathbf{B}_0\rightarrow\mathbb{R}^2\ \ \textrm{where} \ \ \mathbf{u}(\mathbf{X},t)=\phi(\mathbf{X},t)-\mathbf{X}.
+$$
+We'll refer to this function $\mathbf{u}$ as the displacement mapping. We'll also introduce a little more notation here for the derivatives of these mappings. The deformation gradient refers to $\frac{\partial\phi}{\partial\mathbf{X}}$ and is often denoted with $\mathbf{F}$.
+$$
+\mathbf{F(.,t)}:\mathbf{B}_0\rightarrow\mathbb{R}^{2\times2}\ \ \textrm{and} \ \ \mathbf{F}=\frac{\partial\phi}{\partial\mathbf{X}}.
+$$
+Index notation for derivatives will be helpful for compactness of expressions. E.g. $F_{ij}=\frac{\partial\phi_i}{\partial{X}_j}=\phi_{i,j}$ and $\frac{\partial{u}_i}{\partial{X}_j}=u_{i,j}$
+\begin{figure}
+\includegraphics[width=\columnwidth]{images/continuum}
+\caption{We will be solving for the mapping between the current configuration and a rest configuration. Stresses will arise via elasticity to resist changes in shape induced by this motion.}
+\label{phi}
+\end{figure}
+\subsection*{Basic balance laws}
+Again, I will only present the essential details for getting started with elastodynamics. Our governing equations of motion arise from the basic principles of continuum mechanics, ultimately $F=ma$ applied over our continuum of material $\mathbf{B}_0$. This reads as:
+$$
+\rho_0(\mathbf{X})\frac{\partial^2\mathbf{u}}{\partial{t}^2}=\nabla^\mathbf{X}\cdot\mathbf{P}+\mathbf{f}^{\textrm{ext}}.
+$$
+Here, $\rho$ is the mass density of the material, $\mathbf{f}^\textrm{ext}$ is an externally applied force and $\mathbf{P}$ is the first Piola-Kirchoff Stress which describes the forces of interaction in the material (specifically, $\mathbf{P}$ relates the normal of an infinitesimal surface in the material to the forces applied by one side of the material to the other, see Figure \ref{phi}). We will discuss the form of this stress in the coming sections. For now, note that it is a matrix valued function over the material:
+$$
+\mathbf{P}:\mathbf{B}_0\times[0,T]\rightarrow\mathbb{R}^{2\times2}.
+$$
+For elasticity, we will be relating this quantity to the deformation gradient. It will usually make more sense for us to consider $\mathbf{P}$ as a function of $\mathbf{F}$, but we will discuss this in the constitutive modeling section. This equation is hyperbolic and roughly like the second order linear wave equation (although, the specific nature of $\mathbf{P}$ for elasticity will give rise to non-linear equations.\
+\
+It will be useful numerically to consider both the velocities of points of material and the displacements as unknowns. We will use $\mathbf{v}(\mathbf{X},t)=\frac{\partial\mathbf{u}}{\partial{t}}(\mathbf{X},t)$ to denote the velocity of material point $\mathbf{X}$. With this convention, we can rewrite our problem with the equivalent system:
+$$
+\left(\begin{array}{c}
+\frac{\partial\mathbf{u}}{\partial{t}} \\
+\rho_0\frac{\partial\mathbf{v}}{\partial{t}} \end{array}\right)=\left(\begin{array}{c}
+\mathbf{v} \\
+\nabla^\mathbf{X}\cdot\mathbf{P}+\mathbf{f}^{\textrm{ext}} \end{array}\right).
+$$
+\subsection*{Elasticity and constitutive modeling}
+The equations are not yet closed because we still need to determine a relationship between the stress and the state of the material. For elastic materials, this is often referred to as the constitutive or material law. Here, we will focus on hyperelastic materials. The constitutive law for such materials arises from a so called strain energy density function $\Psi$. Specifically, we define the stress as the derivative of this energy with respect to the deformation gradient.
+$$
+\Psi:\mathbb{R}^{2\times2}\rightarrow\mathbb{R} \ \ \textrm{and} \ \ \mathbf{P}=\frac{\partial\Psi}{\partial\mathbf{F}}
+$$
+In index notation this is, $P_{ij}=\Psi_{,ij}$. In general, the indices following the comma refer to partial differentiation.\\
+\\
+The most simplistic model for elasticity is isotropic linear elaticity. In this case, we have
+$$
+\epsilon_{ij}=\frac{1}{2}(F_{ij}+F_{ji})-\delta_{ij}=\frac{1}{2}(\frac{\partial{u}_i}{\partial{X}_j}+\frac{\partial{u}_j}{\partial{X}_i}) \ \ \textrm{and} \ \ \Psi(\mathbf{F})=\mu\epsilon_{ij}\epsilon_{ij}+\frac{\lambda}{2}\epsilon_{kk}^2.
+$$
+We are using the convention that repeated indices are summed here and $\delta_{ij}$ is the identity matrix. Differentiating this expression with respect to $\mathbf{F}$ gives us the relationship between the stress and the state of the displaced material:
+$$
+P_{ij}=\Psi_{,ij}=2\mu\epsilon_{ij}+\lambda\epsilon_{kk}\delta_{ij} \ \ \textrm{or} \ \ \mathbf{P}=2\mu\epsilon+\lambda\textrm{Tr}(\epsilon)\mathbf{I}.
+$$
+This relationship between the stress and the displacement mapping is enough to close our governing system of equations. I will not give too much motivation for these equations, but note that $\epsilon$ is zero when $\mathbf{F}$ is skew-symmetric. Also, note that if the displacement is spatially constant, then $\frac{\partial\mathbf{u}}{\partial\mathbf{X}}=-\mathbf{I}$ and hence $\epsilon=\mathbf{P}=\mathbf{0}$. $\epsilon$ is a measure of the strain (or change of shape) in the material. Ideally, we'd like a measure that was invariant under rigid motions $\phi$. Unfortunately, the motions just described are only approximately rigid. The approximation is valid if we assume that the deformation is very small. In fact, we can only say that linear elasticity is valid if the deformation is very small. Otherwise, it is not a very good model. That is, it does not accurately describe any elastic materials observed in nature unless the strain is very small. A more general expression of a rigid body motion is that the deformation gradient is orthogonal. I.e. that $\mathbf{F}^T\mathbf{F}=\mathbf{I}$. In fact, more appropriate strain measures for large deformation elasticity are the left and right Cauchy-Green strain tensors: $\mathbf{G}=\mathbf{F}^T\mathbf{F}-\mathbf{I}$ and  $\mathbf{G}=\mathbf{F}\mathbf{F}^T-\mathbf{I}$ respectfully. Note that this measure is quadratic in the deformation. This will lead to nonlinear governing equations and complicate considerably the process of running our simulation. In other words, if we want to simulate large tissues that undergo significant deformation (as we would need in virtual surgery), we'll be stuck with nonlinear governing equations.\\
+\\
+Arguably, the most simplistic model for large defromation elasticity is the {\bf Neo-Hookean} model. The hyperelastic strain energy density for such materials is given by the following equation
+$$
+\Psi(\mathbf{F})=\frac{\mu}{2}\left(F_{ij}F_{ji}-2\right)-\mu\textrm{log}(J)+\frac{\lambda}{2}\textrm{log}(J)^2
+$$
+$$
+\mathbf{P}(\mathbf{F})=\mu\mathbf{F}+(\textrm{log}(J)\lambda-\mu)\mathbf{F}^{-T}
+$$
+where  $J$ is the determinant of the deformation gradient
+$$
+J=\textrm{det}(\mathbf{F}).
+$$
+The log term in this equation is there to resist changes in volume. The $\lambda$ and $\mu$ terms can be set as in linear elasticity. The most intuitive way to set these parameters is from the Young's modulus ($\textrm{K}$) and Poisson ratios ($\nu$). This relationship is
+$$
+\lambda=\frac{\textrm{K}\nu}{(1+\nu)(1-2\nu)} \ \ \textrm{and} \ \ \mu=\frac{\textrm{K}}{2(1+\nu)}.
+$$
+The Young's modulus is a measure of the stiffness of the material and should be larger than zero (typically around 1000 for our exercises). The Poisson's ratio is a measure of the incompressibility of the material and should be between 0 and $\frac{1}{2}$ (with $\nu=\frac{1}{2}$ being the limit of an incompressible material, note that $\lambda$ goes to $\infty$ in this case).\\
+\begin{figure}
+\includegraphics[width=.5\columnwidth]{images/muscle_biomechanics_2005}
+\caption{Constitutive models for muscle, tendon, ligament and many other tissues must be anisotropic to accurately reflect the natural fibrous structure of these materials. In such cases, we must represent a fiber field defined over the material configuration of the material as shown above in a rectis femoris muscle.}
+\label{fibers}
+\end{figure}
+\\
+The models described so far are both isotropic. That is, the elastic response to deformation is the same regardless of which direction the material is stretched in. This is not very accurate for many fibrous tissues in the anatomy. In these cases, we need an auxiliary function $\mathbf{g}:\mathbf{B}_0\rightarrow\mathbb{R}^2$ that describes the local fiber direction in the material configuration of the tissue (see Figure \ref{fibers}). The specialized response in the fiber direction can be incorporated by changing the original isotropic strain energy density to include a term based on the stretching in the fiber direction: $\mathbf{g^TF^TFg}$. That is, the modification looks like
+$$
+\Psi(\mathbf{F})=\Psi_\textrm{iso}(\mathbf{F})+\Psi_\textrm{fiber}(\mathbf{g^TF^TFg}).
+$$
+\begin{figure}
+\includegraphics[width=\columnwidth]{images/muscles}
+\caption{Simulation of elasticity for the musculoskeletal system.}
+\label{fibers}
+\end{figure}
+\section*{Equilibrium and weak form}
+We can get an idea for how to treat the spatial discretization of the PDE by first considering elastic equilibrium (or quasistatic) problems where the inertia terms in the governing equations are negligible (see \cite{TeranQuas05} for more details). In this case we can solve directly for the displacement (i.e. we don't need to store the velocities as well). Ignoring the inertia, our governing equations are then
+$$
+-\nabla^\mathbf{X}\cdot\mathbf{P}=\mathbf{f}^\textrm{ext} \ \ \textrm{or} \ \ -P_{ij,j}=f^\textrm{ext}_i.
+$$
+This can be read as the row wise divergences of the matrix $\mathbf{P}$ balance the different components of the applied forces. We'll mainly be considering FEM type discretization in these notes, so we'll look at the weak form here to get started with that. Taking a class of test functions $\mathbf{w}:\mathbf{B}_0\rightarrow\mathbb{R}^2$, we take the dot product with both sides of the governing equations and integrate over $\mathbf{B}_0$ to get
+$$
+-\int_{\mathbf{B}_0}w_iP_{ij,j}d\mathbf{X}=\int_{\mathbf{B}_0}w_if^\textrm{ext}_id\mathbf{X}
+$$
+$$
+-\int_{\mathbf{B}_0}{(w_iP_{ij})}_{,j}-w_{i,j}P_{ij}d\mathbf{X}=\int_{\mathbf{B}_0}w_if^\textrm{ext}_id\mathbf{X}
+$$
+$$
+\int_{\mathbf{B}_0}w_{i,j}P_{ij}d\mathbf{X}=\int_{\partial\mathbf{B}_0}w_iP_{ij}n_jdS(\mathbf{X})+\int_{\mathbf{B}_0}w_if^\textrm{ext}_id\mathbf{X}.
+$$
+We'd then just assume that the bottom equations hold for all suitable $\mathbf{w}$ for the weak form. Furthermore, the quantity $P_{ij}n_j$ would be supplied as a boundary condition (this would be the external loading on the material). A FEM discretization would then be done by setting up a space of interpolating functions over a mesh and considering the weak form over this finite dimensional space.\\
+\\
+\subsection*{1D elasticity}
+To provide an introductory example, I will cover the case of 1D elasticity (I will assume some basic knowledge of FEM). Here, we'll first assume the material is linearly elastic. In that case,
+$$
+P(X)=(2\mu-\lambda)\frac{\partial{u}}{\partial{X}}
+$$
+and the equilibrium equation is just Poisson
+$$
+-(2\mu-\lambda)\frac{\partial^2{u}}{\partial{X}^2}=f^\textrm{ext}.
+$$
+Thus, we can just use a piecewise linear interpolation space of a uniform discretization of our material (which I will assume for simplicity is just some interval $[a,b]$). In this case, we will ultimately just be solving a Poisson equation for the unknown deformation field. This is only the case in 1D. If we assume that each node in the discrete domain has an associated interpolating function $N_i$, then the FEM discretized linear system is
+$$
+A_{ij}u_j=F^\textrm{ext}_i+g_i \ \ \textrm{where} \ \ A_{ij}=(2\mu-\lambda)\int_a^b\frac{\partial{N_i}}{\partial{X}}\frac{\partial{N_j}}{\partial{X}}dX, 
+$$
+$$
+F^\textrm{ext}_i=\int_a^bf^\textrm{ext}N_idX, \ g_i=N_i(b)P(b)-N_i(a)P(a)
+$$
+(where we assume that $P(a)$ and $P(b)$ were already given). Now, let's consider the case of Neo-Hookean elasticity. In this case, our discretization of the weak form will give rise to a nonlinear system of equations for our displacements $u_i$
+$$
+q_i(\mathbf{u})=\int_a^b\frac{\partial{N_i}}{\partial{X}}P(F(u(X)))dX-F^\textrm{ext}_i+g_i
+$$
+where $u(X)=u_iN_i(X)$ (again, where repeated indices imply sumation). For Neo-Hookean materials in 1D, we have
+$$
+P(F(u(X)))=\mu(\frac{\partial{u}}{\partial{X}}+1)+(\textrm{log}(\frac{\partial{u}}{\partial{X}}+1)\lambda-\mu)\frac{1}{\frac{\partial{u}}{\partial{X}}+1}.
+$$
+We can think of $\mathbf{q}:\mathbb{R}^n\rightarrow\mathbb{R}^n$ as a nonlinear function that we need to find a zero of. We'll use Newton's method to iteratively improve our approximate solution (here, I am assuming $\mathbf{u}^k\in\mathbb{R}^n$ is our current approximation to the vector of discrete displacements) as:
+$$
+\frac{\partial{q_i}}{\partial{u_j}}(\mathbf{u}^k)\Delta{u}_j+q_i(\mathbf{u}^k)=0
+$$
+$$
+u_i^{k+1}=u_i^{k}+\Delta{u}_i.
+$$
+The linearization of the discrete equilibrium equations can be a little tricky, so it will be good to first consider it in 1D. The general idea is to linearize the stress with respect to the deformation gradient, then linearize the deformation gradient with respect to discrete degrees of freedom.
+$$
+\frac{\partial{q}_i}{\partial{u}_j}(\mathbf{u})=\int_a^b\frac{\partial{N_i}}{\partial{X}}\frac{\partial{P}}{\partial{F}}(F(\mathbf{u}))\frac{\partial{F}}{\partial{u}_j}dX=\int_a^b\frac{\partial{N_i}}{\partial{X}}\frac{\partial{P}}{\partial{F}}(F(\mathbf{u}))\frac{\partial{N_j}}{\partial{X}}dX
+$$
+since $u(X)=u_iN_i(X)$ and $F(X)=\frac{\partial{u}}{\partial{X}}+1=u_i\frac{\partial{N_i}}{\partial{X}}(X)+1$. Note that the linearized system is just a spatially varying Poisson equation. However, it should be noted that for such equations we must typically require the coefficients remain positive throughout the domain. This will not always happen and can lead to difficulties with robustness. We will discuss this issue in the next section.
+\begin{figure}
+\includegraphics[width=\columnwidth]{images/elasticity_1d}
+\caption{The image at the left shows an acceptable solution for the deformation $\phi$ (namely, $\phi(X)=X^2$). The solution at the right shows one that would produce inverted material (namely, $\phi(X)=\textrm{sin}(2\pi{X})$).}
+\label{inversion}
+\end{figure}
+\section*{Inversion}
+The deformation mapping ($\phi$) must be a bijection (1-1 and onto) if we are to strictly apply the principles of continuum mechanics. This precludes many solutions you might otherwise expect to see. For example, for the 1D case, the solution must never have a derivative less than or equal to zero. I.e. many functions we are used to solving for (see Figure \ref{inversion}) are not, strictly speaking, allowable. Unfortunately, this constraint will not always be naturally achieved by our discretization. For some models (e.g. linear elasticity) it is OK that the discrete solution does not satisfy the inversion constraint. For others like Neo-Hookean, we would end up taking the natural log of a negative number. This log term is there to prevent excessive compression, however it has the consequence that our equations become incredibly stiff under compression. Such behavior can be very problematic numerically and must be avoided in surgical simulator. A general approach to improving robustness to discretely inverted (i.e. non-bijection) deformation mappings was developed in \cite{Irving06}. I will not go through all of the details for the sake of time, however I will show how we can apply the principles developed in this work to our simple Neo-Hookean model.\\
+\begin{figure}
+\includegraphics[width=\columnwidth]{images/buddha_gears}
+\caption{These images show the the algorithm of \cite{Irving06} in action. This algorithm is based on removing the bijection constraint from continuum mechanics in the discrete setting to provide robustness to large deformation.}
+\label{inversion2}
+\end{figure}
+\\
+The problematic term in the Neo-Hookean model is the natural log. If we replace the log with another function $r$, we can improve the robustness of our numerical simulation to inversion. This function should look very nearly like the natural log around $J=1$ to prevent loss of accuracy, but should not have a singularity at $J=0$. We can do this by taking $r$ to be the cubic Taylor expansion of the log around $J=1$ (see Figure \ref{inversion3}). With this choice, we have the following expressions for the Neo-Hookean hyperelastic strain energy density and first Piola-Kirchoff stresses;
+$$
+\Psi(\mathbf{F})=\frac{\mu}{2}(F_{ij}F_{ij}-2)-\mu{r}(J)+\frac{\lambda}{2}r(J)^2
+$$
+$$
+\mathbf{P}(\mathbf{F})=\mu\mathbf{F}+\left[r(J)\lambda-\mu\right]r'(J)\left[\begin{array}{cc}
+F_{22} & -F_{12}\\
+-F_{21} & F_{11} \end{array}\right].
+$$
+In Figure \ref{inversion3}, we see the effect of this modification in 1D. This new model is well defined through inversion, but accurately reflects the original model when very near the undeformed configuration. We can make further adjustments to prevent problematic values of $\frac{\partial{P}}{\partial{F}}$ (e.g. we wanted this to be positive for our 1D example). The treatment of these terms is addressed in \cite{TeranQuas05}.
+\begin{figure}
+\includegraphics[width=\columnwidth]{images/invertible_neo_hookean}
+\caption{The plots at the left are of the hyperelastic energy density of the 1D Neo-Hookean model. The plots at the right are of the 1D Neo-Hookean stresses. The blue curves are the unmodified Neo-Hookean model, the green curves result from replacing the log with it's cubic Taylor expansion around J=1. These are preferable for the sake of robustness.}
+\label{inversion3}
+\end{figure}
+\section*{Time stepping}
+In general, our simulator will run the following loop:
+$$
+\begin{array}{lc}
+\textrm{for} \ n=0:\textrm{N}_\textrm{final}\\
+\ \ -\textrm{Get user boundary condition input}\\
+\ \ -t=t+\Delta{t}\\
+\ \ -\textrm{Solve nonlinear system for displacements and velocities}\\
+\ \ -\textrm{Render solution to screen}\\
+\textrm{end}
+ \end{array}
+$$
+The key factor, is that the nonlinear system must be solved in less than one thirtieth of a second to maintain an interactive simulation rate. An example of a discretization of this system that allows for inertia is the following. Let $\mathbf{u}^m\in\mathbb{R}^n$ represent the spatially discrete displacements at time $m$ and let $\mathbf{v}^m\in\mathbb{R}^n$ represent the spatially discrete velocities. We can implement backward Euler by saying
+$$
+\mathbf{v}^{m+1}=\frac{\mathbf{u}^{m+1}-\mathbf{u}^{m}}{\Delta{t}}
+$$
+and
+$$
+\rho_0\left[\frac{\frac{\mathbf{u}^{m+1}-\mathbf{u}^{m}}{\Delta{t}}-\mathbf{v}^{m}}{\Delta{t}}\right]=\nabla\cdot\mathbf{P}(\mathbf{F}(\mathbf{u}^{m+1}))+\mathbf{f}^\textrm{ext}
+$$
+where we solve this final system by following a similar FEM procedure to the quasistatic case for $\mathbf{u}^{m+1}$. Specifically, we'd get 
+$$
+q^a_i(\mathbf{u}^{m+1})=M_{(ai)(bj)}u^{m+1}_{bj}+\Delta{t}^2\int_{\mathbf{B}_0}N^a_{,j}P_{ij}d\mathbf{X}-M_{(ai)(bj)}\left[u^{m+1}_{bj}+\Delta{t}v^{m}_{bj}\right]-
+$$
+$$
+\int_{\partial\mathbf{B}_0}N^aP_{ij}n_jdS(\mathbf{X})-\int_{\mathbf{B}_0}N^af^\textrm{ext}_id\mathbf{X}
+$$
+and $M_{(ai)(bj)}=\int_{\mathbf{B}_0}N^a\rho_0N^b\delta_{ij}d\mathbf{X}$
+%-----------------------------------------------------------------------
+%	The text of the article.
+%-----------------------------------------------------------------------
+
+% Uncomment the following and edit to suit your purposes.
+%
+% \section[short section name]{long section name}
+%	Text of first section.
+
+%  The short section name will appear in the header of even numbered
+%  pages.  It is only needed if the the long section name is too long
+%  to fit.
+
+% Repeat for the rest of the sections.  Notice the \section is 
+% the main division for the manuscript.
+
+%-----------------------------------------------------------------------
+%	Bibliography.
+%-----------------------------------------------------------------------
+
+%    The standard LaTeX method for inputing a bibliography 
+%    involves using the environment
+
+% \begin{thebibliography}{longest-label}
+% 	bibliographic entries
+% \end{thebibliography}
+
+%    A typical entry has the form
+
+% \bibitem[label]{key}  entry-text
+
+%    Bibliographies can also be prepared with BibTeX using amsplain
+%    or amsalpha.
+
+\bibliographystyle{amsplain}
+\bibliography{PCMI_TERAN}
+%    Insert the bibliography data here.
+
+%-----------------------------------------------------------------------
+%	The end.
+%-----------------------------------------------------------------------
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Templates for common elements of a manuscript in article format.
+
+%    Subsection headings
+
+\subsection{}
+\subsubsection{}
+
+%    Ordinary theorem and proof
+
+\begin{theorem}[Optional addition to theorem head]
+% text of theorem
+\end{theorem}
+
+\begin{proof}[Optional replacement proof heading]
+% text of proof
+\end{proof}
+
+%    Figure insertion; default placement is top; if the figure occupies
+%    more than 75% of a page, the [p] option should be specified.
+
+\begin{figure}
+\includegraphics{filename}
+\caption{text of caption}
+\label{}
+\end{figure}
+
+%    Mathematical displays; for additional information, see the amsmath
+%    user's guide, linked from http://www.ams.org/tex/amslatex.html .
+
+% Numbered equation
+
+\begin{equation}
+  \label{}
+\end{equation}
+
+% Unnumbered equation
+
+\begin{equation*}
+\end{equation*}
+
+% Aligned equations with all equations numbered.
+
+\begin{align}
+  &  \label{} \\
+  &  \label{}
+\end{align}
+
+% Aligned equations with no equations numbered.
+
+\begin{align*}
+  &  \\
+  &
+\end{align*}
+
+% Aligned equations with one number for all.
+
+\begin{align}
+  \label{}
+  \begin{split}
+    &  \\
+    &
+  \end{split
+\end{align}
+
+%-----------------------------------------------------------------------
+% End of pcms-l.template
+%-----------------------------------------------------------------------
+
+
