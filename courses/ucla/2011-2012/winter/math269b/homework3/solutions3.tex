@@ -64,11 +64,7 @@ used to approximate solutions to $u_t + a u_x = 0$ with, say, $x \in [0,1]$ and 
 
 \textbf{Solution}
 
-Our difference operator is
-\begin{equation*}
-P_{k,h} v^n_m = \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{h} \left( v^{n+1}_{m+1} - v^{n+1}_m \right)
-\end{equation*}
-which has symbol
+Denoting the difference operator of the backward-time forward-space scheme by $P_{k,h}$, we find its corresponding symbol to be
 \begin{align*}
 p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
                & = \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{h} e^{sk} \left( e^{ih\xi} - 1 \right).
@@ -109,11 +105,7 @@ to second order accuracy in $L^{\infty}$. I.e., show that $\abs{v^n - u_{k,h} \l
 
 \textbf{Solution}
 
-The difference operator for the Lax-Friedrichs scheme is
-\begin{equation*}
-P_{k,h} v^n_m = \frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + \frac{a}{2h} \left( v^n_{m+1} - v^n_{m-1} \right)
-\end{equation*}
-which has symbol
+Denoting the difference operator for the Lax-Friedrichs scheme by $P_{k,h}$, we find its corresponding symbol to be
 \begin{align*}
 p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
                & = \frac{1}{k} \left( e^{sk} - \cos h \xi \right) + i \frac{a}{h} \sin h \xi \\
@@ -132,6 +124,26 @@ with $\nu = k / h^3$ constant, is stable if and only if
 
 \textbf{Solution}
 
+Denoting the difference operator of the given leapfrog scheme by $P_{k,h}$, we find its corresponding symbol to be
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{2k} \left( e^{sk} - e^{-sk} \right) + i \frac{2a}{h^3} \left( \cos \theta - 1 \right) \sin \theta \\
+               & = \frac{1}{2k} e^{-sk} \left( e^{2sk} - 4 i a \nu \sin \theta \left( 1 - \cos \theta \right) e^{sk} - 1 \right),
+\end{align*}
+where $\nu := k/h^3$. We determine stability by finding the roots of the symbol as a function of $g := e^{sk}$, yielding
+\begin{equation*}
+g_{\pm} = 2 i a \nu \sin \theta \left( 1 - \cos \theta \right) \pm \sqrt{1 - 4 a^2 \nu^2 \sin^2 \theta \left( 1 - \cos \theta \right)^2}.
+\end{equation*}
+Clearly, if the expression under the $\sqrt{\cdot}$ is nonnegative, then $\abs{g_{\pm}} \equiv 1$, so this would certainly be sufficient for stability. Furthermore, the expression under the $\sqrt{\cdot}$ should never be zero, as that would give $g_+(\theta) = g_-(\theta)$ (for some $\theta$), leading to linear growth. Lastly, if the expression under the $\sqrt{\cdot}$ is ever \emph{negative} (for some $\theta$), then it is easy to see that at least one of $\abs{g_+}$ or $\abs{g_-}$ will be larger than $1$, since, in that case, $\abs{2 a \nu \sin \theta \left( 1 - \cos \theta \right)} > 1$. Stability is thus equivalent to
+\begin{equation*}
+0 < 1 - 4 a^2 \nu^2 \sin^2 \theta \left( 1 - \cos \theta \right)^2 =: \alpha(\theta)
+\end{equation*}
+for all $\theta$. We compute that
+\begin{equation*}
+\alpha'(\theta) = 2 \sin \theta \left( 1 - \cos \theta \right)^2 \left( 1 + 2 \cos \theta \right),
+\end{equation*}
+and hence the extrema of $\alpha$ occur when $\sin \theta = 0$, $\cos \theta = 1$, or $\cos \theta = -\frac{1}{2}$. The former two cases give $\alpha = 1$, while the latter case gives $\alpha = 1 - \frac{27}{4} a^2 \nu^2$. It follows that $\alpha > 0$ is equivalent to $\abs{a \nu} < 2/3^{3/2}$, as desired.
+
 \item[5.] (Strikwerda 3.2.1.) Show that the (forward-backward) MacCormack scheme
 \begin{align*}
 \tilde{v}^{n+1}_m & = v^n_m - a \lambda \left( v^n_{m+1} - v^n_m \right) + k f^n_m, \\
@@ -140,6 +152,22 @@ v^{n+1}_m & = \frac{1}{2} \left( v^n_m + \tilde{v}^{n+1}_m - a \lambda \left( \t
 is a second-order accurate scheme for the one-way wave equation (1.1.1). Show that for $f = 0$ it is identical to the Lax-Wendroff scheme (3.1.1).
 
 \textbf{Solution}
+
+Denoting the difference operators of the given MacCormack scheme by $P_{k,h}$ and $R_{k,h}$, we find the corresponding symbols to be
+\begin{align*}
+p_{k,h}(s,\xi) & = P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{k} \left( e^{sk} - \frac{1}{2} \left( 1 + \tilde{v}^{n+1} \left( e^{imh\xi}, f^n \equiv 0 \right) / e^{imh\xi} \right) \right) \\
+               & \quad {} + \frac{a}{2h} \left( 1 - e^{-ih\xi} \right) \tilde{v}^{n+1} \left( e^{imh\xi}, f^n \equiv 0 \right) / e^{imh\xi} \\
+               & = \frac{1}{k} \left( e^{sk} - \frac{1}{2} \left( 2 - a \lambda \left( e^{ih\xi} - 1 \right) \right) \right) + \frac{a}{2h} \left( 1 - e^{-ih\xi} \right) \left( 1 - a \lambda \left( e^{ih\xi} - 1 \right) \right) \\
+               & = \frac{1}{k} \left( e^{sk} - 1 \right) + i \frac{a}{h} \sin h \xi + \frac{a^2k}{h^2} \left( 1 - \cos h \xi \right) \\
+               & = s + \frac{1}{2} k s^2 + i a \xi + \frac{1}{2} a^2 k \xi^2 + O \left( k^2 + h^2 \right) \\
+               & = \left( 1 + \frac{1}{2} k s - \frac{1}{2} i k a \xi \right) \left( s + i a \xi \right) + O \left( k^2 + h^2 \right); \\
+r_{k,h}(s,\xi) & = R_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+               & = \frac{1}{2} \left( \left( \frac{1}{k} - \frac{a}{h} \left( 1 - e^{-ih\xi} \right) \right) \tilde{v}^{n+1} \left( v^n \equiv 0, e^{imh\xi} \right) / e^{imh\xi} + e^{sk} \right) \\
+               & = \frac{1}{2} \left( 1 - a \lambda \left( 1 - e^{-ih\xi} \right) + e^{sk} \right) \\
+               & = 1 + \frac{1}{2} k s - \frac{1}{2} i k a \xi + O \left( k^2 + kh + h^2 \right).
+\end{align*}
+Given that the differential operator $P := \partial_t + a \partial_x$ for the one-way wave equation $P u = f$ has symbol $p(s,\xi) = s + i a \xi$, we see that $p_{k,h} - r_{k,h} p = O \left( k^2 + kh + h^2 \right)$, showing second order accuracy. Additionally, $P_{k,h}$ for this MacCormack scheme is identical to Lax-Wendroff, hence the stability condition is identical to that for Lax-Wendroff, $\abs{a\lambda} \leq 1$. By the Lax-Richtmyer Equivalence Theorem, for $\abs{a\lambda} \leq 1$, this MacCormack scheme is second order convergent.
 
 \end{itemize}
 
