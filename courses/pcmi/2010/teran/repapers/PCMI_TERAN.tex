@@ -304,7 +304,7 @@ $$
 \textrm{end}
  \end{array}
 $$
-The key factor, is that the nonlinear system must be solved in less than one thirtieth of a second to maintain an interactive simulation rate. An example of a discretization of this system that allows for inertia is the following. Let $\mathbf{u}^m\in\mathbb{R}^n$ represent the spatially discrete displacements at time $m$ and let $\mathbf{v}^m\in\mathbb{R}^n$ represent the spatially discrete velocities. We can implement backward Euler by saying
+The key factor is that the nonlinear system must be solved in less than one thirtieth of a second to maintain an interactive simulation rate. An example of a discretization of this system that allows for inertia is the following. Let $\mathbf{u}^m\in\mathbb{R}^n$ represent the spatially discrete displacements at time $m$ and let $\mathbf{v}^m\in\mathbb{R}^n$ represent the spatially discrete velocities. We can implement backward Euler by saying
 $$
 \mathbf{v}^{m+1}=\frac{\mathbf{u}^{m+1}-\mathbf{u}^{m}}{\Delta{t}}
 $$

@@ -1,0 +1,997 @@
+@STRING{JFM = "J. Fluid. Mech."}
+@STRING{CS = "Comput. Struct."}
+@STRING{CPAM = "Comm. Pur. Appl. Math."}
+@STRING{SIREV = "SIAM  Review"}
+@STRING{SIMA = "SIAM  J. Math. Anal."}
+@STRING{SIJAM = "SIAM J. Appl. Math."}
+@STRING{SINA = "SIAM J. Num. Anal."}
+@STRING{SISC = "SIAM J. Sci. Comput."}
+@STRING{SISSC = "SIAM J. Sci. Stat. Comput."}
+@STRING{PhysFl = "Phys. Fluids"}
+@STRING{PhysFlA = "Phys. Fluids A"}
+@STRING{PRL = "Phys. Rev. Lett."}
+@STRING{JCP = "J. Comput. Phys."}
+@STRING{CME = "Comput. Meth. Appl. Mech. Engrg."}
+@STRING{MC = "Math. of Comput."}
+@STRING{CF = "Comput. Fluids"}
+@STRING{IEEE_VIS = "IEEE Trans. Vis. Comput. Graph."}
+@STRING{ISCSB = "I. Symp. Comput. Sim. Biomech."}
+@STRING{IJNMF = "I. J. Numer. Meth. Fluids"}
+@STRING{SCA = "ACM SIGGRAPH/Eurgraphics Symp. Comput. Anim."}
+
+@article{ABDKKKMPSWWY09,
+ author = {K. Asanovic and R. Bodik and J. Demmel and T. Keaveny and K. Keutzer and J. Kubiatowicz and N. Morgan and D. Patterson and K. Sen and J. Wawrzynek and D. Wessel and K. Yelick},
+ title = {A view of the parallel computing landscape},
+ journal = {Commun. ACM},
+ volume = {52},
+ number = {10},
+ year = {2009},
+ issn = {0001-0782},
+ pages = {56--67},
+ doi = {http://doi.acm.org/10.1145/1562764.1562783},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+@ARTICLE{MST10,
+    author = {A. McAdams and E. Sifakis and J. Teran},
+    title = {A parallel multigrid Poisson solver for fluids simulation on very large grids},
+    journal={Submitted.},
+    year = {2010}
+}
+
+@ARTICLE{SMT08,
+    author = {E. Sifakis and S. Marino and J. Teran},
+    title = {Globally coupled impulse-based collision handling for cloth simulation},
+    journal={ACM SIGGRAPH/Eurographics Symposium on Computer Animation (SCA) edited by M. Gross and D. James},
+    pages={147-152},
+    year = {2008}
+}
+
+@ARTICLE{MSWST09,
+    author = {A. McAdams and A. Selle and K. Ward and E. Sifakis and J. Teran},
+    title = {Detail preserving continuum simulation of straight hair},
+    journal = "SIGGRAPH 2009, ACM TOG",
+    year = {2009},
+    volume = {28},
+    number={3},  
+    pages = {385-392}
+}
+
+@ARTICLE{Molino04,
+    author = {N. Molino and Z. Bao and R. Fedkiw},
+    title = {A Virtual Node Algorithm for changing mesh topology during simulation},
+    journal = "SIGGRAPH 2004, ACM TOG",
+    year = {2004},
+    volume = {23},
+    pages = {385-392}
+}
+
+@ARTICLE{Molino03,
+    author = {N. Molino and R. Bridson and J. Teran and R. Fedkiw},
+    title = {A Crystalline, Red Green Strategy for Meshing Highly Deformable Objects with Tetrahedra},
+    journal = "12th International Meshing Roundtable",
+    year = {2003},
+    pages = {103-114}
+}
+
+@ARTICLE{TeranQuas05,
+    author = {J. Teran and E. Sifakis and G. Irving and R. Fedkiw},
+    title = {Robust quasistatic finite elements and flesh simulation},
+    journal = {ACM SIGGRAPH/Eurographics Symposium on Computer Animation (SCA)},
+    pages = {181-190},
+    year = {2005}
+}
+
+@ARTICLE{Irving06,
+    author = {Irving, G. and Teran, J. and Fedkiw, R.},
+ title = {Tetrahedral and hexahedral invertible finite elements},
+ journal = {Graph. Models},
+ volume = {68},
+ number = {2},
+ year = {2006},
+ issn = {1524-0703},
+ pages = {66--89},
+ doi = {http://dx.doi.org/10.1016/j.gmod.2005.03.007},
+ publisher = {Academic Press Professional, Inc.},
+ address = {San Diego, CA, USA},
+}
+
+@ARTICLE{Irving03,
+    author = {G. Irving and J. Teran and R. Fedkiw},
+    title = {Invertible Finite Elements for Robust Simulation of Large Deformation},
+    journal = {ACM SIGGRAPH/Eurographics Symposium on Computer Animation (SCA)},
+    pages = {131-140},
+    year = {2003}
+}
+
+@ARTICLE{Teran05,
+    author = {J. Teran and E. Sifakis and S. Blemker and V. Ng Thow Hing and C. Lau and R. Fedkiw},
+    title = {Creating and simulating skeletal muscle from the Visible Human Data Set},
+    journal = IEEE_VIS,
+    year = {2005},
+    volume = {11},
+    pages = {317--328}
+}
+
+@ARTICLE{Weinstein06,
+    author = {R. Weinstein and J. Teran and R. Fedkiw},
+    title = {Dynamic Simulation of Articulated Rigid Bodies with Collision and Contact},
+    journal = IEEE_VIS,
+    year = {2006},
+    volume = {12},
+    pages = {365--374}
+}
+
+@ARTICLE{Blemker05,
+    author = {S. Blemker and J. Teran and E. Sifakis and R. Fedkiw and S. Delp},
+    title = {Fast 3D muscle simulations using a new quasistatic invertible finite-element algorithm},
+    journal = ISCSB,
+    year = {2005}
+}
+
+@article{TeranPeskin,
+author="J. Teran and C. Peskin",
+title="Tether force constraints in Stokes flow by the immersed boundary method on a periodic domain",
+journal={SIAM J. Sci. Comput.},
+volume={31},
+number={5},
+pages={3404-3416},
+year={2009}
+}
+
+@article{ZhuBedrossianTeran,
+author="J. Bedrossian and J. von Brecht and S. Zhu and E. Sifakis and J. Teran",
+title="A Second Order Virtual Node Method for Poisson Interface Problems on Irregular Domains",
+journal={J. Comp. Phys., To appear.}
+}
+
+@article{TeranBao06,
+author = {Z. Bao and J. Hong and J. Teran and R. Fedkiw},
+title = {Fracturing Rigid Materials},
+journal = {IEEE Trans on Vis and Comput Graph},
+volume = {13},
+number = {2},
+year = {2007},
+issn = {1077-2626},
+pages = {370-378}
+}
+
+@article{TeranFauciShelley2,
+title = {Viscoelastic Fluid Response Can Increase the Speed and Efficiency of a Free Swimmer},
+  author = {J. Teran  and L. Fauci  and M. Shelley},
+  journal = {Phys. Rev. Lett.},
+  volume = {104},
+  number = {3},
+  pages = {038101},
+  numpages = {4},
+  year = {2010},
+  month = {Jan},
+  doi = {10.1103/PhysRevLett.104.038101},
+  publisher = {American Physical Society}
+}
+
+@article{TeranFauciShelley,
+author={J. Teran and L. Fauci and M. Shelley},
+title={Peristaltic pumping and irreversibility of a Stokesian viscoelastic fluid},
+journal={Phys. Fl.},
+volume={20},
+number={073101},
+year={2008}}
+
+@article{adler07,
+author="J. Adler",
+title="Click and Cut in the Virtual Operating Room",
+journal={Newsweek Magazine, December 17, 2007}}
+
+@article{greenemeir07,
+author="L. Greenemeir",
+title="When Will Virtual Surgery Make the Cut?",
+journal={Scientific American.com, December 7, 2007}}
+
+@article{GWABPS07,
+author="A. Grant and S. Webb and E. Anthes and Y. Bhattacharjee and J. Pepitone and E. Svoboda",
+title="{20 best brains under 40}",
+journal={Discover Magazine, December 2008}}
+
+@article{ZSTB09, author="Y. Zhu and E. Sifakis and J. Teran and A. Brandt", title="An efficient multigrid method for the simulation of high resolution solids", journal={ACM Trans. Graph., To appear.}}
+
+
+@inproceedings{TBHF03,
+ author = {Teran, J. and Blemker, S. and Hing, V. Ng Thow and Fedkiw, R.},
+ title = {Finite volume methods for the simulation of skeletal muscle},
+ booktitle = {SCA '03: Proceedings of the 2003 ACM SIGGRAPH/Eurographics Symposium on Computer Animation},
+ year = {2003},
+ isbn = {1-58113-659-5},
+ pages = {68--74},
+ location = {San Diego, California},
+ publisher = {Eurographics Association},
+ address = {Aire-la-Ville, Switzerland, Switzerland},
+ }
+
+@book{BW08,
+title="{Nonlinear continuum mechanics for finite element analysis}",
+author="J. Bonet and R.D. Wood",
+publisher="Cambridge University Press",
+year="1997"
+}
+
+@Article{ brandt:1977:multilevel,
+	title = "{Multi-level adaptive solutions to boundary-value problems}",
+	author = "A. Brandt",
+	journal = "Mathematics of Computation",
+	volume = "31",
+	number = "138",
+	pages = "333--390",
+	year = "1977"
+}
+
+@Article{ rivers:2007:fastlsm,
+	title = "{FastLSM: fast lattice shape matching for robust real-time deformation}",
+	author = "A.R. Rivers and D.L. James",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "26",
+	number = "3",
+	year = "2007"
+}
+
+@Article{ Harlow:1965:NCO,
+	author = "F. Harlow and J. Welch",
+	title = "{Numerical Calculation of Time-Dependent Viscous Incompressible Flow of Fluid with Free Surface}",
+	journal = "Phys. Fluids",
+	volume = "8",
+	pages = "2182--2189",
+	year = "1965"
+}
+
+@Book{BML00,
+title="Nonlinear finite elements for continua and structures",
+author="T. Belytschko and B. Moran and W. K. Liu",
+publisher="Wiley, John and Sons, Incorporated",
+year="2000"}
+
+@Book{brezzi:1991:mixed,
+	title = "{Mixed and hybrid finite element methods}",
+	author = "F. Brezzi and M. Fortin",
+	publisher = "Springer: Berlin",
+	year = "1991"
+}
+
+@Article{ kazhdan:2008:multigrid,
+	author = {Kazhdan, Michael and Hoppe, Hugues},
+ title = {Streaming multigrid for gradient-domain operations on large images},
+ journal = {ACM Trans. Graph.},
+ volume = {27},
+ number = {3},
+ year = {2008},
+ issn = {0730-0301},
+ pages = {1--10},
+ doi = {http://doi.acm.org/10.1145/1360612.1360620},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+@Article{ gaspar:2008:distributive,
+	author = "F. Gaspar and J. Gracia and F. Lisbona and C. Oosterlee",
+	title = "{Distributive smoothers in multigrid for problems with dominating grad-div operators}",
+	journal = "Numerical Linear Algebra with Applications",
+	volume = "15",
+	number = "8",
+	pages = "661--683",
+	year = "2008"
+}
+
+@Book{ brezzi:1991:mixed,
+	title = "{Mixed and hybrid finite element methods}",
+	author = "F. Brezzi and M. Fortin",
+	publisher = "Springer: Berlin",
+	year = "1991"
+}
+
+@Book{ trottenberg:2001:multigrid,
+	title = "Multigrid",
+	author = "U. Trottenberg and C. {O}osterlee and A. Schuller",
+	year = "2001",
+	publisher = "San Diego: Academic Press"
+}
+
+@Book{bonet:1997:nonlinear,
+	title = "{Nonlinear Continuum Mechanics for Finite Element Analysis}",
+	author = "J. Bonet and R.D. Wood",
+	publisher = "Cambridge University Press",
+    year = "1997",
+}
+
+@InProceedings{ fedkiw:2001:smoke,
+	author = "R. Fedkiw and J. Stam and H. Jensen",
+	title = "Visual simulation of smoke",
+	booktitle = "Proc. of ACM SIGGRAPH 2001",
+	pages = "15--22",
+	year = "2001"
+}
+
+@Article{ terzopoulos:1987:elastic,
+	author = "D. Terzopoulos and J. Platt and A. Barr and K. Fleischer",
+	title = "Elastically deformable models",
+	year = "1987",
+	journal = "Computer Graphics (Proc. SIGGRAPH 87)",
+	volume = "21",
+	number = "4",
+	pages = "205--214"
+}
+
+@Article{ terzopoulos:1988:deformable,
+	author = "D. Terzopoulos and K. Fleischer",
+	title = "Deformable models",
+	journal = "The Visual Computer",
+	volume = "4",
+	number = "6",
+	pages = "306--331",
+	year = "1988"
+}
+
+@Article{ rivers:2007:fastlsm,
+	title = "{FastLSM: fast lattice shape matching for robust real-time deformation}",
+	author = "A.R. Rivers and D.L. James",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "26",
+	number = "3",
+	year = "2007"
+}
+
+@InProceedings{ muller:2004:objects,
+	author = "M. M{\"u}ller and M. Teschner and M. Gross",
+	title = "Physically-Based simulation of Objects Represented by Surface Meshes",
+	booktitle = "Proc. Comput. Graph. Int.",
+	month = "June",
+	year = "2004",
+	pages = "156--165"
+}
+
+@InProceedings{ james:2004:squashingcubes,
+	title = "Squashing Cubes: Automating Deformable Model Construction for Graphics",
+	author = "D. James and J. Barbic and C. Twigg",
+	booktitle = "SIGGRAPH 2004 Sketches {\&} Applications",
+	publisher = "ACM Press",
+	year = "2004"
+}
+
+@Article{ irving:2007:incompressible,
+	author = "G. Irving and C. Schroeder and R. Fedkiw",
+	title = "Volume conserving finite element simulations of deformable models",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "26",
+	number = "3",
+	year = "2007"
+}
+
+@Article{ english:2008:developable,
+	title = "{Animating developable surfaces using nonconforming elements}",
+	author = "E. English and R. Bridson",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "26",
+	number = "3",
+	year = "2007"
+}
+
+@InProceedings{ muller:2002:stablerealtimedefs,
+	author = "M. M{\"u}ller and J. Dorsey and L. McMillan and R. Jagnow and B. Cutler",
+	title = "Stable Real-Time Deformations",
+	booktitle = "ACM SIGGRAPH Symp. on Comput. Anim.",
+	year = "2002",
+	pages = "49--54"
+}
+
+@InProceedings{ kaufmann:2008:discontinuous,
+	title = "{Flexible Simulation of Deformable Models Using Discontinuous Galerkin FEM}",
+	author = "P. Kaufmann and S. Martin and M. Botsch and M. Gross",
+	booktitle = "ACM SIGGRAPH/Eurographics Symp. on Comp. Animation",
+	year = "2008"
+}
+
+@InProceedings{ hauth:2004:corotational,
+	title = "{Corotational Simulation of Deformable Solids}",
+	author = "M. Hauth and W. Strasser",
+	booktitle = "In Proc. of WSCG",
+	pages = "137--145",
+	year = "2004"
+}
+
+@InProceedings{ muller:2004:interactive,
+	author = "M. M{\"u}ller and M. Gross",
+	title = "Interactive Virtual Materials",
+	booktitle = "Graph. Interface",
+	month = "May",
+	pages = "239--246",
+	year = "2004"
+}
+
+@Article{ georgii:2006:multigrid,
+	title = "A multigrid framework for real-time simulation of deformable bodies",
+	author = "J. Georgii and R. Westermann",
+	journal = "Computers and Graphics",
+	volume = "30",
+	number = "3",
+	pages = "408--415",
+	year = "2006" }
+
+@article{GOS03,
+ author = {M. Griebel and D. Oeltz and M.A. Schweitzer},
+ title = {An Algebraic Multigrid Method for Linear Elasticity},
+ journal = {SIAM J. Sci. Comput.},
+ volume = {25},
+ number = {2},
+ year = {2003},
+ issn = {1064-8275},
+ pages = {385--407},
+ doi = {http://dx.doi.org/10.1137/S1064827502407810},
+ publisher = {Society for Industrial and Applied Mathematics},
+ address = {Philadelphia, PA, USA},
+ }
+
+@Article{ brandt:1986:amg,
+	title = "{Algebraic multigrid theory: The symmetric case}",
+	author = "A. Brandt",
+	journal = "Applied Mathematics and Computation",
+	volume = "19",
+	number = "1-4",
+	pages = "23--56",
+	year = "1986",
+	publisher = "Elsevier Science Inc. New York, NY, USA"
+}
+
+@Article{ brandt:1977:multilevel,
+	title = "{Multi-level adaptive solutions to boundary-value problems}",
+	author = "A. Brandt",
+	journal = "Mathematics of Computation",
+	volume = "31",
+	number = "138",
+	pages = "333--390",
+	year = "1977"
+}
+
+@Article{ brandt:1978:multigrid,
+	title = "{Multigrid solutions to elliptic flow problems}",
+	author = "A. Brandt and N. Dinar",
+	journal = "Numerical methods for partial differential equations",
+	pages = "53--147",
+	publisher = "Academic Press. New York, NY, USA",
+	year = "1978"
+}
+
+@Article{ brandt:1994:analysis,
+	title = "{Rigorous Quantitative Analysis of Multigrid, I: Constant Coefficients Two-Level Cycle with $L_2$-Norm}",
+	author = "A. Brandt",
+	journal = "SIAM Journal on Numerical Analysis",
+	volume = "31",
+	pages = "1695--1695",
+	year = "1994",
+	publisher = "SIAM SOCIETY FOR INDUSTRIAL AND APPLIED"
+}
+
+@InProceedings{ debunne:2001:dynamicrealtime,
+	author = "G. Debunne and M. Desbrun and M. Cani and A. Barr",
+	title = "Dynamic Real-Time Deformations using Space and Time Adaptive Sampling",
+	booktitle = "Proc. SIGGRAPH 2001",
+	volume = "20",
+	year = "2001",
+	pages = "31--36"
+}
+
+@InProceedings{ capell:2002:multresolution,
+	author = "S. Capell and S. Green and B. Curless and T. Duchamp and Z. Popovi{\'c}",
+	title = "A Multiresolution Framework for Dynamic Deformations",
+	booktitle = "ACM SIGGRAPH Symp. on Comput. Anim.",
+	year = "2002",
+	pages = "41--48",
+	publisher = "ACM Press"
+}
+
+@Article{ grinspun:2002:charms,
+	author = "E. Grinspun and P. Krysl and P. Schr{\"o}der",
+	title = "{CHARMS}: A simple framework for adaptive simulation",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "21",
+	year = "2002",
+	pages = "281--290"
+}
+
+@Article{ james:2003:precomputing,
+	author = "D. James and K. Fatahalian",
+	title = "Precomputing Interactive Dynamic Deformable Scenes",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "22",
+	year = "2003",
+	pages = "879--887"
+}
+
+@Article{ barbic:2005:stvenant,
+	author = "J. Barbic and D. James",
+	title = "Real-Time Subspace Integration of St. Venant-Kirchoff Deformable Models",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	year = "2005",
+	volume = "24",
+	number = "3",
+	pages = "982--990"
+}
+
+@Article{ muller:2005:meshless,
+	author = "M. M{\"u}ller and B. Heidelberger and M. Teschner and M. Gross",
+	title = "Meshless Deformations Based On Shape Matching",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	year = "2005",
+	volume = "24",
+	number = "3",
+	pages = "471--478"
+}
+
+@InProceedings{ mosegaard:2006:surgical,
+	title = "Technical Aspects of the GPU Accelerated Surgical Simulator",
+	author = "J. Mosegaard and T. S. S{\o}rensen",
+	booktitle = "SIGGRAPH 2006 Sketches {\&} Applications",
+	publisher = "ACM Press",
+	year = "2006"
+}
+
+@InProceedings{ Hughes:2007:physicalsimulation,
+	author = {J. Hughes and R. Grzeszczuk and E. Sifakis and D. Kim and S. Kumar and A. Selle and J. Chhugani and M. Holliman and Y. Chen},
+ title = {Physical simulation for animation and visual effects: parallelization and characterization for chip multiprocessors},
+ booktitle = {ISCA '07: Proceedings of the 34th annual international symposium on Computer architecture},
+ year = {2007},
+ isbn = {978-1-59593-706-3},
+ pages = {220--231},
+ location = {San Diego, California, USA},
+ doi = {http://doi.acm.org/10.1145/1250662.1250690},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+@Article{ Thomaszewski:2007:cloth_parallel_multicore,
+	author = "B. Thomaszewski and S. Pabst and W. Blochinger",
+	title = "Exploiting Parallelism in Physically-Based Simulations on Multi-Core Processor Architectures",
+	journal = "EG Symposium on Parallel Graphics and Visualization",
+	pages="69--76",
+	year = "2007"
+}
+
+@Article{ georgii:2006:multigrid,
+	title = "A multigrid framework for real-time simulation of deformable bodies",
+	author = "J. Georgii and R. Westermann",
+	journal = "Computers \& Graphics",
+	volume = "30",
+	number = "3",
+	pages = "408--415",
+	year = "2006"
+}
+
+@InProceedings{ green:2002:subdivision,
+	title = "{Subdivision-based multilevel methods for large scale engineering simulation of thin shells}",
+	author = "S. Green and G. Turkiyyah and D. Storti",
+	booktitle = "Proceedings of the seventh ACM symposium on Solid modeling and applications",
+	pages = "265--272",
+	year = "2002",
+	organization = "ACM New York, NY, USA"
+}
+
+@Article{ shi:2006:multigrid,
+	title = "{A fast multigrid algorithm for mesh deformation}",
+	author = "L. Shi and Y. Yu and N. Bell and W.W. Feng",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	pages = "1108--1117",
+	year = "2006"
+}
+
+@Article{ ni:2004:multigrid,
+	title = "{Fair morse functions for extracting the topological structure of a surface mesh}",
+	author = "X. Ni and M. Garland and J.C. Hart",
+	journal = "ACM Transactions on Graphics (TOG)",
+	volume = "23",
+	number = "3",
+	pages = "613--622",
+	year = "2004",
+	publisher = "ACM New York, NY, USA"
+}
+
+@InProceedings{ wu:2004:multigrid,
+	title = "Multigrid integration for interactive deformable body simulation",
+	author = "X. Wu and F. Tendick",
+	booktitle = "International Symposium on Medical Simulation (2004). c○ Association for Computing Machinery, Inc",
+	year = "2004",
+	pages = "92--104"
+}
+
+@Article{ Bolz:2003:SMS,
+	author = "J. Bolz and I. Farmer and E. Grinspun and P. Schroder",
+	title = "Sparse Matrix Solvers on the GPU: Conjugate Gradients and Multigrid",
+	year = "2003",
+	journal = "ACM Trans. Graph. (SIGGRAPH Proc.)",
+	volume = "22",
+	number = "3",
+	pages = "917--924"
+}
+
+@InProceedings{ goodnight:2003:multigrid,
+	title = "{A multigrid solver for boundary value problems using programmable graphics hardware}",
+	author = "N. Goodnight and C. Woolley and G. Lewin and D. Luebke and G. Humphreys",
+	booktitle = "Proceedings of the ACM SIGGRAPH/Eurographics Conf. on Graphics Hardware",
+	pages = "102--111",
+	year = "2003"
+}
+
+@Article{ Harlow:1965:NCO,
+	author = "F. Harlow and J. Welch",
+	title = "{Numerical Calculation of Time-Dependent Viscous Incompressible Flow of Fluid with Free Surface}",
+	journal = "Phys. Fluids",
+	volume = "8",
+	pages = "2182--2189",
+	year = "1965"
+}
+
+@InProceedings{ O'Brien:1999:GMA,
+	author = "J. O'Brien and J. Hodgins",
+	title = "Graphical modeling and animation of brittle fracture",
+	booktitle = "Proc. of SIGGRAPH 1999",
+	pages = "137--146",
+	year = "1999"
+}
+
+@Article{ aksoylu:2005:multilevel,
+	title = "Multilevel Solvers For Unstructured Surface Meshes ",
+	author = "A. Khodakovsky and P. Schr{\"o}der and B. Aksoylu",
+	journal = "SIAM J. Sci. Comput",
+	volume = "26",
+	number = "4",
+	year = "2005"
+}
+
+@InProceedings{ otaduy:2007:adaptive,
+	title = "Adaptive Deformations with Fast Tight Bounds",
+	booktitle = "SCA '07: Proceedings of the 2007 ACM SIGGRAPH/Eurographics symposium on Computer animation",
+	author = "M. A. Otaduy and D. Germann and S. Redon and M. Gross",
+	pages = "181--190",
+	year = "2007"
+}
+
+@InProceedings{ georgii:2008:fem,
+	title = "Corotated Finite Elements Made Fast and Stable",
+	author = "J. Georgii and R. Westermann",
+	booktitle = "Proceedings of the 5th Workshop On Virtual Reality Interaction and Physical Simulation",
+	year = "2008"
+}
+
+@techreport{ adams99parallel,
+    author = "M. Adams",
+    title = "Parallel Multigrid Algorithms for Unstructured 3{D} Large Deformation Elasticity and Plasticity Finite Element Problems",
+    number = "CSD-99-1036",
+    month = "25,",
+    pages = "21",
+    year = "1999"}
+
+@book{BHM00,
+ author = {W. Briggs and V.E. Henson and S.F. McCormick},
+ title = {A multigrid tutorial: second edition},
+ year = {2000},
+ isbn = {0-89871-462-1},
+ publisher = {Society for Industrial and Applied Mathematics},
+ address = {Philadelphia, PA, USA},
+ }
+
+@article{Brezina06,
+ author = {M. Brezina and C. Tong and R. Becker},
+ title = {Parallel Algebraic Multigrids for Structural Mechanics},
+ journal = {SIAM J. Sci. Comput.},
+ volume = {27},
+ number = {5},
+ year = {2006},
+ issn = {1064-8275},
+ pages = {1534--1554},
+ doi = {http://dx.doi.org/10.1137/040608271},
+ publisher = {Society for Industrial and Applied Mathematics},
+ address = {Philadelphia, PA, USA},
+ }
+
+@article{SHTOC09,
+  author = {E. Sifakis and J. Hellrung and J. Teran and A. Oliker and C. Cutting},
+  Doi = {},
+  Issn = {0926-9630},
+  Jid = {9214582},
+  Journal = {Stud Health Technol Inform},
+  Jt = {Studies in health technology and informatics},
+  Language = {eng},
+  Number = {},
+  Pages = {313-8},
+  Pmid = {19377176},
+  Stat = {In-Data-Review},
+  Title = {Local flaps: a real-time finite element based solution to the plastic surgery defect puzzle.},
+  Volume = {142},
+  Year = {2009}}
+
+@InProceedings{ dick:2008:fem,
+	title = "Computational Steering for Patient-Specific Implant Planning in Orthopedics",
+	booktitle = "Proceedings of Visual Computing for Biomedicine 2008",
+	author = "C. Dick and J. Georgii and R. Burgkart and R. Westermann",
+	pages = "83--92",
+	year = "2008"
+}
+
+@Article{ griebel:2003:amg,
+	title = "An Algebraic Multigrid Method for Linear Elasticity",
+	author = "Michael Griebel and Daniel Oeltz and Marc Alexander Schweitzer",
+	journal = "SIAM J. Sci. Comput",
+	pages = "407",
+	volume = "25",
+	year = "2003"
+}
+
+@Article{ nesme:2006:fem,
+	author = "Matthieu Nesme and Fran\c{c}ois Faure and Yohan Payan",
+	title = "Hierarchical Multi-Resolution Finite Element Model for Soft Body Simulation",
+	journal = "Lecture Notes in Computer Science",
+	volume = "4072",
+	pages = "40--47",
+	month = "july",
+	year = "2006",
+	url = "http://www-evasion.imag.fr/Publications/2006/NFP06b"
+}
+
+@PhDThesis{ gerritsma:1996:staggered,
+	title = "Time dependent numerical simulations of a viscoelastic fluid on a staggered grid",
+	author = "M. Gerritsma",
+	school = "Ruhjsybuversuteut Gribubgeb",
+	year = "1996"
+}
+
+@Article{ hiptmair:2007mixed,
+	title = "Nodal Auxiliary Space Preconditioning in H(curl) and H(div) Spaces",
+	author = "Ralf Hiptmair and Jinchao Xu",
+	journal = "SIAM Journal on Numerical Analysis",
+	pages = "2483--2509",
+	volume = "45",
+	number = "6",
+	year = "2007"
+}
+
+@article{HPC09,
+ author = {I. Nielsen and C. Janssen},
+ title = {Multicore challenges and benefits for high performance scientific computing},
+ journal = {Sci. Program.},
+ volume = {16},
+ number = {4},
+ year = {2008},
+ issn = {1058-9244},
+ pages = {277--285},
+ publisher = {IOS Press},
+ address = {Amsterdam, The Netherlands, The Netherlands},
+ }
+
+
+
+@Article{ KP,
+	title = "A Parallel Multigrid Method for History-Dependent Elastoplasticity Computations",
+	author = "S. Kacou and I. Parsons",
+	journal = "CME",
+	pages = "1--21",
+	volume = "108",
+	year = "1993"
+}
+
+@Article{FPB,
+	title = "An Efficient Multigrid Solution Scheme for Large Scale Non-Linear
+Systems",
+	author = "J. Fish and M. Pandheeradi and V. Belsky",
+	journal = "International Journal for Numerical Methods in Engineering",
+	pages = "1597--1610",
+	volume = "38",
+	year = "1995"
+}
+
+@Article{DC,
+	title = "Coarse/Fine Preconditioners for the Iterative Solution of Finite Element
+Problems",
+	author = "M. Dracopoulos and M. Crisfield",
+	journal = "International Journal for Numerical Methods in Engineering",
+	pages = "3297--3313",
+	volume = "38",
+	year = "1995"
+}
+
+@Article{FPO,
+	title = "A Multi-Grid Enhanced GMRES Algorithm for Elasto-Plastic Problems",
+	author = "Y. Feng and D. Peric and D. Owen",
+	journal = "International Journal for Numerical Methods in Engineering",
+	pages = "1441--1462",
+	volume = "42",
+	year = "1998"
+}
+
+@Article{A2,
+	title = "Evaluation of Three Unstructured Multigrid Methods on 3D Finite Element Problems in Solid
+Mechanics",
+	author = "M. Adams",
+	journal = "International Journal for Numerical Methods in Engineering",
+	pages = "519--534",
+	volume = "55",
+	year = "2002"
+}
+
+@Article{BFMMMR,
+	title = "Adaptive Smoothed Aggregation (aSA) Multigrid",
+	author = "M. Brezina and R. Falgout and S. MacLachlan and T. Manteuffel and S. McCormick and J. Ruge",
+	journal = "SIAM Review SIGEST",
+	pages = "317--346",
+	volume = "47",
+	year = "2005"
+}
+
+@Article{TVB,
+	title = "Two-Level Method for Solids on Unstructured Meshes",
+	author = "R. Tezaur and P. Vanek and M. Brezina",
+	journal = "SIAM J. Sci. Comp.",
+	pages = "900--923",
+	volume = "21",
+	year = "1999"
+}
+
+@Article{VMB,
+	title = "Algebraic Multigrid by Smoothed Aggregation for Second and Fourth
+Order Elliptic Problems",
+	author = "P. Vanek and J. Mandel and M. Brezina",
+	journal = "Computing",
+	pages = "179--196",
+	volume = "56",
+	year = "1996"
+}
+
+@Article{B3,
+	title = "A Nonconforming Mixed Multigrid Method for the Pure Displacemet Problem in Planar
+Linear Elasticity",
+	author = "S. Brenner",
+	journal = "SIAM Journal on Numerical Analysis",
+	pages = "116--135",
+	volume = "30",
+	year = "1993"
+}
+
+@Article{AP,
+	title = "On a Robust and Scalable Linear Elasticity Solver Based on a Saddle Point
+Formulation",
+	author = "O. Axelsson and A. Padiy",
+	journal = "International Journal for Numerical Methods in Engineering",
+	pages = "801--818",
+	volume = "44",
+	year = "1999"
+}
+
+@Article{AN,
+	title = "Scalable Algorithms for the Solution of Navier’s Equations of Elasticity",
+	author = "O. Axelsson and M. Neytcheva",
+	journal = "International Journal for Numerical Methods in Engineering",
+	pages = "149--178",
+	volume = "63",
+	year = "1995"
+}
+
+@Article{CLMM,
+	title = "First-order system least squares for planar linear elasticity:
+numerical results",
+	author = "Z. Cai and C. Lee and T. Manteuffel and S. McCormick",
+	journal = "SIAM Journal on Scientific Computing",
+	pages = "1706--1727",
+	volume = "21",
+	year = "2000"
+}
+
+@Article{CLMM2,
+	title = "First-order system least squares for planar linear elasticity:
+further results",
+	author = "Z. Cai and C. Lee and T. Manteuffel and S. McCormick",
+	journal = "SIAM Journal on Scientific Computing",
+	pages = "1728--1739",
+	volume = "21",
+	year = "2000"
+}
+
+@Article{CMM,
+	title = "First-order system least squares for the Stokes equations, with
+application to linear elasticity",
+	author = "Z. Cai and T. Manteuffel and S. McCormick",
+	journal = "SIAM Journal on Numerical Analysis",
+	pages = "1727--1741",
+	volume = "34",
+	year = "1997"
+}
+
+@Article{CMM2,
+	title = "First-order system least squares for the vorticity form of the Stokes
+equations, with application to linear elasticity",
+	author = "Z. Cai and T. Manteuffel and S. McCormick",
+	journal = "E.T.N.A.",
+	pages = "150--159",
+	volume = "3",
+	year = "1997"
+}
+
+@Article{CMMP,
+	title = "First-order system least squares for the pure traction
+problem in planar linear elasticity",
+	author = "Z. Cai and T. Manteuffel and S. McCormick and S. Parter",
+	journal = "SIAM Journal on Numerical Analysis",
+	pages = "320--335",
+	volume = "35",
+	year = "1998"
+}
+
+@Article{MMSW,
+	title = "First-Order System Least Squares for
+Geometrically Nonlinear Elasticity",
+	author = "T. Manteuffel and S. McCormick and Schmidt and C. Westphal",
+	journal = "SIAM Journal on Numerical Analysis",
+	pages = "2057--2081",
+	volume = "44",
+	year = "2006"
+}
+
+@ARTICLE{Lim04,
+    author = {Y.J. Lim and S. De},
+    title = {Realistic simulation of surgical cutting of soft tissues in real time with force feedback},
+    journal = "Medicine meets virtual reality",
+    year = {2004},
+    volume = {12}
+}
+
+@ARTICLE{De05,
+    author = {S. De and J. Kim and Y.J. Lim and M. Srinivasan},
+    title = {The point collocation-based method of finite spheres (PCMFS) for real time surgery simulation},
+    journal = "Computers and Structures",
+    year = {2005},
+    volume = {83},
+    pages = {1515--1525}
+}
+
+@ARTICLE{De06,
+    author = {S. De and Y.J. Lim and M. Srinivasan},
+    title = {Physically realistic virtual surgery using the point-associated finite field (PAFF) approach},
+    journal = "Presence: Teleoperators and Virt. Environ.",
+    year = {2006},
+    volume = {15},
+    pages = {294--308}
+}
+
+@ARTICLE{Jeong04,
+    author = {J. Jeong and T. Goktekin and X. Wu},
+    title = {An interactive parallel multigrid FEM simulator},
+    journal = "Lecture Notes in Computer Science",
+    year = {2004},
+    volume = {3078},
+    pages = {124--133}
+}
+
+@ARTICLE{Adler07,
+    author = {J. Adler},
+    title = {Click and Cut in the Virtual OR},
+    journal = "Newsweek Magazine",
+    year = {2007},
+    volume = {December 17}
+}
+
+@ARTICLE{Greenemeier07,
+    author = {L. Greenemeier},
+    title = {When Will Virtual Surgery Make the Cut?},
+    journal = "Scientific American",
+    year = {2007}
+}
+
+@ARTICLE{Comas08,
+    author = {O. Comas and Z.A. Taylor and J. Allard and S. Ourselin and S. Cotin and J. Passenger},
+    title = {Efficient nonlinear FEM for soft tissue modelling and its GPU implementation within the open source framework SOFA},
+    journal = "Proc. Inter. Symp. Computational Models for Biomedical Simul.",
+    year = {2008}
+}
+
+@article{Sifakis07,
+author="E. Sifakis and K. Der and R. Fedkiw",
+title="Arbitrary cutting of deformable tetrahedralized objects",
+    year = {2007},
+    pages="73--80",
+    journal = "Proceedings of ACM SIGGRAPH/Eurographics Symposium on Computer Animation"
+}

@@ -1,0 +1,226 @@
+%-----------------------------------------------------------------------
+% Beginning of pcms-l.template
+%-----------------------------------------------------------------------
+% 
+%	This is a template file for pcms-l for use with 
+%       AMS-LaTeX to prepare lecture note for PCMI.  
+% 
+% There are two format options for pcms-l.cls.  This template 
+% demonstrates the use of the 'lectures' format.    
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[lectures]{pcms-l}
+
+% Notice that the option is called 'lectures'
+
+%-----------------------------------------------------------------------
+%	Preamble
+%-----------------------------------------------------------------------
+
+% Please put all package calls in this preamble area.  
+%
+% If you need symbols beyond the basic set, uncomment this
+% command. 
+
+% \usepackage{amssymb}
+
+% If your article includes graphics, uncomment this command.
+
+% \usepackage{graphicx}
+
+% If the article includes commutative diagrams, ...
+
+% \usepackage[cmtip,all]{xy}
+
+% Put all theorem-like declarations here.  For example, you 
+% might just uncommment all or part of the following
+
+% \theoremstyle{plain}
+% \newtheorem{theorem}{Theorem}[chapter]
+% \newtheorem{lemma}{Lemma}[chapter]
+% \newtheorem{proposition}{Proposition}[chapter]
+% \newtheorem{corollary}{Corollary}[chapter]
+% 
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}[chapter]
+% \newtheorem{example}{Example}[chapter]
+% \newtheorem{exercise}{Exercise}[lecture]
+
+% \theoremstyle{remark}
+% \newtheorem{remark}{Remark}[lecture]
+
+% To properly number equations, edit and uncomment  
+
+% \numberwithin{equation}{chapter}
+
+% Put all macro declarations here.  This means commands like
+
+% \newcommand{\boundary}{\delta}
+% \newcommand{\interior}{\ ^\circ}
+
+%-----------------------------------------------------------------------
+%	Here we begin the document proper.
+%-----------------------------------------------------------------------
+
+\begin{document}
+
+%-----------------------------------------------------------------------
+%	First the front matter.
+%-----------------------------------------------------------------------
+
+\frontmatter
+\tableofcontents
+
+%-----------------------------------------------------------------------
+%	The main matter.
+%-----------------------------------------------------------------------
+
+\mainmatter
+
+%-----------------------------------------------------------------------
+%	The title of the lecture series.  Modify and uncomment.
+%-----------------------------------------------------------------------
+
+% \LectureSeries[short-title]%
+% {long-title \author{author-name}}
+
+% The short-title is used in headers.  If your real title is short
+% enough, this option is not needed.
+
+%-----------------------------------------------------------------------
+%	Author information.  Address and email is required.  
+%	Comment out those not used.
+%-----------------------------------------------------------------------
+
+\address{}
+\curraddr{}
+\email{}
+\date{}
+\thanks{}
+\dedicatory{}
+
+%-----------------------------------------------------------------------
+%	Introductory material.	
+%-----------------------------------------------------------------------
+
+% Use \section*{} for the introduction, foreward, abstract, or whatever
+% the author wants to call a preliminary section of the manuscript.  
+% There can be more than one such sections.
+
+% Uncomment the following and edit to suit your purposes.
+
+% \section*{Introduction}
+%	Text of introduction.
+
+%-----------------------------------------------------------------------
+%	The lectures.
+%-----------------------------------------------------------------------
+
+% Uncomment the following and edit to suit your purposes.
+%
+% \lecture{lecture-name}
+%	Text of first lecture.
+
+% Repeat for the rest of the lectures.
+
+%-----------------------------------------------------------------------
+%	Bibliography.
+%-----------------------------------------------------------------------
+
+%    The standard LaTeX method for inputing a bibliography 
+%    involves using the environment
+
+% \begin{thebibliography}{longest-label}
+% 	bibliographic entries
+% \end{thebibliography}
+
+%    A typical entry has the form
+
+% \bibitem[label]{key}  entry-text
+
+%    Bibliographies can be prepared with BibTeX using amsplain
+%    The standard LaTeX method for inputing a bibliography 
+%    involves using the environment
+
+% \bibliographystyle{amsplain}
+%    Insert the bibliography data here.
+
+%-----------------------------------------------------------------------
+%	The end.
+%-----------------------------------------------------------------------
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Templates for common elements of a lecture manuscript.
+
+%    Section headings
+
+\section{}
+\subsection{}
+\subsubsection{}
+
+%    Ordinary theorem and proof
+
+\begin{theorem}[Optional addition to theorem head]
+% text of theorem
+\end{theorem}
+
+\begin{proof}[Optional replacement proof heading]
+% text of proof
+\end{proof}
+
+%    Figure insertion; default placement is top; if the figure occupies
+%    more than 75% of a page, the [p] option should be specified.
+
+\begin{figure}
+\includegraphics{filename}
+\caption{text of caption}
+\label{}
+\end{figure}
+
+%    Mathematical displays; for additional information, see the amsmath
+%    user's guide, linked from http://www.ams.org/tex/amslatex.html .
+
+% Numbered equation
+
+\begin{equation}
+  \label{}
+\end{equation}
+
+% Unnumbered equation
+
+\begin{equation*}
+\end{equation*}
+
+% Aligned equations with all equations numbered.
+
+\begin{align}
+  &  \label{} \\
+  &  \label{}
+\end{align}
+
+% Aligned equations with no equations numbered.
+
+\begin{align*}
+  &  \\
+  &
+\end{align*}
+
+% Aligned equations with one number for all.
+
+\begin{align}
+  \label{}
+  \begin{split}
+    &  \\
+    &
+  \end{split
+\end{align}
+
+%-----------------------------------------------------------------------
+% End of pcms-l.template
+%-----------------------------------------------------------------------
+
+
