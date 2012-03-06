@@ -2,24 +2,25 @@
 
 \section*{Kinematics}
 
-I will go through the basic continuum mechanics for describing the \emph{initial boundary value problems} (IBVPs) for deformable objects as quickly as possible with an emphasis on only those details necessary for implementing a basic \emph{finite element method} (FEM) type simulation (see the text \cite{BW08} for more details). We will quantify the deformation of the objects of interest in terms of the mapping $\mathbf{\phi}$ between an initial (or material) $\mathbf{B}_0\in\mathbb{R}^2$ and current (or deformed) $\mathbf{B}_t\in\mathbb{R}^2$ configuration (we'll just be covering 2D for simplicity). Let's introduce the convention that points in $\mathbf{B}_0$ we label as $\mathbf{X}$ and points in $\mathbf{B}_t$ we label as $\mathbf{x}$ (see Figure \ref{fig:phi}). I.e. $\mathbf{B}_0=\{\mathbf{X}\}$ and $\mathbf{B}_t=\{\mathbf{x}\}$ so
-$$
-\mathbf{\phi(.,t)}:\mathbf{B}_0\rightarrow\mathbf{B}_t \ \ \textrm{and} \ \ \phi(\mathbf{X},t)=\mathbf{x}
-$$
+I will go through the basic continuum mechanics for describing the \emph{initial boundary value problems} (IBVPs) for deformable objects as quickly as possible with an emphasis on only those details necessary for implementing a basic \emph{finite element method} (FEM) type simulation (see the text \cite{BW08} for more details). We will quantify the deformation of the objects of interest in terms of the mapping $\boldsymbol{\phi}$ between an initial (or material) $\mathbf{B}_0\in\mathbb{R}^2$ and current (or deformed) $\mathbf{B}_t\in\mathbb{R}^2$ configuration (we'll just be covering 2D for simplicity). Let's introduce the convention that points in $\mathbf{B}_0$ we label as $\mathbf{X}$ and points in $\mathbf{B}_t$ we label as $\mathbf{x}$ (see Figure \ref{fig:phi}). I.e. $\mathbf{B}_0=\{\mathbf{X}\}$ and $\mathbf{B}_t=\{\mathbf{x}\}$ so
+\begin{equation*}
+\boldsymbol{\phi}(\cdot,t) \colon \mathbf{B}_0 \to \mathbf{B}_t \quad \text{and} \quad \boldsymbol{\phi}(\mathbf{X},t) = \mathbf{x}
+\end{equation*}
 It is also useful to talk about
-$$
-\mathbf{u(.,t)}:\mathbf{B}_0\rightarrow\mathbb{R}^2\ \ \textrm{where} \ \ \mathbf{u}(\mathbf{X},t)=\phi(\mathbf{X},t)-\mathbf{X}.
-$$
-We'll refer to this function $\mathbf{u}$ as the displacement mapping. We'll also introduce a little more notation here for the derivatives of these mappings. The deformation gradient refers to $\frac{\partial\phi}{\partial\mathbf{X}}$ and is often denoted with $\mathbf{F}$.
-$$
-\mathbf{F(.,t)}:\mathbf{B}_0\rightarrow\mathbb{R}^{2\times2}\ \ \textrm{and} \ \ \mathbf{F}=\frac{\partial\phi}{\partial\mathbf{X}}.
-$$
-Index notation for derivatives will be helpful for compactness of expressions. E.g. $F_{ij}=\frac{\partial\phi_i}{\partial{X}_j}=\phi_{i,j}$ and $\frac{\partial{u}_i}{\partial{X}_j}=u_{i,j}$
+\begin{equation*}
+\mathbf{u}(\cdot,t) \colon \mathbf{B}_0 \to \mathbb{R}^2 \quad \text{where} \quad \mathbf{u}(\mathbf{X},t) = \boldsymbol{\phi}(\mathbf{X},t)-\mathbf{X}.
+\end{equation*}
+We'll refer to this function $\mathbf{u}$ as the displacement mapping. We'll also introduce a little more notation here for the derivatives of these mappings. The deformation gradient refers to $\frac{\partial\boldsymbol{\phi}}{\partial\mathbf{X}}$ and is often denoted with $\mathbf{F}$.
+\begin{equation*}
+\mathbf{F}(\cdot,t) \colon \mathbf{B}_0 \to \mathbb{R}^{2\times2} \quad \text{and} \quad \mathbf{F} = \frac{\partial\boldsymbol{\phi}}{\partial\mathbf{X}}.
+\end{equation*}
+Index notation for derivatives will be helpful for compactness of expressions. E.g. $F_{ij} = \frac{\partial\phi_i}{\partial X_j} = \phi_{i,j}$ and $\frac{\partial u_i}{\partial X_j} = u_{i,j}$.
 \begin{figure}
 %\includegraphics[width=\columnwidth]{images/continuum}
 \caption{We will be solving for the mapping between the current configuration and a rest configuration. Stresses will arise via elasticity to resist changes in shape induced by this motion.}
 \label{fig:phi}
 \end{figure}
+
 \section*{Basic balance laws}
 Again, I will only present the essential details for getting started with elastodynamics. Our governing equations of motion arise from the basic principles of continuum mechanics, ultimately $F=ma$ applied over our continuum of material $\mathbf{B}_0$. This reads as:
 $$
