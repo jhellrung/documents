@@ -88,7 +88,7 @@ Verify this procedure computes the same stiffness matrix as before, and modify y
 
 \end{enumerate}
 
-\section{Neo-Hookean Elasticity with Quasistatics Evolution in Dimension~1}
+\section{Neo-Hookean Elasticity with Quasistatic Evolution in Dimension~1}
 
 Let us now consider the numerical solution of the equations of elasticity with the Neo-Hookean constitutive model. To begin, for simplicity, we will consider using quasistatic evolution in dimension $d = 1$. The subsequent section will extend this into dimension $d = 2$ and add inertial effects.
 
@@ -348,7 +348,7 @@ We can test the code with the following example problem.
 \item $f^{\text{ext}} \equiv 0$
 \item $E = 1000$ and $\nu = 0.3$; so $\mu = E / (2 (1 + \nu)) = 384.$ and $\lambda = E \nu / ((1 + \nu) (1 - 2\nu)) = 577.$
 \end{itemize}
-Since a quasistatics evolution has no inertial terms, we expect the solution displacement to simply be $u(X,t) = \sin t = g(0,t)$.
+Since a quasistatic evolution has no inertial terms, we expect the solution displacement to simply be $u(X,t) = \sin t = g(0,t)$.
 
 This is a pretty simple test, so feel free to experiment with other combinations of parameters.
 
@@ -362,7 +362,7 @@ Let us again recall the elasticity equations:
 \left( \bfP \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
 \end{align}
 \end{subequations}
-With non-negligible inertial effects, a more sophisticated temporal evolution than quasistatic evolution must be used. One such scheme is Backward Euler, which is desirable due to its unconditional stability and dissipation of oscillatory errors. We'll also see that it is not significantly more complex than quasistatics. However, the transition from dimension $d = 1$ to dimension $d = 2$ does offer a fair amount of complexity, which we shall investigate.
+With non-negligible inertial effects, a more sophisticated temporal evolution than quasistatic evolution must be used. One such scheme is Backward Euler, which is desirable due to its unconditional stability and dissipation of oscillatory errors. We'll also see that it is not significantly more complex than quasistatic evolution. However, the transition from dimension $d = 1$ to dimension $d = 2$ does offer a fair amount of complexity, which we shall investigate.
 
 \subsection{Backward Euler}
 
