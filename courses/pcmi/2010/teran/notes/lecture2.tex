@@ -12,7 +12,7 @@ u & = p \quad \in \partial \Omega_d \\
 \beta \nabla u \cdot \hat{n} & = q \quad \in \partial \Omega_n
 \end{align}
 \end{subequations}
-Here, $\Omega \subset \mathbb{R}^d$ is open; $\partial \Omega_d$ and $\partial \Omega_n$ partition the boundary of $\Omega$ and define where \emph{Dirichlet} ($d$) and \emph{Neumann} ($n$) boundary conditions are applied, respectively; $\hat{n}$ is the outward-pointing unit normal on $\partial \Omega_n$; $\beta, f \colon \Omega \to \mathbb{R}$, $p \colon \partial \Omega_d \to \mathbb{R}$, and $q \colon \partial \Omega_q \to \mathbb{R}$ are given, and $\beta$ is bounded below by some positive number; and the goal is to solve for the unknown function $u \colon \Omega \to \mathbb{R}$. For now, we'll ignore the details of the function spaces that $u$, $\beta$, $f$, $p$, and $q$ are assumed to belong in.
+Here, $\Omega \subset \bbR^d$ is open; $\partial \Omega_d$ and $\partial \Omega_n$ partition the boundary of $\Omega$ and define where \emph{Dirichlet} ($d$) and \emph{Neumann} ($n$) boundary conditions are applied, respectively; $\hat{n}$ is the outward-pointing unit normal on $\partial \Omega_n$; $\beta, f \colon \Omega \to \bbR$, $p \colon \partial \Omega_d \to \bbR$, and $q \colon \partial \Omega_q \to \bbR$ are given, and $\beta$ is bounded below by some positive number; and the goal is to solve for the unknown function $u \colon \Omega \to \bbR$. For now, we'll ignore the details of the function spaces that $u$, $\beta$, $f$, $p$, and $q$ are assumed to belong in.
 
 For the numerical solution of \eqref{eq:poisson.strong}, we'll use a discretization based on the Finite Element Method (FEM). Briefly, an FEM discretization focuses on the weak formulation of the partial differential equation. The derivation involves multiplying the differential equation by a test function (chosen from some suitable function space), integrating by parts, and applying boundary conditions:
 \begin{subequations}
@@ -97,23 +97,23 @@ Let us now consider the numerical solution of the equations of elasticity with t
 Recall that the equations of elasticity are given by the boundary value problem
 \begin{subequations}\label{eq:elasticity.i}
 \begin{align}
-\rho_0(\mathbf{X}) \frac{\partial^2 \mathbf{u}}{\partial t^2} & = \nabla^{\mathbf{X}} \cdot \mathbf{P} + \mathbf{f}^{\text{ext}} \quad \in \Omega(t) \\
-\mathbf{u}(t,\cdot) & = \mathbf{g}(t,\cdot) \quad \in \partial \Omega_d(t) \\
-\left( \mathbf{P} \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \mathbf{h}(t,\cdot) \quad \in \partial \Omega_n(t)
+\rho_0 \left( \bfX \right) \frac{\partial^2 \bfu}{\partial t^2} & = \nabla^{\bfX} \cdot \bfP + \bff^{\text{ext}} \quad \in \Omega(t) \\
+\bfu(t,\cdot) & = \bfg(t,\cdot) \quad \in \partial \Omega_d(t) \\
+\left( \bfP \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
 \end{align}
 \end{subequations}
-where $\rho_0 \colon \Omega_0 \to \mathbb{R}$ is the mass density (as a function of $\mathbf{X}$, the undeformed coordinates); $\mathbf{u} \colon \Omega_0 \to \Omega(t), \mathbf{X} \mapsto \boldsymbol{\phi}(\mathbf{X}) - \mathbf{X}$ is the unknown displacement; $\mathbf{P}$ is the first Piola-Kirchoff stress (which takes a specific form for Neo-Hookean, to be given later); $\mathbf{f}^{\text{ext}}$ is the given (external) force; and $\mathbf{g}$ and $\mathbf{h}$ specify the Dirichlet and Neumann boundary conditions, respectively. For simplicity, we'll assume a uniform mass density, i.e., $\rho_0 \equiv 1$.
+where $\rho_0 \colon \Omega_0 \to \bbR$ is the mass density (as a function of $\bfX$, the undeformed coordinates); $\bfu \colon \Omega_0 \to \Omega(t), \bfX \mapsto \bsphi \left( \bfX \right) - \bfX$ is the unknown displacement; $\bfP$ is the first Piola-Kirchoff stress (which takes a specific form for Neo-Hookean, to be given later); $\bff^{\text{ext}}$ is the given (external) force; and $\bfg$ and $\bfh$ specify the Dirichlet and Neumann boundary conditions, respectively. For simplicity, we'll assume a uniform mass density, i.e., $\rho_0 \equiv 1$.
 
 \subsection{Neo-Hookean Constitutive Model}
 
-The Neo-Hookean constitutive model relates the stress $\mathbf{P}$ to the deformation gradient $\mathbf{F} := \frac{\partial\boldsymbol{\phi}}{\partial\mathbf{X}}$ via
+The Neo-Hookean constitutive model relates the stress $\bfP$ to the deformation gradient $\bfF := \frac{\partial\bsphi}{\partial\bfX}$ via
 \begin{subequations}
 \begin{align}
-\Psi(\mathbf{F}) & := \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log J + \frac{\lambda}{2} \log^2 J, \label{eq:neo-hookean.strain.energy} \\
-\mathbf{P}(\mathbf{F}) := \frac{\partial \Psi}{\partial \mathbf{F}} & = \mu \mathbf{F} + \left( \lambda \log J - \mu \right) \mathbf{F}^{-T}.
+\Psi \left( \bfF \right) & := \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log J + \frac{\lambda}{2} \log^2 J, \label{eq:neo-hookean.strain.energy} \\
+\bfP \left( \bfF \right) := \frac{\partial \Psi}{\partial \bfF} & = \mu \bfF + \left( \lambda \log J - \mu \right) \bfF^{-T}.
 \end{align}
 \end{subequations}
-(Recall that $J := \det \mathbf{F}$.) This manifests itself in dimension $d = 1$ in terms of the displacement $u$ as
+(Recall that $J := \det \bfF$.) This manifests itself in dimension $d = 1$ in terms of the displacement $u$ as
 \begin{equation*}
 P(u) = \mu \left( \frac{du}{dX} + 1 \right) + \left( \lambda \log \left( \frac{du}{dX} + 1 \right) - \mu \right) \frac{1}{\frac{du}{dX} + 1}.
 \end{equation*}
@@ -139,7 +139,7 @@ r''(x) & = -1 + 2 (x - 1) \\
 \end{subequations}
 This gives
 \begin{align*}
-\Psi(\mathbf{F}) & = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu r(J) + \frac{\lambda}{2} r(J)^2, \\ \mathbf{P}(\mathbf{F}) = \frac{\partial \Psi}{\partial \mathbf{F}} & = \mu \mathbf{F} + \left( \lambda r(J) - \mu \right) r'(J) \frac{\partial J}{\partial \mathbf{F}}.
+\Psi \left( \bfF \right) & = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu r(J) + \frac{\lambda}{2} r(J)^2, \\ \bfP \left( \bfF \right) = \frac{\partial \Psi}{\partial \bfF} & = \mu \bfF + \left( \lambda r(J) - \mu \right) r'(J) \frac{\partial J}{\partial \bfF}.
 \end{align*}
 Again, specializing this for $d = 1$ dimension, we obtain
 \begin{equation}\label{eq:P.1d}
@@ -150,15 +150,15 @@ P(u) = \mu \left( \frac{du}{dX} + 1 \right) + \left( \lambda r \left( \frac{du}{
 
 We begin by studying \eqref{eq:elasticity.i} at equilibrium, which is the basis for quasistatic evolution. This reduces the equations to
 \begin{equation}\label{eq:elasticity.quasistatic}
--\nabla^{\mathbf{X}} \cdot \mathbf{P} = \mathbf{f}^{\text{ext}}.
+-\nabla^{\bfX} \cdot \bfP = \bff^{\text{ext}}.
 \end{equation}
 The equivalent weak formulation is
 \begin{equation*}
-\int_{\Omega_0} w_{i,j} P_{ij} d\mathbf{X} = \int_{\partial \Omega_n} w_i h_i dS(\mathbf{X}) + \int_{\Omega_0} w_i f_i^{\text{ext}} d\mathbf{X}
+\int_{\Omega_0} w_{i,j} P_{ij} d\bfX = \int_{\partial \Omega_n} w_i h_i dS \left( \bfX \right) + \int_{\Omega_0} w_i f_i^{\text{ext}} d\bfX
 \end{equation*}
-for all test functions $\mathbf{w}$. Recall that summation over repeated indices is implied, and comma'ed indices indicate differentiation.
+for all test functions $\bfw$. Recall that summation over repeated indices is implied, and comma'ed indices indicate differentiation.
 
-As for Poisson, we let the coordinates of $\mathbf{w}$ vary over the nodal basis functions $N_i$. In dimension $d = 1$, this reduces to the system of equations
+As for Poisson, we let the coordinates of $\bfw$ vary over the nodal basis functions $N_i$. In dimension $d = 1$, this reduces to the system of equations
 \begin{subequations}\label{eq:elasticity.quasistatic.weak.1d}
 \begin{align}
 0 = q_i \left( \vec{u} \right) & := \int_a^b \frac{\partial N_i}{\partial X} P(F(u(X))) dX - b_i; \label{eq:elasticity.quasistatic.weak.1d.qi} \\
@@ -357,36 +357,36 @@ This is a pretty simple test, so feel free to experiment with other combinations
 Let us again recall the elasticity equations:
 \begin{subequations}\label{eq:elasticity.ii}
 \begin{align}
-\rho_0 \frac{\partial^2 \mathbf{u}}{\partial t^2} & = \nabla^{\mathbf{X}} \cdot \mathbf{P} + \mathbf{f}^{\text{ext}} \quad \in \Omega(t) \\
-\mathbf{u}(t,\cdot) & = \mathbf{g}(t,\cdot) \quad \in \partial \Omega_d(t) \\
-\left( \mathbf{P} \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \mathbf{h}(t,\cdot) \quad \in \partial \Omega_n(t)
+\rho_0 \frac{\partial^2 \bfu}{\partial t^2} & = \nabla^{\bfX} \cdot \bfP + \bff^{\text{ext}} \quad \in \Omega(t) \\
+\bfu(t,\cdot) & = \bfg(t,\cdot) \quad \in \partial \Omega_d(t) \\
+\left( \bfP \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
 \end{align}
 \end{subequations}
 With non-negligible inertial effects, a more sophisticated temporal evolution than quasistatic evolution must be used. One such scheme is Backward Euler, which is desirable due to its unconditional stability and dissipation of oscillatory errors. We'll also see that it is not significantly more complex than quasistatics. However, the transition from dimension $d = 1$ to dimension $d = 2$ does offer a fair amount of complexity, which we shall investigate.
 
 \subsection{Backward Euler}
 
-To formulate the Backward Euler time-stepping, we introduce an auxiliary variable, $\mathbf{v}$ (``velocity''), to transform \eqref{eq:elasticity.ii} into a first-order system (in time):
+To formulate the Backward Euler time-stepping, we introduce an auxiliary variable, $\bfv$ (``velocity''), to transform \eqref{eq:elasticity.ii} into a first-order system (in time):
 \begin{align*}
-\frac{\partial \mathbf{u}}{\partial t} & = \mathbf{v}; \\
-\rho_0 \frac{\partial \mathbf{v}}{\partial t} & = \nabla^{\mathbf{X}} \cdot \mathbf{P} + \mathbf{f}^{\text{ext}}.
+\frac{\partial \bfu}{\partial t} & = \bfv; \\
+\rho_0 \frac{\partial \bfv}{\partial t} & = \nabla^{\bfX} \cdot \bfP + \bff^{\text{ext}}.
 \end{align*}
 The Backward Euler time discretization thus gives
 \begin{subequations}\label{eq:backwardeuler.i}
 \begin{align}
-\frac{1}{\Delta t} \left( \mathbf{u} \left( t + \Delta t, \cdot \right) - \mathbf{u}(t,\cdot) \right) & = \mathbf{v} \left( t + \Delta t, \cdot \right); \\
-\rho_0 \frac{1}{\Delta t} \left( \mathbf{v} \left( t + \Delta t, \cdot \right) - \mathbf{v}(t,\cdot) \right) & = \left( \nabla^{\mathbf{X}} \cdot \mathbf{P} \right)_{t + \Delta t} + \mathbf{f}^{\text{ext}} \left( t + \Delta t, \cdot \right).
+\frac{1}{\Delta t} \left( \bfu \left( t + \Delta t, \cdot \right) - \bfu(t,\cdot) \right) & = \bfv \left( t + \Delta t, \cdot \right); \\
+\rho_0 \frac{1}{\Delta t} \left( \bfv \left( t + \Delta t, \cdot \right) - \bfv(t,\cdot) \right) & = \left( \nabla^{\bfX} \cdot \bfP \right)_{t + \Delta t} + \bff^{\text{ext}} \left( t + \Delta t, \cdot \right).
 \end{align}
 \end{subequations}
-Eliminating $\mathbf{v} \left( t + \Delta t, \cdot \right)$ from \eqref{eq:backwardeuler.i} gives a (nonlinear) equation which must be solved for $\mathbf{u} \left( t + \Delta t, \cdot \right)$ at each time-step. For present notational purposes, let us refer to the unknown $\mathbf{u} \left( t + \Delta t, \cdot \right)$ as simply $\mathbf{u}$, and to the known $\mathbf{u}(t,\cdot)$ and $\mathbf{v}(t,\cdot)$ as $\mathbf{u}_0$ and $\mathbf{v}_0$, respectively. Thus, \eqref{eq:backwardeuler.i} is equivalent to
+Eliminating $\bfv \left( t + \Delta t, \cdot \right)$ from \eqref{eq:backwardeuler.i} gives a (nonlinear) equation which must be solved for $\bfu \left( t + \Delta t, \cdot \right)$ at each time-step. For present notational purposes, let us refer to the unknown $\bfu \left( t + \Delta t, \cdot \right)$ as simply $\bfu$, and to the known $\bfu(t,\cdot)$ and $\bfv(t,\cdot)$ as $\bfu_0$ and $\bfv_0$, respectively. Thus, \eqref{eq:backwardeuler.i} is equivalent to
 \begin{equation}\label{eq:backwardeuler.ii}
-\rho_0 \mathbf{u} - \Delta t^2 \nabla^{\mathbf{X}} \cdot \mathbf{P} = \rho_0 \left( \mathbf{u}_0 + \Delta t \mathbf{v}_0 \right) + \Delta t^2 \mathbf{f}^{\text{ext}},
+\rho_0 \bfu - \Delta t^2 \nabla^{\bfX} \cdot \bfP = \rho_0 \left( \bfu_0 + \Delta t \bfv_0 \right) + \Delta t^2 \bff^{\text{ext}},
 \end{equation}
-where $\nabla^{\mathbf{X}} \cdot \mathbf{P}$ is evaluated at $t + \Delta t$ (hence depends on the uknown $\mathbf{u}$) and $\mathbf{f}^{\text{ext}}$ is also evaluated at $t + \Delta t$.
+where $\nabla^{\bfX} \cdot \bfP$ is evaluated at $t + \Delta t$ (hence depends on the uknown $\bfu$) and $\bff^{\text{ext}}$ is also evaluated at $t + \Delta t$.
 
 \subsection{Weak Formulation and Finite Element Discretization}
 
-Let us now derive the weak formulation of equation \eqref{eq:backwardeuler.ii} to obtain a finite element discretization in space. We dot product by a test function $\mathbf{w}$, integrate over $\Omega_0$, apply integration by parts, and simplify the integrals over $\partial \Omega_0$ by stipulating that $\mathbf{w} \equiv 0$ on $\partial \Omega_d := \partial \Omega_d(t + \Delta t)$ and substituting the Neumann condition over $\partial \Omega_n := \partial \Omega_n(t + \Delta t)$. It will be notationally convenient, at this point, to once again use index notation and implied summation. We will use subscripts to denote coordinates ($1, \dotsc, d$) and (later) superscripts to denote grid vertices.
+Let us now derive the weak formulation of equation \eqref{eq:backwardeuler.ii} to obtain a finite element discretization in space. We dot product by a test function $\bfw$, integrate over $\Omega_0$, apply integration by parts, and simplify the integrals over $\partial \Omega_0$ by stipulating that $\bfw \equiv 0$ on $\partial \Omega_d := \partial \Omega_d(t + \Delta t)$ and substituting the Neumann condition over $\partial \Omega_n := \partial \Omega_n(t + \Delta t)$. It will be notationally convenient, at this point, to once again use index notation and implied summation. We will use subscripts to denote coordinates ($1, \dotsc, d$) and (later) superscripts to denote grid vertices.
 
 \begin{subequations}
 \begin{align}
@@ -396,12 +396,12 @@ Let us now derive the weak formulation of equation \eqref{eq:backwardeuler.ii} t
 \end{align}
 \end{subequations}
 
-For the finite element discretization, we'll suppose that $\Omega_0 \subset \mathbb{R}^d$ is tesselated by simplices $S^1, \dotsc, S^N$ with grid vertices $\mathbf{X}^1, \dotsc, \mathbf{X}^n \in \mathbb{R}^d$ and with $S^{\alpha}_i$ denoting the $i^{th}$ grid vertex of simplex $S^{\alpha}$ (we shall let ``$a \in S^{\alpha}$'' denote the relation that grid vertex $a$ is one of the grid vertices of simplex $S^{\alpha}$). Our finite element space will consist of continuous $\mathbb{R}^d$-valued functions which are affine over each simplex $S^{\alpha}$. This space is spanned by the nodal basis (``hat'') functions $\left\{ N^a \right\}$; $N^a$ takes the value $1$ at $\mathbf{X}^a$ and the value $0$ at all other grid vertices. (Strictly speaking, of course, it's really the {\em projection} of this function space on each coordinate that is spanned by the nodal basis functions.)
+For the finite element discretization, we'll suppose that $\Omega_0 \subset \bbR^d$ is tesselated by simplices $S^1, \dotsc, S^N$ with grid vertices $\bfX^1, \dotsc, \bfX^n \in \bbR^d$ and with $S^{\alpha}_i$ denoting the $i^{th}$ grid vertex of simplex $S^{\alpha}$ (we shall let ``$a \in S^{\alpha}$'' denote the relation that grid vertex $a$ is one of the grid vertices of simplex $S^{\alpha}$). Our finite element space will consist of continuous $\bbR^d$-valued functions which are affine over each simplex $S^{\alpha}$. This space is spanned by the nodal basis (``hat'') functions $\left\{ N^a \right\}$; $N^a$ takes the value $1$ at $\bfX^a$ and the value $0$ at all other grid vertices. (Strictly speaking, of course, it's really the {\em projection} of this function space on each coordinate that is spanned by the nodal basis functions.)
 
-We thus take $\mathbf{w} = (w_i) = \left( \delta_{ij} N^a \right)$ in \eqref{eq:elasticity.backward_euler.weak}, where $j$ ranges over $1, \dotsc, d$ and $a$ ranges over $1, \dotsc, n$, to obtain $d n$ equations for $\mathbf{u}$. Likewise, we discretize each coordinate of $\mathbf{u}$ as $u_i = u_i^b N^b$, giving a (nonlinear) system of equations for the coefficients $u_i^b$:
+We thus take $\bfw = (w_i) = \left( \delta_{ij} N^a \right)$ in \eqref{eq:elasticity.backward_euler.weak}, where $j$ ranges over $1, \dotsc, d$ and $a$ ranges over $1, \dotsc, n$, to obtain $d n$ equations for $\bfu$. Likewise, we discretize each coordinate of $\bfu$ as $u_i = u_i^b N^b$, giving a (nonlinear) system of equations for the coefficients $u_i^b$:
 \begin{subequations}\label{eq:elasticity.backward_euler.qb}
 \begin{align}
-0 = q^a_i(\mathbf{u}) & := \left( \int_{\Omega_0} \rho_0 N^a N^b \right) u_i^b + \Delta t^2 \left( \int_{\Omega_0} P_{ij} N^a_{,j} \right) - b^a_i; \label{eq:elasticity.backward_euler.qai} \\
+0 = q^a_i \left( \vec{u} \right) & := \left( \int_{\Omega_0} \rho_0 N^a N^b \right) u_i^b + \Delta t^2 \left( \int_{\Omega_0} P_{ij} N^a_{,j} \right) - b^a_i; \label{eq:elasticity.backward_euler.qai} \\
 b^a_i & := \int_{\Omega_0} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) N^a + \Delta t^2 \int_{\partial \Omega_n} h_i N^a.
 \end{align}
 \end{subequations}
@@ -427,7 +427,7 @@ Like in dimension $d = 1$, we will evaluate $\vec{b}$ via an element-based loop,
 \begin{equation*}
 \int_{S^{\alpha}} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) N^a.
 \end{equation*}
-(We'll address the Neumann terms later.) Let us suppose we are given the value of $\mathbf{f}^{\text{ext}}$ at each grid vertex $\mathbf{X}^b$ and the value of $\rho_0$ for each element $S^{\alpha}$. Then we can expand each of $(u_0)_i$, $(v_0)_i$, and $f^{\text{ext}}_i$ as $(u_0)_i^b N^b$, $(v_0)_i^b N^b$, and $f^{\text{ext},b}_i N^b$, respectively, giving
+(We'll address the Neumann terms later.) Let us suppose we are given the value of $\bff^{\text{ext}}$ at each grid vertex $\bfX^b$ and the value of $\rho_0$ for each element $S^{\alpha}$. Then we can expand each of $(u_0)_i$, $(v_0)_i$, and $f^{\text{ext}}_i$ as $(u_0)_i^b N^b$, $(v_0)_i^b N^b$, and $f^{\text{ext},b}_i N^b$, respectively, giving
 \begin{equation*}
 \begin{split}
 & \int_{S^{\alpha}} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) N^a \\
@@ -445,9 +445,9 @@ Note that this will be nonzero only for $a,b \in S^{\alpha}$. It thus suffices t
 \end{subequations}
 and we can compute $\operatorname{area} \left( S^{\alpha} \right)$ via
 \begin{equation*}
-\operatorname{area} \left( S^{\alpha} \right) = \frac{1}{2} \begin{vmatrix} \mathbf{X}^{S^{\alpha}_1} & \mathbf{X}^{S^{\alpha}_2} & \mathbf{X}^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{vmatrix}.
+\operatorname{area} \left( S^{\alpha} \right) = \frac{1}{2} \begin{vmatrix} \bfX^{S^{\alpha}_1} & \bfX^{S^{\alpha}_2} & \bfX^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{vmatrix}.
 \end{equation*}
-In the implementation below, we assume $\operatorname{area} \left( S^{\alpha} \right)$ and $\int_{\partial \Omega_n} \mathbf{h} N^a$ have been precomputed for each $\alpha$ and $a$, respectively.
+In the implementation below, we assume $\operatorname{area} \left( S^{\alpha} \right)$ and $\int_{\partial \Omega_n} \bfh N^a$ have been precomputed for each $\alpha$ and $a$, respectively.
 \begin{verbatim}
 function b = eval_b(tris, X, tri_areas, rho, fext, h, u0, v0, dt)
 % tris(k,:)    = the 3 grid vertices within triangle k
@@ -481,48 +481,48 @@ Computation of $\vec{q}$ requires computing the integrals
 \end{equation*}
 where we have used the fact that $\rho_0$ is given element-wise. We already know the value of $\int N^a N^b$ from the previous subsubsection, so we need only address $\int P_{ij} N^a_{,j}$.
 
-To this end, recall that inversion-robust Neo-Hookean defines $\mathbf{P}$ in terms of $\mathbf{F}$ by
+To this end, recall that inversion-robust Neo-Hookean defines $\bfP$ in terms of $\bfF$ by
 \begin{subequations}\label{eq:neo_hookean.P}
 \begin{align}
 \begin{split}
-\mathbf{P} & = \mu \mathbf{F} + \left( \lambda r(J) - \mu \right) r'(J) \frac{\partial J}{\partial \mathbf{F}} \\
-            & = \mu \mathbf{F} + \left( \lambda r(J) - \mu \right) r'(J) J \mathbf{F}^{-T}
+\bfP & = \mu \bfF + \left( \lambda r(J) - \mu \right) r'(J) \frac{\partial J}{\partial \bfF} \\
+            & = \mu \bfF + \left( \lambda r(J) - \mu \right) r'(J) J \bfF^{-T}
 \end{split} \\
 r(x + 1) & = x - \frac{1}{2} x^2 + \frac{1}{3} x^3 \\
 r'(x + 1) & = 1 - x + x^2.
 \end{align}
 \end{subequations}
-We thus must compute $\mathbf{F}$ from $\mathbf{u}$. First, notice that $N^a(\mathbf{X})$ may be interpreted as the barycentric coordinate of $\mathbf{X}$ with respect to $\mathbf{X}^a$ within $S^{\alpha}$ (assuming that $a \in S^{\alpha}$). In other words, $N^a(\mathbf{X})$ is equal to $\xi^a$, where
+We thus must compute $\bfF$ from $\bfu$. First, notice that $N^a \left( \bfX \right)$ may be interpreted as the barycentric coordinate of $\bfX$ with respect to $\bfX^a$ within $S^{\alpha}$ (assuming that $a \in S^{\alpha}$). In other words, $N^a \left( \bfX \right)$ is equal to $\xi^a$, where
 \begin{equation*}
-\begin{pmatrix} \mathbf{X}^{S^{\alpha}_1} & \mathbf{X}^{S^{\alpha}_2} & \mathbf{X}^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{pmatrix}
+\begin{pmatrix} \bfX^{S^{\alpha}_1} & \bfX^{S^{\alpha}_2} & \bfX^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{pmatrix}
 \begin{pmatrix} \xi^{S^{\alpha}_1} \\ \xi^{S^{\alpha}_2} \\ \xi^{S^{\alpha}_3} \end{pmatrix}
 =
-\begin{pmatrix} \mathbf{X} \\ 1 \end{pmatrix}.
+\begin{pmatrix} \bfX \\ 1 \end{pmatrix}.
 \end{equation*}
 It follows that
 \begin{equation*}
-\mathbf{N}^{S^{\alpha}}(\mathbf{X})
+\bfN^{S^{\alpha}} \left( \bfX \right)
 =
-\begin{pmatrix} N^{S^{\alpha}_1}(\mathbf{X}) \\ N^{S^{\alpha}_2}(\mathbf{X}) \\ N^{S^{\alpha}_3}(\mathbf{X}) \end{pmatrix}
+\begin{pmatrix} N^{S^{\alpha}_1} \left( \bfX \right) \\ N^{S^{\alpha}_2} \left( \bfX \right) \\ N^{S^{\alpha}_3} \left( \bfX \right) \end{pmatrix}
 =
-\begin{pmatrix} \mathbf{X}^{S^{\alpha}_1} & \mathbf{X}^{S^{\alpha}_2} & \mathbf{X}^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{pmatrix}^{-1}
-\begin{pmatrix} \mathbf{X} \\ 1 \end{pmatrix}
+\begin{pmatrix} \bfX^{S^{\alpha}_1} & \bfX^{S^{\alpha}_2} & \bfX^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{pmatrix}^{-1}
+\begin{pmatrix} \bfX \\ 1 \end{pmatrix}
 \end{equation*}
 and hence
 \begin{equation*}
-\frac{\partial \mathbf{N}^{S^{\alpha}}}{\partial \mathbf{X}}
+\frac{\partial \bfN^{S^{\alpha}}}{\partial \bfX}
 =
-\begin{pmatrix} \frac{\partial N^{S^{\alpha}_1}}{\partial \mathbf{X}} \\ \frac{\partial N^{S^{\alpha}_2}}{\partial \mathbf{X}} \\ \frac{\partial N^{S^{\alpha}_3}}{\partial \mathbf{X}} \end{pmatrix}
+\begin{pmatrix} \frac{\partial N^{S^{\alpha}_1}}{\partial \bfX} \\ \frac{\partial N^{S^{\alpha}_2}}{\partial \bfX} \\ \frac{\partial N^{S^{\alpha}_3}}{\partial \bfX} \end{pmatrix}
 =
-\begin{pmatrix} \mathbf{X}^{S^{\alpha}_1} & \mathbf{X}^{S^{\alpha}_2} & \mathbf{X}^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{pmatrix}^{-1}
+\begin{pmatrix} \bfX^{S^{\alpha}_1} & \bfX^{S^{\alpha}_2} & \bfX^{S^{\alpha}_3} \\ 1 & 1 & 1 \end{pmatrix}^{-1}
 \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}.
 \end{equation*}
-With the ability to compute $\partial \mathbf{N}^{S^{\alpha}} / \partial \mathbf{X}$ in hand, and using the fact that $\mathbf{u} = \mathbf{u}^a N^a$, we can now compute $\mathbf{F}$:
+With the ability to compute $\partial \bfN^{S^{\alpha}} / \partial \bfX$ in hand, and using the fact that $\bfu = \bfu^a N^a$, we can now compute $\bfF$:
 \begin{equation}\label{eq:F.2d}
-\mathbf{F} = \frac{\partial \mathbf{u}}{\partial \mathbf{X}} + \mathbf{I}
-           = \mathbf{u}^{S^{\alpha}} \frac{\partial \mathbf{N}^{S^{\alpha}}}{\partial \mathbf{X}} + \mathbf{I}
+\bfF = \frac{\partial \bfu}{\partial \bfX} + \bfI
+           = \bfu^{S^{\alpha}} \frac{\partial \bfN^{S^{\alpha}}}{\partial \bfX} + \bfI
 \end{equation}
-Using \eqref{eq:F.2d} in \eqref{eq:neo_hookean.P} will thus give $\mathbf{P}$. Finally, we can collect all $P_{ij} N^a_{,j}$ terms into a single (constant) $2 \times 3$ matrix as $\mathbf{P} \left( \partial \mathbf{N}^{S^{\alpha}} / \partial \mathbf{X} \right)^T$ (the rows are indexed by $i$, the columns by $a$). The implementation for computing $\vec{q}$ is then as follows.
+Using \eqref{eq:F.2d} in \eqref{eq:neo_hookean.P} will thus give $\bfP$. Finally, we can collect all $P_{ij} N^a_{,j}$ terms into a single (constant) $2 \times 3$ matrix as $\bfP \left( \partial \bfN^{S^{\alpha}} / \partial \bfX \right)^T$ (the rows are indexed by $i$, the columns by $a$). The implementation for computing $\vec{q}$ is then as follows.
 \begin{verbatim}
 function q = eval_q(tris, X, tri_areas, rho, mu, lambda, u, b, dt)
 % tris(k,:)    = the 3 grid vertices within triangle k
@@ -560,7 +560,7 @@ It is probably not too surprising that the most complicated computation is evalu
     + \Delta t^2 \int_{\Omega_0} \frac{\partial P_{ik}}{\partial F_{\ell m}} \frac{\partial F_{\ell m}}{\partial u^b_j} N^a_{,k}.
 \end{split}
 \end{equation*}
-Given that $\mathbf{F} = \mathbf{u}^{S^{\alpha}} \left( \partial \mathbf{N}^{S^{\alpha}} / \partial \mathbf{X} \right) + \mathbf{I}$ (from \eqref{eq:F.2d}), one can show that $\partial F_{\ell m} / \partial u^b_j = \delta_{j \ell} N^b_{,m}$. Substituting this into the equation above yields
+Given that $\bfF = \bfu^{S^{\alpha}} \left( \partial \bfN^{S^{\alpha}} / \partial \bfX \right) + \bfI$ (from \eqref{eq:F.2d}), one can show that $\partial F_{\ell m} / \partial u^b_j = \delta_{j \ell} N^b_{,m}$. Substituting this into the equation above yields
 \begin{equation}\label{eq:elasticity.backward_euler.dqaidubj}
 \frac{\partial q^a_i}{\partial u^b_j}
   = \delta_{ij} \int_{\Omega_0} \rho_0 N^a N^b
@@ -696,9 +696,9 @@ end
 We can test the code with the following example problem.
 \begin{itemize}
 \item $\Omega_0 = (-1,1)^2$
-\item Dirichlet boundary conditions at $\mathbf{X}_1 = \pm 1$: $u(\mathbf{X},t) = \sin \lvert \mathbf{X}_1 \rvert t$
-\item Zero Neumann boundary conditions at $\mathbf{X}_2 = \pm 1$
+\item Dirichlet boundary conditions at $\bfX_1 = \pm 1$: $u \left( t, \bfX \right) = \sin \lvert \bfX_1 \rvert t$
+\item Zero Neumann boundary conditions at $\bfX_2 = \pm 1$
 \item $\rho_0 \equiv 1$
-\item $\mathbf{f}^{\text{ext}} = \mathbf{0}$
+\item $\bff^{\text{ext}} = \mathbf{0}$
 \item $E = 1000$ and $\nu = 0.3$; so $\mu = E / (2 (1 + \nu)) = 384.$ and $\lambda = E \nu / ((1 + \nu) (1 - 2\nu)) = 577.$
 \end{itemize}

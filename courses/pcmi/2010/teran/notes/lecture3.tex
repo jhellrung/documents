@@ -1,1 +1,94 @@
-\lecture{Techniques to Deal with Element Inversion}
+\lecture{Supplemental Material}
+
+\section{Techniques to Deal with Inversion}
+
+\emph{[excerpted from \cite{Irving04}, shortened and with minor modifications]}
+
+\subsection{Diagonalization}
+
+Since rigid body rotations do not change the physics of a deformable object, the stress $\bfP$ satisfies $\bfP \left( \bfU \bfF \right) = \bfU \bfP \left( \bfF \right)$ for any rotation $\bfU$. (Here $\bfP \left( \bfF \right)$ denotes function application.) Furthermore, if we temporarily assume an isotropic constitutive model, $\bfP$ is invariant under rotations of material space, i.e., $\bfP \left( \bfF \bfV^T \right) = \bfP \left( \bfF \right) \bfV^T$. Therefore, if we diagonalize $\bfF$ via rotations $\bfU$ and $\bfV$ to obtain $\bfF = \bfU \hat{\bfF} \bfV^T$, $\bfP$ becomes
+\begin{equation}\label{eq:P.diagonalized}
+\bfP = \bfP \left( \bfV \right) = \bfU \bfP \left( \hat{\bfF} \right) \bfV^T = \bfU \hat{\bfP} \bfV^T
+\end{equation}
+where a hat superscript denotes the corresponding rotated quantity. Since the elastic energy of an isotropic material is invariant under world and material rotations, it can depend only on the invariants of $\bfF$, or equivalently on the entries of the diagonalization $\hat{\bfF}$ (see e.g. [BW97]). Therefore, the gradient of the energy, $\hat{\bssigma}$, will also be diagonal. Moreover, since the three stresses are related via $\hat{\bssigma} = (1/J) \hat{\bfP} \hat{\bfF}^T$ and $\hat{\bfP} = \hat{\bfF} \hat{\bfS}$, the diagonalization of $\bfF$ actually results in the simultaneous diagonalization of all three stresses. In particular, $\hat{\bfP}$ in equation
+\eqref{eq:P.diagonalized} is diagonal for an isotropic constitutive model. For an anisotropic constitutive model, a diagonal $\hat{\bfF}$ does not result in a diagonal $\hat{\bfP}$. However, this is not restrictive, and we show examples of anisotropic constitutive models later.
+
+The diagonalization of $\bfF$ is not unique, however. While the ordering of the entries of the diagonal matrix $\hat{\bfF}$ is unimportant, the signs of the entries determine whether the tetrahedron is inverted in a particular direction. The standard SVD convention of choosing all nonnegative entries works only when $\det \bfF \geq 0$. When $\det \bfF < 0$, the signs of the entries must be chosen carefully in order to guarantee that the forces act to uninvert the tetrahedron. In this case, $\hat{\bfF}$ has either one or three negative entries. We heuristically assume that each tetrahedron is as uninverted as possible, and thus we assume that only one entry (not three) is negative. Moreover, the entry with the smallest magnitude is chosen to be negative. This is motivated by the geometric fact that an inverted tetrahedron can be uninverted by moving any one node across the plane of the opposite face, and it is most efficient to choose the node that is closest to the opposite face.
+
+\subsection{Constitutive Models}
+
+Once we have carefully diagonalized $\bfF$, we can extend our constitutive models to behave reasonably under inversion. The diagonal setting makes this quite simple.
+
+To avoid the unnecessary stiffness associated with the neo-Hookean constitutive model, we modify the constitutive model near the origin to remove the singularity by either linearizing at a given compression limit or simply clamping the stress at some maximum value. Moreover, we extend the model past the origin into the inverted regime in order to obtain valid forces for inverted elements. These forces act to uninvert the element. Note that since we have removed both spatial and material rotations by diagonalizing, the modified model is automatically rotation invariant and isotropic.
+
+The major strength of the diagonal setting is that these modifications can be applied to arbitrary constitutive models. This is quite natural, since the diagonal setting is also commonly used in the experimental determination of material parameters. The resulting model is identical to the physical model most of the time, and allows the simulation to continue if a few tetrahedrons invert. Furthermore, our extensions provide $C^0$ or $C^1$ continuity around the flat case, which avoids sudden jumps or oscillations which might effect neighboring elements.
+
+Once we have computed the diagonalized stress $\hat{\bfP}$, the force computation becomes
+\begin{equation}\label{eq:G.diagonalized}
+\bfG = \bfU \hat{\bfP} \bfV^T \bfB_m = \bfU \hat{\bfP} \hat{\bfB}_m
+\end{equation}
+where $\hat{\bfB}_m = \bfV^T \bfB_m$ can be computed and stored if the rotation is fixed for multiple force computations, as in some versions of Newmark time integration.
+
+\subsubsection{Anisotropy}
+
+If the constitutive model includes anisotropic components, it is no longer invariant under rotations of material space. However, we can continue to fully diagonalize $\bfF$, and rotate the anisotropic terms using $\bfV$. Since we still work with a diagonal $\hat{\bfF}$, the large deformation behavior of the constitutive model is still apparent and easy to modify to handle inversion. For example, if the material is stronger in a certain material direction $\bfa$, we diagonalize $\bfF$ and use $\bfV^T \bfa$ in the computation of $\hat{\bfP}$. $\hat{\bfP}$ is no longer a diagonal matrix, but we can still compute forces using equation \eqref{eq:G.diagonalized}. When constructing anisotropic constitutive models that allow inversion, we write $\hat{\bfP}$ as a diagonal matrix plus $\hat{\bfF}$ times a symmetric matrix for the anisotropic terms. Then $\hat{\bfS} = \hat{\bfF}^{-1} \hat{\bfP}$ is symmetric (preserving angular momentum) as required.
+
+\section{Constitutive Model for Muscle}
+
+\emph{[excerpted from \cite{Teran05b}, shortened and with minor modifications]}
+
+Muscle tissue has a highly complex material behavior—-it is a nonlinear, incompressible, anisotropic, hyperelastic material and we use a state-of-the-art constitutive model to describe it with a strain energy of the following form:
+\begin{equation*}
+W \left( I_1, I_2, \lambda, \bfa_0, \alpha \right) = F_1 \left( I_1, I_2 \right) + U(J) + F_2 \left( \lambda, \bfa_0, \alpha \right),
+\end{equation*}
+where $I_1$ and $I_2$ are deviatoric isotropic invariants of the strain, $\lambda$ is a strain invariant associated with transverse isotropy (it equals the deviatoric stretch along the fiber direction), $\bfa_0$ is the fiber direction, and $\alpha$ represents the level of activation in the tissue. $F_1$ is a Mooney-Rivlin rubber-like model that represents the isotropic tissues in muscle that embed the fasicles and fibers, $U(J)$ is the term associated with incompressibility, and $F_2$ represents the
+active and passive muscle fiber response. $F_2$ must take into account the muscle fiber direction $\bfa_0$, the deviatoric stretch in the along-fiber direction $\lambda$, the nonlinear stress-stretch relationship in muscle, and the activation level $\alpha$. The tension produced in a fiber is directed along the vector tangent to the fiber direction. The relationship between the stress in the muscle and the fiber stretch has been established using single-fiber experiments and then normalized to represent any muscle fiber.
+
+The diagonalized FEM framework is most naturally formulated in terms of a first Piola-Kirchoff stress. A stress of this type corresponding to the above constitutive model has the form
+\begin{subequations}
+\begin{equation*}
+\bfP = w_{12} \bfF - w_2 \bfF^3 + \left( p - p_f \right) \bfF^{-1} + 4 J_{cc} T \left( \bfF \bff_m \right) \bff_m^T
+\end{equation*}
+\begin{equation*}
+J_c = \det \left( \bfF \right)^{-1/3}, \quad J_{cc} = J_c^2, \quad I_1 = J_{cc} \bfC, \quad \lambda = \sqrt{\bff_m^T \bfC \bff_m}
+\end{equation*}
+\begin{equation*}
+w_1 = 4 J_{cc} \text{mat}_{c1}, \quad w_2 = 4 J_{cc}^2 \text{mat}_{c2}, \quad w_{12} = w_1 + I_1 w_2
+\end{equation*}
+\begin{equation*}
+p = K \log(J), \quad p_f = \frac{1}{3} \left( w_{12} \operatorname{tr} \left( \bfC \right) - w_2 \operatorname{tr} \left( \bfC^2 \right) + T \lambda^2 \right).
+\end{equation*}
+\end{subequations}
+Here, $\bfF$ is the deformation gradient, $\bfC = \bfF^T \bfF$ is the Cauchy strain, and $\bff_m$ is the local fiber direction (in material coordinates). $\text{mat}_{c1}$ and $\text{mat}_{c2}$ are Mooney-Rivlin material parameters and $K$ is the bulk modulus. $T$ is the tension in the fiber direction from the force length curve. Typical values for these parameters are:
+\begin{align*}
+\text{mat}_{c1} & = 30000 \text{Pa} \quad \text{(muscle)}, \\
+\text{mat}_{c1} & = 60000 \text{Pa} \quad \text{(tendon)}, \\
+\text{mat}_{c2} & = 10000 \text{Pa} \quad \text{(muscle and tendon)}, \\
+K & = 60000 \text{Pa} \quad \text{(muscle)}, \\
+K & = 80000 \text{Pa} \quad \text{(tendon)}, \\
+T & = 80000 \text{Pa}.
+\end{align*}
+This formula holds throughout both the muscle and tendon tetrahedra, however, the tendons are passive (no active stress). Note that tendon is considerably stiffer than muscle. Modeling this inhomogeneity is essential for generating muscle bulging during contraction (as well as for accurately computing the musculotendon force generating capacity). Also, large muscles, like the deltoid, trapezius, triceps, and latissimus dorsi, have multiple regions of activation. That is, muscle contraction and activation is nonuniform in the muscle. In general, the effects of varying activation within a muscle can be localized to a few contractile units in each muscle. For example, each head of the biceps and triceps receive individual activations.
+
+\section{Guaranteeing Positive Definiteness of the Linear Systems in Newton Iterations}
+
+\emph{[excerpted from \cite{Teran05a}, shortened and with minor modifications]}
+
+\subsection{Element Stiffness Matrix}
+
+The global stiffness matrix in equation is constructed from the additive contributions of the element stiffness matrices, $-\partial\bff/\partial\bfx$, which are based on contributions from individual tetrahedra. As a result of this additive decomposition, definiteness of the element stiffness matrices is a sufficient condition for definiteness of the global stiffness matrix. Motivated by this fact, we manipulate the element stiffness matrix to ensure global definiteness. Later we show that this elemental manipulation amounts to the solution of a single $3\times3$ symmetric eigenproblem and a few simple algebraic operations. In contrast, dealing with the global stiffness matrix directly can be prohibitively expensive, especially if eigenanalysis or Cholesky factorization of that matrix is required, as in most standard approaches to treating locally
+indefinite optimization problems.
+
+In order to establish the positive definiteness of the element stiffness matrix, we must ensure that $\delta\bfx^T \left( -\partial\bff/\partial\bfx \right) \delta\bfx = -\delta\bfx^T \delta\bff > 0$ for any increment $\delta\bfx$. Using the formulas from the last section and some tensor manipulations yields
+\begin{align*}
+\delta\bfx^T \delta\bff
+& = \sum_{i=1}^3 \delta\bfx_i^T \delta\bfg_i - \delta\bfx_0^T \sum_{i=1}^3 \delta\bfg_i \\
+& = \sum_{i=1}^3 \left( \delta\bfx_i - \delta\bfx_0 \right)^T \delta\bfg_i \\
+& = \delta\bfD_s \colon \delta\bfG \\
+& = \operatorname{tr} \left( \delta\bfD_s^T \delta\bfG \right) \\
+& = -V \operatorname{tr} \left( \delta\bfD_s^T \delta\bfP \bfD_m^{-T} \right) \\
+& = -V \operatorname{tr} \left( \bfD_m^{-T} \delta\bfD_s^T \delta\bfP \right) \\
+& = -V \operatorname{tr} \left( \delta\bfF^T \delta\bfP \right) \\
+& = -V \left( \delta\bfF \colon \delta\bfP \right).
+\end{align*}
+Since the material element volume $V$ is always a positive constant, the positive definiteness condition reduces to $\delta\bfF \colon \delta\bfP > 0$ or $\delta\bfF \colon \left( \partial\bfP/\partial\bfF \right) \colon \delta\bfF > 0$. Therefore, the positive definiteness of the element stiffness matrix is equivalent to the positive definiteness of the fourth order tensor $\partial\bfP/\partial\bfF$. This result is in direct analogy with the energy based formulation of the Newton-Raphson iteration system, since by definition $\bfP = \partial\Psi/\partial\bfF$ and thus $\partial\bfP/\partial\bfF = \partial^2\Psi/\partial\bfF^2$.
