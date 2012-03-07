@@ -92,3 +92,36 @@ In order to establish the positive definiteness of the element stiffness matrix,
 & = -V \left( \delta\bfF \colon \delta\bfP \right).
 \end{align*}
 Since the material element volume $V$ is always a positive constant, the positive definiteness condition reduces to $\delta\bfF \colon \delta\bfP > 0$ or $\delta\bfF \colon \left( \partial\bfP/\partial\bfF \right) \colon \delta\bfF > 0$. Therefore, the positive definiteness of the element stiffness matrix is equivalent to the positive definiteness of the fourth order tensor $\partial\bfP/\partial\bfF$. This result is in direct analogy with the energy based formulation of the Newton-Raphson iteration system, since by definition $\bfP = \partial\Psi/\partial\bfF$ and thus $\partial\bfP/\partial\bfF = \partial^2\Psi/\partial\bfF^2$.
+
+\subsection{Diagonalization}
+
+Testing and enforcing positive definiteness of the fourth order tensor $\partial\bfP/\partial\bfF$ directly can be rather unwieldy. Instead, we start by rotating both stresses and deformations into diagonal space (transforming our configuration using the rotation matrices that diagonalize the current $\bfF$ and $\bfP$). In order to do this, first note that $\delta\bfP = \left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\bfF} \colon \delta\bfF$ where we explicitly stress the dependency of $\bfP$ on $\bfF$ with $\bfP \left( \bfF \right)$. We can manipulate this equality into
+\begin{align}\label{eq:deltaP.diagonalized}
+\delta\bfP
+& = \left. \frac{\partial \bfU \bfP \left( \bfU^T \bfF \bfV \right) \bfV^T}{\partial \left( \bfU^T \bfF \bfV \right)} \right\rvert_{\bfF} \colon \delta \left( \bfU^T \bfF \bfV \right) \\
+& = \bfU \left( \left. \frac{\partial\bfP \left( \bfF \right)}{\partial\bfF} \right\rvert_{\bfU^T \bfF \bfV} \colon \bfU^T \delta\bfF \bfV \right) \bfV^T \\
+& = \bfU \left( \left. \frac{\partial\bfP}{\partial\bfF} \right\rvert_{\hat{\bfF}} \colon \bfU^T \delta \bfF \bfV \right) \bfV^T
+\end{align}
+where the first equality comes from equation
+\begin{equation*}
+\bfP \left( \bfF \right) = \bfU \bfP \left( \bfU^T \bfF \bfV \right) \bfV^T = \bfU \bfP \left( \hat{\bfF} \right) \bfV^T
+\end{equation*}
+and replacing $\delta\bfF$ with a rotated version, the second comes from a change of variables and the fact that $\bfU$ and $\bfV$ are chosen independent of $\bfF$, and the third comes from choosing $\bfU$ and
+$\bfV$ to be the rotation matrices that diagonalize the initial value of $\bfF$, i.e., where we evaluate $\partial\bfP/\partial\bfF$ to linearize for iteration. Also in the last equality, we drop the explicit dependence of
+$\bfP$ on $\bfF$.
+
+Equation \eqref{eq:deltaP.diagonalized} provides all the information we need for solving the Newton-Raphson iteration system using a conjugate gradient solver, since the nodal force differentials can readily be computed from the stress differentials as $\delta\bfG = \delta\bfP \bfB_m$. Furthermore we have
+\begin{align*}
+\delta\bfP : \delta\bfF
+& = \delta\bfU \left( \left. \frac{\partial\bfP}{\partial\bfF} \right\rvert_{\hat{\bfF}} \colon \bfU^T \delta\bfF \bfV \right) \bfV^T \colon \delta\bfF \\
+& = \bfU^T \delta\bfF \bfV \colon \left. \frac{\partial\bfP}{\partial\bfF} \right\rvert_{\hat{\bfF}} \colon \bfU^T \delta\bfF \bfV
+\end{align*}
+illustrating that the condition for definiteness, $\delta\bfP \colon \delta\bfF > 0$, derived in the previous subsection is equivalent to positive definiteness of $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$. We might expect that applying the rotations that diagonalize the current deformation $\bfF$ to $\delta\bfP$ and $\delta\bfF$ would induce a simple structure for the tensor $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$. In fact this tensor turns out to have a block diagonal structure in the
+case of isotropic materials.
+
+\subsection{Enforcing Positive Definiteness}
+
+In order to reveal the block diagonal structure of $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$,
+we rewrite the $3\times3\times3\times3$ fourth order tensor as a $9\times9$ matrix. To do this, we consider the rearrangement of a $3\times3$ matrix $S$ into the $9\times1$ vector $\left( s_{11}, s_{22}, s_{33}, s_{12}, s_{21}, s_{13}, s_{31}, s_{23}, s_{32} \right)$. We can then represent
+$\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$ as the $9\times9$ matrix that maps the vector equivalent of $\delta\bfF$ to the vector equivalent of $\delta\bfP$. For isotropic materials this matrix is block diagonal with diagonal components
+$\bfA$, $\bfB_{12}$, $\bfB_{13}$ and $\bfB_{23}$ where
