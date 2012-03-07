@@ -26,7 +26,7 @@ For the numerical solution of \eqref{eq:poisson.strong}, we'll use a discretizat
 \end{subequations}
 where the derivation from \eqref{eq:poisson.weak.c} to \eqref{eq:poisson.weak.d} is possible by stipulating that $v \equiv 0$ on $\partial \Omega_d$. Clearly, then, if $u$ satisfies \eqref{eq:poisson.strong}, then $u$ also satisfies \eqref{eq:poisson.weak.d} for all appropriate $v$. Under suitable conditions, it turns out to be the case that the converse holds as well. Since \eqref{eq:poisson.weak.d} involves only first order derivatives in $u$, its analysis is often preferable to \eqref{eq:poisson.strong}.
 
-We then suppose that $u$ can be approximated by a function in a finite-di\-men\-sion\-al function space (the \emph{(discretized) solution space}) (e.g., continuous piecewise linear functions over some tessellation of $\Omega$), i.e., $u \approx \tilde{u} = \sum_j u_j e_j$ for basis elements $\left\{ e_j \right\}$. Likewise, $v$ is selected from some other (often related) finite-dimensional function space (the \emph{(discretized) test space}), thus giving a system of equations for the coefficients $u_j$. For example, if $v$ is taken from the same space as $\tilde{u}$, and we let $v$ be, in turn, each of the basis functions, then we obtain
+We then suppose that $u$ can be approximated by a function in a finite-di\-men\-sion\-al function space (the \emph{(discretized) solution space}) (e.g., continuous piecewise affine functions over some tessellation of $\Omega$), i.e., $u \approx \tilde{u} = \sum_j u_j e_j$ for basis elements $\left\{ e_j \right\}$. Likewise, $v$ is selected from some other (often related) finite-dimensional function space (the \emph{(discretized) test space}), thus giving a system of equations for the coefficients $u_j$. For example, if $v$ is taken from the same space as $\tilde{u}$, and we let $v$ be, in turn, each of the basis functions, then we obtain
 \begin{equation}\label{eq:poisson.system.i}
 \sum_j \left( \int_{\Omega} \beta \nabla e_j \cdot \nabla e_i \right) u_j = \int_{\Omega} f e_i + \int_{\partial \Omega_n} q e_i
 \end{equation}
@@ -46,18 +46,19 @@ Strictly speaking, the above is only correct if $v$ varies \emph{precisely} thro
 
 Note that the sparsity of $A$ is directly related to the overlap of the supports of the $e_j$'s. Typically we choose the $e_j$'s such that the support of one basis element overlaps the supports of only a small constant number of other basis elements, in which case $A$ will have a number of nonzero entries proportional to the number of basis elements.
 
-Let's now focus on dimension $d = 1$ and use \emph{linear finite elements}. Let $\Omega$ be an interval $(a,b)$, and let $\{x_j\}$ be grid points in $(a,b)$, with $a = x_0 < x_1 < \dotsm < x_n = b$. Often times, the $x_j$'s will be equally spaced, which makes the analysis simpler, but it is not necessary. We'll take $\tilde{u}$ (the discretized solution) and $v$ (the discretized test function) to be continuous over $\Omega = (a,b)$ and \emph{piecewise linear} on each segment $\left( x_{j-1}, x_j \right)$, with $v(a)$ and/or $v(b)$ vanishing if a Dirichlet condition is specified at $a$ and/or $b$, respectively. This space of continuous piecewise linear functions is spanned by the \emph{nodal basis functions} (also called ``hat'' functions, because of the shape of their graphs) $e_j$, (uniquely) defined such that
-\begin{equation}\label{eq:poisson.1d.ej}
-e_j(x_k) = \delta_{jk} = \begin{cases} 1, & j = k \\ 0, & j \neq k \end{cases}
+Let's now focus on dimension $d = 1$ and use \emph{linear finite elements}. Let $\Omega$ be an interval $(a,b)$, and let $\{x_j\}$ be grid points in $(a,b)$, with $a = x_0 < x_1 < \dotsm < x_n = b$. Often times, the $x_j$'s will be equally spaced, which makes the analysis simpler, but it is not necessary. We'll take $\tilde{u}$ (the discretized solution) and $v$ (the discretized test function) to be continuous over $\Omega = (a,b)$ and \emph{piecewise affine} on each segment $\left( x_{j-1}, x_j \right)$, with $v(a)$ and/or $v(b)$ vanishing if a Dirichlet condition is specified at $a$ and/or $b$, respectively. This space of continuous piecewise affine functions is spanned by the \emph{nodal basis functions} (also called ``hat'' functions, because of the shape of their graphs) $\left\{ N_j \right\}$, (uniquely) defined such that
+\begin{equation}\label{eq:poisson.1d.Nj}
+N_j(x_k) = \delta_{jk} = \begin{cases} 1, & j = k \\ 0, & j \neq k \end{cases}.
 \end{equation}
+The basis $\left\{ N_j \right\}$ (and its corresponding analogs in higher dimensions) is the typical basis to use for linear finite elements.
 
 \subsection{Exercises}
 
-Unless otherwise noted, assume dimension $d = 1$ linear finite elements with the basis $\{e_j\}$ given by \eqref{eq:poisson.1d.ej}, although these results extend to higher order and higher dimensional finite elements.
+Unless otherwise noted, assume dimension $d = 1$ linear finite elements with the basis $\left\{ N_j \right\}$ given by \eqref{eq:poisson.1d.Nj}, although these results typically extend to higher order and higher dimensional finite elements.
 
 \begin{enumerate}
 
-\item Here is one way to incorporate the Dirichlet boundary conditions into \eqref{eq:poisson.system.b}. For concreteness, suppose $\Omega_d = \{a\}$ (with $\Omega = (a,b)$). Then we still have $\tilde{u} = \sum_{j = 0}^n u_j e_j$, but our space of test functions $\{v\}$ is slightly smaller, $\operatorname{span} \{ e_1, \dotsc, e_n \}$, to ensure that $v(a) = 0$. Thus we obtain $n$ equations of the form \eqref{eq:poisson.system.i}, plus one more equation from the Dirichlet boundary condition ($u_0 = u(a)$). This (ostensibly) gives enough equations to solve for the $n + 1$ coefficients $\{u_j\}$.
+\item Here is one way to incorporate the Dirichlet boundary conditions into \eqref{eq:poisson.system.b}. For concreteness, suppose $\Omega_d = \{a\}$ (with $\Omega = (a,b)$). Then we still have $\tilde{u} = \sum_{j = 0}^n u_j N_j$, but our space of test functions $\{v\}$ is slightly smaller, $\operatorname{span} \left\{ N_1, \dotsc, N_n \right\}$, to ensure that $v(a) = 0$. Thus we obtain $n$ equations of the form \eqref{eq:poisson.system.i}, plus one more equation from the Dirichlet boundary condition ($u_0 = u(a)$). This (ostensibly) gives enough equations to solve for the $n + 1$ coefficients $\left\{ u_j \right\}$.
 
 Another conceptual way to incorporate the Dirichlet boundary conditions is to consider the function $w = u - u(a) e_0$, which satisfies a similar Poisson problem as $u$ but now with homogeneous Dirichlet boundary conditions. Thus, the space of test functions $\{v\}$ and the solution space of $w$ coincide, and one may use eqs \eqref{eq:poisson.system.b} directly.
 
@@ -78,9 +79,9 @@ u(0) & = 1 \\
 
 \item The FEM terminology for the matrix $A$ in \eqref{eq:poisson.system.a} is the \emph{(global) stiffness matrix} (the meaning of the term ``global'' will become obvious shortly). With dimension $d = 1$ linear finite elements, it is relatively straightforward to compute the entries of the stiffness matrix, even given that one has to account for differences between boundary and interior grid vertices. However, the situation becomes more complicated with higher order or higher dimensional finite elements, and it becomes tedious to consider all the special boundary cases. As such, it is common practice to assemble the global stiffness matrix element by element (i.e., cell by cell), with each element contributing partially to several entries of the global stiffness matrix. The collection of these contributions from a single element may be put into a small matrix, the \emph{local stiffness matrix} for that element. The computation of the local stiffness matrix is identical to that of the global stiffness matrix upon replacing the integrations over $\Omega$ with integrations localized over the element. For example, back to dimension $d = 1$ linear finite elements, the local stiffness matrix over $I_j = \left( x_{j-1}, x_j \right)$ would consist of $2^2$ (nonzero) entries (since only $2$ basis functions are supported on $I_j$). Each of these entries would be added to accumulated global stiffness matrix entries:
 \begin{align*}
-A_{j-1,j-1}          & {} +\!\!= \int_{I_j} \beta \nabla e_{j-1} \cdot \nabla e_{j-1} \\
-A_{j-1,j}, A_{j,j-1} & {} +\!\!= \int_{I_j} \beta \nabla e_{j-1} \cdot \nabla e_j \\
-A_{jj}               & {} +\!\!= \int_{I_j} \beta \nabla e_j \cdot \nabla e_j
+A_{j-1,j-1}          & {} +\!\!= \int_{I_j} \beta \nabla N_{j-1} \cdot \nabla N_{j-1} \\
+A_{j-1,j}, A_{j,j-1} & {} +\!\!= \int_{I_j} \beta \nabla N_{j-1} \cdot \nabla N_j \\
+A_{jj}               & {} +\!\!= \int_{I_j} \beta \nabla N_j \cdot \nabla N_j
 \end{align*}
 This suggests the following procedure to build the (global) stiffness matrix $A$. First, initialize the sparsity pattern of $A$ (with zeros). Then iterate through each element and add the contributions of the element's local stiffness matrix to the corresponding entries in $A$.
 
@@ -378,7 +379,7 @@ The Backward Euler time discretization thus gives
 \rho_0 \frac{1}{\Delta t} \left( \bfv \left( t + \Delta t, \cdot \right) - \bfv(t,\cdot) \right) & = \left( \nabla^{\bfX} \cdot \bfP \right)_{t + \Delta t} + \bff^{\text{ext}} \left( t + \Delta t, \cdot \right).
 \end{align}
 \end{subequations}
-Eliminating $\bfv \left( t + \Delta t, \cdot \right)$ from \eqref{eq:backwardeuler.i} gives a (nonlinear) equation which must be solved for $\bfu \left( t + \Delta t, \cdot \right)$ at each time-step. For present notational purposes, let us refer to the unknown $\bfu \left( t + \Delta t, \cdot \right)$ as simply $\bfu$, and to the known $\bfu(t,\cdot)$ and $\bfv(t,\cdot)$ as $\bfu_0$ and $\bfv_0$, respectively. Thus, \eqref{eq:backwardeuler.i} is equivalent to
+Eliminating $\bfv \left( t + \Delta t, \cdot \right)$ from \eqref{eq:backwardeuler.i} gives a (non-linear) equation which must be solved for $\bfu \left( t + \Delta t, \cdot \right)$ at each time-step. For present notational purposes, let us refer to the unknown $\bfu \left( t + \Delta t, \cdot \right)$ as simply $\bfu$, and to the known $\bfu(t,\cdot)$ and $\bfv(t,\cdot)$ as $\bfu_0$ and $\bfv_0$, respectively. Thus, \eqref{eq:backwardeuler.i} is equivalent to
 \begin{equation}\label{eq:backwardeuler.ii}
 \rho_0 \bfu - \Delta t^2 \nabla^{\bfX} \cdot \bfP = \rho_0 \left( \bfu_0 + \Delta t \bfv_0 \right) + \Delta t^2 \bff^{\text{ext}},
 \end{equation}
@@ -391,21 +392,21 @@ Let us now derive the weak formulation of equation \eqref{eq:backwardeuler.ii} t
 \begin{subequations}
 \begin{align}
 \rho_0 u_i w_i - \Delta t^2 P_{ij,j} w_i & = \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) w_i \\
-\int\limits_{\Omega_0} \rho_0 u_i w_i - \Delta t^2 P_{ij,j} w_i & = \int\limits_{\Omega_0} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) w_i \\
-\int\limits_{\Omega_0} \rho_0 u_i w_i + \Delta t^2 P_{ij} w_{i,j} & = \int\limits_{\Omega_0} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) w_i + \Delta t^2 \int\limits_{\partial \Omega_n} h_i w_i. \label{eq:elasticity.backward_euler.weak}
+\int\limits_{\Omega_0} \!\! \rho_0 u_i w_i - \Delta t^2 P_{ij,j} w_i & = \int\limits_{\Omega_0} \!\! \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) w_i \\
+\int\limits_{\Omega_0} \!\! \rho_0 u_i w_i + \Delta t^2 P_{ij} w_{i,j} & = \int\limits_{\Omega_0} \!\! \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) w_i + \Delta t^2 \!\!\! \int\limits_{\partial \Omega_n} \!\!\! h_i w_i. \label{eq:elasticity.backward_euler.weak}
 \end{align}
 \end{subequations}
 
 For the finite element discretization, we'll suppose that $\Omega_0 \subset \bbR^d$ is tesselated by simplices $S^1, \dotsc, S^N$ with grid vertices $\bfX^1, \dotsc, \bfX^n \in \bbR^d$ and with $S^{\alpha}_i$ denoting the $i^{th}$ grid vertex of simplex $S^{\alpha}$ (we shall let ``$a \in S^{\alpha}$'' denote the relation that grid vertex $a$ is one of the grid vertices of simplex $S^{\alpha}$). Our finite element space will consist of continuous $\bbR^d$-valued functions which are affine over each simplex $S^{\alpha}$. This space is spanned by the nodal basis (``hat'') functions $\left\{ N^a \right\}$; $N^a$ takes the value $1$ at $\bfX^a$ and the value $0$ at all other grid vertices. (Strictly speaking, of course, it is really the {\em projection} of this function space on each coordinate that is spanned by the nodal basis functions.)
 
-We thus take $\bfw = (w_i) = \left( \delta_{ij} N^a \right)$ in \eqref{eq:elasticity.backward_euler.weak}, where $j$ ranges over $1, \dotsc, d$ and $a$ ranges over $1, \dotsc, n$, to obtain $d n$ equations for $\bfu$. Likewise, we discretize each coordinate of $\bfu$ as $u_i = u_i^b N^b$, giving a (nonlinear) system of equations for the coefficients $u_i^b$:
+We thus take $\bfw = \left( w_i = \delta_{ij} N^a \right)$ in \eqref{eq:elasticity.backward_euler.weak}, where $j$ ranges over $1, \dotsc, d$ and $a$ ranges over $1, \dotsc, n$, to obtain $d n$ equations for $\bfu$. Likewise, we discretize each coordinate of $\bfu$ as $u_i = u_i^b N^b$, giving a (non-linear) system of equations for the coefficients $\vec{u} := \left\{ u_i^b \right\}$:
 \begin{subequations}\label{eq:elasticity.backward_euler.qb}
 \begin{align}
 0 = q^a_i \left( \vec{u} \right) & := \left( \int_{\Omega_0} \rho_0 N^a N^b \right) u_i^b + \Delta t^2 \left( \int_{\Omega_0} P_{ij} N^a_{,j} \right) - b^a_i; \label{eq:elasticity.backward_euler.qai} \\
 b^a_i & := \int_{\Omega_0} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \right) + \Delta t^2 f^{\text{ext}}_i \right) N^a + \Delta t^2 \int_{\partial \Omega_n} h_i N^a.
 \end{align}
 \end{subequations}
-It is worth noting that this is very similar to the nonlinear system of equations which arise in a discretization of quasistatic evolution. The differences are only in the right-hand side $\vec{b}$ and the additional identity-like block to \eqref{eq:elasticity.backward_euler.qai}.
+It is worth noting that this is very similar to the non-linear system of equations which arise in a discretization of quasistatic evolution. The differences are only in the right-hand side $\vec{b} := \left\{ b_i^a \right\}$ and the additional identity-like block to \eqref{eq:elasticity.backward_euler.qai}.
 
 Like in dimension $d = 1$, we shall solve \eqref{eq:elasticity.backward_euler.qb} via Newton iteration:
 \begin{subequations}
