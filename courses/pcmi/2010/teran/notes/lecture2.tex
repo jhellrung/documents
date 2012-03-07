@@ -9,10 +9,10 @@ Let us consider numerical solutions of (variable coefficient) Poisson's equation
 \begin{align}\label{eq:poisson.strong}
 -\nabla \cdot \left( \beta \nabla u \right) & = f \quad \in \Omega \\
 u & = p \quad \in \partial \Omega_d \\
-\beta \nabla u \cdot \hat{n} & = q \quad \in \partial \Omega_n
+\beta \nabla u \cdot \hat{\bfn} & = q \quad \in \partial \Omega_n
 \end{align}
 \end{subequations}
-Here, $\Omega \subset \bbR^d$ is open; $\partial \Omega_d$ and $\partial \Omega_n$ partition the boundary of $\Omega$ and define where \emph{Dirichlet} ($d$) and \emph{Neumann} ($n$) boundary conditions are applied, respectively; $\hat{n}$ is the outward-pointing unit normal on $\partial \Omega_n$; $\beta, f \colon \Omega \to \bbR$, $p \colon \partial \Omega_d \to \bbR$, and $q \colon \partial \Omega_q \to \bbR$ are given, and $\beta$ is bounded below by some positive number; and the goal is to solve for the unknown function $u \colon \Omega \to \bbR$. For now, we'll ignore the details of the function spaces that $u$, $\beta$, $f$, $p$, and $q$ are assumed to belong in.
+Here, $\Omega \subset \bbR^d$ is open; $\partial \Omega_d$ and $\partial \Omega_n$ partition the boundary of $\Omega$ and define where \emph{Dirichlet} ($d$) and \emph{Neumann} ($n$) boundary conditions are applied, respectively; $\hat{\bfn}$ is the outward-pointing unit normal on $\partial \Omega_n$; $\beta, f \colon \Omega \to \bbR$, $p \colon \partial \Omega_d \to \bbR$, and $q \colon \partial \Omega_q \to \bbR$ are given, and $\beta$ is bounded below by some positive number; and the goal is to solve for the unknown function $u \colon \Omega \to \bbR$. For now, we'll ignore the details of the function spaces that $u$, $\beta$, $f$, $p$, and $q$ are assumed to belong in.
 
 For the numerical solution of \eqref{eq:poisson.strong}, we'll use a discretization based on the Finite Element Method (FEM). Briefly, an FEM discretization focuses on the weak formulation of the partial differential equation. The derivation involves multiplying the differential equation by a test function (chosen from some suitable function space), integrating by parts, and applying boundary conditions:
 \begin{subequations}
@@ -20,7 +20,7 @@ For the numerical solution of \eqref{eq:poisson.strong}, we'll use a discretizat
 & -\nabla \cdot \left( \beta \nabla u \right) = f \\
 \Rightarrow & \int_{\Omega} -\nabla \cdot \left( \beta \nabla u \right) v = \int_{\Omega} f v \\
 \Rightarrow & \int_{\Omega} \beta \nabla u \cdot \nabla v =
-    \int_{\Omega} f v + \int_{\partial \Omega} \left( \beta \nabla u \cdot \hat{n} \right) v \label{eq:poisson.weak.c} \\
+    \int_{\Omega} f v + \int_{\partial \Omega} \left( \beta \nabla u \cdot \hat{\bfn} \right) v \label{eq:poisson.weak.c} \\
 \Rightarrow & \int_{\Omega} \beta \nabla u \cdot \nabla v = \int_{\Omega} f v + \int_{\partial \Omega_n} q v \label{eq:poisson.weak.d}
 \end{align}
 \end{subequations}
@@ -46,7 +46,7 @@ Strictly speaking, the above is only correct if $v$ varies \emph{precisely} thro
 
 Note that the sparsity of $A$ is directly related to the overlap of the supports of the $e_j$'s. Typically we choose the $e_j$'s such that the support of one basis element overlaps the supports of only a small constant number of other basis elements, in which case $A$ will have a number of nonzero entries proportional to the number of basis elements.
 
-Let's now focus on dimension $d = 1$ and use \emph{linear finite elements}. Let $\Omega$ be an interval $(a,b)$, and let $\{x_j\}$ be grid points in $(a,b)$, with $a = x_0 < x_1 < \dotsm < x_n = b$. Often times, the $x_j$'s will be equally spaced, which makes the analysis simpler, but it's not necessary. We'll take $\tilde{u}$ (the discretized solution) and $v$ (the discretized test function) to be continuous and \emph{piecewise linear} on each segment $\left( x_{j-1}, x_j \right)$, with $v(a)$ and/or $v(b)$ vanishing if a Dirichlet condition is specified at $a$ and/or $b$, respectively. This space of continuous piecewise linear functions is spanned by the \emph{nodal basis functions} (also called ``hat'' functions, because of the shape of their graphs) $e_j$, (uniquely) defined such that
+Let's now focus on dimension $d = 1$ and use \emph{linear finite elements}. Let $\Omega$ be an interval $(a,b)$, and let $\{x_j\}$ be grid points in $(a,b)$, with $a = x_0 < x_1 < \dotsm < x_n = b$. Often times, the $x_j$'s will be equally spaced, which makes the analysis simpler, but it is not necessary. We'll take $\tilde{u}$ (the discretized solution) and $v$ (the discretized test function) to be continuous over $\Omega = (a,b)$ and \emph{piecewise linear} on each segment $\left( x_{j-1}, x_j \right)$, with $v(a)$ and/or $v(b)$ vanishing if a Dirichlet condition is specified at $a$ and/or $b$, respectively. This space of continuous piecewise linear functions is spanned by the \emph{nodal basis functions} (also called ``hat'' functions, because of the shape of their graphs) $e_j$, (uniquely) defined such that
 \begin{equation}\label{eq:poisson.1d.ej}
 e_j(x_k) = \delta_{jk} = \begin{cases} 1, & j = k \\ 0, & j \neq k \end{cases}
 \end{equation}
@@ -99,21 +99,21 @@ Recall that the equations of elasticity are given by the boundary value problem
 \begin{align}
 \rho_0 \left( \bfX \right) \frac{\partial^2 \bfu}{\partial t^2} & = \nabla^{\bfX} \cdot \bfP + \bff^{\text{ext}} \quad \in \Omega(t) \\
 \bfu(t,\cdot) & = \bfg(t,\cdot) \quad \in \partial \Omega_d(t) \\
-\left( \bfP \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
+\left( \bfP \cdot \hat{\bfn} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
 \end{align}
 \end{subequations}
-where $\rho_0 \colon \Omega_0 \to \bbR$ is the mass density (as a function of $\bfX$, the undeformed coordinates); $\bfu \colon \Omega_0 \to \Omega(t), \bfX \mapsto \bsphi \left( \bfX \right) - \bfX$ is the unknown displacement; $\bfP$ is the first Piola-Kirchoff stress (which takes a specific form for Neo-Hookean, to be given later); $\bff^{\text{ext}}$ is the given (external) force; and $\bfg$ and $\bfh$ specify the Dirichlet and Neumann boundary conditions, respectively. For simplicity, we'll assume a uniform mass density, i.e., $\rho_0 \equiv 1$.
+where $\rho_0 \colon \Omega_0 \to \bbR$ is the mass density (as a function of $\bfX$, the undeformed coordinates); $\bfu \colon \Omega_0 \to \bbR^2, \bfX \mapsto \bsphi \left( \bfX \right) - \bfX$ is the unknown displacement; $\bfP$ is the first Piola-Kirchoff stress (which takes a specific form for Neo-Hookean, to be given later); $\bff^{\text{ext}}$ is the given (external) force; and $\bfg$ and $\bfh$ specify the Dirichlet and Neumann boundary conditions, respectively. For simplicity, we'll assume a uniform mass density, i.e., $\rho_0 \equiv 1$.
 
 \subsection{Neo-Hookean Constitutive Model}
 
-The Neo-Hookean constitutive model relates the stress $\bfP$ to the deformation gradient $\bfF := \frac{\partial\bsphi}{\partial\bfX}$ via
+The Neo-Hookean constitutive model relates the stress $\bfP$ to the deformation gradient $\bfF := \partial\bsphi/\partial\bfX$ via
 \begin{subequations}
 \begin{align}
 \Psi \left( \bfF \right) & := \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log J + \frac{\lambda}{2} \log^2 J, \label{eq:neo-hookean.strain.energy} \\
 \bfP \left( \bfF \right) := \frac{\partial \Psi}{\partial \bfF} & = \mu \bfF + \left( \lambda \log J - \mu \right) \bfF^{-T}.
 \end{align}
 \end{subequations}
-(Recall that $J := \det \bfF$.) This manifests itself in dimension $d = 1$ in terms of the displacement $u$ as
+(Recall that $J := \det \bfF$.) This manifests itself in dimension $d = 1$ in terms of the (scalar) displacement $u$ as
 \begin{equation*}
 P(u) = \mu \left( \frac{du}{dX} + 1 \right) + \left( \lambda \log \left( \frac{du}{dX} + 1 \right) - \mu \right) \frac{1}{\frac{du}{dX} + 1}.
 \end{equation*}
@@ -173,7 +173,7 @@ For Neo-Hookean, $P$ depends \emph{non-linearly} on the displacement $u$, hence 
 \frac{\partial q_i}{\partial\vec{u}} \left( \vec{u} \right) \Delta \vec{u} + q_i \left( \vec{u} \right) = 0;
 \end{equation*}
 \begin{equation*}
-\vec{u} \leftarrow \vec{u} + \Delta \vec{u}
+\vec{u} \leftarrow \vec{u} + \Delta \vec{u};
 \end{equation*}
 \end{subequations}
 where
@@ -192,7 +192,7 @@ Let us assume a regular grid on $(a,b)$, such that we have $n$ grid vertices $x_
 \begin{itemize}
 \item Compute $\vec{b} := \left( b_1, \dotsc, b_n \right)$ (from \eqref{eq:elasticity.quasistatic.weak.1d.bi}).
 \item Implement a procedure to compute $\vec{q} := \left( q_1, \dotsc, q_n \right)$ (from \eqref{eq:elasticity.quasistatic.weak.1d.qi}).
-\item Implement a procedure to compute $\partial q/\partial\vec{u}$.
+\item Implement a procedure to compute $\partial\vec{q}/\partial\vec{u}$.
 \item Solve for the Newton increment $\Delta \vec{u}$.
 \end{itemize}
 We provide psuedocode for all steps in a syntax similar to Matlab or Octave.
@@ -221,7 +221,7 @@ b(n) += hn; % add Neumann boundary terms
 
 \subsubsection{Computing $\vec{q}$}
 
-We turn now toward computing $\vec{q}$ via \eqref{eq:elasticity.quasistatic.weak.1d.qi} given the current Newton approximation $u$. Again, we'll use an element-based approach, meaning we need to compute the integrals
+We turn now toward computing $\vec{q}$ via \eqref{eq:elasticity.quasistatic.weak.1d.qi} given the current Newton approximation $\vec{u}$. Again, we'll use an element-based approach, meaning we need to compute the integrals
 \begin{equation*}
 \int_{x_i}^{x_{i+1}} \frac{\partial N_j}{\partial X} P \left( \frac{\partial u}{\partial X} \right) dX
 \end{equation*}
@@ -250,9 +250,9 @@ for i = 1:n-1
 end
 \end{verbatim}
 
-\subsubsection{Computing $\partial q/\partial\vec{u}$}
+\subsubsection{Computing $\partial\vec{q}/\partial\vec{u}$}
 
-The nex step is to consider the computation of $\partial q/\partial\vec{u}$, which will be a sparse $n \times n$ matrix. The integrals we need to compute this time are
+The nex step is to consider the computation of $\partial\vec{q}/\partial\vec{u}$, which will be a sparse $n \times n$ matrix. The integrals we need to compute this time are
 \begin{equation*}
 \int_{x_i}^{x_{i+1}} \frac{\partial N_j}{\partial X} \frac{\partial N_k}{\partial X} \frac{\partial P}{\partial F} \left( \frac{\partial u}{\partial X} \right) dX
 \end{equation*}
@@ -311,7 +311,7 @@ function u = solve( ...
     h1, hn, ... % Neumann boundary conditions
     fext, ...
     tol, u)
-b = construct_b(x1, xn, n, fext, h1, hn);
+b = eval_b(x1, xn, n, fext, h1, hn);
 if dirichlet_bc_at_1
     u(1) = g1;
 end
@@ -359,7 +359,7 @@ Let us again recall the elasticity equations:
 \begin{align}
 \rho_0 \frac{\partial^2 \bfu}{\partial t^2} & = \nabla^{\bfX} \cdot \bfP + \bff^{\text{ext}} \quad \in \Omega(t) \\
 \bfu(t,\cdot) & = \bfg(t,\cdot) \quad \in \partial \Omega_d(t) \\
-\left( \bfP \cdot \mathbf{\hat{n}} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
+\left( \bfP \cdot \hat{\bfn} \right) (t,\cdot) & = \bfh(t,\cdot) \quad \in \partial \Omega_n(t)
 \end{align}
 \end{subequations}
 With non-negligible inertial effects, a more sophisticated temporal evolution than quasistatic evolution must be used. One such scheme is Backward Euler, which is desirable due to its unconditional stability and dissipation of oscillatory errors. We'll also see that it is not significantly more complex than quasistatic evolution. However, the transition from dimension $d = 1$ to dimension $d = 2$ does offer a fair amount of complexity, which we shall investigate.
@@ -396,7 +396,7 @@ Let us now derive the weak formulation of equation \eqref{eq:backwardeuler.ii} t
 \end{align}
 \end{subequations}
 
-For the finite element discretization, we'll suppose that $\Omega_0 \subset \bbR^d$ is tesselated by simplices $S^1, \dotsc, S^N$ with grid vertices $\bfX^1, \dotsc, \bfX^n \in \bbR^d$ and with $S^{\alpha}_i$ denoting the $i^{th}$ grid vertex of simplex $S^{\alpha}$ (we shall let ``$a \in S^{\alpha}$'' denote the relation that grid vertex $a$ is one of the grid vertices of simplex $S^{\alpha}$). Our finite element space will consist of continuous $\bbR^d$-valued functions which are affine over each simplex $S^{\alpha}$. This space is spanned by the nodal basis (``hat'') functions $\left\{ N^a \right\}$; $N^a$ takes the value $1$ at $\bfX^a$ and the value $0$ at all other grid vertices. (Strictly speaking, of course, it's really the {\em projection} of this function space on each coordinate that is spanned by the nodal basis functions.)
+For the finite element discretization, we'll suppose that $\Omega_0 \subset \bbR^d$ is tesselated by simplices $S^1, \dotsc, S^N$ with grid vertices $\bfX^1, \dotsc, \bfX^n \in \bbR^d$ and with $S^{\alpha}_i$ denoting the $i^{th}$ grid vertex of simplex $S^{\alpha}$ (we shall let ``$a \in S^{\alpha}$'' denote the relation that grid vertex $a$ is one of the grid vertices of simplex $S^{\alpha}$). Our finite element space will consist of continuous $\bbR^d$-valued functions which are affine over each simplex $S^{\alpha}$. This space is spanned by the nodal basis (``hat'') functions $\left\{ N^a \right\}$; $N^a$ takes the value $1$ at $\bfX^a$ and the value $0$ at all other grid vertices. (Strictly speaking, of course, it is really the {\em projection} of this function space on each coordinate that is spanned by the nodal basis functions.)
 
 We thus take $\bfw = (w_i) = \left( \delta_{ij} N^a \right)$ in \eqref{eq:elasticity.backward_euler.weak}, where $j$ ranges over $1, \dotsc, d$ and $a$ ranges over $1, \dotsc, n$, to obtain $d n$ equations for $\bfu$. Likewise, we discretize each coordinate of $\bfu$ as $u_i = u_i^b N^b$, giving a (nonlinear) system of equations for the coefficients $u_i^b$:
 \begin{subequations}\label{eq:elasticity.backward_euler.qb}
