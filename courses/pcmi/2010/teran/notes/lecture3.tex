@@ -1,6 +1,6 @@
 \lecture{Supplemental Material}
 
-\section{Techniques to Deal with Inversion}
+\section{Handling Inversion via Diagonalization}
 
 \emph{[excerpted from \cite{Irving04}, shortened and with minor modifications]}
 
@@ -125,3 +125,24 @@ In order to reveal the block diagonal structure of $\left. \left( \partial\bfP/\
 we rewrite the $3\times3\times3\times3$ fourth order tensor as a $9\times9$ matrix. To do this, we consider the rearrangement of a $3\times3$ matrix $S$ into the $9\times1$ vector $\left( s_{11}, s_{22}, s_{33}, s_{12}, s_{21}, s_{13}, s_{31}, s_{23}, s_{32} \right)$. We can then represent
 $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$ as the $9\times9$ matrix that maps the vector equivalent of $\delta\bfF$ to the vector equivalent of $\delta\bfP$. For isotropic materials this matrix is block diagonal with diagonal components
 $\bfA$, $\bfB_{12}$, $\bfB_{13}$ and $\bfB_{23}$ where
+\begin{align*}
+\bfA & = \begin{pmatrix} \alpha_{11} + \beta_{11} + \gamma_{11} & \gamma_{12} & \gamma_{13} \\ \gamma_{12} & \alpha_{22} + \beta_{22} + \gamma_{22} & \gamma_{23} \\ \gamma_{13} & \gamma_{23} & \alpha_{33} + \beta_{33} + \gamma_{33} \end{pmatrix}, \\
+\bfB_{ij} & = \begin{pmatrix} \alpha_{ij} & \beta_{ij} \\ \beta_{ij} & \alpha_{ij} \end{pmatrix}.
+\end{align*}
+Here,
+\begin{align*}
+\alpha_{ij} & = 2 \Psi_{I} + 4 \left( \sigma_i^2 + \sigma_j^2 \right) \Psi_{\II}, \\
+\beta_{ij} & = 4 \sigma_i \sigma_j \Psi_{\II} - \frac{2 \III \Psi_{\III}}{\sigma_i \sigma_j}, \\
+\gamma_{ij} & = \begin{pmatrix} 2 \sigma_i & 4 \sigma_i^3 & 2 \III \sigma_i^{-1} \end{pmatrix} \frac{\partial^2 \Psi}{\partial \left( I, \II, \III \right)^2} \begin{pmatrix} 2 \sigma_j \\ 4 \sigma_j^3 \\ 2 \III \sigma_j^{-1} \end{pmatrix} + \frac{4 \III \Psi_{\III}}{\sigma_i \sigma_j},
+\end{align*}
+where $\Psi = \Psi \left( I, \II, \III \right)$ is the strain energy written in terms of the invariants $I = \operatorname{tr} \left( \bfC \right)$, $\II = \bfC \colon \bfC$ and $\III = \det \bfC$ with $\bfC = \bfF^T \bfF$ and subscripts representing partial derivatives. Also, $\sigma_1$, $\sigma_2$ and $\sigma_3$ are the diagonal components that constitute $\hat{bfF}$.
+
+Positive definiteness of $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$ is equivalent to positive definiteness of each of the blocks $\bfA$, $\bfB_{12}$, $\bfB_{13}$ and $\bfB_{23}$. For $\bfA$ a simple $3\times3$ diagonalization is required, followed by the clamping of all negative eigenvalues to zero. For the $2\times2$ matrices $\bfB_{12}$, $\bfB_{13}$ and $\bfB_{23}$ no eigenanalysis is necessary since the negative eigenvalue, if present, can be clamped to zero analytically.
+
+Our algorithm computes the stress differential $\delta\bfP$ as outlined in equation \eqref{eq:deltaP.diagonalized}. First we compute the rotated deformation differential $\bfU^T \delta\bfF \bfV$, and then convert this $3\times3$ second order tensor into a $9\times1$ vector and multiply it by the $9\times9$ matrix for $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$ to carry out the contraction. Of course, we
+use the clamped positive definite version of $\left. \left( \partial\bfP/\partial\bfF \right) \right\rvert_{\hat{\bfF}}$. The result is then converted from a $9\times1$ vector back to a $3\times3$ second order tensor, before being premultiplied by $\bfU$ and postmultiplied by $\bfV^T$.
+
+Since we clamp eigenvalues to zero, the element stiffness matrices are only positive semi-definite, not positive definite, which raises the issue of whether the resulting global stiffness matrix could be semi-definite or ill-conditioned itself. In practice, the additive contributions of neighboring
+elements and boundary conditions always lead to a positive definite global stiffness matrix, even for extreme configurations. (Note that one could clamp to
+a small positive value as well.) The effect of boundary conditions on the definiteness of the stiffness matrix is analogous to that observed in the matrix resulting from the discretization of the Poisson equation. When all Neumann boundary conditions are specified, the resulting matrix is positive semi-definite. In this case a special version of Conjugate Gradients is still applicable, since an analytic description of the null space is available and, similarly, the global stiffness matrix of an elastic object has a null space corresponding to global translation and linearized rotation. Specification
+of one or more Dirichlet boundary conditions makes the Poisson matrix strictly positive definite, with positional constraints having the same effect on the definiteness of the global stiffness matrix for elasticity.
