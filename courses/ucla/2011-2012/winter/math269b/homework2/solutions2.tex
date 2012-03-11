@@ -191,11 +191,34 @@ u_t + \left( 1 + \frac{1}{4} \left( 3 - x \right) \left( 1 + x \right) \right) u
 \end{equation*}
 on the interval $[-1,3]$ with the Lax-Friedrichs scheme (2.3.1) with $\lambda$ equal to $0.8$. Demonstrate that the instability phenomena occur where $\abs{a(t,x) \lambda}$ is greater than $1$ and where there are discontinuities in the solution. Use the same initial data as in Exercise 2.3.1. Specify the solution to be $0$ at both boundaries. Compute up to the time of $0.2$ and use successively smaller values of $h$ to show the location of the instability.
 
+\textbf{Solution}
+
 \item[2.] Investigate (via numerical evidence) the convergence (or lack thereof) of the forward-time central-space scheme
 \begin{equation*}
 \frac{1}{k} \left( u^{n+1}_m - u^n_m \right) + \frac{a}{2h} \left( u^n_{m+1} - u^n_{m-1} \right) = 0
 \end{equation*}
 in the $L^{\infty}$-norm. Use the same scenarios from Homework 1, e.g., compare your results using smooth, continuous-but-non-smooth, and discontinuous initial conditions. Be sure to restrict the relation between $k$ and $h$ appropriately. Compare convergence in the $L^{\infty}$-norm with convergence in the $L^2$-norm.
+
+\textbf{Solution}
+
+We need only run the previous convergence tests for the forward-time central-space scheme with use of the $L^{\infty}$-norm rather than the $L^2$-norm:
+
+\begin{verbatim}
+test_convergence( ...
+    1, 1, @(x) sin(2*pi*x), ...
+    @ftcs, "forward-time central-space", ...
+    2.^(-(5:0.5:8)), @(h) h*h, "inf");
+test_convergence( ...
+    1, 1, @(x) 1 - 2*abs(x - 1/2), ...
+    @ftcs, "forward-time central-space", ...
+    2.^(-(5:0.5:8)), @(h) h*h, "inf");
+test_convergence( ...
+    1, 1, @(x) (1 + sign(1/4 - abs(x - 1/2)))/2, ...
+    @ftcs, "forward-time central-space", ...
+    2.^(-(5:0.5:8)), @(h) h*h, "inf");
+\end{verbatim}
+
+The numerical convergence rates are found to be $2.51$, $1.19$, and $0.36$, respectively. (Note that the last convergence test with discontinuous $u_0$ does not give a strong linear relationship in the log-log plot of $h$ vs. $L^2$-error.) Interestingly, these numerical convergence rates are all non-negligibly better than those for the $L^2$-error.
 
 \end{itemize}
 
