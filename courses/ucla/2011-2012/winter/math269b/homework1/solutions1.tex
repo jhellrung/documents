@@ -216,6 +216,40 @@ so $\abs{g} \leq 1$ if and only if $\abs{ak/h} \leq 1$.
 \end{equation*}
 [Note: Due to periodicity, be sure to avoid double-counting the contributions at $x = 0$ and $x = 1$!] Plot the numerical solutions from each scheme at $t = T$ when $h = 1/100$. Summarize your results. Which scheme do you think is better and why?
 
+\textbf{Solution}
+
+Using the included code, the results of the following statements investigate the convergence of the Lax-Friedrichs scheme with the various initial conditions and $\lambda = 0.99$.
+
+\begin{verbatim}
+test_convergence( ...
+    1, 1, @(x) sin(2*pi*x), ...
+    @lax_friedrichs, "Lax-Friedrichs", ...
+    2.^(-(9:0.5:12)), @(h) 0.99*h);
+test_convergence( ...
+    1, 1, @(x) 1 - 2*abs(x - 1/2), ...
+    @lax_friedrichs, "Lax-Friedrichs", ...
+    2.^(-(9:0.5:12)), @(h) 0.99*h);
+test_convergence( ...
+    1, 1, @(x) (1 + sign(1/4 - abs(x - 1/2)))/2, ...
+    @lax_friedrichs, "Lax-Friedrichs", ...
+    2.^(-(9:0.5:12)), @(h) 0.99*h);
+\end{verbatim}
+
+The numerical convergence rates, based on fitting a linear regression through a log-log plot of $h$ vs. $L^2$-error, are found to be, respectively, $1.06$, $0.80$, and $0.19$. For the smooth initial condition $u_0(x) = \sin(2 \pi x)$, the numerical convergence rate, $1.06$, agrees well with the theoretical convergence rate of $1$. The fact that the numerical convergence rates for the non-smooth initial conditions are significantly less than $1$ is not surprising given that our theoretical convergence analysis depended on the existence of some number of derivatives.
+
+Additionally, as predicted by theory, numerical evidence indicates that the Lax-Friedrichs scheme diverges if $\lambda > 1$ (and, still, $a = 1$), while the forward-time central-space scheme diverges for any $\lambda$, which is consistent with our theoretical analysis.
+
+We do get the forward-time central-space scheme to converge if, e.g., we let $k = h^2$, as demonstrated by the results of the following statement.
+
+\begin{verbatim}
+test_convergence( ...
+    1, 1, @(x) sin(2*pi*x), ...
+    @ftcs, "forward-time central-space", ...
+    2.^(-(4:0.5:7)), @(h) h*h);
+\end{verbatim}
+
+The numerical convergence rate is found to be $2.01$, which agrees with the theoretical rate of convergence of $2$.
+
 \end{itemize}
 
 \end{document}
