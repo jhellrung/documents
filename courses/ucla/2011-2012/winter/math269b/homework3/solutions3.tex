@@ -175,7 +175,132 @@ Given that the differential operator $P := \partial_t + a \partial_x$ for the on
 
 \begin{itemize}
 
-\item[1.] For the one-way wave equation $u_t + a u_x = 0$, investigate how close the numerical solution to a finite difference scheme is to the solution to the corresponding modified equation. To be concrete, suppose a convenient initial condition for which you can solve the modified equation explicitly with periodic boundary conditions. Take $a = 1$, $k/h = 0.5$, and final time $T = 0.5$. Compare the following finite difference schemes: upwinding, Lax-Friedrichs, and Lax-Wendroff. Also, include a derivation of the respective corresponding modified equations.
+\item[1.] For the one-way wave equation $u_t + a u_x = 0$, investigate how close the numerical solution to a finite difference scheme is to the solution to the corresponding modified equation. To be concrete, suppose a convenient initial condition for which you can solve the modified equation explicitly with periodic boundary conditions. Take $a = 1$, $k/h = 0.5$, and final time $T = 0.5$. Compare the following finite difference schemes: forward-time backward-space, Lax-Friedrichs, and Lax-Wendroff. Also, include a derivation of the respective corresponding modified equations.
+
+\textbf{Solution}
+
+\begin{itemize}
+
+\item The forward-time backward-space scheme is given by
+\begin{equation*}
+P_{k,h} v^n_m := \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + a \frac{1}{h} \left( v^n_m - v^n_{m-1} \right) = 0.
+\end{equation*}
+Its corresponding symbol is
+\begin{align*}
+p_{k,h}(s,\xi) := {} & P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+                = {} & \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{h} \left( 1 - e^{-ih\xi} \right) \\
+                = {} & s + i a \xi + \frac{1}{2} s^2 k + \frac{1}{2} a \xi^2 h + O \left( k^2 + h^2 \right),
+\end{align*}
+suggesting a modified equation of
+\begin{equation*}
+u_t + a u_x + \frac{1}{2} k u_{tt} - \frac{1}{2} ah u_{xx} = 0.
+\end{equation*}
+Of course, if $u$ satisfies the above, then
+\begin{equation*}
+u_{tt} = a^2 u_{xx} + O \left( k + h \right),
+\end{equation*}
+giving the modified equation
+\begin{equation*}
+u_t + a u_x - \frac{1}{2} a \left( h - ak \right) u_{xx} = 0.
+\end{equation*}
+To determine convenient initial conditions, let us suppose that $u$ takes the form $u_K(t,x) = \alpha(t) e^{2\pi iKx}$ for some integer $K$ (the $e^{2\pi iKx}$ term ensures we satisfy the periodic boundary conditions). Then $\alpha$ must satisfy the ordinary differential equation
+\begin{equation*}
+\alpha' + \left( 2 \pi i K a + 2 \pi^2 K^2 a \left( h - ak \right) \right) \alpha = 0,
+\end{equation*}
+giving
+\begin{equation*}
+u_K(t,x) = e^{-2 \pi^2 K^2 a \left( h - ak \right) t} e^{2 \pi i K \left( x - a t \right)}.
+\end{equation*}
+
+The included code tests the forward-time backward-space scheme against the following solution to the modified equation (where the parameters $k,h$ have been suppressed for notational convenience):
+\begin{equation*}
+u(t,x) = u_{K=1}(t,x) - 2 u_{K=2}(t,x) + 3 u_{K=3}(t,x).
+\end{equation*}
+The results of the following statement
+\begin{verbatim}
+test_convergence_ftbs(1, 0.5, 2.^(-(9:0.5:12)), 0.5);
+\end{verbatim}
+give a numerical convergence rate of $2.97$, which is an order of accuracy better than the theoretical convergence rate of $2$. This is (most likely) due to a fortuitous choice of $\lambda$. For example, if $\lambda = 0.6$, the numerical convergence rate drops to $1.97$, which is more in line with expectations.
+
+\item The Lax-Friedrichs scheme is given by
+\begin{equation*}
+P_{k,h} v^n_m := \frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} + v^n_{m-1} \right) \right) + a \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0.
+\end{equation*}
+Its corresponding symbol is
+\begin{align*}
+p_{k,h}(s,\xi) := {} & P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+                = {} & \frac{1}{k} \left( e^{sk} - \frac{1}{2} \left( e^{ih\xi} + e^{-ih\xi} \right) \right) + \frac{a}{2h} \left( e^{ih\xi} - e^{-ih\xi} \right) \\
+                = {} & \frac{1}{k} \left( e^{sk} - \cos h\xi \right) + i \frac{a}{h} \sin h\xi \\
+                = {} & s + i a \xi + \frac{1}{2} s^2 k + \frac{1}{2} \xi^2 \frac{h^2}{k} + O \left( k^2 + h^2 \right),
+\end{align*}
+suggesting a modified equation of
+\begin{equation*}
+u_t + a u_x + \frac{1}{2} k u_{tt} - \frac{1}{2} \frac{h^2}{k} u_{xx} = 0.
+\end{equation*}
+Again, if $u$ satisfies the above, then
+\begin{equation*}
+u_{tt} = a^2 u_{xx} + O \left( k + h \right),
+\end{equation*}
+giving the modified equation
+\begin{equation*}
+u_t + a u_x - \frac{1}{2} \left( \frac{h^2}{k} - a^2 k \right) u_{xx} = 0.
+\end{equation*}
+To determine convenient initial conditions, we proceed as before and find that
+\begin{equation*}
+u_K(t,x) = e^{-2 \pi^2 K^2 \left( \frac{h^2}{k} - a^2 k \right) t} e^{2 \pi i K \left( x - a t \right)}
+\end{equation*}
+satisfies the modified equation for each integer $K$.
+
+The included code tests the Lax-Friedrichs scheme against the following solution to the modified equation (where the parameters $k,h$ have been suppressed for notational convenience):
+\begin{equation*}
+u(t,x) = u_{K=1}(t,x) - 2 u_{K=2}(t,x) + 3 u_{K=3}(t,x).
+\end{equation*}
+The results of the following statement
+\begin{verbatim}
+test_convergence_lax_friedrichs(1, 0.5, 2.^(-(9:0.5:12)), 0.5);
+\end{verbatim}
+give a numerical convergence rate of $1.90$, which is consistent with the theoretical convergence rate of $2$.
+
+\item The Lax-Wendroff scheme is given by
+\begin{equation*}
+P_{k,h} v^n_m := \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + a \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) - \frac{a^2k}{2h^2} \left( v^n_{m+1} - 2v^n_m + v^n_{m-1} \right) = 0.
+\end{equation*}
+Its corresponding symbol is
+\begin{align*}
+p_{k,h}(s,\xi) := {} & P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+                = {} & \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{a}{2h} \left( e^{ih\xi} - e^{-ih\xi} \right) - \frac{a^2k}{2h^2} \left( e^{ih\xi} - 2 + e^{-ih\xi} \right) \\
+                = {} & \frac{1}{k} \left( e^{sk} - 1 \right) + i \frac{a}{h} \sin h\xi + \frac{a^2k}{h^2} \left( 1 - \cos h\xi \right) \\
+                = {} & \left( 1 + \frac{1}{2} k \left( s - i a \xi \right) \right) \left( s + i a \xi \right) + \frac{1}{6} s^3 k^2 - i \frac{1}{6} a \xi^3 h^2 + O \left( k^3 + h^3 \right),
+\end{align*}
+suggesting a modified equation of
+\begin{equation*}
+u_t + a u_x + \frac{1}{6} k^2 u_{ttt} + \frac{1}{6} a h^2 u_{xxx} = 0.
+\end{equation*}
+Similar to before, if $u$ satisfies the above, then
+\begin{equation*}
+u_{ttt} = -a^3 u_{xxx} + O \left( k + h \right),
+\end{equation*}
+giving the modified equation
+\begin{equation*}
+u_t + a u_x + \frac{1}{6} a \left( h^2 - a^2 k^2 \right) u_{xxx} = 0.
+\end{equation*}
+To determine convenient initial conditions, we proceed as before and find that
+\begin{equation*}
+u_K(t,x) = e^{2 \pi i K \left( x - a_K t \right)} \quad \left[ a_K := a \left( 1 - \frac{2}{3} \pi^3 K^2 \left( h^2 - a^2 k^2 \right) \right) \right]
+\end{equation*}
+satisfies the modified equation for each integer $K$.
+
+The included code tests the Lax-Wendroff scheme against the following solution to the modified equation (where the parameters $k,h$ have been suppressed for notational convenience):
+\begin{equation*}
+u(t,x) = u_{K=1}(t,x) - 2 u_{K=2}(t,x) + 3 u_{K=3}(t,x).
+\end{equation*}
+The results of the following statement
+\begin{verbatim}
+test_convergence_lax_wendroff(1, 0.5, 2.^(-(9:0.5:12)), 0.5);
+\end{verbatim}
+give a numerical convergence rate of $3.00$, which is identical (to the displayed precision) with the theoretical convergence rate of $3$.
+
+\end{itemize}
 
 \end{itemize}
 
