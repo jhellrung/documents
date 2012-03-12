@@ -1,8 +1,4 @@
-function test_convergence(a, T, u, scheme, scheme_name, hs, k_of_h, norm_p)
-
-    if nargin() < 8
-        norm_p = 2;
-    endif
+function test_convergence(a, T, u, scheme, scheme_name, hs, k_of_h)
 
     e = zeros(size(hs));
 
@@ -14,11 +10,11 @@ function test_convergence(a, T, u, scheme, scheme_name, hs, k_of_h, norm_p)
         N = ceil(T/k);
         k = T/N;
         x = (0:M)/M;
-        v = u(h,k,0,x);
+        v = u(k,h,0,x);
         for n = 1:N
             v = scheme(v,a,k,h);
         endfor
-        e(i) = sqrt(h) * norm((u(h,k,T,x)-v)(1:end-1), norm_p);
+        e(i) = sqrt(h) * norm((u(k,h,T,x)-v)(1:end-1));
     endfor
 
     p = polyfit(log(hs), log(e), 1);
