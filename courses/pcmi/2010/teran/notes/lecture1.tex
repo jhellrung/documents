@@ -217,10 +217,8 @@ and
 where we solve this final system by following a similar FEM procedure to the quasistatic case for $\vec{u}^{m+1}$. Specifically, we'd get
 \begin{align*}
 q^a_i \left( \vec{u}^{m+1} \right)
-& = M_{ai;bj} u^{m+1}_{bj} \\
-& \quad {} + \Delta t^2 \int_{\bfB_0} N^a_{,j} P_{ij} d\bfX \\
-& \quad {} - M_{ai;bj} \left( u^{m+1}_{bj} + \Delta{t} v^m_{bj} \right) \\
-& \quad {} - \int_{\partial\bfB_0} N^a P_{ij} n_j d\bfS \left( \bfX \right) \\
+& = M_{ai;bj} u^{m+1}_{bj} + \Delta t^2 \int_{\bfB_0} N^a_{,j} P_{ij} d\bfX \\
+& \quad {} - M_{ai;bj} \left( u^{m+1}_{bj} + \Delta{t} v^m_{bj} \right) - \int_{\partial\bfB_0} N^a P_{ij} n_j d\bfS \left( \bfX \right) \\
 & \quad {} - \int_{\bfB_0} N^a f^{\text{ext}}_i d\bfX
 \end{align*}
 and $M_{ai;bj}=\int_{\bfB_0} N^a \rho_0 N^b \delta_{ij} d\bfX$.
