@@ -18,10 +18,10 @@ For the numerical solution of \eqref{eq:poisson.strong}, we'll use a discretizat
 \begin{subequations}
 \begin{align}
 & -\nabla \cdot \left( \beta \nabla u \right) = f \\
-\Rightarrow & \int_{\Omega} -\nabla \cdot \left( \beta \nabla u \right) v = \int_{\Omega} f v \\
-\Rightarrow & \int_{\Omega} \beta \nabla u \cdot \nabla v =
+& \quad \Rightarrow \int_{\Omega} -\nabla \cdot \left( \beta \nabla u \right) v = \int_{\Omega} f v \\
+& \quad \Rightarrow \int_{\Omega} \beta \nabla u \cdot \nabla v =
     \int_{\Omega} f v + \int_{\partial \Omega} \left( \beta \nabla u \cdot \hat{\bfn} \right) v \label{eq:poisson.weak.c} \\
-\Rightarrow & \int_{\Omega} \beta \nabla u \cdot \nabla v = \int_{\Omega} f v + \int_{\partial \Omega_n} q v \label{eq:poisson.weak.d}
+& \quad \Rightarrow \int_{\Omega} \beta \nabla u \cdot \nabla v = \int_{\Omega} f v + \int_{\partial \Omega_n} q v \label{eq:poisson.weak.d}
 \end{align}
 \end{subequations}
 where the derivation from \eqref{eq:poisson.weak.c} to \eqref{eq:poisson.weak.d} is possible by stipulating that $v \equiv 0$ on $\partial \Omega_d$. Clearly, then, if $u$ satisfies \eqref{eq:poisson.strong}, then $u$ also satisfies \eqref{eq:poisson.weak.d} for all appropriate $v$. Under suitable conditions, it turns out to be the case that the converse holds as well. Since \eqref{eq:poisson.weak.d} involves only first order derivatives in $u$, its analysis is often preferable to \eqref{eq:poisson.strong}.
@@ -79,9 +79,9 @@ u(0) & = 1 \\
 
 \item The FEM terminology for the matrix $A$ in \eqref{eq:poisson.system.a} is the \emph{(global) stiffness matrix} (the meaning of the term ``global'' will become obvious shortly). With dimension $d = 1$ linear finite elements, it is relatively straightforward to compute the entries of the stiffness matrix, even given that one has to account for differences between boundary and interior grid vertices. However, the situation becomes more complicated with higher order or higher dimensional finite elements, and it becomes tedious to consider all the special boundary cases. As such, it is common practice to assemble the global stiffness matrix element by element (i.e., cell by cell), with each element contributing partially to several entries of the global stiffness matrix. The collection of these contributions from a single element may be put into a small matrix, the \emph{local stiffness matrix} for that element. The computation of the local stiffness matrix is identical to that of the global stiffness matrix upon replacing the integrations over $\Omega$ with integrations localized over the element. For example, back to dimension $d = 1$ linear finite elements, the local stiffness matrix over $I_j = \left( x_{j-1}, x_j \right)$ would consist of $2^2$ (nonzero) entries (since only $2$ basis functions are supported on $I_j$). Each of these entries would be added to accumulated global stiffness matrix entries:
 \begin{align*}
-A_{j-1,j-1}          & {} +\!\!= \int_{I_j} \beta \nabla N_{j-1} \cdot \nabla N_{j-1} \\
-A_{j-1,j}, A_{j,j-1} & {} +\!\!= \int_{I_j} \beta \nabla N_{j-1} \cdot \nabla N_j \\
-A_{jj}               & {} +\!\!= \int_{I_j} \beta \nabla N_j \cdot \nabla N_j
+A_{j-1,j-1}          & {} + {} \!\!\!= \int_{I_j} \beta \nabla N_{j-1} \cdot \nabla N_{j-1} \\
+A_{j-1,j}, A_{j,j-1} & {} + {} \!\!\!= \int_{I_j} \beta \nabla N_{j-1} \cdot \nabla N_j \\
+A_{jj}               & {} + {} \!\!\!= \int_{I_j} \beta \nabla N_j \cdot \nabla N_j
 \end{align*}
 This suggests the following procedure to build the (global) stiffness matrix $A$. First, initialize the sparsity pattern of $A$ (with zeros). Then iterate through each element and add the contributions of the element's local stiffness matrix to the corresponding entries in $A$.
 
@@ -169,14 +169,10 @@ b_i & := \int_a^b N_i f^{\text{ext}} dX + \text{[Neumann boundary terms]} \label
 for each grid vertex $i$, where $u := u_i N_i$. The Neumann boundary terms consist of neither, one, or both of $N_i(b) h(b)$ and/or $-N_i(a) h(a)$, depending on whether $b$ and/or $a$, respectively, belong to $\partial\Omega_n$.
 
 For Neo-Hookean, $P$ depends \emph{non-linearly} on the displacement $u$, hence one must use a non-linear solver, such as Newton iteration, to solve \eqref{eq:elasticity.quasistatic.weak.1d} for $\vec{u} := \left( u_i \right)$. The Newton step looks like
-\begin{subequations}
-\begin{equation*}
-\frac{\partial q_i}{\partial\vec{u}} \left( \vec{u} \right) \Delta \vec{u} + q_i \left( \vec{u} \right) = 0;
-\end{equation*}
-\begin{equation*}
+\begin{gather*}
+\frac{\partial q_i}{\partial\vec{u}} \left( \vec{u} \right) \Delta \vec{u} + q_i \left( \vec{u} \right) = 0; \\
 \vec{u} \leftarrow \vec{u} + \Delta \vec{u};
-\end{equation*}
-\end{subequations}
+\end{gather*}
 where
 \begin{equation*}
 \frac{\partial q_i}{\partial u_j} \left( \vec{u} \right) = \int_a^b \frac{\partial N_i}{\partial X} \frac{\partial P}{\partial F} \left( F(u) \right) \frac{\partial N_j}{\partial X} dX
@@ -409,14 +405,10 @@ b^a_i & := \int_{\Omega_0} \left( \rho_0 \left( (u_0)_i + \Delta t (v_0)_i \righ
 It is worth noting that this is very similar to the non-linear system of equations which arise in a discretization of quasistatic evolution. The differences are only in the right-hand side $\vec{b} := \left\{ b_i^a \right\}$ and the additional identity-like block to \eqref{eq:elasticity.backward_euler.qai}.
 
 Like in dimension $d = 1$, we shall solve \eqref{eq:elasticity.backward_euler.qb} via Newton iteration:
-\begin{subequations}
-\begin{equation*}
-\frac{\partial\vec{q}}{\partial\vec{u}} \left( \vec{u} \right) \Delta \vec{u} + \vec{q} \left( \vec{u} \right) = 0;
-\end{equation*}
-\begin{equation*}
+\begin{gather*}
+\frac{\partial\vec{q}}{\partial\vec{u}} \left( \vec{u} \right) \Delta \vec{u} + \vec{q} \left( \vec{u} \right) = 0; \\
 \vec{u} \leftarrow \vec{u} + \Delta \vec{u}.
-\end{equation*}
-\end{subequations}
+\end{gather*}
 
 \subsection{Implementation Details in Dimension~2}
 
