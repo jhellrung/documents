@@ -61,16 +61,12 @@ P_{ij} = \Psi_{,ij} = 2 \mu \epsilon_{ij} + \lambda \epsilon_{kk} \delta_{ij} \q
 \end{equation*}
 This relationship between the stress and the displacement mapping is enough to close our governing system of equations. I will not give too much motivation for these equations, but note that $\bsepsilon$ is zero when $\bfF$ is skew-symmetric. Also, note that if the displacement is spatially constant, then $\frac{\partial\bfu}{\partial\bfX} = -\bfI$ and hence $\bsepsilon = \bfP = \mathbf{0}$. $\bsepsilon$ is a measure of the strain (or change of shape) in the material. Ideally, we'd like a measure that was invariant under rigid motions $\bsphi$. Unfortunately, the motions just described are only approximately rigid. The approximation is valid if we assume that the deformation is very small. In fact, we can only say that linear elasticity is valid if the deformation is very small. Otherwise, it is not a very good model. That is, it does not accurately describe any elastic materials observed in nature unless the strain is very small. A more general expression of a rigid body motion is that the deformation gradient is orthogonal. I.e., that $\bfF^T \bfF = \bfI$. In fact, more appropriate strain measures for large deformation elasticity are the right and left Cauchy-Green strain tensors: $\bfG_R = \bfF^T \bfF - \bfI$ and  $\bfG_L = \bfF \bfF^T - \bfI$, respectfully. Note that this measure is quadratic in the deformation. This will lead to nonlinear governing equations and complicate considerably the process of running our simulation. In other words, if we want to simulate large tissues that undergo significant deformation (as we would need in virtual surgery), we'll be stuck with nonlinear governing equations.
 
-Arguably, the most simplistic model for large deformation elasticity is the \emph{Neo-Hookean} model. The hyperelastic strain energy density for such materials is given by the following equation
-\begin{subequations}
-\begin{equation*}
-\Psi \left( \bfF \right) = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log(J) + \frac{\lambda}{2} \log(J)^2
-\end{equation*}
-\begin{equation*}
-\bfP \left( \bfF \right) = \mu \bfF + \left( \lambda \log(J) - \mu \right) \bfF^{-T}
-\end{equation*}
-\end{subequations}
-where  $J$ is the determinant of the deformation gradient
+Arguably, the most simplistic model for large deformation elasticity is the \emph{Neo-Hookean} model. The hyperelastic strain energy density for such materials is given by the following equation.
+\begin{gather*}
+\Psi \left( \bfF \right) = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log(J) + \frac{\lambda}{2} \log(J)^2 \\
+\bfP \left( \bfF \right) = \mu \bfF + \left( \lambda \log(J) - \mu \right) \bfF^{-T},
+\end{gather*}
+where  $J$ is the determinant of the deformation gradient:
 \begin{equation*}
 J = \det \left( \bfF \right).
 \end{equation*}
@@ -104,17 +100,11 @@ We can get an idea for how to treat the spatial discretization of the partial di
 -\nabla^{\bfX} \cdot \bfP = \bff^{\text{ext}} \quad \text{or} \quad -P_{ij,j} = f^{\text{ext}}_i.
 \end{equation*}
 This can be read as the row wise divergences of the matrix $\bfP$ balance the different components of the applied forces. We'll mainly be considering \emph{finite element method} (FEM) type discretizations in these notes, so we'll look at the weak form here to get started with that. Taking a class of test functions $\bfw \colon \bfB_0 \to \bbR^2$, we take the dot product with both sides of the governing equations and integrate over $\bfB_0$ to get
-\begin{subequations}
-\begin{equation*}
--\int_{\bfB_0} w_i P_{ij,j} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX
-\end{equation*}
-\begin{equation*}
--\int_{\bfB_0} \left( w_i P_{ij} \right)_{,j} - w_{i,j} P_{ij} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX
-\end{equation*}
-\begin{equation*}
+\begin{gather*}
+-\int_{\bfB_0} w_i P_{ij,j} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX \\
+-\int_{\bfB_0} \left( w_i P_{ij} \right)_{,j} - w_{i,j} P_{ij} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX \\
 \int_{\bfB_0} w_{i,j} P_{ij} d\bfX = \int_{\partial\bfB_0} w_i P_{ij} n_j d\bfS \left( \bfX \right) + \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX.
-\end{equation*}
-\end{subequations}
+\end{gather*}
 We'd then just assume that the bottom equations hold for all suitable $\bfw$ for the weak form. Furthermore, the quantity $P_{ij} n_j$ would be supplied as a boundary condition (this would be the external loading on the material). A FEM discretization would then be done by setting up a space of interpolating functions over a mesh and considering the weak form over this finite dimensional space.
 
 \section*{1D Elasticity}
@@ -128,15 +118,11 @@ and the equilibrium equation is just Poisson's equation:
 -\left( 2 \mu - \lambda \right) \frac{\partial^2 u}{\partial X^2} = f^{\text{ext}}.
 \end{equation*}
 Thus, we can just use a continuous piecewise linear interpolation space of a uniform discretization of our material (which I will assume for simplicity is just some interval $(a,b)$). In this case, we will ultimately just be solving a Poisson equation for the unknown deformation field. This is only the case in 1D. If we assume that each node in the discrete domain has an associated interpolating function $N_i$, then the FEM discretized linear system is
-\begin{subequations}
-\begin{equation*}
-A_{ij} u_j = F^{\text{ext}}_i + g_i \quad \text{where} \quad A_{ij} = \left( 2 \mu - \lambda \right) \int_a^b \frac{\partial N_i}{\partial X}\frac{\partial N_j}{\partial X} dX,
-\end{equation*}
-\begin{equation*}
-F^{\text{ext}}_i = \int_a^b f^{\text{ext}} N_i dX, \quad g_i = N_i(b) P(b) - N_i(a) P(a)
-\end{equation*}
-\end{subequations}
-(where we assume that $P(a)$ and $P(b)$ were already given). Now, let's consider the case of Neo-Hookean elasticity. In this case, our discretization of the weak form will give rise to a nonlinear system of equations for our displacements $u_i$:
+\begin{gather*}
+A_{ij} u_j = F^{\text{ext}}_i + g_i \quad \text{where} \quad A_{ij} = \left( 2 \mu - \lambda \right) \int_a^b \frac{\partial N_i}{\partial X}\frac{\partial N_j}{\partial X} dX, \\
+F^{\text{ext}}_i = \int_a^b f^{\text{ext}} N_i dX, \quad g_i = N_i(b) P(b) - N_i(a) P(a).
+\end{gather*}
+(We assume that $P(a)$ and $P(b)$ were already given.) Now, let's consider the case of Neo-Hookean elasticity. In this case, our discretization of the weak form will give rise to a nonlinear system of equations for our displacements $u_i$:
 \begin{equation*}
 q_i \left( \vec{u} \right) = \int_a^b \frac{\partial N_i}{\partial X} P(F(u(X))) dX - F^{\text{ext}}_i + g_i = 0
 \end{equation*}
@@ -145,14 +131,10 @@ where $u(X) = u_i N_i(X)$ (again, where repeated indices imply sumation). For Ne
 P(F(u(X))) = \mu \left( \frac{\partial u}{\partial X} + 1 \right) + \left( \lambda \text{log} \left( \frac{\partial u}{\partial X} + 1 \right) - \mu \right) \frac{1}{\frac{\partial u}{\partial X} + 1}.
 \end{equation*}
 We can think of $\vec{q} : \bbR^n \to \bbR^n$ as a nonlinear function that we need to find a zero of. We'll use Newton's method to iteratively improve our approximate solution (here, I am assuming $\vec{u}^k \in \bbR^n$ is our current approximation to the vector of discrete displacements) as:
-\begin{subequations}
-\begin{equation*}
-\frac{\partial q_i}{\partial u_j} \left( \vec{u}^k \right) \Delta{u}_j + q_i \left( \vec{u}^k \right) = 0,
-\end{equation*}
-\begin{equation*}
+\begin{gather*}
+\frac{\partial q_i}{\partial u_j} \left( \vec{u}^k \right) \Delta{u}_j + q_i \left( \vec{u}^k \right) = 0, \\
 u_i^{k+1} \leftarrow u_i^{k} + \Delta{u}_i.
-\end{equation*}
-\end{subequations}
+\end{gather*}
 The linearization of the discrete equilibrium equations can be a little tricky, so it will be good to first consider it in 1D. The general idea is to linearize the stress with respect to the deformation gradient, then linearize the deformation gradient with respect to discrete degrees of freedom.
 \begin{equation*}
 \frac{\partial q_i}{\partial u_j} \left( \vec{u} \right) = \int_a^b \frac{\partial N_i}{\partial X} \frac{\partial P}{\partial F} \left( F \left( \vec{u} \right) \right) \frac{\partial F}{\partial u_j} dX = \int_a^b \frac{\partial N_i}{\partial X} \frac{\partial P}{\partial F} \left( F \left( \vec{u} \right) \right) \frac{\partial N_j}{\partial X} dX
@@ -176,15 +158,11 @@ The deformation mapping $\bsphi$ must be a bijection (one-to-one and onto) if we
 \end{figure}
 
 The problematic term in the Neo-Hookean model is the natural log. If we replace the log with another function $r$, we can improve the robustness of our numerical simulation to inversion. This function should look very nearly like the natural log around $J = 1$ to prevent loss of accuracy, but should not have a singularity at $J = 0$. We can do this by taking $r$ to be the cubic Taylor expansion of the log around $J = 1$ (see Figure~\ref{fig:inversion3}). With this choice, we have the following expressions for the Neo-Hookean hyperelastic strain energy density and first Piola-Kirchoff stresses:
-\begin{subequations}
-\begin{equation*}
-\Psi \left( \bfF \right) = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu r(J) + \frac{\lambda}{2} r(J)^2
-\end{equation*}
-\begin{equation*}
+\begin{gather*}
+\Psi \left( \bfF \right) = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu r(J) + \frac{\lambda}{2} r(J)^2, \\
 \bfP \left( \bfF \right) = \mu \bfF + \left( \lambda r(J) -\mu \right) r'(J) \begin{pmatrix} F_{22} & -F_{12} \\
 -F_{21} & F_{11} \end{pmatrix}.
-\end{equation*}
-\end{subequations}
+\end{gather*}
 In Figure~\ref{fig:inversion3}, we see the effect of this modification in 1D. This new model is well-defined through inversion, but accurately reflects the original model when very near the undeformed configuration. We can make further adjustments to prevent problematic values of $\frac{\partial P}{\partial F}$ (e.g. we wanted this to be positive for our 1D example). The treatment of these terms is addressed in \cite{Teran05a}.
 
 \begin{figure}
@@ -217,8 +195,7 @@ and
 where we solve this final system by following a similar FEM procedure to the quasistatic case for $\vec{u}^{m+1}$. Specifically, we'd get
 \begin{align*}
 q^a_i \left( \vec{u}^{m+1} \right)
-& = M_{ai;bj} u^{m+1}_{bj} + \Delta t^2 \int_{\bfB_0} N^a_{,j} P_{ij} d\bfX \\
-& \quad {} - M_{ai;bj} \left( u^{m+1}_{bj} + \Delta{t} v^m_{bj} \right) - \int_{\partial\bfB_0} N^a P_{ij} n_j d\bfS \left( \bfX \right) \\
-& \quad {} - \int_{\bfB_0} N^a f^{\text{ext}}_i d\bfX
+& = M_{ai;bj} u^{m+1}_{bj} + \Delta t^2 \int_{\bfB_0} N^a_{,j} P_{ij} d\bfX - M_{ai;bj} \left( u^{m+1}_{bj} + \Delta{t} v^m_{bj} \right) \\
+& \quad {} - \int_{\partial\bfB_0} N^a P_{ij} n_j d\bfS \left( \bfX \right) - \int_{\bfB_0} N^a f^{\text{ext}}_i d\bfX
 \end{align*}
 and $M_{ai;bj}=\int_{\bfB_0} N^a \rho_0 N^b \delta_{ij} d\bfX$.
