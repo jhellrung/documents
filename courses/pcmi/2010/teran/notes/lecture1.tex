@@ -16,7 +16,7 @@ We'll refer to this function $\bfu$ as the displacement mapping. We'll also intr
 \end{equation*}
 Index notation for derivatives will be helpful for compactness of expressions. E.g. $F_{ij} = \frac{\partial\phi_i}{\partial X_j} = \phi_{i,j}$ and $\frac{\partial u_i}{\partial X_j} = u_{i,j}$.
 \begin{figure}
-%\includegraphics[width=\columnwidth]{images/continuum}
+\includegraphics[width=\columnwidth]{images/continuum}
 \caption{We will be solving for the mapping between the current configuration and a rest configuration. Stresses will arise via elasticity to resist changes in shape induced by this motion.}
 \label{fig:phi}
 \end{figure}
@@ -77,7 +77,7 @@ The log term in this equation is there to resist changes in volume. The $\lambda
 The Young's modulus is a measure of the stiffness of the material and should be larger than zero (typically around $1000$ for our exercises). The Poisson's ratio is a measure of the incompressibility of the material and should be between 0 and $\frac{1}{2}$ (with $\nu = \frac{1}{2}$ being the limit of an incompressible material; note that $\lambda$ goes to $\infty$ in this case).
 
 \begin{figure}
-%\includegraphics[width=.5\columnwidth]{images/muscle_biomechanics_2005}
+\includegraphics[width=.5\columnwidth]{images/muscle_biomechanics_2005}
 \caption{Constitutive models for muscle, tendon, ligament and many other tissues must be anisotropic to accurately reflect the natural fibrous structure of these materials. In such cases, we must represent a fiber field defined over the material configuration of the material as shown above in a rectis femoris muscle.}
 \label{fig:fibers}
 \end{figure}
@@ -88,7 +88,7 @@ The models described so far are both isotropic. That is, the elastic response to
 \end{equation*}
 
 \begin{figure}
-%\includegraphics[width=\columnwidth]{images/muscles}
+\includegraphics[width=\columnwidth]{images/muscles}
 \caption{Simulation of elasticity for the musculoskeletal system.}
 %\label{fig:mucles}
 \end{figure}
@@ -142,7 +142,7 @@ The linearization of the discrete equilibrium equations can be a little tricky, 
 since $u(X) = u_i N_i(X)$ and $F(X) = \frac{\partial u}{\partial X}(X) + 1 = u_i \frac{\partial N_i}{\partial X}(X) + 1$. Note that the linearized system is just a spatially varying Poisson equation. However, it should be noted that for such equations we must typically require the coefficients remain positive throughout the domain. This will not always happen and can lead to difficulties with robustness. We will discuss this issue in the next section.
 
 \begin{figure}
-%\includegraphics[width=\columnwidth]{images/elasticity_1d}
+\includegraphics[width=\columnwidth]{images/elasticity_1d}
 \caption{The image at the left shows an acceptable solution for the deformation $\phi$ (namely, $\phi(X) = X^2$). The solution at the right shows one that would produce inverted material (namely, $\phi(X) = \sin \left( 2 \pi X \right)$).}
 \label{fig:inversion}
 \end{figure}
@@ -152,7 +152,7 @@ since $u(X) = u_i N_i(X)$ and $F(X) = \frac{\partial u}{\partial X}(X) + 1 = u_i
 The deformation mapping $\bsphi$ must be a bijection (one-to-one and onto) if we are to strictly apply the principles of continuum mechanics. This precludes many solutions you might otherwise expect to see. For example, for the 1D case, the solution must never have a derivative less than or equal to zero. I.e. many functions we are used to solving for (see Figure~\ref{fig:inversion}) are not, strictly speaking, allowable. Unfortunately, this constraint will not always be naturally achieved by our discretization. For some models (e.g. linear elasticity) it is okay that the discrete solution does not satisfy the inversion constraint. For others like Neo-Hookean, we would end up taking the natural log of a negative number. This log term is there to prevent excessive compression. However, it has the consequence that our equations become incredibly stiff under compression. Such behavior can be very problematic numerically and must be avoided in a surgical simulator. A general approach to improving robustness to discretely inverted (i.e., non-bijective) deformation mappings was developed in \cite{Irving06}. I will not go through all of the details for the sake of time. However, I will show how we can apply the principles developed in this work to our simple Neo-Hookean model.
 
 \begin{figure}
-%\includegraphics[width=\columnwidth]{images/buddha_gears}
+\includegraphics[width=\columnwidth]{images/buddha_gears}
 \caption{These images show the the algorithm of \cite{Irving06} in action. This algorithm is based on removing the bijection constraint from continuum mechanics in the discrete setting to provide robustness to large deformation.}
 %\label{fig:inversion2}
 \end{figure}
@@ -166,7 +166,7 @@ The problematic term in the Neo-Hookean model is the natural log. If we replace 
 In Figure~\ref{fig:inversion3}, we see the effect of this modification in 1D. This new model is well-defined through inversion, but accurately reflects the original model when very near the undeformed configuration. We can make further adjustments to prevent problematic values of $\frac{\partial P}{\partial F}$ (e.g. we wanted this to be positive for our 1D example). The treatment of these terms is addressed in \cite{Teran05a}.
 
 \begin{figure}
-%\includegraphics[width=\columnwidth]{images/invertible_neo_hookean}
+\includegraphics[width=\columnwidth]{images/invertible_neo_hookean}
 \caption{The plots at the left are of the hyperelastic energy density of the 1D Neo-Hookean model. The plots at the right are of the 1D Neo-Hookean stresses. The blue curves are the unmodified Neo-Hookean model, the green curves result from replacing the log with it's cubic Taylor expansion around $J = 1$. These are preferable for the sake of robustness.}
 \label{fig:inversion3}
 \end{figure}
