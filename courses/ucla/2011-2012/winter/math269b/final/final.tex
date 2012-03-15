@@ -52,9 +52,9 @@ Determine the path $t \mapsto \left( t, x_S(t) \right)$ of the (physically corre
 [Hint: Recall that the shock speed $x_S'(t) = \frac{1}{2} \left( u^L + u^R \right) \left( t, x_S(t) \right)$, thus allowing you to set up an ordinary differential equation for $x_S$.] Consider and explain the physical significance of the special cases $a_L = a_R$ and $b_L = b_R$.
 
 \item[6.] Solve the weak form of \eqref{eq:burgers.strong} (i.e., give the entropy solution with rarefaction, and with any shocks propagating at the physically correct speed) on the \emph{periodic} domain $[0,4]$ with the ``pulse'' initial condition
-\begin{equation*}
+\begin{equation}\label{eq:pulse}
 u_0(x) := \begin{cases} 0, & 0 \leq x < 1 \\ 2, & 1 < x < 2 \\ 0, & 2 < x \leq 4 \end{cases}.
-\end{equation*}
+\end{equation}
 Identify key points in time $t$ when the character of the solution changes. (It will be natural to express the solution $u(t,x)$ piecewise with respect to $x$ \emph{and} $t$.) Confirm that $\int u(t,x) dx$ is conserved (i.e., $\int u(t,x) dx = \text{constant}$ for all $t$), and determine $\lim_{t \to \infty} u(t,x)$.
 
 \item[7.] (Strikwerda 6.3.9.) Consider a scheme for (6.1.1), $u_t = b u_{xx}$, of the form
@@ -87,7 +87,7 @@ Show that the scheme is fourth-order accurate in $x$ is $\alpha_2 = -\alpha_1 / 
 \frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} - v^n_{m-1} \right) \right) + v^n_m \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0
 \end{equation*}
 \end{itemize}
-For those schemes that appear to converge to the exact solution (derived previously), compute a numerical convergence rate. For those schemes that don't appear to converge to the exact solution, explain the discrepancy (e.g., incorrect rarefaction, non-physical shock speed, unstable). Which scheme do you think performs best for the given initial condition?
+Use the initial condition \eqref{eq:pulse}. For those schemes that appear to converge to the exact solution (derived previously), compute a numerical convergence rate. For those schemes that don't appear to converge to the exact solution, explain the discrepancy (e.g., incorrect rarefaction, non-physical shock speed, unstable). Which scheme do you think performs best for the given initial condition?
 
 \item[2.] Use your implementation of the Thomas algorithm from Homework 4 to solve \emph{periodic} tridiagonal systems:
 \begin{equation*}
