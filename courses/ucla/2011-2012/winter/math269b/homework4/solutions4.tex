@@ -1,0 +1,189 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Homework 4 (Solutions)}
+\date{March 14, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] Solve the heat equation $u_t = b u_{xx}$ on a interval $I \subset \mathbb{R}$ with \emph{periodic} boundary conditions. How does $\int_I u(t,x) dx$ vary with time $t$?
+
+\textbf{Solution}
+
+Let us first suppose that $I = [-\pi,+\pi]$. We proceed as in the text for the heat equation over $\mathbb{R}$, but this time use the Fourier transform defined over periodic functions on $[-\pi,+\pi]$:
+\begin{equation*}
+\hat{u}_m = \left( \mathcal{F}u \right)_m := \frac{1}{\sqrt{2\pi}} \int_{-\pi}^{+\pi} e^{-imx} u(x) dx.
+\end{equation*}
+Applying this Fourier transform in space to $u_t = b u_{xx}$ yields $\left( \hat{u}_m \right)_t = -bm^2 \hat{u}_m$, an ordinary differential equation in $t \mapsto \hat{u}_m(t)$ which easily solves to $\hat{u}_m(t) = e^{-bm^2t} \hat{u}_m(0)$. An inverse Fourier transform thus yields
+\begin{align*}
+u(t,x) = {} & \left( \mathcal{F}^{-1} \hat{u}(t) \right)(x) \\
+      := {} & \frac{1}{\sqrt{2\pi}} \sum_{m=-\infty}^{+\infty} e^{imx} \hat{u}_m(t) \\
+       = {} & \frac{1}{\sqrt{2\pi}} \sum_{m=-\infty}^{+\infty} e^{imx} e^{-bm^2t} \hat{u}_m(0).
+\end{align*}
+A similar formula holds for general $I =: [\alpha,\beta]$. First, let $\tilde{u} : [-\pi,\pi] \to \mathbb{R}$ be defined as
+\begin{equation*}
+\tilde{u}(t,\xi) := u \left( t, \gamma(\xi) \right), \quad \gamma : [-\pi,\pi] \to I, \xi \mapsto \frac{\alpha (\pi - \xi) + \beta (\xi + \pi)}{2\pi}.
+\end{equation*}
+Then $\tilde{u}$ and satisfies
+\begin{equation*}
+b \tilde{u}_{\xi\xi} = b \left( \gamma' \right)^2 u_{xx} = \left( \gamma' \right)^2 u_t = \left( \gamma' \right)^2 \tilde{u}_t \quad \Rightarrow \quad \tilde{u}_t = \tilde{b} \tilde{u}_{\xi\xi}, \quad \tilde{b} = \left( \gamma' \right)^{-2} b.
+\end{equation*}
+(Note that $\gamma' \equiv (\beta - \alpha) / 2\pi$.) Thus,
+\begin{equation*}
+\tilde{u}(t,\xi) = \frac{1}{\sqrt{2\pi}} \sum_{m=-\infty}^{+\infty} e^{im\xi} e^{-\tilde{b}m^2t} \left( \mathcal{F} \tilde{u}(t=0,\cdot) \right)_m
+\end{equation*}
+where
+\begin{align*}
+\left( \mathcal{F} \tilde{u}(t=0,\cdot) \right)_m
+ & = \frac{1}{\sqrt{2\pi}} \int_{-\pi}^{+\pi} e^{-im\xi} \tilde{u}(0,\xi) d\xi \\
+ & = \frac{\sqrt{2\pi}}{\beta - \alpha} \int_I e^{-im\gamma^{-1}(x)} u_0(x) dx \\
+ & =: \left( \mathcal{F} u_0 \right)_m.
+\end{align*}
+This finally gives us
+\begin{equation*}
+u(t,x) = \tilde{u} \left( t, \gamma^{-1}(x) \right)
+\end{equation*}
+with $\tilde{u}$ as above.
+
+Clearly, with the representation above, since $\int_{-\pi}^{+\pi} e^{im\xi} d\xi = 0$ except when $m = 0$,
+\begin{equation*}
+\int_I u(t,x) dx = \frac{\beta - \alpha}{2\pi} \int_{-\pi}^{+\pi} \tilde{u}(t,\xi) d\xi = \frac{\beta - \alpha}{\sqrt{2\pi}} \left( \mathcal{F} u_0 \right)_0 = \int_I u_0(x) dx.
+\end{equation*}
+
+\item[2.] (Strikwerda 6.1.4.) Use the representation (6.1.3) to verify the following estimates on the norms of $u(t,x)$:
+\begin{equation*}
+\norm{u(t,\cdot)}_1 \leq \norm{u_0}_1,
+\end{equation*}
+\begin{equation*}
+\norm{u(t,\cdot)}_{\infty} \leq \norm{u_0}_{\infty}.
+\end{equation*}
+Show that if $u_0$ is nonnegative, then
+\begin{equation*}
+\norm{u(t,\cdot)}_1 = \norm{u_0}_1.
+\end{equation*}
+
+\textbf{Solution}
+
+For the first inequality, we make use of exchanging the order of integration:
+\begin{align*}
+\norm{u(t,\cdot)}_1
+ & = \int_{-\infty}^{+\infty} \abs{u(t,x)} dx \\
+ & = \int_{-\infty}^{+\infty} \abs{\frac{1}{\sqrt{4\pi bt}} \int_{-\infty}^{+\infty} e^{-(x-y)^2/4bt} u_0(y) dy} dx \\
+ & \leq \int_{-\infty}^{+\infty} \abs{u_0(y)} \left( \frac{1}{\sqrt{4\pi bt}} \int_{-\infty}^{+\infty} e^{-(x-y)^2/4bt} dx \right) dy \\
+ & = \int_{-\infty}^{+\infty} \abs{u_0(y)} dy \\
+ & = \norm{u_0}_1.
+\end{align*}
+Note that if $u_0 \geq 0$, then the inequality above is actually an equality, we have that $\norm{u(t,\cdot)}_1 = \norm{u_0}_1$.
+
+The second inequality is derived similarly:
+\begin{align*}
+\norm{u(t,\cdot)}_{\infty}
+ & = \sup_{x \in \mathbb{R}} \abs{u(t,x)} \\
+ & = \sup_{x \in \mathbb{R}} \abs{\frac{1}{\sqrt{4\pi bt}} \int_{-\infty}^{+\infty} e^{-(x-y)^2/4bt} u_0(y) dy} \\
+ & \leq \sup_{x \in \mathbb{R}} \frac{1}{\sqrt{4\pi bt}} \int_{-\infty}^{+\infty} e^{-(x-y)^2/4bt} \norm{u_0}_{\infty} dy \\
+ & = \norm{u_0}_{\infty} \sup_{x \in \mathbb{R}} \frac{1}{\sqrt{4\pi bt}} \int_{-\infty}^{+\infty} e^{-(x-y)^2/4bt} dy \\
+ & = \norm{u_0}_{\infty}.
+\end{align*}
+
+\item[3.] Determine the stability and accuracy of the following combination of the Lax-Wendroff and backward-time central-space schemes to solve $u_t + a u_x = b u_{xx}$ (with $b > 0$):
+\begin{align*}
+0 & = P_{k,h} v^n_m \\
+  & = \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) + \frac{a}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) - \frac{a^2k}{2h^2} \left( v^n_{m+1} - 2 v^n_m + v^n_{m-1} \right) \\
+  & \quad {} - \frac{b}{h^2} \left( v^{n+1}_{m+1} - 2 v^{n+1}_m + v^{n+1}_{m-1} \right).
+\end{align*}
+
+\textbf{Solution}
+
+The symbol corresponding to the differential operator $P_{k,h}$ is
+\begin{align*}
+p_{k,h}(s,\xi) := {} & P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+                = {} & \frac{1}{k} \left( e^{sk} - 1 \right) + i \frac{a}{h} \sin h\xi + \frac{a^2k}{h^2} \left( 1 - \cos h\xi \right) + \frac{2b}{h^2} e^{sk} \left( 1 - \cos h\xi \right) \\
+                = {} & s + ia\xi + b \xi^2 + O \left( k + h^2 \right) \\
+                = {} & p(s,\xi) + O \left( k + h^2 \right),
+\end{align*}
+where $p$ is the symbol of the differential operator $P := \partial_t + a \partial_x - b \partial_x^2$. Thus, this scheme is accurate to order $(1,2)$.
+
+Regarding stability, we need to find the roots of $p_{k,h}$ with respect to $g := e^{sk}$, giving
+\begin{equation*}
+g = \frac{1 - i a \lambda \sin \theta  - a^2 \lambda^2 \left( 1 - \cos \theta \right)}{1 + 2 b \mu \left( 1 - \cos \theta \right)},
+\end{equation*}
+where $\lambda := k/h$ and $\mu := k/h^2$. Note that the numerator is precisely the amplification factor of the Lax-Wendroff scheme applied to $u_t + a u_x = 0$, which we know is stable for $\abs{a\lambda} \leq 1$, while the denominator is always at least $1$. Hence, $\abs{a\lambda} \leq 1$ is certainly sufficient for stability. However, notice that the numerator is $1 + O \left( \lambda + \lambda^2 \right)$ while the denominator is $1 + O \left( \mu \right)$, and since $\lambda + \lambda^2 = (h + k) \mu$, we see that the denominator will bound the numerator (uniformly in $\theta$) as $h,k \to 0$. Thus, this scheme is actually unconditionally stable.
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] Solve $u_t + a u_x = 0$ numerically using the Lax-Friedrichs scheme. Take $a = 1$, $T = 1$, $x \in [0,1]$ with periodic boundary conditions, and $u_0(x) = \sin 2 \pi x$. For each fixed $\lambda$ within a decreasing sequence of $\lambda$s (each satisfying the stability criterion), demonstrate convergence with $k/h =: \lambda$ by plotting the logarithm of the $L^2$-norm of the error (between the analytic solution and the numerical solution) versus the logarithm of $h$. Verify that the slope suggested by your plot agrees with theory, and estimate the error constant $C_{\lambda}$ in the relation $\text{error} = C_{\lambda} h^p$. Use enough values of $\lambda$ to estimate the relation between $C_{\lambda}$ and $\lambda$. What appears to happen to $C_{\lambda}$ as $\lambda \to 0+$, i.e., as you shrink $k$ relative to $h$? What happens if, instead of taking $k = \lambda h$, you take $k = h^2$? Explain your numerical results in the context of the theoretical convergence analysis of the Lax-Friedrichs scheme.
+
+\textbf{Solution}
+
+The results of the following statements
+\begin{verbatim}
+lambdas = 2.^(-(3:0.5:7));
+C = lax_friedrichs_convergence_constant(1, 1, @(x) sin(2*pi*x), lambdas);
+r = corr(log(lambdas), log(C));
+p = polyfit(log(lambdas), log(C), 1);
+plot(log(lambdas), log(C), "o", log(lambdas), polyval(p,log(lambdas)));
+\end{verbatim}
+yields a correlation coefficient of $r = -0.99999$ between $\log \lambda$ and $\log C_{\lambda}$, with the linear regression giving the relation $C_{\lambda} = 2.8266 \lambda^{-0.61853}$. Clearly, $C_{\lambda} \to +\infty$ as $\lambda \to 0+$.
+
+Using code from Homework 1 allows one to easily see that Lax-Friedrichs does not converge if $k = h^2$. This is consistent with the truncation error being $O \left( h^2 / k \right)$.
+
+\item[2.] Implement the scheme from problem 3 in the Theory section and confirm numerically the theoretical rate of convergence. Use convenient (but non-trivial) initial and boundary conditions such that the solution takes a simple form.
+
+\textbf{Solution}
+
+Using the included code, the results of the following statements
+\begin{verbatim}
+test_convergence_lax_wendroff_btcs(1, 1/128, 1, 2.^(-(10:0.5:13)), @(h) 0.5*h);
+test_convergence_lax_wendroff_btcs(1, 1/128, 1, 2.^(-(10:0.5:13)), @(h) 2*h);
+\end{verbatim}
+give numerical convergence rates of $1.06$ and $1.05$, respectively, consistent with the theoretical convergence rate of $1$. Note that we set the diffusion coefficient $b$ to be $1/128$ to avoid a nearly zero solution once $T = 1$, and that we get convergence even when $\abs{a\lambda} > 1$.
+
+\item[3.] Write a function implementing the Thomas algorithm presented in Strikwerda 3.5. Specifically, we solve the system of equations
+\begin{equation*}
+a_i w_{i-1} + b_i w_i + c_i w_{i+1} = d_i, \quad i = 1, \dotsc, m-1,
+\end{equation*}
+with $w_0 = \beta_0$ and $w_m = \beta_m$. The solution is given by
+\begin{equation*}
+w_i = p_{i+1} w_{i+1} + q_{i+1}
+\end{equation*}
+where $p_{i+1}$ and $q_{i+1}$ are defined recursively by
+\begin{align*}
+p_{i+1} & = -\left( a_i p_i + b_i \right)^{-1} c_i, \\
+q_{i+1} & = \left( a_i p_i + b_i \right)^{-1} \left( d_i - a_i q_i \right),
+\end{align*}
+and with $p_1$ and $q_1$ determined by the boundary conditions. For the next homework, be prepared to utilize your function implementing the Thomas algorithm to write a function which solves \emph{periodic} tridiagonal systems.
+
+\textbf{Solution}
+
+One can test the included code as follows.
+\begin{verbatim}
+N = 10;
+a = rand([N 1]); b = rand([N 1]); c = rand([N 1]);
+A = spdiags([[a(2:end);0] b [0;c(1:end-1)]], [-1 0 +1], N, N);
+x = rand([N 1]);
+d = A*x;
+y = solve_tridiag(a,b,c,d);
+norm(x-y, "inf")
+\end{verbatim}
+
+\end{itemize}
+
+\end{document}
