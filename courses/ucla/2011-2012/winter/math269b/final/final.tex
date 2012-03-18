@@ -30,7 +30,7 @@ u(t,x) = u_0 \left( x - t u(t,x) \right).
 \end{equation}
 [Hint: Begin by defining $\tilde{u}(t,X) := u \left( t, \varphi(t,X) \right)$ for some to-be-determined change of variables $\varphi \colon [0,\infty) \times \{X\} \to \{x\}$, and choose $\varphi$ such that $\tilde{u}_t \equiv 0$.]
 
-\item[2.] Suppose $u_0'$ in \eqref{eq:burgers.strong} is bounded below, i.e., $u_0' \geq c$ for some constant $c$. Determine the maximal $T$ such that a solution to \eqref{eq:burgers.implicit} is guaranteed to exist for $t \in [0,T)$ (possibly with $T = \infty$). [Hint: Determine when one can guarantee that the function $u \mapsto u - u_0(x - tu)$ has a root.)
+\item[2.] Suppose $u_0'$ in \eqref{eq:burgers.strong} is bounded below, i.e., $u_0' \geq c$ for some constant $c$. Determine the maximal $T$ such that a solution to \eqref{eq:burgers.implicit} is guaranteed to exist for $t \in [0,T)$ (possibly with $T = \infty$). [Hint: Determine when one can guarantee that the function $u \mapsto u - u_0(x - tu)$ has a unique root.)
 
 \item[3.] Solve \eqref{eq:burgers.strong} for $u_0(x) = ax + b$, where $a,b$ are constants. [Hint: Use \eqref{eq:burgers.implicit}.]
 
@@ -47,7 +47,7 @@ u_0(x) := \begin{cases} u^L_0(x) := a_L x + b_L, & x < 0 \\ u^R_0(x) := a_R x + 
 \end{equation*}
 Determine the path $t \mapsto \left( t, x_S(t) \right)$ of the (physically correct) shock in the solution $u$ to \eqref{eq:burgers.strong} eminating from $(t,x) = (0,0)$ (assume $b_L \geq b_R$). You may use the fact that
 \begin{equation*}
-\frac{1}{2} \int \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) t}{\left( \left( 1 + a_L t \right) \left( 1 + a_R t \right) \right)^{3/2}} dt = \frac{\left( a_L b_R - a_R b_L \right) t + \left( b_R - b_L \right)}{\left( a_R - a_L \right) \sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)}} \quad \left[ a_L \neq a_R \right].
+\frac{1}{2} \int \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) t}{\left( \left( 1 + a_L t \right) \left( 1 + a_R t \right) \right)^{3/2}} dt = \frac{\left( a_L b_R - a_R b_L \right) t + \left( b_R - b_L \right)}{\left( a_L - a_R \right) \sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)}} \quad \left[ a_L \neq a_R \right].
 \end{equation*}
 [Hint: Recall that the shock speed $x_S'(t) = \frac{1}{2} \left( u^L + u^R \right) \left( t, x_S(t) \right)$, thus allowing you to set up an ordinary differential equation for $x_S$.] Consider and explain the physical significance of the special cases $a_L = a_R$ and $b_L = b_R$.
 
