@@ -177,7 +177,7 @@ One can test the included code as follows.
 \begin{verbatim}
 N = 10;
 a = rand([N 1]); b = rand([N 1]); c = rand([N 1]);
-A = spdiags([[a(2:end);0] b [0;c(1:end-1)]], [-1 0 +1], N, N);
+A = spdiags([[a(2:N);0] b [0;c(1:N-1)]], [-1 0 +1], N, N);
 x = rand([N 1]);
 d = A*x;
 y = solve_tridiag(a,b,c,d);
