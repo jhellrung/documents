@@ -1,16 +1,16 @@
 \lecture{Introduction to Continuum Mechanics and Elasticity}
 
-\section*{Kinematics}
+\section{Kinematics}
 
-I will go through the basic continuum mechanics for describing the \emph{initial boundary value problems} (IBVPs) for deformable objects as quickly as possible with an emphasis on only those details necessary for implementing a basic \emph{finite element method} (FEM) type simulation (see the text \cite{Bonet_Wood_2008} for more details). We will quantify the deformation of the objects of interest in terms of the mapping $\bsphi$ between an initial (or material) $\bfB_0 \in \bbR^2$ and current (or deformed) $\bfB_t \in \bbR^2$ configuration (we'll just be covering 2D for simplicity). Let's introduce the convention that points in $\bfB_0$ we label as $\bfX$ and points in $\bfB_t$ we label as $\bfx$ (see Figure~\ref{fig:phi}). I.e. $\bfB_0 = \left\{ \bfX \right\}$ and $\bfB_t = \left\{ \bfx \right\}$ so
+We will go through the basic continuum mechanics for describing the \emph{initial boundary value problems} (IBVPs) for deformable objects as quickly as possible with an emphasis on only those details necessary for implementing a basic \emph{finite element method} (FEM) type simulation (see the text \cite{Bonet_Wood_2008} for more details). We will quantify the deformation of the objects of interest in terms of the mapping $\bsphi$ between an initial (or material) $\bfB_0 \in \bbR^2$ and current (or deformed) $\bfB_t \in \bbR^2$ configuration (we will just be covering 2D for simplicity). Let us introduce the convention that points in $\bfB_0$ we label as $\bfX$ and points in $\bfB_t$ we label as $\bfx$ (see Figure~\ref{fig:phi}), i.e., $\bfB_0 = \left\{ \bfX \right\}$ and $\bfB_t = \left\{ \bfx \right\}$ so
 \begin{equation*}
-\bsphi(\cdot,t) \colon \bfB_0 \to \bfB_t \quad \text{and} \quad \bsphi \left( \bfX, t \right) = \bfx
+\bsphi(\cdot,t) \colon \bfB_0 \to \bfB_t \quad \text{and} \quad \bsphi \left( \bfX, t \right) = \bfx.
 \end{equation*}
 It is also useful to talk about
 \begin{equation*}
 \bfu(\cdot,t) \colon \bfB_0 \to \bbR^2 \quad \text{where} \quad \bfu \left( \bfX, t \right) = \bsphi \left( \bfX, t \right) - \bfX.
 \end{equation*}
-We'll refer to this function $\bfu$ as the displacement mapping. We'll also introduce a little more notation here for the derivatives of these mappings. The deformation gradient refers to $\frac{\partial\bsphi}{\partial\bfX}$ and is often denoted with $\bfF$.
+We will refer to this function $\bfu$ as the displacement mapping. We will also introduce a little more notation here for the derivatives of these mappings. The deformation gradient refers to $\frac{\partial\bsphi}{\partial\bfX}$ and is often denoted with $\bfF$:
 \begin{equation*}
 \bfF(\cdot,t) \colon \bfB_0 \to \bbR^{2\times2} \quad \text{and} \quad \bfF = \frac{\partial\bsphi}{\partial\bfX}.
 \end{equation*}
@@ -21,9 +21,9 @@ Index notation for derivatives will be helpful for compactness of expressions. E
 \label{fig:phi}
 \end{figure}
 
-\section*{Basic Balance Laws}
+\section{Basic Balance Laws}
 
-Again, I will only present the essential details for getting started with elastodynamics. Our governing equations of motion arise from the basic principles of continuum mechanics, ultimately $F = ma$ applied over our continuum of material $\bfB_0$. This reads as:
+Again, we will only present the essential details for getting started with elastodynamics. Our governing equations of motion arise from the basic principles of continuum mechanics, ultimately $F = ma$ applied over our continuum of material $\bfB_0$. This reads as:
 \begin{equation*}
 \rho_0 \left( \bfX \right) \frac{\partial^2 \bfu}{\partial t^2} = \nabla^{\bfX} \cdot \bfP + \bff^{\text{ext}}.
 \end{equation*}
@@ -43,15 +43,15 @@ For elasticity, we will be relating this quantity to the deformation gradient $\
 \end{pmatrix}.
 \end{equation*}
 
-\section*{Elasticity and Constitutive Modeling}
+\section{Elasticity and Constitutive Modeling}
 
 The equations are not yet closed because we still need to determine a relationship between the stress and the state of the material. For elastic materials, this is often referred to as the constitutive or material law. Here, we will focus on hyperelastic materials. The constitutive law for such materials arises from a so-called strain energy density function $\Psi$. Specifically, we define the stress as the derivative of this energy with respect to the deformation gradient $\bfF$:
 \begin{equation*}
 \Psi \colon \bbR^{2\times2} \to \bbR \quad \text{and} \quad \bfP = \frac{\partial\Psi}{\partial\bfF}.
 \end{equation*}
-In index notation this is $P_{ij} = \Psi_{,ij}$. In general, the indices following the comma refer to partial differentiation.
+This can be written in index notation as $P_{ij} = \Psi_{,ij}$. In general, the indices following the comma refer to partial differentiation.
 
-The most simplistic model for elasticity is isotropic linear elaticity. In this case, we have
+The most simplistic model for elasticity is isotropic linear elasticity. In this case, we have
 \begin{equation*}
 \epsilon_{ij} = \frac{1}{2} \left( F_{ij} + F_{ji} \right) - \delta_{ij} = \frac{1}{2} \left( \frac{\partial u_i}{\partial X_j} + \frac{\partial u_j}{\partial X_i} \right) \quad \text{and} \quad \Psi \left( \bfF \right) = \mu \epsilon_{ij} \epsilon_{ij} + \frac{\lambda}{2} \epsilon_{kk}^2.
 \end{equation*}
@@ -59,13 +59,13 @@ We are using the convention that repeated indices are summed here and $\delta_{i
 \begin{equation*}
 P_{ij} = \Psi_{,ij} = 2 \mu \epsilon_{ij} + \lambda \epsilon_{kk} \delta_{ij} \quad \text{or} \quad \bfP = 2 \mu \bsepsilon + \lambda \operatorname{tr}(\bsepsilon) \bfI.
 \end{equation*}
-This relationship between the stress and the displacement mapping is enough to close our governing system of equations. I will not give too much motivation for these equations, but note that $\bsepsilon$ is zero when $\bfF$ is skew-symmetric. Also, note that if the displacement is spatially constant, then $\frac{\partial\bfu}{\partial\bfX} = -\bfI$ and hence $\bsepsilon = \bfP = \mathbf{0}$. $\bsepsilon$ is a measure of the strain (or change of shape) in the material. Ideally, we'd like a measure that was invariant under rigid motions $\bsphi$. Unfortunately, the motions just described are only approximately rigid. The approximation is valid if we assume that the deformation is very small. In fact, we can only say that linear elasticity is valid if the deformation is very small. Otherwise, it is not a very good model. That is, it does not accurately describe any elastic materials observed in nature unless the strain is very small. A more general expression of a rigid body motion is that the deformation gradient is orthogonal. I.e., that $\bfF^T \bfF = \bfI$. In fact, more appropriate strain measures for large deformation elasticity are the right and left Cauchy-Green strain tensors: $\bfG_R = \bfF^T \bfF - \bfI$ and  $\bfG_L = \bfF \bfF^T - \bfI$, respectfully. Note that this measure is quadratic in the deformation. This will lead to nonlinear governing equations and complicate considerably the process of running our simulation. In other words, if we want to simulate large tissues that undergo significant deformation (as we would need in virtual surgery), we'll be stuck with nonlinear governing equations.
+This relationship between the stress and the displacement mapping is enough to close our governing system of equations. We will not give too much motivation for these equations, but note that $\bsepsilon$ is zero when $\bfF$ is skew-symmetric. Also, note that if the displacement is spatially constant, then $\frac{\partial\bfu}{\partial\bfX} = -\bfI$ and hence $\bsepsilon = \bfP = \mathbf{0}$. $\bsepsilon$ is a measure of the strain (or change of shape) in the material. Ideally, we would like a measure that was invariant under rigid motions $\bsphi$. Unfortunately, the motions just described are only approximately rigid. The approximation is valid if we assume that the deformation is very small. In fact, we can only say that linear elasticity is valid if the deformation is very small. Otherwise, it is not a very good model. That is, it does not accurately describe any elastic materials observed in nature unless the strain is very small. A more general expression of a rigid body motion is that the deformation gradient is orthogonal, i.e., $\bfF^T \bfF = \bfI$. In fact, more appropriate strain measures for large deformation elasticity are the right and left Cauchy-Green strain tensors: $\bfG_R = \bfF^T \bfF - \bfI$ and  $\bfG_L = \bfF \bfF^T - \bfI$, respectively. Note that this measure is quadratic in the deformation. This will lead to nonlinear governing equations and considerably complicate the process of running our simulation. In other words, if we want to simulate large tissues that undergo significant deformation (as we would need in virtual surgery), we will be stuck with nonlinear governing equations.
 
-Arguably, the most simplistic model for large deformation elasticity is the \emph{Neo-Hookean} model. The hyperelastic strain energy density for such materials is given by the following equation.
-\begin{gather*}
-\Psi \left( \bfF \right) = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log(J) + \frac{\lambda}{2} \log(J)^2 \\
-\bfP \left( \bfF \right) = \mu \bfF + \left( \lambda \log(J) - \mu \right) \bfF^{-T},
-\end{gather*}
+Arguably, the most simplistic model for large deformation elasticity is the \emph{Neo-Hookean} model. The hyperelastic strain energy density for such materials is given by the following equation:
+\begin{align*}
+\Psi \left( \bfF \right) & = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu \log(J) + \frac{\lambda}{2} \log(J)^2 \\
+\bfP \left( \bfF \right) & = \mu \bfF + \left( \lambda \log(J) - \mu \right) \bfF^{-T},
+\end{align*}
 where  $J$ is the determinant of the deformation gradient:
 \begin{equation*}
 J = \det \left( \bfF \right).
@@ -93,23 +93,23 @@ The models described so far are both isotropic. That is, the elastic response to
 %\label{fig:mucles}
 \end{figure}
 
-\section*{Equilibrium and Weak Form}
+\section{Equilibrium and Weak Form}
 
-We can get an idea for how to treat the spatial discretization of the partial differential equation by first considering elastic equilibrium (or quasistatic) problems where the inertial terms in the governing equations are negligible (see \cite{Teran05a} for more details). In this case we can solve directly for the displacement (i.e., we don't need to store the velocities as well). Ignoring inertia, our governing equations are then
+We can get an idea for how to treat the spatial discretization of the partial differential equation by first considering elastic equilibrium (or quasistatic) problems where the inertial terms in the governing equations are negligible (see \cite{Teran05a} for more details). In this case we can solve directly for the displacement (i.e., we do not need to store the velocities as well). Ignoring inertia, our governing equations are then given by
 \begin{equation*}
 -\nabla^{\bfX} \cdot \bfP = \bff^{\text{ext}} \quad \text{or} \quad -P_{ij,j} = f^{\text{ext}}_i.
 \end{equation*}
-This can be read as the row wise divergences of the matrix $\bfP$ balance the different components of the applied forces. We'll mainly be considering \emph{finite element method} (FEM) type discretizations in these notes, so we'll look at the weak form here to get started with that. Taking a class of test functions $\bfw \colon \bfB_0 \to \bbR^2$, we take the dot product with both sides of the governing equations and integrate over $\bfB_0$ to get
-\begin{gather*}
--\int_{\bfB_0} w_i P_{ij,j} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX \\
--\int_{\bfB_0} \left( w_i P_{ij} \right)_{,j} - w_{i,j} P_{ij} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX \\
-\int_{\bfB_0} w_{i,j} P_{ij} d\bfX = \int_{\partial\bfB_0} w_i P_{ij} n_j d\bfS \left( \bfX \right) + \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX.
-\end{gather*}
-We'd then just assume that the bottom equations hold for all suitable $\bfw$ for the weak form. Furthermore, the quantity $P_{ij} n_j$ would be supplied as a boundary condition (this would be the external loading on the material). A FEM discretization would then be done by setting up a space of interpolating functions over a mesh and considering the weak form over this finite dimensional space.
+This can be read as the row-wise divergences of the matrix $\bfP$ balance the different components of the applied forces. We will mainly be considering \emph{finite element method} (FEM) type discretizations in these notes, so we will first look at the weak form of the governing equations. Taking a class of test functions $\bfw \colon \bfB_0 \to \bbR^2$, we take the dot product with both sides of the governing equations and integrate over $\bfB_0$ to get
+\begin{align*}
+& -\int_{\bfB_0} w_i P_{ij,j} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX \\
+& \quad \Rightarrow -\int_{\bfB_0} \left( w_i P_{ij} \right)_{,j} - w_{i,j} P_{ij} d\bfX = \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX \\
+& \quad \Rightarrow \int_{\bfB_0} w_{i,j} P_{ij} d\bfX = \int_{\partial\bfB_0} w_i P_{ij} n_j d\bfS \left( \bfX \right) + \int_{\bfB_0} w_i f^{\text{ext}}_i d\bfX.
+\end{align*}
+We then assume that the bottom equations hold for all suitable $\bfw$ for the weak form. Furthermore, the quantities $P_{ij} n_j$ are generally supplied as a boundary condition (this would be the external loading on the material). A FEM discretization is then done by setting up a space of interpolating functions over a mesh and considering the weak form over this finite dimensional space.
 
-\section*{1D Elasticity}
+\section{1D Elasticity}
 
-To provide an introductory example, I will cover the case of 1D elasticity (I will assume some basic knowledge of FEM). Here, we'll first assume the material is linearly elastic. In that case,
+To provide an introductory example, we will cover the case of 1D elasticity (we will assume some basic knowledge of FEM). Here, we will first assume the material is linearly elastic. In that case,
 \begin{equation*}
 P(X) = \left( 2 \mu - \lambda \right) \frac{\partial u}{\partial X}
 \end{equation*}
@@ -117,12 +117,12 @@ and the equilibrium equation is just Poisson's equation:
 \begin{equation*}
 -\left( 2 \mu - \lambda \right) \frac{\partial^2 u}{\partial X^2} = f^{\text{ext}}.
 \end{equation*}
-Thus, we can just use a continuous piecewise linear interpolation space of a uniform discretization of our material (which I will assume for simplicity is just some interval $(a,b)$). In this case, we will ultimately just be solving a Poisson equation for the unknown deformation field. This is only the case in 1D. If we assume that each node in the discrete domain has an associated interpolating function $N_i$, then the FEM discretized linear system is
-\begin{gather*}
-A_{ij} u_j = F^{\text{ext}}_i + g_i \quad \text{where} \quad A_{ij} = \left( 2 \mu - \lambda \right) \int_a^b \frac{\partial N_i}{\partial X}\frac{\partial N_j}{\partial X} dX, \\
-F^{\text{ext}}_i = \int_a^b f^{\text{ext}} N_i dX, \quad g_i = N_i(b) P(b) - N_i(a) P(a).
-\end{gather*}
-(We assume that $P(a)$ and $P(b)$ were already given.) Now, let's consider the case of Neo-Hookean elasticity. In this case, our discretization of the weak form will give rise to a nonlinear system of equations for our displacements $u_i$:
+Thus, we can just use a continuous piecewise linear interpolation space of a uniform discretization of our material (which we will assume for simplicity is just some interval $(a,b)$). In this case, we will ultimately just be solving a Poisson equation for the unknown deformation field. (This is, however, only the case in 1D.) If we assume that each node in the discrete domain has an associated interpolating function $N_i$, then the FEM discretized linear system is
+\begin{align*}
+A_{ij} u_j & = F^{\text{ext}}_i + g_i \quad \text{where} \quad A_{ij} = \left( 2 \mu - \lambda \right) \int_a^b \frac{\partial N_i}{\partial X}\frac{\partial N_j}{\partial X} dX, \\
+F^{\text{ext}}_i & = \int_a^b f^{\text{ext}} N_i dX, \quad g_i = N_i(b) P(b) - N_i(a) P(a).
+\end{align*}
+(We assume that $P(a)$ and $P(b)$ were already given.) Now, let us consider the case of Neo-Hookean elasticity. In this case, our discretization of the weak form will give rise to a nonlinear system of equations for our displacements $u_i$:
 \begin{equation*}
 q_i \left( \vec{u} \right) = \int_a^b \frac{\partial N_i}{\partial X} P(F(u(X))) dX - F^{\text{ext}}_i + g_i = 0
 \end{equation*}
@@ -130,16 +130,16 @@ where $u(X) = u_i N_i(X)$ (again, where repeated indices imply sumation). For Ne
 \begin{equation*}
 P(F(u(X))) = \mu \left( \frac{\partial u}{\partial X} + 1 \right) + \left( \lambda \text{log} \left( \frac{\partial u}{\partial X} + 1 \right) - \mu \right) \frac{1}{\frac{\partial u}{\partial X} + 1}.
 \end{equation*}
-We can think of $\vec{q} : \bbR^n \to \bbR^n$ as a nonlinear function that we need to find a zero of. We'll use Newton's method to iteratively improve our approximate solution (here, I am assuming $\vec{u}^k \in \bbR^n$ is our current approximation to the vector of discrete displacements) as:
+We can think of $\vec{q} : \bbR^n \to \bbR^n$ as a nonlinear function of which we need to find a root. We will use Newton's method to iteratively improve our approximate solution (here, we assume $\vec{u}^k \in \bbR^n$ is our current approximation to the vector of discrete displacements) as:
 \begin{gather*}
 \frac{\partial q_i}{\partial u_j} \left( \vec{u}^k \right) \Delta{u}_j + q_i \left( \vec{u}^k \right) = 0, \\
 u_i^{k+1} \leftarrow u_i^{k} + \Delta{u}_i.
 \end{gather*}
-The linearization of the discrete equilibrium equations can be a little tricky, so it will be good to first consider it in 1D. The general idea is to linearize the stress with respect to the deformation gradient, then linearize the deformation gradient with respect to discrete degrees of freedom.
+The linearization of the discrete equilibrium equations can be a little tricky, so it will be good to first consider it in 1D. The general idea is to linearize the stress with respect to the deformation gradient, then linearize the deformation gradient with respect to discrete degrees of freedom. We have
 \begin{equation*}
 \frac{\partial q_i}{\partial u_j} \left( \vec{u} \right) = \int_a^b \frac{\partial N_i}{\partial X} \frac{\partial P}{\partial F} \left( F \left( \vec{u} \right) \right) \frac{\partial F}{\partial u_j} dX = \int_a^b \frac{\partial N_i}{\partial X} \frac{\partial P}{\partial F} \left( F \left( \vec{u} \right) \right) \frac{\partial N_j}{\partial X} dX
 \end{equation*}
-since $u(X) = u_i N_i(X)$ and $F(X) = \frac{\partial u}{\partial X}(X) + 1 = u_i \frac{\partial N_i}{\partial X}(X) + 1$. Note that the linearized system is just a spatially varying Poisson equation. However, it should be noted that for such equations we must typically require the coefficients remain positive throughout the domain. This will not always happen and can lead to difficulties with robustness. We will discuss this issue in the next section.
+since $u(X) = u_i N_i(X)$ and $F(X) = \frac{\partial u}{\partial X}(X) + 1 = u_i \frac{\partial N_i}{\partial X}(X) + 1$. Note that the linearized system is just a spatially varying Poisson equation. However, it should be noted that for such equations we must typically require the coefficients to remain positive throughout the domain. This will not always happen and can lead to difficulties with robustness. We will discuss this issue in the next section.
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{images/elasticity_1d}
@@ -147,9 +147,9 @@ since $u(X) = u_i N_i(X)$ and $F(X) = \frac{\partial u}{\partial X}(X) + 1 = u_i
 \label{fig:inversion}
 \end{figure}
 
-\section*{Inversion}
+\section{Inversion}
 
-The deformation mapping $\bsphi$ must be a bijection (one-to-one and onto) if we are to strictly apply the principles of continuum mechanics. This precludes many solutions you might otherwise expect to see. For example, for the 1D case, the solution must never have a derivative less than or equal to zero. I.e. many functions we are used to solving for (see Figure~\ref{fig:inversion}) are not, strictly speaking, allowable. Unfortunately, this constraint will not always be naturally achieved by our discretization. For some models (e.g. linear elasticity) it is okay that the discrete solution does not satisfy the inversion constraint. For others like Neo-Hookean, we would end up taking the natural log of a negative number. This log term is there to prevent excessive compression. However, it has the consequence that our equations become incredibly stiff under compression. Such behavior can be very problematic numerically and must be avoided in a surgical simulator. A general approach to improving robustness to discretely inverted (i.e., non-bijective) deformation mappings was developed in \cite{Irving06}. I will not go through all of the details for the sake of time. However, I will show how we can apply the principles developed in this work to our simple Neo-Hookean model.
+The deformation mapping $\bsphi$ must be a bijection (one-to-one and onto) if we are to strictly apply the principles of continuum mechanics. This precludes many solutions you might otherwise expect to see. For example, for the 1D case, the solution must never have a derivative less than or equal to zero. I.e. many functions we are used to solving for (see Figure~\ref{fig:inversion}) are not, strictly speaking, allowable. Unfortunately, this constraint will not always be naturally achieved by our discretization. For some models (e.g. linear elasticity) it is okay that the discrete solution does not satisfy the inversion constraint. For others like Neo-Hookean, we would end up taking the natural log of a negative number. This log term is there to prevent excessive compression. However, it has the consequence that our equations become incredibly stiff under compression. Such behavior can be very problematic numerically and must be avoided in a surgical simulator. A general approach to improving robustness to discretely inverted (i.e., non-bijective) deformation mappings was developed in \cite{Irving06}. We will not go through all of the details for the sake of time. However, we will show how we can apply the principles developed in this work to our simple Neo-Hookean model.
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{images/buddha_gears}
@@ -157,12 +157,12 @@ The deformation mapping $\bsphi$ must be a bijection (one-to-one and onto) if we
 %\label{fig:inversion2}
 \end{figure}
 
-The problematic term in the Neo-Hookean model is the natural log. If we replace the log with another function $r$, we can improve the robustness of our numerical simulation to inversion. This function should look very nearly like the natural log around $J = 1$ to prevent loss of accuracy, but should not have a singularity at $J = 0$. We can do this by taking $r$ to be the cubic Taylor expansion of the log around $J = 1$ (see Figure~\ref{fig:inversion3}). With this choice, we have the following expressions for the Neo-Hookean hyperelastic strain energy density and first Piola-Kirchoff stresses:
-\begin{gather*}
-\Psi \left( \bfF \right) = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu r(J) + \frac{\lambda}{2} r(J)^2, \\
-\bfP \left( \bfF \right) = \mu \bfF + \left( \lambda r(J) -\mu \right) r'(J) \begin{pmatrix} F_{22} & -F_{12} \\
+The problematic term in the Neo-Hookean model is the natural log. If we replace the log with another function $r$, we can improve the robustness of our numerical simulation to inversion. This function should look very nearly like the natural log around $J = 1$ to prevent loss of accuracy, but should not have a singularity at $J = 0$. We can do this by taking $r$ to be the cubic Taylor expansion of the log around $J = 1$ (see Figure~\ref{fig:inversion3}). With this choice, we have the following expressions for the Neo-Hookean hyperelastic strain energy density and first Piola-Kirchoff stresses in 2D:
+\begin{align*}
+\Psi \left( \bfF \right) & = \frac{\mu}{2} \left( F_{ij} F_{ji} - 2 \right) - \mu r(J) + \frac{\lambda}{2} r(J)^2, \\
+\bfP \left( \bfF \right) & = \mu \bfF + \left( \lambda r(J) -\mu \right) r'(J) \begin{pmatrix} F_{22} & -F_{12} \\
 -F_{21} & F_{11} \end{pmatrix}.
-\end{gather*}
+\end{align*}
 In Figure~\ref{fig:inversion3}, we see the effect of this modification in 1D. This new model is well-defined through inversion, but accurately reflects the original model when very near the undeformed configuration. We can make further adjustments to prevent problematic values of $\frac{\partial P}{\partial F}$ (e.g. we wanted this to be positive for our 1D example). The treatment of these terms is addressed in \cite{Teran05a}.
 
 \begin{figure}
@@ -171,10 +171,10 @@ In Figure~\ref{fig:inversion3}, we see the effect of this modification in 1D. Th
 \label{fig:inversion3}
 \end{figure}
 
-\section*{Time Stepping}
+\section{Time Stepping}
 
 In general, our simulator will run the following loop:
-\begin{equation}
+\begin{equation*}
 \begin{array}{lc}
 \text{for} \ n = 0 : N_\text{final} \\
 \quad \bullet \ \text{get user boundary condition input} \\
@@ -183,8 +183,8 @@ In general, our simulator will run the following loop:
 \quad \bullet \ \text{render solution to screen}\\
 \text{end}
 \end{array}
-\end{equation}
-The key factor is that the nonlinear system must be solved in less than one thirtieth of a second to maintain an interactive simulation rate. An example of a discretization of this system that allows for inertia is the following. Let $\vec{u}^m \in \bbR^n$ represent the spatially discrete displacements at time $m$ and let $\vec{v}^m \in \bbR^n$ represent the spatially discrete velocities. We can implement backward Euler by saying
+\end{equation*}
+The key factor is that the nonlinear system must be solved in less than one thirtieth of a second to maintain an interactive simulation rate. An example of a discretization of this system that allows for inertia is the following. Let $\vec{u}^m \in \bbR^n$ represent the spatially discrete displacements at time $m$ and let $\vec{v}^m \in \bbR^n$ represent the spatially discrete velocities. We can implement backward Euler by using
 \begin{equation*}
 \vec{v}^{m+1} = \frac{1}{\Delta t} \left( \vec{u}^{m+1} - \vec{u}^m \right)
 \end{equation*}
@@ -192,10 +192,11 @@ and
 \begin{equation*}
 \rho_0 \frac{1}{\Delta t} \left( \frac{1}{\Delta t} \left( \vec{u}^{m+1} - \vec{u}^m \right) - \vec{v}^m \right) = \nabla^{\bfX} \cdot \bfP \left( \bfF \left( \vec{u}^{m+1} \right) \right) + \bff^{\text{ext}}
 \end{equation*}
-where we solve this final system by following a similar FEM procedure to the quasistatic case for $\vec{u}^{m+1}$. Specifically, we'd get
+where we solve this final system by following a similar FEM procedure to the quasistatic case for $\vec{u}^{m+1}$. Specifically, we get
 \begin{align*}
 q^a_i \left( \vec{u}^{m+1} \right)
 & = M_{ai;bj} u^{m+1}_{bj} + \Delta t^2 \int_{\bfB_0} N^a_{,j} P_{ij} d\bfX - M_{ai;bj} \left( u^{m+1}_{bj} + \Delta{t} v^m_{bj} \right) \\
-& \quad {} - \int_{\partial\bfB_0} N^a P_{ij} n_j d\bfS \left( \bfX \right) - \int_{\bfB_0} N^a f^{\text{ext}}_i d\bfX
+& \quad {} - \int_{\partial\bfB_0} N^a P_{ij} n_j d\bfS \left( \bfX \right) - \int_{\bfB_0} N^a f^{\text{ext}}_i d\bfX \\
+\intertext{and}
+M_{ai;bj} &= \int_{\bfB_0} N^a \rho_0 N^b \delta_{ij} d\bfX.
 \end{align*}
-and $M_{ai;bj}=\int_{\bfB_0} N^a \rho_0 N^b \delta_{ij} d\bfX$.
