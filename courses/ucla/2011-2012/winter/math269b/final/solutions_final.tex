@@ -57,7 +57,7 @@ If $x = \varphi(t,X)$, this reduces to
 u(t,x) = u_0 \left( x - t u(t,x) \right).
 \end{equation*}
 
-\item[2.] Suppose $u_0'$ in \eqref{eq:burgers.strong} is bounded below, i.e., $u_0' \geq c$ for some constant $c$. Determine the maximal $T$ such that a solution to \eqref{eq:burgers.implicit} is guaranteed to exist for $t \in [0,T)$ (possibly with $T = \infty$). [Hint: Determine when one can guarantee that the function $u \mapsto u - u_0(x - tu)$ has a unique root.)
+\item[2.] Suppose $u_0'$ in \eqref{eq:burgers.strong} is bounded below, i.e., $u_0' \geq c$ for some constant $c$. Determine the maximal $T$ such that a solution to \eqref{eq:burgers.implicit} is guaranteed to exist for $t \in [0,T)$ (possibly with $T = \infty$). [Hint: Determine when one can guarantee that the function $u \mapsto u - u_0(x - tu)$ has a unique root.]
 
 \textbf{Solution}
 
@@ -88,7 +88,7 @@ v_t + v v_x = 0, \quad v(0,x) = v_0(x) := a u_0(x) + b.
 
 Let $u$ denote the solution to \eqref{eq:burgers.strong} with initial condition $u_0$, and let $v$ denote the solution to \eqref{eq:burgers.strong} with initial condition $v_0(x) := a u_0(x) + b$. Using \eqref{eq:burgers.implicit}, we wish to solve
 \begin{equation*}
-v = v_0 \left( x - tv \right) = a u_0 \left( x - tv \right) \quad \Leftrightarrow \quad \frac{1}{a} \left( v - b \right) = u_0 \left( (x - tb) - (at) \frac{1}{a} \left( v - b \right) \right),
+v = v_0 \left( x - tv \right) = a u_0 \left( x - tv \right) + b \quad \Leftrightarrow \quad \frac{1}{a} \left( v - b \right) = u_0 \left( (x - tb) - (at) \frac{1}{a} \left( v - b \right) \right),
 \end{equation*}
 which suggests that
 \begin{equation*}
