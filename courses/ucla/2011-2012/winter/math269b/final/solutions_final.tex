@@ -1,0 +1,315 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Math 269B, 2012 Winter, Final (Solutions)}
+\date{March 26, 2012}
+\author{Professor Joseph Teran \and Jeffrey Lee Hellrung, Jr.}
+\maketitle
+
+\section{Theory}
+
+\begin{itemize}
+
+\item[1.] Suppose $u \colon [0,\infty) \times \mathbb{R} \to \mathbb{R}$ satisfies the inviscid Burger's equation,
+\begin{equation}\label{eq:burgers.strong}
+0 = u_t + \frac{1}{2} \left( u^2 \right)_x = u_t + u u_x, \quad u(0,x) = u_0(x).
+\end{equation}
+Use the method of characteristics to show that $u$ must then satisfy the implicit relation
+\begin{equation}\label{eq:burgers.implicit}
+u(t,x) = u_0 \left( x - t u(t,x) \right).
+\end{equation}
+[Hint: Begin by defining $\tilde{u}(t,X) := u \left( t, \varphi(t,X) \right)$ for some to-be-determined change of variables $\varphi \colon [0,\infty) \times \{X\} \to \{x\}$, and choose $\varphi$ such that $\tilde{u}_t \equiv 0$.]
+
+\textbf{Solution}
+
+Let $\tilde{u}$ and $\varphi$ be as in the hint. Then
+\begin{equation*}
+\tilde{u}_t = u_t + \varphi_t u_x = 0
+\end{equation*}
+if
+\begin{equation*}
+\varphi_t(t,X) = \tilde{u}(t,X) = u(t,\varphi(t,X)).
+\end{equation*}
+Of course, if $\tilde{u}_t = 0$, then
+\begin{equation*}
+\tilde{u}(t,X) = \tilde{u}(0,X) = u(0,\varphi(0,X)) = u_0(X)
+\end{equation*}
+so long as $\varphi(0,X) = X$. Thus,
+\begin{equation*}
+\varphi_t(t,X) = u_0(X) \quad \Rightarrow \quad \varphi(t,X) = X + t u_0(X) = X + t \tilde{u}(t,X) = X + t u \left( t, \varphi(t,X) \right)
+\end{equation*}
+and hence
+\begin{equation*}
+u \left( t, \varphi(t,X) \right) = \tilde{u}(t,X) = u_0(X) = u_0 \left( \varphi(t,X) - t u \left( t, \varphi(t,X) \right) \right).
+\end{equation*}
+If $x = \varphi(t,X)$, this reduces to
+\begin{equation*}
+u(t,x) = u_0 \left( x - t u(t,x) \right).
+\end{equation*}
+
+\item[2.] Suppose $u_0'$ in \eqref{eq:burgers.strong} is bounded below, i.e., $u_0' \geq c$ for some constant $c$. Determine the maximal $T$ such that a solution to \eqref{eq:burgers.implicit} is guaranteed to exist for $t \in [0,T)$ (possibly with $T = \infty$). [Hint: Determine when one can guarantee that the function $u \mapsto u - u_0(x - tu)$ has a unique root.)
+
+\textbf{Solution}
+
+Note that \eqref{eq:burgers.strong} has a solution up to time $T$ if \eqref{eq:burgers.implicit} has a solution $u$ for each $(t,x) \in [0,T) \times \mathbb{R}$, and the latter is equivalent to $\alpha_{t,x}(u) := u - u_0(x - tu)$ having a unique root. A sufficient condition for a unique root is $\alpha_{t,x}'$ continuous and bounded away from zero. As such, we compute $\alpha_{t,x}'(u) = 1 + t u_0'(x - tu)$. Now given that $u_0' \geq c$, if $c \geq 0$ then $\alpha_{t,x}' \geq 1$ for all $(t,x) \in [0,\infty) \times \mathbb{R}$, implying that a solution to \eqref{eq:burgers.strong} exists for all $t \in [0,\infty)$, i.e., $T = \infty$. Otherwise, if $c < 0$, we conclude that a solution is guaranteed to exist only up to time $T = -1/c$.
+
+\item[3.] Solve \eqref{eq:burgers.strong} for $u_0(x) = ax + b$, where $a,b$ are constants. [Hint: Use \eqref{eq:burgers.implicit}.]
+
+\textbf{Solution}
+
+Using \eqref{eq:burgers.implicit}, we solve
+\begin{equation*}
+u = u_0 \left( x - tu \right) = a \left( x - tu \right) + b,
+\end{equation*}
+giving
+\begin{equation*}
+u(t,x) = \frac{ax + b}{1 + at}.
+\end{equation*}
+Indeed, one can quickly verify that this does, in fact, solve \eqref{eq:burgers.strong}.
+
+\item[4.] Denote the solution to \eqref{eq:burgers.strong} by $u = F \left[ u_0 \right]$. Express $F \left[ x \mapsto a u_0(x) + b \right]$ in terms of $F \left[ u_0 \right]$.
+
+In other words, given $u$ satisfying \eqref{eq:burgers.strong} for some $u_0$, determine the solution $v$ (in terms of the aforementioned $u$) to
+\begin{equation*}
+v_t + v v_x = 0, \quad v(0,x) = v_0(x) := a u_0(x) + b.
+\end{equation*}
+
+\textbf{Solution}
+
+Let $u$ denote the solution to \eqref{eq:burgers.strong} with initial condition $u_0$, and let $v$ denote the solution to \eqref{eq:burgers.strong} with initial condition $v_0(x) := a u_0(x) + b$. Using \eqref{eq:burgers.implicit}, we wish to solve
+\begin{equation*}
+v = v_0 \left( x - tv \right) = a u_0 \left( x - tv \right) \quad \Leftrightarrow \quad \frac{1}{a} \left( v - b \right) = u_0 \left( (x - tb) - (at) \frac{1}{a} \left( v - b \right) \right),
+\end{equation*}
+which suggests that
+\begin{equation*}
+\frac{1}{a} \left( v(t,x) - b \right) = u \left( at, x - tb \right) \quad \Leftrightarrow \quad v(t,x) = a u \left( at, x - tb \right) + b.
+\end{equation*}
+Indeed, one can quickly verify that this does, in fact, solve \eqref{eq:burgers.strong} with initial condition $v_0$. In other words,
+\begin{equation*}
+F \left[ x \mapsto a u_0(x) + b \right](t,x) = a F \left[ u_0 \right] \left( at, x - tb \right) + b.
+\end{equation*}
+
+\item[5.] Suppose $u_0$ is given as
+\begin{equation*}
+u_0(x) := \begin{cases} u^L_0(x) := a_L x + b_L, & x < 0 \\ u^R_0(x) := a_R x + b_R, & x > 0 \end{cases}.
+\end{equation*}
+Determine the path $t \mapsto \left( t, x_S(t) \right)$ of the (physically correct) shock in the solution $u$ to \eqref{eq:burgers.strong} eminating from $(t,x) = (0,0)$ (assume $b_L \geq b_R$). You may use the fact that
+\begin{equation*}
+\frac{1}{2} \int \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) t}{\left( \left( 1 + a_L t \right) \left( 1 + a_R t \right) \right)^{3/2}} dt = \frac{\left( a_L b_R - a_R b_L \right) t + \left( b_R - b_L \right)}{\left( a_L - a_R \right) \sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)}} \quad \left[ a_L \neq a_R \right].
+\end{equation*}
+[Hint: Recall that the shock speed $x_S'(t) = \frac{1}{2} \left( u^L + u^R \right) \left( t, x_S(t) \right)$, thus allowing you to set up an ordinary differential equation for $x_S$.] Consider and explain the physical significance of the special cases $a_L = a_R$ and $b_L = b_R$.
+
+\textbf{Solution}
+
+We know that
+\begin{equation*}
+u^L(t,x) = \frac{a_L x + b_L}{1 + a_L t}, \quad u^R(t,x) = \frac{a_R x + b_R}{1 + a_R t}
+\end{equation*}
+describe the solution $u$ to the left and right of the shock, respectively. From the hint, it follows that
+\begin{align*}
+x_S'(t) & = \frac{1}{2} \left( u^L + u^R \right) \left( t, x_S \right) \\
+        & = \frac{1}{2} \left( \frac{a_L x_S + b_L}{1 + a_L t} + \frac{a_R x_S + b_R}{1 + a_R t} \right).
+\end{align*}
+Rearranging gives
+\begin{equation*}
+x_S' - \frac{1}{2} \left( \frac{a_L}{1 + a_L t} + \frac{a_R}{1 + a_R t} \right) x_S = \frac{1}{2} \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) t}{\left( 1 + a_L t \right) \left( 1 + a_R t \right)}.
+\end{equation*}
+One can solve this via multiplication of the integrating factor
+\begin{align*}
+\exp \left( \int -\frac{1}{2} \left( \frac{a_L}{1 + a_L t} + \frac{a_R}{1 + a_R t} \right) dt \right) = \left( \left( 1 + a_L t \right) \left( 1 + a_R t \right) \right)^{-1/2}
+\end{align*}
+giving
+\begin{equation*}
+\left( \frac{x_S}{\sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)}} \right)' = \frac{1}{2} \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) t}{\left( \left( 1 + a_L t \right) \left( 1 + a_R t \right) \right)^{3/2}}
+\end{equation*}
+and hence
+\begin{equation*}
+x_S = \frac{1}{2} \sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)} \int_0^t \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) \tau}{\left( \left( 1 + a_L \tau \right) \left( 1 + a_R \tau \right) \right)^{3/2}} d\tau.
+\end{equation*}
+Now, if $a_L \neq a_R$, the integral on the right evaluates to
+\begin{equation*}
+\frac{1}{2} \int_0^t \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) \tau}{\left( \left( 1 + a_L \tau \right) \left( 1 + a_R \tau \right) \right)^{3/2}} d\tau = \frac{\left( a_L b_R - a_R b_L \right) t + \left( b_R - b_L \right)}{\left( a_L - a_R \right) \sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)}} - \frac{b_R - b_L}{a_L - a_R}
+\end{equation*}
+giving
+\begin{equation*}
+x_S = \frac{1}{a_L - a_R} \left( \left( a_L b_R - a_R b_L \right) t + \left( b_R - b_L \right) \left( 1 - \sqrt{\left( 1 + a_L t \right) \left( 1 + a_R t \right)} \right) \right).
+\end{equation*}
+On the other hand, if $a_L = a_R =: a$, then the integral is significantly simpler:
+\begin{equation*}
+\frac{1}{2} \int_0^t \frac{b_L + b_R + \left( a_L b_R + a_R b_L \right) \tau}{\left( \left( 1 + a_L \tau \right) \left( 1 + a_R \tau \right) \right)^{3/2}} d\tau = \frac{1}{2} \left( b_L + b_R \right) \int_0^t \frac{1}{\left( 1 + a \tau \right)^2} d\tau = \frac{b_L + b_R}{2a} \left( 1 - \frac{1}{1 + at} \right)
+\end{equation*}
+giving the particularly simple trajectory
+\begin{equation*}
+x_S = \frac{1}{2} \left( b_L + b_R \right) t.
+\end{equation*}
+
+The shock trajectory for this latter case, when $a_L = a_R$, indicates that the shock travels exactly along the path where $\left( u_L + u_R \right)/2 = \left( b_L + b_R \right)/2$.
+
+When $b_L = b_R =: b$, the solution is actually \emph{continuous}, i.e., there is no shock; nonetheless, the computed shock trajectory $x_S(t) = b t$ correctly tracks the interface between $u_L$ and $u_R$.
+
+\item[6.] Solve the weak form of \eqref{eq:burgers.strong} (i.e., give the entropy solution with rarefaction, and with any shocks propagating at the physically correct speed) on the \emph{periodic} domain $[0,4]$ with the ``pulse'' initial condition
+\begin{equation}\label{eq:pulse}
+u_0(x) := \begin{cases} 0, & 0 \leq x < 1 \\ 2, & 1 < x < 2 \\ 0, & 2 < x \leq 4 \end{cases}.
+\end{equation}
+Identify key points in time $t$ when the character of the solution changes. (It will be natural to express the solution $u(t,x)$ piecewise with respect to $x$ \emph{and} $t$.) Confirm that $\int u(t,x) dx$ is conserved (i.e., $\int u(t,x) dx = \text{constant}$ for all $t$), and determine $\lim_{t \to \infty} u(t,x)$.
+
+\textbf{Solution}
+
+With the given initial condition $u_0$, we immediately have both a rarefaction, between $x = 1$ and $x = 1 + 2t$; and a shock, at $x = 2 + t$, where we compute the speed of the shock to be $1$ based on the average of the left ($2$) and right ($0$) values of the solution, which both remain constant. The solution continues with the rarefaction and the constant-speed shock propagation until the rarefaction region reaches the shock at time $t = 1$ (when $1 + 2t = 2 + t$). Thus, for $t \in [0,1]$, we have the solution
+\begin{equation*}
+u(t,x) = \begin{cases} 0, & 0 \leq x \leq 1 \\ \frac{x-1}{t}, & 1 \leq x \leq 1 + 2t \\ 2, & 1 + 2t \leq x < 2 + t \\ 0, & 2 + t < x \leq 4 \end{cases} \quad \left[ 0 \leq t \leq 1 \right].
+\end{equation*}
+We quickly verify that
+\begin{equation*}
+\int u(t,x) dx = \int_1^{1+2t} \frac{x-1}{t} dx + \int_{1+2t}^{2+t} 2 dx = 2t + 2 \left( 1 - t \right) = 2 \quad \left[ 0 \leq t \leq 1 \right].
+\end{equation*}
+Once the rarefaction region reaches the shock, we can use our previous derivation to compute the trajectory of the shock until the shock reaches $x = 5 \cong 1$, the left edge of the rarefaction region. This gives
+\begin{equation*}
+u(t,x) = \begin{cases} \frac{x-1}{t}, & 1 \leq x < 1 + 2 \sqrt{t} \\ 0, & 1 + 2 \sqrt{t} < x \leq 5 \end{cases} \quad \left[ 1 \leq t \leq 4 \right],
+\end{equation*}
+where we have taken the liberty to identify $[0,4] \cong [1,5]$ via periodicity. We again verify that
+\begin{equation*}
+\int u(t,x) dx = \int_1^{1 + 2 \sqrt{t}} \frac{x-1}{t} dx = 2.
+\end{equation*}
+Once the shock reaches the left edge of the rarefaction region at $x = 1$, it travels at the constant speed $1/2$, giving
+\begin{equation*}
+u(t,x) = \begin{cases} \frac{x-1}{t}, & \frac{1}{2} t - 1 < x < \frac{1}{2} t + 3 \end{cases} \quad \left[ 4 \leq t \right].
+\end{equation*}
+We again verify that
+\begin{equation*}
+\int u(t,x) dx = \int_{\frac{1}{2} t - 1}^{\frac{1}{2} t + 3} \frac{x-1}{t} dx = 2.
+\end{equation*}
+For time $t \geq 4$, the solution $u(t,x)$ is affine save for a discontinuity at the shock, where the solution increases from $\frac{1}{2} - \frac{2}{t}$ to the right of the shock up to $\frac{1}{2} + \frac{2}{t}$ to the left of the shock. Hence, $\lim_{t \to \infty} u(t,x) = \frac{1}{2}$.
+
+\item[7.] (Strikwerda 6.3.9.) Consider a scheme for (6.1.1), $u_t = b u_{xx}$, of the form
+\begin{equation*}
+v^{n+1}_m = \left( 1 - 2 \alpha_1 - 2 \alpha_2 \right) v^n_m + \alpha_1 \left( v^n_{m+1} + v^n_{m-1} \right) + \alpha_2 \left( v^n_{m+2} + v^n_{m-2} \right).
+\end{equation*}
+Show that when $\mu$ is constant, as $k$ and $h$ tend to zero, the scheme is inconsistent unless
+\begin{equation*}
+\alpha_1 + 4 \alpha_2 = b \mu.
+\end{equation*}
+Show that the scheme is fourth-order accurate in $x$ if $\alpha_2 = -\alpha_1 / 16$.
+
+\textbf{Solution}
+
+Denote by $P_{k,h}$ the (scaled) difference operator
+\begin{equation*}
+P_{k,h} v^n_m := \frac{1}{k} \left( v^{n+1}_m - v^n_m \right) - \frac{\alpha_1}{k} \left( v^n_{m+1} - 2 v^n_m + v^n_{m-1} \right) - \frac{\alpha_2}{k} \left( v^n_{m+2} - 2 v^n_m + v^n_{m-2} \right).
+\end{equation*}
+The corresponding symbol is then
+\begin{align*}
+p_{k,h}(s,\xi) := {} & P_{k,h} \left( e^{skn + imh\xi} \right) / e^{skn + imh\xi} \\
+                = {} & \frac{1}{k} \left( e^{sk} - 1 \right) + \frac{2\alpha_1}{k} \left( 1 - \cos h\xi \right) + \frac{2\alpha_2}{k} \left( 1 - \cos 2h\xi \right) \\
+                = {} & s + \left( \alpha_1 + 4 \alpha_2 \right) \frac{h^2}{k} \xi^2 - \frac{1}{12} \left( \alpha_1 + 16 \alpha_2 \right) \frac{h^4}{k} \xi^4 +  O \left( k^2 + \left( \alpha_1 + \alpha_2 \right) \frac{h^6}{k} \right)
+\end{align*}
+which is consistent with the symbol $p = s + b \xi^2$ of the differential operator $P = \partial_t - b \partial_x^2$ as long as
+\begin{equation*}
+\left( \alpha_1 + 4 \alpha_2 \right) \frac{h^2}{k} = b \quad \Leftrightarrow \quad \alpha_1 + 4 \alpha_2 = b \mu,
+\end{equation*}
+with $\mu := k/h^2$. Indeed, we see that one gets fourth-order accuracy in space if, additionally, $\alpha_1 + 16 \alpha_2 = 0$.
+
+\end{itemize}
+
+\section{Programming}
+
+\begin{itemize}
+
+\item[1.] Implement the following numerical schemes to solve \eqref{eq:burgers.strong} on the \emph{periodic} domain $[0,4]$:
+\begin{itemize}
+\item Godunov's method. At time level $n$, solve the Riemann problem assuming a piecewise constant initial condition $v^n$, then resample to determine $v^{n+1}$.
+\item (Backward) Semi-Lagrangian. At time level $n+1$ and grid vertex $m$, trace the characteristic $t \mapsto x_m + v^n_m \left( t - t_{n+1} \right)$ \emph{backward} to time level $n$ and linearly interpolate $v^n$ to determine $v^{n+1}_m$.
+\item (Forward) Semi-Lagrangian. Trace the characteristics $t \mapsto x_m + v^n_m \left( t - t_n \right)$ \emph{forward} to time level $n+1$ and linearly interpolate the nearest characteristics at a given grid vertex $m$ to determine $v^{n+1}_m$.
+\item (Conservative) Lax-Friedrichs. Discretize the conservative form of (inviscid) Burger's equation:
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} - v^n_{m-1} \right) \right) + \frac{1}{2} \cdot \frac{1}{2h} \left( \left( v^n_{m+1} \right)^2 - \left( v^n_{m-1} \right)^2 \right) = 0
+\end{equation*}
+\item (Advective) Lax-Friedrichs. Discretize the advective form of (inviscid) Burger's equation:
+\begin{equation*}
+\frac{1}{k} \left( v^{n+1}_m - \frac{1}{2} \left( v^n_{m+1} - v^n_{m-1} \right) \right) + v^n_m \frac{1}{2h} \left( v^n_{m+1} - v^n_{m-1} \right) = 0
+\end{equation*}
+\end{itemize}
+Use the initial condition \eqref{eq:pulse}. For those schemes that appear to converge to the exact solution (derived previously), compute a numerical convergence rate. For those schemes that don't appear to converge to the exact solution, explain the discrepancy (e.g., incorrect rarefaction, non-physical shock speed, unstable). Which scheme do you think performs best for the given initial condition?
+
+\textbf{Solution}
+
+\begin{itemize}
+\item Godunov's method. Numerical evidence suggests that Godunov's method converges with a numerical convergence rate of $0.42$:
+\begin{verbatim}
+test_convergence( ...
+    6, ...
+    @godunov, "Godunov's Method", ...
+    2.^(-(7:0.5:10)), @(h) h/2);
+\end{verbatim}
+\item (Backward) Semi-Lagrangian. For small enough $k$, the (backward) semi-Lagrangian scheme is equivalent to
+\begin{equation*}
+v^{n+1}_m = v^n_m \left( 1 - \frac{k}{h} \left( \begin{cases} v^n_m - v^n_{m-1}, & v^n_m > 0 \\ v^n_{m+1} - v^n_m, & v^n_m < 0 \end{cases} \right) \right),
+\end{equation*}
+which is just the upwinding scheme. Numerical evidence suggests that this scheme \emph{diverges}. Shock speeds are not captured accurately. In particular, any zero values at the $n^{\text{th}}$ time step are propagated \emph{directly} to the $(n+1)^{\text{th}}$ time step, hence if $u^L > 0$ and $u^R = 0$ around a shock, the shock will remain stationary.
+\item (Forward) Semi-Lagrangian. For small enough $k$, the (forward) semi-Lagrangian scheme is equivalent to
+\begin{equation*}
+v^{n+1}_m = v^n_m \left( 1 + \frac{k}{h} \left( \begin{cases} v^n_m - v^n_{m-1}, & v^n_m > 0 \\ v^n_{m+1} - v^n_m, & v^n_m < 0 \end{cases} \right) \right)^{-1}.
+\end{equation*}
+Numerical evidence suggests that this scheme \emph{diverges}. Again, shock speeds are not captured accurately, as in the case where $v_m = 0$.
+\item (Conservative) Lax-Friedrichs. Numerical evidence suggests that the (conservative) Lax-Friedrichs scheme converges with a numerical convergence rate of $0.53$:
+\begin{verbatim}
+test_convergence( ...
+    6, ...
+    @lax_friedrichs_conservative, "(Conservative) Lax-Friedrichs", ...
+    2.^(-(7:0.5:10)), @(h) h/2);
+\end{verbatim}
+\item (Advective) Lax-Friedrichs. Numerical evidence suggests that the (advective) Lax-Friedrichs scheme \emph{diverges}. Although shock speeds appear to be captured accurately, the scheme introduces substantial oscillations in the numerical solution as $k,h \to 0$.
+\end{itemize}
+
+Clearly, Godunov's method and the (conservative) Lax-Friedrichs schemes are the only worthwhile schemes to use for solving \eqref{eq:burgers.strong}. It appears that the (conservative) Lax-Friedrichs scheme gives a slightly better numerical convergence rate for the initial condition \eqref{eq:pulse}. On the other hand, Godunov's method retains the sharpness of the shocks better.
+
+\item[2.] Use your implementation of the Thomas algorithm from Homework 4 to solve \emph{periodic} tridiagonal systems:
+\begin{equation*}
+a_i w_{i-1} + b_i w_i + c_i w_{i+1}, \quad i = 1, \dotsc, m,
+\end{equation*}
+with $w_0 = w_m$ and $w_{m+1} = w_1$. The following algorithm is described in Strikwerda. First, solve the following (non-periodic) tridiagonal systems:
+\begin{align*}
+a_i x_{i-1} + b_i x_i + c_i x_{i+1} & = d_i, \quad x_0 = 0 \text{ and } x_{m+1} = 0; \\
+a_i y_{i-1} + b_i y_i + c_i y_{i+1} & = 0,   \quad y_0 = 1 \text{ and } y_{m+1} = 0; \\
+a_i z_{i-1} + b_i z_i + c_i z_{i+1} & = 0,   \quad z_0 = 0 \text{ and } z_{m+1} = 1;
+\end{align*}
+for $i = 1, \dotsc, m$. Then $w_i$ is given by
+\begin{equation*}
+w_i = x_i + r y_i + s z_i
+\end{equation*}
+where
+\begin{align*}
+r := {} & \frac{1}{D} \left( x_m \left( 1 - z_1 \right) + x_1 z_m \right), \\
+s := {} &  \frac{1}{D} \left( x_m y_1 + x_1 \left( 1 - y_m \right) \right), \\
+D := {} & \left( 1 - y_m \right) \left( 1 - z_1 \right) - y_1 z_m.
+\end{align*}
+
+\textbf{Solution}
+
+We can test the included code as follows.
+
+\begin{verbatim}
+N = 10;
+a = rand([N 1]); b = rand([N 1]); c = rand([N 1]);
+A = spdiags([[a(2:N);0] b [0;c(1:N-1)]], [-1 0 +1], N, N);
+A(1,N) = a(1);
+A(N,1) = c(N);
+x = rand([N 1]);
+d = A*x;
+y = solve_periodic_tridiag(a,b,c,d);
+norm(x-y, "inf")
+\end{verbatim}
+
+\end{itemize}
+
+\end{document}
