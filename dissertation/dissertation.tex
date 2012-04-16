@@ -1,0 +1,23 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% dissertation.tex
+%
+% Copyright 2012, Jeffrey Hellrung.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[PhD,single]{uclathes}
+
+\input{dissertation.macros}
+\input{dissertation.prelim}
+
+\begin{document}
+
+\makeintropages
+
+\include{dissertation.intro}
+%\include{dissertation.chapter1}
+%\include{dissertation.chapter2}
+
+\bibliography{bib/CIM,bib/DG,bib/FDM,bib/FEM_adaptive,bib/FEM_conforming,bib/FEM_nonconforming,bib/FEM_LM,bib/FVM,bib/GFM,bib/IIM,bib/KKT,bib/MFEM,bib/MG,bib/MIB,bib/VNA,bib/XFEM,bib/petsc,bib/quadrature,bib/misc}
+\bibliographystyle{uclathes}
+
+\end{document}
