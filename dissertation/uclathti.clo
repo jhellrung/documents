@@ -23,7 +23,7 @@
   % Spacing was not set, set it here as if we were uclathes.cls.
   % \typeout{Spacing not set.}
   \def\@singlespacing{1.0}
-  \def\@doublespacing{1.544}	  % see above for explanation of value
+  \def\@doublespacing{1.544}          % see above for explanation of value
   \let\@spacing=\@singlespacing
 \fi
 
@@ -54,9 +54,9 @@
 \newcommand{\ColumnRestore}{\if@ColumnSaveValue\twocolumn\fi}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			      TITLE PAGE			       %
-%								       %
+%                                                                      %
+%                              TITLE PAGE                              %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand\@maketitlepage{
@@ -69,7 +69,7 @@
          \textbf{\@titlesize \@title} \\
          \vskip 48pt plus0pt minus18pt
          \normalsize A \@thesisname\
-	 submitted in partial satisfaction \\
+         submitted in partial satisfaction \\
          of the requirements for the degree \\
          \@degreename\if@department\ in \@department \fi\\
          \vskip 24pt plus0pt minus6pt
@@ -84,9 +84,9 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			    COPYRIGHT PAGE			       %
-%								       %
+%                                                                      %
+%                            COPYRIGHT PAGE                            %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\if@copyright
@@ -107,17 +107,17 @@
          %\ifx\@copyrightyear\@degreeyear\else , \@degreeyear \fi
          %\ by \@author \\
          %\@copyrightinfo
-	 \normalsize \normalfont \copyright\ Copyright by \\
-	 \@author \\ \@copyrightyear
+         \normalsize \normalfont \copyright\ Copyright by \\
+         \@author \\ \@copyrightyear
       \end{center}
    \fi
    \ColumnRestore
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			    SIGNATURE PAGE			       %
-%								       %
+%                                                                      %
+%                            SIGNATURE PAGE                            %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % The following definitions for "\chair" and "\member" allow for one or
@@ -189,9 +189,9 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			   DEDICATION PAGE			       %
-%								       %
+%                                                                      %
+%                           DEDICATION PAGE                            %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\if@dedication
@@ -203,10 +203,10 @@
       \ColumnSave
       \par\pagestyle{plain}
       \renewcommand\baselinestretch{\@spacing}\@normalsize\normalfont
-      \vspace*{0pt}		% force spacing at top of page
+      \vspace*{0pt}                % force spacing at top of page
       \vfill
       \begin{center}
-	 \@dedication
+         \@dedication
       \end{center}
       \vfill
       \ColumnRestore
@@ -214,9 +214,9 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			 ACKNOWLEDGMENTS PAGE			       %
-%								       %
+%                                                                      %
+%                         ACKNOWLEDGMENTS PAGE                         %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\if@acks
@@ -244,9 +244,9 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			      VITA PAGE				       %
-%								       %
+%                                                                      %
+%                              VITA PAGE                               %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % This definition for the "\vitaitem" command allows for up to 26 vita
@@ -336,6 +336,28 @@
    \addtocounter{publications}{1}
 }
 
+% This definition for the "\award" command allows for up to 26
+% awards
+
+\newcounter{awards}
+\setcounter{awards}{0}
+\newcommand\award[1]{
+   \ifcase\value{awards}
+      \def\@awardA{#1} \or \def\@awardB{#1} \or \def\@awardC{#1} \or
+      \def\@awardD{#1} \or \def\@awardE{#1} \or \def\@awardF{#1} \or
+      \def\@awardG{#1} \or \def\@awardH{#1} \or \def\@awardI{#1} \or
+      \def\@awardJ{#1} \or \def\@awardK{#1} \or \def\@awardL{#1} \or
+      \def\@awardM{#1} \or \def\@awardN{#1} \or \def\@awardO{#1} \or
+      \def\@awardP{#1} \or \def\@awardQ{#1} \or \def\@awardR{#1} \or
+      \def\@awardS{#1} \or \def\@awardT{#1} \or \def\@awardU{#1} \or
+      \def\@awardV{#1} \or \def\@awardW{#1} \or \def\@awardX{#1} \or
+      \def\@awardY{#1} \or \def\@awardZ{#1}
+   \else
+      \typeout{Too many awards.}
+   \fi
+   \addtocounter{awards}{1}
+}
+
 \newcommand\@printvitaitem[1]{
    \noindent
    \begin {tabular} {@{}p{1.25in}@{}p{5.25in}@{}}
@@ -344,6 +366,8 @@
 }
 
 \newcommand\@printpubitem[1]{\par \noindent #1}
+
+\newcommand\@printawarditem[1]{\par \noindent #1}
 
 \newcommand\@makevitapage{
    % Save the old stretch.
@@ -385,20 +409,20 @@
       \ifnum\c@vitaitems>25 \@printvitaitem{\@vitaZ} \fi
       \ifnum\c@publications>0{
          \ifx\@spacing\@doublespacing\parskip 24pt plus 4pt
-	 \else                       \parskip 12pt plus 2pt
-	 \fi
-	 \vskip 36pt
-	 \begin{center}
-	    \large \scshape
-	    \if@pubs
-	       \if@pres Publications and Presentations
-	       \else    Publications
-	       \fi
-	    \else       Presentations
-	    \fi
-	    \\
-	 \end{center}
-	 \nobreak \vskip 12pt
+         \else                       \parskip 12pt plus 2pt
+         \fi
+         \vskip 36pt
+         \begin{center}
+            \large \scshape
+            \if@pubs
+               \if@pres Publications and Presentations
+               \else    Publications
+               \fi
+            \else       Presentations
+            \fi
+            \\
+         \end{center}
+         \nobreak \vskip 12pt
          \ifnum\c@publications>0  \@printpubitem{\@pubA} \fi
          \ifnum\c@publications>1  \@printpubitem{\@pubB} \fi
          \ifnum\c@publications>2  \@printpubitem{\@pubC} \fi
@@ -426,15 +450,51 @@
          \ifnum\c@publications>24 \@printpubitem{\@pubY} \fi
          \ifnum\c@publications>25 \@printpubitem{\@pubZ} \fi
       }
+      \ifnum\c@awards>0{
+         \ifx\@spacing\@doublespacing\parskip 24pt plus 4pt
+         \else                       \parskip 12pt plus 2pt
+         \fi
+         \vskip 36pt
+         \begin{center}
+         \large \scshape Awards \\
+         \end{center}
+         \nobreak \vskip 12pt
+         \ifnum\c@awards>0  \@printawarditem{\@awardA} \fi
+         \ifnum\c@awards>1  \@printawarditem{\@awardB} \fi
+         \ifnum\c@awards>2  \@printawarditem{\@awardC} \fi
+         \ifnum\c@awards>3  \@printawarditem{\@awardD} \fi
+         \ifnum\c@awards>4  \@printawarditem{\@awardE} \fi
+         \ifnum\c@awards>5  \@printawarditem{\@awardF} \fi
+         \ifnum\c@awards>6  \@printawarditem{\@awardG} \fi
+         \ifnum\c@awards>7  \@printawarditem{\@awardH} \fi
+         \ifnum\c@awards>8  \@printawarditem{\@awardI} \fi
+         \ifnum\c@awards>9  \@printawarditem{\@awardJ} \fi
+         \ifnum\c@awards>10 \@printawarditem{\@awardK} \fi
+         \ifnum\c@awards>11 \@printawarditem{\@awardL} \fi
+         \ifnum\c@awards>12 \@printawarditem{\@awardM} \fi
+         \ifnum\c@awards>13 \@printawarditem{\@awardN} \fi
+         \ifnum\c@awards>14 \@printawarditem{\@awardO} \fi
+         \ifnum\c@awards>15 \@printawarditem{\@awardP} \fi
+         \ifnum\c@awards>16 \@printawarditem{\@awardQ} \fi
+         \ifnum\c@awards>17 \@printawarditem{\@awardR} \fi
+         \ifnum\c@awards>18 \@printawarditem{\@awardS} \fi
+         \ifnum\c@awards>19 \@printawarditem{\@awardT} \fi
+         \ifnum\c@awards>20 \@printawarditem{\@awardU} \fi
+         \ifnum\c@awards>21 \@printawarditem{\@awardV} \fi
+         \ifnum\c@awards>22 \@printawarditem{\@awardW} \fi
+         \ifnum\c@awards>23 \@printawarditem{\@awardX} \fi
+         \ifnum\c@awards>24 \@printawarditem{\@awardY} \fi
+         \ifnum\c@awards>25 \@printawarditem{\@awardZ} \fi
+      }
       \ColumnRestore
    \fi\fi
    \renewcommand\arraystretch{\OldArrayStretch}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%			    ABSTRACT PAGE			       %
-%								       %
+%                                                                      %
+%                            ABSTRACT PAGE                             %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\if@abstract
@@ -456,7 +516,7 @@
          \normalsize \normalfont by\\[12pt]
          \textbf{\large \@author} \\
          \normalsize \normalfont
-	 \@degreename\if@department\ in \@department \fi\\
+         \@degreename\if@department\ in \@department \fi\\
          University of California, Los Angeles, \@degreeyear \\
          \ifnum\c@chairs>2
             Professor \@chairA, Co-chair \\
@@ -480,14 +540,14 @@
       % as well use the whole \textwidth.
       %
       \ifthenelse{\equal{#1}{\@stdsinglespacing}}{
-	\begin{center}
-	\begin{minipage}{4.75in}
-	\setlength{\parindent}{1.5em}
-	\@abstract
+        \begin{center}
+        \begin{minipage}{4.75in}
+        \setlength{\parindent}{1.5em}
+        \@abstract
         \end{minipage}
-	\end{center}
+        \end{center}
       }{
-	\@abstract
+        \@abstract
       }
 
       \renewcommand\baselinestretch{\@spacing}\@normalsize
@@ -498,9 +558,9 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								       %
-%		      PRINT ALL PRELIMINARY PAGES		       %
-%								       %
+%                                                                      %
+%                      PRINT ALL PRELIMINARY PAGES                     %
+%                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand\makeintropages{
