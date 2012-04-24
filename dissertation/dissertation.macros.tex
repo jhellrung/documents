@@ -15,7 +15,29 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
-\providecommand{\abs}[1]{\left\lvert #1 \right\rvert}
-\providecommand{\jump}[1]{\left[ #1 \right]}
-\providecommand{\norm}[1]{\left\| #1 \right\|}
-\providecommand{\set}[1]{\left\{ #1 \right\}}
+\usepackage{appendix}
+
+\newcommand{\bbR}{\mathbb{R}}
+
+\newcommand{\bfn}{\mathbf{n}}
+\newcommand{\bfu}{\mathbf{u}}
+\newcommand{\bfx}{\mathbf{x}}
+
+\newcommand{\bsepsilon}{\boldsymbol{\epsilon}}
+\newcommand{\bssigma}{\boldsymbol{\sigma}}
+\newcommand{\bstau}{\boldsymbol{\tau}}
+
+\newcommand{\dOmega}{\partial\Omega}
+
+\newcommand{\hatn}{\hat{\bfn}}
+
+\newcommand{\lrp}[1]{\left( #1 \right)}
+\newcommand{\lrb}[1]{\left[ #1 \right]}
+\newcommand{\lrB}[1]{\left\lbrace #1 \right\rbrace}
+\newcommand{\lrv}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\lrV}[1]{\left\lVert #1 \right\rVert}
+
+\providecommand{\abs}[1]{\lrv{#1}}
+\providecommand{\jump}[1]{\lrb{#1}}
+\providecommand{\norm}[1]{\lrV{#1}}
+\providecommand{\set}[1]{\lrB{#1}}
