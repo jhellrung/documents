@@ -6,6 +6,8 @@
 
 \part{Virtual Node Methods for Elliptic Problems} \label{pt:elliptic}
 
+\section*{Introduction}
+
 We now turn toward the solution of elliptic partial differential equations on arbitrary, irregular domains with a discretization based on a regular Cartesian grid. We will specifically consider the following problems in the subsequent chapters.
 
 \begin{itemize}
@@ -64,24 +66,24 @@ Therefore, the equations \eqref{eq:pt2.elasticity} are equivalently formulated a
 
 \end{itemize}
 
-In all the above, $\dOmega = \dOmega_d \sqcup \dOmega_n$, and we assume $\Gamma$ (if applicable) and $\dOmega$ to be sufficiently smooth. See Figure \ref{fig:pt2.embedding} for an example of an embedding of a domain $\Omega$ within a background Cartesian grid in $2$ and $3$ dimensions.
+In all the above, $\dOmega = \dOmega_d \sqcup \dOmega_n$, and we assume $\Gamma$ (if applicable) and $\dOmega$ to be sufficiently smooth. See Figure~\ref{fig:pt2.embedding} for an example of an embedding of a domain $\Omega$ within a background Cartesian grid in $2$ and $3$ dimensions.
 
-\newlength\embeddingfigureheight
-\setlength\embeddingfigureheight{0.40\columnwidth}
+\newlength\figheightptiiembedding
+\setlength\figheightptiiembedding{0.40\columnwidth}
 \begin{figure}[htbp]
 \begin{center}
 \subfigure[Embedding in $2$ dimensions]
-{\includegraphics[height=\embeddingfigureheight]{part2/figures/embedding_2d}}
+{\includegraphics[height=\figheightptiiembedding]{part2/figures/embedding_2d}}
 \subfigure[Embedding in $3$ dimensions]
-{\includegraphics[height=\embeddingfigureheight]{part2/figures/embedding_3d}}
+{\includegraphics[height=\figheightptiiembedding]{part2/figures/embedding_3d}}
 \caption{Example domain embeddings in (a) $2$ dimensions and (b) $3$ dimensions. In a typical domain embedding, only grid vertices on grid cells which intersect the domain (in (a), shaded) are considered degrees of freedom.}
 \label{fig:pt2.embedding}
 \end{center}
 \end{figure}
 
-Although the use of embedded methods avoids the complexities inherent to unstructured mesh generation, as discussed in Part I, it does introduce (typically less computationally intensive) difficulties of their own. One prominent such difficulty is the enforcement of algebraic surface conditions (such as boundary conditions or interfacial jump conditions) on embedded features such as $\dOmega$ and $\Gamma$, since the degrees of freedom now do not lie on said embedded features. Our methods employ a Lagrange multiplier space in a relatively straightforward way to weakly enforce Dirichlet boundary conditions and interfacial jump conditions. We mention some alternative techniques in the background sections of the subsequent chapters, and for a good review, see Lew et al. \cite{Lew.Adrian08}.
+Although the use of embedded methods avoids the complexities inherent to unstructured mesh generation, as discussed in Part I, it does introduce (typically less computationally intensive) difficulties of their own. One prominent such difficulty is the enforcement of algebraic surface conditions (such as boundary conditions or interfacial jump conditions) on embedded features such as $\dOmega$ and $\Gamma$, since the degrees of freedom now do not lie on said embedded features. Our methods employ a Lagrange multiplier space in a relatively straightforward way to weakly enforce Dirichlet boundary conditions and interfacial jump conditions. We mention some alternative techniques in the background sections in the subsequent chapters, and for a good review, see Lew et al. \cite{Lew.Adrian08}.
 
-A further challenge is the retention of higher order accuracy in $L^{\infty}$. The difficulty typically lies in determining the numerical stencils near embedded features that retain the accuracy achieved in the regions of the domain sufficiently distanced from said embedded features. Many present methods address these problems at the cost of implementation complexity and sometimes require significant effort to adapt to general applications. But while the accuracy of the discretization may be nontrivial, to reiterate from Part I, the ability to use a regular Cartesian grid greatly facilitates the implementation of efficient solution methods. Specifically for high resolution discretizations, efficient solution of the discrete linear systems can be challenging; direct methods become too slow and memory intensive. Geometric multigrid methods and domain decomposition approaches have been shown to provide very favorable performance in this setting. However, their application to embedded discretizations is not entirely straightforward. Ultimately, special attention must be paid near embedded features for both discretization accuracy and efficient numerical linear algebra, as we describe in the subsequent chapters.
+A further challenge is the retention of higher order accuracy in $L^{\infty}$. The difficulty typically lies in determining the numerical stencils near embedded features that retain the accuracy achieved in the regions of the domain sufficiently distanced from said embedded features. Many present methods address these problems at the cost of implementation complexity and sometimes require significant effort to adapt to general applications. But while achieving higher order accuracy in the discretization may be nontrivial, to reiterate from Part I, the ability to use a regular Cartesian grid greatly facilitates the implementation of efficient solution methods. Specifically for high resolution discretizations, direct methods to solve the discrete linear systems become too slow and memory intensive. Geometric multigrid methods and domain decomposition approaches have been shown to provide very favorable performance in this setting. However, their application to embedded discretizations is not entirely straightforward. Ultimately, special attention must be paid near embedded features for both discretization accuracy and efficient numerical linear algebra, as we describe in the subsequent chapters.
 
 The methods presented in the following chapters build on the work of Bedrossian et al. \cite{Bedrossian10}, which introduced a second order virtual node method for solving the interfacial Poisson problem \eqref{eq:pt2.poisson} in $2$ dimensions. The discretization presented in \cite{Bedrossian10} is easy to implement and yields a symmetric positive definite sparse linear system for both interface problems and boundary value problems on irregular domains. In summary, this virtual node method employs a uniform Cartesian grid with duplicated Cartesian bilinear elements along the interface. These duplicated elements introduce additional \emph{virtual} nodes or degrees of freedom to accurately capture the lack of regularity in the solution. The method is variational to define stencils symmetrically, and a different discretization is used depending on proximity to embedded features, allowing for the retention of the standard $5$-point finite difference stencil away from embedded boundaries and interfaces. Langrange multipliers are used to weakly enforce embedded Dirichlet conditions \eqref{eq:pt2.poisson.D} and embedded interfacial jump conditions \eqref{eq:pt2.poisson.DJ}, and the choice of Lagrange multiplier space admits a symmetric positive definite discretization. In the special case when $\beta$ is smooth, a discontinuity removal technique allows the use of the standard $5$-point Poisson stencil even across the embedded interface.
 
@@ -89,7 +91,7 @@ The feature set of this virtual node approach is very powerful. In Chapter \ref{
 
 In Chapter \ref{ch:pt2.LE}, we apply the same basic ideas from Chapter \ref{ch:pt2.poisson} to numerically solve the equilibrium equations of linear elasticity in the nearly incompressible regime. We stabilize the method in the nearly incompressible regime by introducing pressure as an additional unknown in a mixed variational formulation. Our discretization of this variational formulation is then based on a MAC-type staggering of $x$ and $y$-component displacements with pressures at cell centers. Again, we achieve second order accuracy in $L^{\infty}$ while retaining a symmetric positive definite linear system.
 
-Further, within both chapters, we present a family of geometric multigrid algorithms to solve the resulting linear systems with near-optimal multigrid efficiency independet of grid resolution. The variational nature of the methods naturally enables symmetric numerical stencils along embedded features, and our choice of Lagrange multiplier space admits an efficient means for smoothing boundary and interface equations. Indeed, this shows the suitability of efficient parallel implementations, as indicated, e.g., by the similarities to the first order method to solve \eqref{eq:pt2.LE} in \cite{Zhu.Yongning10}.
+Further, within both chapters, we present a family of geometric multigrid algorithms to solve the resulting linear systems with near-optimal multigrid efficiency independet of grid resolution. The variational nature of the methods naturally enables symmetric numerical stencils along embedded features, and together with our choice of Lagrange multiplier space, this admits an efficient means for smoothing boundary and interface equations. Indeed, this shows the suitability of efficient parallel implementations, as indicated, e.g., by the similarities to the first order method to solve \eqref{eq:pt2.LE} in \cite{Zhu.Yongning10}.
 
 In summary, our methods for solving elliptic problems such as Poisson's equation \eqref{eq:pt2.poisson} and the equations of linear elasticity \eqref{eq:pt2.LE} have a distinguishing feature set rarely found simultaneously in the class of embedded methods:
 \begin{itemize}
