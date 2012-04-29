@@ -4,32 +4,34 @@
 % Copyright 2012, Jeffrey Hellrung.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{algorithm}
+\usepackage{algorithmic}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
-
-\usepackage{verbatim}
-
-\usepackage{graphicx}
-
-\usepackage{subfigure}
-
-\usepackage{algorithm}
-\usepackage{algorithmic}
-
 \usepackage{appendix}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{verbatim}
 
 \newcommand{\bbR}{\mathbb{R}}
 
 \newcommand{\bff}{\mathbf{f}}
 \newcommand{\bfh}{\mathbf{h}}
+\newcommand{\bfk}{\mathbf{k}}
 \newcommand{\bfn}{\mathbf{n}}
 \newcommand{\bfu}{\mathbf{u}}
 \newcommand{\bfx}{\mathbf{x}}
+\newcommand{\bfy}{\mathbf{y}}
 \newcommand{\bfH}{\mathbf{H}}
 \newcommand{\bfI}{\mathbf{I}}
 \newcommand{\bfS}{\mathbf{S}}
 \newcommand{\bfV}{\mathbf{V}}
+
+\newcommand{\bfLambda}{\mathbf{\Lambda}}
+\newcommand{\bfzero}{\mathbf{0}}
 
 \newcommand{\bsepsilon}{\boldsymbol{\epsilon}}
 \newcommand{\bssigma}{\boldsymbol{\sigma}}
@@ -37,11 +39,14 @@
 
 \newcommand{\calC}{\mathcal{C}}
 \newcommand{\calG}{\mathcal{G}}
+\newcommand{\calI}{\mathcal{I}}
 \newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
 \newcommand{\calP}{\mathcal{P}}
 
 \newcommand{\dOmega}{\partial\Omega}
 
+\newcommand{\hatk}{\hat{\bfk}}
 \newcommand{\hatn}{\hat{\bfn}}
 
 \newcommand{\lrp}[1]{\left( #1 \right)}
@@ -58,4 +63,12 @@
 \newcommand{\ppartial}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\pppartial}[3]{\frac{\partial^2 #1}{\partial #2 \partial #3}}
 
+\DeclareMathOperator{\argmax}{argmax}
 \DeclareMathOperator{\tr}{tr}
+
+\newlength{\figureheight}
+\newlength{\figureheighti}
+\newlength{\figureheightii}
+\newlength{\figurewidth}
+\newlength{\figurewidthi}
+\newlength{\figurewidthii}
