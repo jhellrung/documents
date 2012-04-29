@@ -10,211 +10,156 @@
 
 \footnote{The content of this chapter is largely a revision of a recently submitted publication entitled ``A second-order virtual node
 algorithm for nearly incompressible linear elasticity in irregular domains'' by Y. Zhu, Y. Wang, J. Hellrung, A. Cantarero, E. Sifakis, J. Teran.}
-To review, this chapter address the solution of the equilibrium equations of linear elasticity, repeated here for convenience:
-\begin{subequations} \label{eq:ch5.elasticity}
+To review, this chapter addresses the solution of the equilibrium equations of linear elasticity, repeated here for convenience:
+\begin{subequations} \label{eq:ch5.LE}
 \begin{align}
--\nabla \cdot \bssigma(\bfu) & = \bff, \quad \in \Omega; \\
-\bfu & = \bfu_0, \quad \in \dOmega_d; \\
-\bssigma(\bfu) \cdot \hatn & = \bstau, \quad \in \dOmega_n;
+-\lrp{\Delta \bfI + (\lambda + \mu) \nabla \nabla^t} \bfu & = \bff \quad \in \Omega \label{eq:ch5.LE.PDE} \\
+\bfu & = \bfu_0 \quad \in \dOmega_d \label{eq:ch5.LE.D} \\
+\mu \lrp{\bfu \cdot \hatn + \nabla \lrp{\bfu \cdot \hatn}} + \lambda \lrp{\nabla \cdot \bfu} \hatn & = \bfg \quad \in \dOmega_n \label{eq:ch5.LE.N}.
 \end{align}
 \end{subequations}
 where we wish to solve for the unknown displacement map $\bfu$.
 
-Following the early methods of Hyman \cite{Hyman52} and Saul'ev \cite{Saul'ev63}, the fictitious domain approach has been used with incompressible materials in a number of works \cite{Bertrand97, Glowinski99, Glowinski94b, Glowinski01, Biros04, Parussini08, Rutka08, Parussini09, Teran09}. These approaches embed the irregular geometry in a more simplistic domain for which fast solvers exist (e.g., fast Fourier transforms). The calculations include fictitious material in the complement of the domain of interest. A forcing term (often from a Lagrange multiplier) is used to maintain boundary conditions at the irregular geometry. Although these techniques naturally allow for efficient solution procedures, they depend on a smooth solution across the embedded domain geometry for optimal accuracy, which is not typically possible.
+Following the early methods of Hyman \cite{Hyman52} and Saul'ev \cite{Saul'ev63}, the fictitious domain approach has been used with incompressible materials in a number of works \cite{Bertrand97, Glowinski94b, Glowinski99, Glowinski01, Biros04, Parussini08, Rutka08, Parussini09, Teran09}. These approaches embed the irregular geometry in a more simplistic domain for which fast solvers exist (e.g., fast Fourier transforms). The calculations include fictitious material in the complement of the domain of interest. A forcing term (often from a Lagrange multiplier) is used to maintain boundary conditions at the irregular geometry. Although these techniques naturally allow for efficient solution procedures, they depend on a smooth solution across the embedded domain geometry for optimal accuracy, which is not typically possible.
 
-The \emph{eXtended Finite Element Method} (XFEM) and related approaches in the finite element literature also make use of geometry embedded in regular elements. Although originally developed for crack-based field discontinuities in elasticity problems, these techniques are also used with embedded problems in irregular domains. Daux et al. first showed that these techniques can naturally capture embedded Neumann boundary conditions \cite{Daux00, Sukumar01}. These approaches are equivalent to the variational cut cell method of Almgren et al. in \cite{Almgren97}. Enforcement of Dirichlet constraints is more difficult with variational cut cell approaches \cite{Moes06, Lew.Adrian08} and typically involves a Lagrange multiplier or stabilization. Dolbow and Devan recently investigated the convergence of such approaches with incompressible materials and point out that much analysis in this context remains to be completed \cite{Dolbow04}. Despite the lack of thorough analysis, such XFEM approaches appear to be very accurate and have been used in many applications involving incompressible materials in irregular domains \cite{Wagner01, Becker09, Coppola05, Chessa03, Gerstenberger08}.
+The \emph{eXtended Finite Element Method} (XFEM) and related approaches in the finite element literature also make use of geometry embedded in regular elements. Although originally developed for crack-based field discontinuities in elasticity problems, these techniques are also used with embedded problems in irregular domains. Daux et al. first showed that these techniques can naturally capture embedded Neumann boundary conditions \cite{Daux00, Sukumar01}. These approaches are equivalent to the variational cut cell method of Almgren et al. in \cite{Almgren97}. Enforcement of Dirichlet constraints is more difficult with variational cut cell approaches \cite{Moes06, Lew.Adrian08} and typically involves a Lagrange multiplier or stabilization. Dolbow and Devan recently investigated the convergence of such approaches with incompressible materials and point out that much analysis in this context remains to be completed \cite{Dolbow04}. Despite the lack of thorough analysis, such XFEM approaches appear to be very accurate and have been used in many applications involving incompressible materials in irregular domains \cite{Wagner01, Chessa03, Coppola05, Gerstenberger08, Becker09}.
 
-There are also many \emph{Finite Difference Methods} (FDM) and \emph{Finite Volume Methods} (FVM) that utilize cut uniform grid cells. Many of these methods have been developed in the context of incompressible flow. For example, Almgren et al. use cut uniform bilinear cells to solve the Poisson equation for pressures in incompressible flow calculations \cite{Almgren97}. Marelle et al. use collocated grids and define define sub cell interface and boundary geometry in cut cells via level sets \cite{Marella05}. Ng et al. also use level set descriptions of the irregular domain and achieve second order accuracy in $L^{\infty}$ for incompressible flows \cite{Ng.YenTiang09}. The approach of Batty et al. is similar, but not as accurate \cite{Batty07}. Although not technically a cut cell approach, the immersed interface method has been used to improve accuracy for incompressible flow calculations in irregular domains \cite{Weigmann00, Rutka04, Rutka08, Li.Zhilin06b, Chen.Tianbing08, Xu.Sheng08}. Cut cell FDM and FVM have also been developed for incompressible and nearly incompressible elastic materials. Bijelonja et al. use cut cell FVM to enforce incompressibility more accurately than is typically seen with FEM \cite{Bijelonja06}. Beir\~{a}o da Veiga et al. use polygonal FVM cells to avoid remeshing with irregular domains \cite{BeiraodaVeiga09}. Barton et al. \cite{Barton10} and Hill et al. \cite{Hill10} use cut cells with Eulerian elastic/plastic flows. 
+There are also many \emph{Finite Difference Methods} (FDM) and \emph{Finite Volume Methods} (FVM) that utilize cut uniform grid cells. Many of these methods have been developed in the context of incompressible flow. For example, Almgren et al. use cut uniform bilinear cells to solve the Poisson equation for pressures in incompressible flow calculations \cite{Almgren97}. Marelle et al. use collocated grids and define define sub cell interface and boundary geometry in cut cells via level sets \cite{Marella05}. Ng et al. also use level set descriptions of the irregular domain and achieve second order accuracy in $L^{\infty}$ for incompressible flows \cite{Ng.YenTiang09}. The approach of Batty et al. is similar, but not as accurate \cite{Batty07}. Although not technically a cut cell approach, the immersed interface method has been used to improve accuracy for incompressible flow calculations in irregular domains \cite{Weigmann00, Rutka04, Li.Zhilin06b, Chen.Tianbing08, Rutka08, Xu.Sheng08}. Cut cell FDM and FVM have also been developed for incompressible and nearly incompressible elastic materials. Bijelonja et al. use cut cell FVM to enforce incompressibility more accurately than is typically seen with FEM \cite{Bijelonja06}. Beir\~{a}o da Veiga et al. use polygonal FVM cells to avoid remeshing with irregular domains \cite{BeiraodaVeiga09}. Barton et al. \cite{Barton10} and Hill et al. \cite{Hill10} use cut cells with Eulerian elastic/plastic flows. 
 
-Many approaches have been proposed to solve elasticity equations in a scalable way at high resoultions. For this class of problems, iterative methods are usually employed rather than direct methods due to the amount memory needed to use such methods. For iterative methods to be scalable, we mean that the method requires only a constant (and small) number of iterations, independent of the grid resolution, to obtain a solution. While many methods of this type have proven quite effective, accommodating mixed boundary conditions on an embedded interface is highly nontrivial, especially when efficiency of implementation is a priority. Most methods have also been created specifically to work with either pure Dirichlet or pure traction boundary conditions, but have not been demonstrated to be effective in both cases. Constructing preconditioners for solving the KKT systems that result from discretizing the equations in a mixed formulation have been studied by Klawonn \cite{Klawonn95, Klawonn98.1} and Bramble and Pasciak \cite{Bramble88}. Work has also been done on using domain decomposition methods with PCG \cite{Farhat00} and GMRES \cite{Klawonn98.2} to solve Stokes and elasticity problems. \emph{Balancing Domain Decomposition by Constraints} (BDDC) has also been used to build preconditioners for solving these problems \cite{Dohrmann03, Pavarino10}. Many authors have also looked at applying multigrid methods to problems in solid mechanics (e.g. \cite{Zhu.Yongning10, Verfurth84, Kocvara87, Haung90, Brenner93, Cai.Zhiqiang98, Hiptmair99, Axelsson99, Schoberl99, Wieners00, Heys04, Lee.Young-Ju09, Gaspar08}), including handling issues arising from nearly incompressible materials. Mixed FEM formulations are one example that maintain good multigrid convergence properties for nearly incompressible materials demonstrated on the pure Dirichlet boundary case \cite{Brenner93, Schoberl99, Lee.Young-Ju09}. FOSLS methods have been demonstrated to produce systems that can be effectively solved using algebraic multigrid methods by rewriting the elasticity equations as a first order system using least squares \cite{Cai.Zhiqiang98, Heys04}. Multigrid applied to FEM discretized equations using a smoother based on a Schur complement has been studied by different authors \cite{Axelsson99, Wieners00}. While demonstrating the ability to solve large problems, the Schur complement approach requires the action of the inverse of the displacements matrix in the smoothing process which is a more expensive smoothing operation than that offered by other methods. Distributive smoothers offer a different option for the smoothing process that has proved effective on elasticity equations discretized with FEM \cite{Hiptmair99} and on staggered grids \cite{Gaspar08}. In our approach, we will look at using distributive smoothing similar to those described in Gaspar et al. \cite{Gaspar08}.
+Many approaches have been proposed to solve elasticity equations in a scalable way at high resoultions. For this class of problems, iterative methods are usually employed rather than direct methods due to memory considerations. For iterative methods to be scalable, we mean that the method requires only a constant (and small) number of iterations, independent of the grid resolution, to obtain a solution. While many methods of this type have proven quite effective, accommodating mixed boundary conditions on an embedded interface is highly nontrivial, especially when efficiency of implementation is a priority. Most methods have also been created specifically to work with either purely Dirichlet or purely traction boundary conditions, but have not been demonstrated to be effective in both cases. Constructing preconditioners for solving the KKT systems that result from discretizing the equations in a mixed formulation have been studied by Klawonn \cite{Klawonn95, Klawonn98.1} and Bramble and Pasciak \cite{Bramble88}. Work has also been done on using domain decomposition methods with PCG \cite{Farhat00} and GMRES \cite{Klawonn98.2} to solve Stokes and elasticity problems. \emph{Balancing Domain Decomposition by Constraints} (BDDC) has also been used to build preconditioners for solving these problems \cite{Dohrmann03, Pavarino10}. Many authors have also looked at applying multigrid methods to problems in solid mechanics \cite{Verfurth84, Kocvara87, Haung90, Brenner93, Cai.Zhiqiang98, Axelsson99, Hiptmair99, Schoberl99, Wieners00, Heys04, Gaspar08, Lee.Young-Ju09, Zhu.Yongning10}, including handling issues arising from nearly incompressible materials. Mixed FEM formulations are one example that maintain good multigrid convergence properties for nearly incompressible materials demonstrated on the Dirichlet boundary case \cite{Brenner93, Schoberl99, Lee.Young-Ju09}. FOSLS methods have been demonstrated to produce systems that can be effectively solved using algebraic multigrid methods by rewriting the elasticity equations as a first order system using least squares \cite{Cai.Zhiqiang98, Heys04}. Multigrid applied to FEM discretized equations using a smoother based on a Schur complement has been studied by different authors \cite{Axelsson99, Wieners00}. While demonstrating the ability to solve large problems, the Schur complement approach requires the action of the inverse of the displacements matrix in the smoothing process which is a more expensive smoothing operation than that offered by other methods. Distributive smoothers offer a different option for the smoothing process that has proved effective on elasticity equations discretized with FEM \cite{Hiptmair99} and on staggered grids \cite{Gaspar08}. In our approach, we will look at using distributive smoothing similar to those described in Gaspar et al. \cite{Gaspar08}.
+
+\section{Mixed finite element formulation} \label{sec:ch5.mixedfem}
+
+In order to accurately handle linear elastic materials near the incompressible limit, we use an augmented form of the equilibrium equations. By introducing a pressure variable as an unknown, we can achieve a stable numerical discretization independent of the degree of incompressibility. We will use the weak form of this augmented system to derive a mixed finite element formulation \cite{Brezzi91}. The augmented form of our equations arises by introducing $p := -(\lambda/\mu) \nabla \cdot \bfu$. With this definition, $\bssigma(\bfu) = \mu (\nabla \bfu + (\nabla \bfu)^t) - \mu p \bfI$ and the derived equations
+\begin{subequations} \label{eq:ch5.augmented.strong}
+\begin{align}
+-\mu (\Delta \bfI + \nabla \nabla^t) \bfu + \mu \nabla p & = \bff \quad \in \Omega; \label{eq:ch5.augmented.strong.PDE} \\
+-\mu \nabla \cdot \bfu - \frac{\mu^2}{\lambda} p & = 0 \quad \in \Omega; \\
+\bfu & = \bfu_0 \quad \in \dOmega_d; \\
+\mu (\bfu \cdot \hatn + \nabla (\bfu \cdot \hatn)) - \mu p \hatn & = \bfg; \quad \in \dOmega_n
+\end{align}
+\end{subequations}
+are then equivalent to the original equations \eqref{eq:ch5.LE}.
+
+We use this augmented form of the equations to derive an equivalent variational form of the equilibrium equations of linear elasticity. A weak form can be derived by taking the inner product of the strong form with an arbitrary vector-valued function $\bfv \in \bfV_0 := (H_{0,\dOmega_d}^1(\Omega))^d$ and by enforcing $p = -(\lambda/\mu) \nabla \cdot \bfu$ weakly:
+\begin{center}
+Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$, $\bfu \rvert_{\dOmega_d} = \bfu_0$, such that
+\end{center}
+\begin{subequations} \label{eq:ch5.augmented.weak}
+\begin{align}
+& \int_{\Omega} 2 \mu \lrp{\frac{\nabla \bfu + (\nabla \bfu)^t}{2}} : \lrp{\frac{\nabla \bfv + (\nabla \bfv)^t}{2}} - \mu p (\nabla \cdot \bfv) d\bfx \\
+& \qquad = -\int_{\Omega} \bff \cdot \bfv d\bfx + \int_{\dOmega_n} \bfg \cdot \bfv d\bfS(\bfx) \quad \forall \bfv \in (H^1_{0,\dOmega_d}(\Omega))^d, \\
+& \int_{\Omega} \lrp{-\mu q \nabla \cdot \bfu - \frac{\mu^2}{\lambda} p q} d\bfx = 0 \quad \forall q \in L^2(\Omega).
+\end{align}
+\end{subequations}
+
+\subsection{Discretization} \label{sec:ch5.discretization}
+
+We discretize this variational formulation using a mixed finite element method defined on a MAC-type staggered grid. Han et al. demonstrated the stability and optimal convergence of this formulation applied to the Stokes equations on a square domain \cite{Han.Houde98}. We generalize this approach to the case of nearly incompressible linear elasticity in embedded domains. We approximate the Sobolev space $\bfV := (H^1(\Omega))^d$ with a finite element subspace $\bfV^h$, where each displacement component of a function in $\bfV^h$ is represented as a piecewise bilinear scalar function defined on a staggered quadrilateral grid (see Figure~\ref{fig:ch5.embedding}). To be more specific, consider the staggered grids
+\begin{align*}
+\calG^x_h & := \set{ (ih, (j-1/2)h) : (i,j) \in \calI_x \subset \bbZ^2 }, \\
+\calG^y_h & := \set{ ((i-1/2)h, jh) : (i,j) \in \calI_y \subset \bbZ^2 }.
+\end{align*}
+Here, $h$ is the discrete spacing between grid points. Furthermore, we use the following notation to denote quadrilaterals defined by these grids:
+\begin{align*}
+T^x_{ij} & := \set{ (x,y) : ih < x < (i+1)h, \; (j-1/2)h < y < (j+1/2)h }, \\
+T^y_{ij} & := \set{ (x,y) : (i-1/2)h < x < (i+1/2)h, \; jh < y < (j+1)h }.
+\end{align*}
+The sets $\calI_x$ and $\calI_y$ used in the definition of grids $\calG^x_h$ and $\calG^y_h$ are defined as the collection of vertices incident on some quadrilateral $T^x_{ij}$ or $T^y_{ij}$, respectively, whose intersection with the domain $\Omega$ is non-empty. In other words, $\calI_x$ and $\calI_y$ are the sets of vertices in the staggered lattices that are at most an $L^{\infty}$-distance of $h$ away from $\Omega$. Henceforth, we will use
+\begin{align*}
+\calT^x_h & := \set{ T^x_{ij} : T^x_{ij} \cap \Omega \neq \emptyset }, \\
+\calT^y_h & := \set{ T^y_{ij} : T^y_{ij} \cap \Omega \neq \emptyset }
+\end{align*}
+to denote the collection of $x$ and $y$ grid quadrilaterals that intersect (or embed) the domain $\Omega$.
+
+\setlength{\figurewidth}{0.32\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[$\calT^p_h$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_p8}}
+\subfigure[$\calT^x_h$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_x8}}
+\subfigure[$\calT^y_h$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_y8}}
+\caption{Staggered grid finite element quadrangulation and embedded domain boundary.}
+\label{fig:ch5.embedding}
+\end{center}
+\end{figure}
+
+We construct two subspaces of $H^1(\Omega)$ based on these respective quadrangulations:
+\begin{align*}
+V_x^h & := \set{ v_h \in C^0(\Omega) : v_h \rvert_{T^x_{ij}} \in Q_1(T^x_{ij}) \; \forall \, T^x_{ij} \in \calT^x_h }, \\
+V_y^h & := \set{ v_h \in C^0(\Omega) : v_h \rvert_{T^y_{ij}} \in Q_1(T^y_{ij}) \; \forall \, T^y_{ij} \in \calT^y_h },
+\end{align*}
+where $Q_1(T^k_{ij})$ is the space of bilinear functions on the quadrilateral $T^k_{ij}$. For simplicity of notation in subsequent equations we will also use the mappings
+\begin{align*}
+& \eta_1 \colon I_1 := \{ 1, 2, \dotsc, N_x \} \to \calI_x, \\
+& \eta_2 \colon I_2 := \{1, 2, \dotsc, N_y \} \to \calI_y
+\end{align*}
+to associate each $x$ and $y$ grid vertex with a unique integer between $1$ and
+$N_x := \abs{\calI_x}$ and $1$ and $N_y := \abs{\calI_y}$, respectively. With this convention, any approximate solution $\bfu^h \in V_x^h \times V_y^h$ can be expressed as
+\begin{equation} \label{eq:ch5.staggeredapproximation.u}
+\bfu^h(\bfx) :=
+\begin{pmatrix}
+\displaystyle \sum_{k_1 \in I_1} u^1_{k_1} N^1_{k_1}(\bfx) \\
+\displaystyle \sum_{k_2 \in I_2} u^2_{k_2} N^2_{k_2}(\bfx)
+\end{pmatrix},
+\end{equation}
+where $N^1_{k_1}$ and $N^2_{k_2}$ are the commonly used piecewise bilinear interpolating basis functions associated with nodes $k_1$ and $k_2$, respectively, in $\calT^x_h$ and $\calT^y_h$. Our discrete equations for the approximate solution $\bfu^h$ can thus be seen to be over $N_x + N_y$ scalar unknowns.
+
+We additionally approximate the pressure space $V_p := L^2(\Omega)$ with a piecewise constant finite element space $V_p^h$ defined on a quadrangulation $\calT^p_h$ over the primary grid (or, henceforth, the pressure grid) $\calG^p_h$:
+\begin{align*}
+\calG^p_h & := \set{ ((i + 1/2)h, (j + 1/2)h) : (i,j) \in \calI_p \subset \bbZ^2 }, \\
+T^p_{ij} & := \set{ (x,y) : ih < x < (i+1)h, \; jh < y < (j+1)h }, \\
+\calT^p_h & := \set{ T^p_{ij} : T^p_{ij} \cap \Omega \neq \emptyset }, \\
+V_p^h & := \set{ p^h \in L^2(\Omega) : p_h \rvert_{T^p_{ij}} \in P_0(T^p_{ij})\; \forall \, T^p_{ij} \in \calT^p_h },
+\end{align*}
+where $P_0(T^p_{ij})$ is the space of constant functions on the quadrilateral $T^p_{ij}$. The grid $\calG^p_h$ is a cell-centered grid (as opposed to a node-centered grid, such as $\calG^x_h$ or $\calG^y_h$); there is one pressure degree of freedom associated with the center of each pressure cell $T^p_{ij}\in \calT^p_h$. The set $\calI_p$ is defined similarly to $\calI_x$ and  $\calI_y$, however here it refers to the collection of cell-centered indices in the grid $\calG^p_h$ whose associated quadrilaterals $T^p_{ij}$ have a non-empty intersection with $\Omega$. For the sake of simplicity in subsequent equations, we again use a mapping
+\begin{equation*}
+\eta_3 \colon I_3 := \{ 1, 2, \dotsc, N_p \} \to \calI_p
+\end{equation*}
+to associate each cell in the pressure grid with a unique integer between 1 and $N_p := \abs{\calI_p}$. Thus, any approximate pressure solution $p^h$ has the representation
+\begin{equation} \label{eq:ch5.staggeredapproximation.p}
+p^h(\bfx) := \sum_{k_3 \in I_3} p_{k_3} \chi_{T^p_{k_3}}(\bfx)
+\end{equation}
+where (with some abuse of notation) $\chi_{T^p_k}(\bfx)$ is the characteristic function associated with the quadrilateral $T^p_k$. That is,
+\begin{equation*}
+\chi_{T^p_k}(\bfx) := \begin{cases} 1, & \bfx \in T^p_k \\ 0, & \bfx \notin T^p_k \end{cases}.
+\end{equation*}
+
+We choose test functions $\bfv^h(\bfx) = N^m_{k_m}(\bfx) \bfe_m$ ($m \in \set{1,2}$) and substitute the finite element discretization \eqref{eq:ch5.staggeredapproximation.u}, \eqref{eq:ch5.staggeredapproximation.p} into each term in the mixed variational form \eqref{eq:ch5.augmented.weak}:
+\begin{align*}
+& 2 \mu \int_{\Omega} \lrp{\frac{\nabla \bfu^h + (\nabla \bfu^h)^t}{2}} : \lrp{\frac{\nabla \bfv^h + (\nabla \bfv^h)^t}{2}} d\bfx \\
+& \qquad = \mu \int_{\Omega} \lrp{\nabla \bfu^h + (\nabla \bfu^h)^t} : \nabla \bfv^h d\bfx = \mu \sum_{i,j \in \set{1,2}} \int_{\Omega} (u^h_{i,j} + u^h_{j,i}) v^h_{j,i} d\bfx \\
+& \qquad = \mu \sum_{i,j \in \set{1,2}} \int_{\Omega} (u^h_{i,j} + u^h_{j,i}) N^m_{k_m,i} \delta_{mj} d\bfx = \mu \sum_{i \in \set{1,2}} \int_{\Omega} (u_{i,m}+u_{m,i}) N^m_{k_m,i} d\bfx \\
+& \qquad = \mu \sum_{i \in \set{1,2}} \int_{\Omega} \lrp{\sum_{k_i \in I_i} u^i_{k_i} N^i_{k_i,m} + \sum_{k_m \in I_m} u^m_{k_m} N^m_{k_m,i}} N^m_{k_m,i} d\bfx \\
+& \qquad = \mu \sum_{i \in \set{1,2}} \sum_{k_i \in I_i} u^i_{k_i} \int_{\Omega} N^i_{k_i,m} N^m_{k_m,i} d\bfx + \mu \sum_{k_m \in I_m} u^m_{k_m} \sum_{i \in \set{1,2}} \int_{\Omega} \lrp{N^m_{k_m,i}}^2 d\bfx; \\
+& -\mu \int_{\Omega} p \nabla \cdot \bfv^h d\bfx = -\mu \sum_{k_3 \in I_3} p_{k_3} \int_{T^p_{k_3} \cap \Omega} N^m_{k_m,m} d\bfx; \\
+& \int_{\Omega} \bff \cdot \bfv^h d\bfx = \int_{\Omega} f_m N^m_{k_m} d\bfx; \\
+& \int_{\dOmega_n} \bfg \cdot \bfv^h d\bfS(\bfx) = \int_{\dOmega_n} g_m N^m_{k_m} d\bfS(\bfx).
+\end{align*}
+We can also choose $\bfv^h \equiv \bfzero$ and $q^h(\bfx) = \chi_{T^p_{k_3}}(\bfx)$ to give the corresponding pressure equations:
+\begin{equation*}
+-\mu \sum_{i \in \set{1,2}} \sum_{k_i \in I_i} u^i_{k_i} \int_{T^p_{k_3} \cap \Omega} N^k_{k_i,i} d\bfx - \frac{\mu^2}{\lambda} p_{k_3} \int_{T^p_{k_3} \cap \Omega} d\bfx = 0.
+\end{equation*}
+
+Since the variational form is derived from an energy minimization problem, the discretized linear system can trivially be seen to be symmetric. Specifically, if $\vec{u} \in \bbR^{N_x + N_y}$ is our vector of displacement unknowns (where, say, the $x$ degrees of freedom are ordered first followed by the $y$ degrees of freedom second) and $\vec{p} \in \bbR^{N_p}$ our vector of pressure unknowns, then our system over the vector $\tilde{u}$ of $N := N_x + N_y + N_p$ degrees of freedom is of the form:
+\begin{equation} \label{eq:ch5.ALEsystem.discrete}
+\begin{pmatrix} A_u & G^t \\ G & D_p \end{pmatrix}
+\begin{pmatrix} \vec{u} \\ \vec{p} \end{pmatrix}
+= \begin{pmatrix} \vec{f} \\ \vec{0} \end{pmatrix}
+\quad \text{or} \quad \tilde{A} \tilde{u} = \tilde{f}
+\end{equation}
+where $\tilde{u} = (\vec{u} \; \vec{p})$ and $\tilde{f} = (\vec{f} \; \vec{0})$. Furthermore, our use of regular grids gives the discrete equations a finite difference interpretation. If we scale the system by $1/h^2$, each block in the discrete system approximates the corresponding differential operator in \eqref{eq:ch5.augmented.strong}, i.e., \eqref{eq:ch5.ALEsystem.discrete} discretizes the following equation:
+\begin{equation} \label{eq:ch5.ALEsystem.continuous}
+h^2 \begin{pmatrix} -\mu (\Delta + \nabla \nabla^t) & \mu \nabla \\ -\mu \nabla^t & -\mu^2/\lambda \end{pmatrix}
+\begin{pmatrix} \bfu \\ p \end{pmatrix}
+= \begin{pmatrix} h^2 \bff \\ 0 \end{pmatrix}.
+\end{equation}
+The linear system is the Hessian matrix of a saddle point problem, therefore the discretized system is symmetric but indefinite. In fact, the upper-left block $A_u$ is positive definite whie the lower-right block $D_p$ negative definite.
 
 \begin{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Mixed finite element formulation}\label{sec:mixed}
-In order to accurately handle linear elastic materials near the incompressible limit, we use an augmented form of the equilibrium equations. By introducing a pressure variable as an
-unknown, we can achieve a stable numerical discretization independent of the degree of incompressibility. We will use the weak form of this augmented system to derive a mixed finite
-element formulation \cite{brezzi:1991:mixed}. The augmented form of our equations arises by introducing $p=-\lambda/\mu\nabla\cdot u$. With this definition, $\vec{\sigma}(u)=\mu\,(\nabla u+(\nabla u)^{T})-\mu\, p\,\mathbf I$ and the derived PDE \begin{eqnarray}
-	-\mu(\Delta\mathbf I+\nabla\nabla^{T})u+\mu\nabla p= & f & \mbox{ in }\Omega\label{StrongFormAugmented}\\
-	-\mu\nabla\cdot u-\frac{\mu^{2}}{\lambda}p= & 0 & \mbox{ in }\Omega\\
-	u = & u_{0} & \mbox{ on }\Gamma_{d}\\
-	\mu(u_{n}+\nabla(u\cdot n))-\mu p\, n = & g & \mbox{ on }\Gamma_{n}\end{eqnarray}
-is then equivalent to the original PDE.
-
-We use this augmented form of the equations to derive an equivalent variational form of the linear elastic equilibrium equations. A weak form can be derived by taking the inner product of the strong form with an arbitrary vector valued function $v\in V_0=(H_{0,\Gamma_{d}}^{1}(\Omega))^{d}$ and by enforcing the equation $p=-\lambda/\mu\nabla\cdot u$ weakly:
-\begin{eqnarray}\label{WeakFormAugmented}
-	&&\mbox{Find }(\vec u,p)\in H^1(\Omega)\times H^1(\Omega)\times L^2(\Omega),\vec u|_{\Gamma_d}=\vec u_0\mbox{, such that}\\
-	&&\int_\Omega 2\mu\left(\frac{\nabla \vec u+\nabla \vec u^T}2\right):\left(\frac{\nabla \vec v+\nabla \vec v^T}2\right)-\mu p(\nabla\cdot \vec v) \,d \vec x \\
-	&&\quad =-\int_\Omega \vec f\cdot \vec v\,d \vec x+\int_{\Gamma_n} \vec g\cdot \vec v\,ds \quad \forall \vec v \in H_{0,\Gamma_d}^1(\Omega)\times H_{0,\Gamma_d}^1(\Omega) \\
-	&& \int_\Omega\left( -\mu q\nabla\cdot \vec u-\frac{\mu^2}{\lambda}pq\right)\,d \vec x=0\quad\forall q\in L^2(\Omega) .
-	\end{eqnarray}
-
-\subsection{Discretization}\label{sec:disc}
-We discretize this variational formulation using a mixed finite element method defined on a MAC-type staggered grid. Han et al. demonstrated the stability and optimal convergence of this formulation applied to the Stokes equations on a square domain \cite{han1998new}. We generalize this approach to the case of nearly incompressible linear elasticity in embedded domains. We approximate the Sobolev space $V = H^1(\Omega) \times H^1(\Omega)$ with a finite element subspace $V^h$, where each displacement component of a function in $V^h$ is represented as a piecewise bilinear scalar function defined on a staggered quadrilateral grid (see  Figure \ref{fig_embed}). To be more specific, consider the staggered grids:
-	$$\mathcal G^x_h=\{(ih,(j-1/2)h):(i,j)\in I_x\subset Z^2\},$$
-	$$\mathcal G^y_h=\{((i-1/2)h,jh):(i,j)\in I_y\subset Z^2\}.$$
-Here, $h$ is the discrete spacing between grid points. Furthermore, we use the following notation to denote quadrilaterals defined by these grids:
-	$$T^x_{ij}=\{(x,y):ih<x<(i+1)h, (j-1/2)h<y<(j+1/2)h \},$$
-	$$T^y_{ij}=\{(x,y):(i-1/2)h<x<(i+1/2)h, jh<y<(j+1)h \}.$$
-The sets $I_x$ and $I_y$ used in the definition of grids $\mathcal G^x_h$ and $\mathcal G^y_h$ are defined as the collection of vertices incident on some quadrilateral $T^x_{ij}$ or $T^y_{ij}$, respectively, whose intersection with the domain $\Omega$ is non-empty. In other words, $I_x$ and $I_y$ are the sets of vertices in the staggered lattices that are at most a distance of $h$ away from $\Omega$. Henceforth, we will use
-$$\mathcal T_h^x=\{T^x_{ij}: \ T^x_{ij}\cap\Omega\neq\emptyset\}$$
-and
-$$\mathcal T_h^y=\{T^y_{ij}: \ T^y_{ij}\cap\Omega\neq\emptyset\}$$
-to denote the collection of $x$ and $y$ grid quadrilaterals that intersect (or embed) the domain $\Omega$. 
-We construct two subspaces of $H^1(\Omega)$ based on these quadrangulations respectively: 
-$$V_x^h=\{v_h\in C^{(0)}(\Omega): v_h|_{T^x_{ij}}\in Q_1(T^x_{ij}) \; \forall \ T^x_{ij} \in \mathcal T_h^x \},$$
-$$V_y^h=\{v_h\in C^{(0)}(\Omega): v_h|_{T^y_{ij}}\in Q_1(T^y_{ij}) \; \forall \ T^y_{ij} \in \mathcal T_h^y \}$$
-where $Q_1(T^k_{ij})$ is the space of bilinear functions on the quadrilateral $T^k_{ij}$. For simplicity of notation in subsequent equations we will also use mappings
-$\eta_1:I_{1}=\{1,2,...,N_x\}\rightarrow{I_x}$ and $\eta_2:I_{2}=\{1,2,...,N_y\}\rightarrow{I_y}$ to associate each $x$ and $y$ grid vertex with a unique integer between 1 and
-$N_x= |I_x|$ and 1 and $N_y= |I_y|$ respectively. With this convention, any approximated solution $\vec u\in V_x^h\times V_y^h$ can be expressed as
-	\begin{eqnarray}
-	\vec u(\vec x) & = & \left(\begin{array}{l}
-	{\displaystyle \sum_{k_{1}\in I_{1}}u_{1k_{1}}N_{1k_{1}}(\vec x)}\\
-	{\displaystyle \sum_{k_{2}\in I_{2}}u_{2k_{2}}N_{2k_{2}}(\vec x)}\end{array}\right)\label{StaggeredFEM}
-	\end{eqnarray}
-where $N_{1k_1}$ and $N_{2k_2}$ are the commonly used piecewise bilinear interpolating functions associated with nodes $k_1$ and $k_2$ respectively in $\mathcal T_h^x$ and $\mathcal T_h^y$. Our discrete equations for the approximate solution $\vec u$ can thus be seen to be over $N_x+N_y$ unknowns.
-
-%	\begin{figure}[htp]
-%	\centering
-%	%\includegraphics[width=.4\columnwidth]{image_bw/embed1.png}
-%	\includegraphics[width=.4\columnwidth]{image_bw/embed2.png}
-%	\includegraphics[width=.4\columnwidth]{image_bw/embed6.png}
-%	\includegraphics[width=.4\columnwidth]{image_bw/embed3.png}
-%	\includegraphics[width=.4\columnwidth]{image_bw/embed4.png}
-%	%\includegraphics[width=.4\columnwidth]{image_bw/embed5.png}
-%	%\includegraphics[width=.4\columnwidth]{image_bw/embed7.png}
-%	\caption{Staggered mesh finite element quadrangulation and embedded domain boundary (top left: the thick lines are grids for  is $\mathcal{T}_h^p$; top right: integral subcells that are cut by domain boundary segmented curves; bottom left: the dashed lines are grids for $\mathcal{T}_h^x$; bottom right: the dashed lines are grids for $\mathcal{T}_h^y$. The shaded region represents the actual domain $\Omega$).}
-%	\vspace*{-.07in}
-%	\label{fig_embed}
-%	\end{figure}
-
-	\begin{figure}[htp]
-	\centering
-	\subfigure[$\mathcal{T}_h^p$]{\includegraphics[width=.3\columnwidth]{image_bw/grid_p8.png}}
-	\subfigure[$\mathcal{T}_h^x$]{\includegraphics[width=.3\columnwidth]{image_bw/grid_x8.png}}
-	\subfigure[$\mathcal{T}_h^y$]{\includegraphics[width=.3\columnwidth]{image_bw/grid_y8.png}}
-	\caption{Staggered grid finite element quadrangulation and embedded domain boundary.}
-	\vspace*{-.07in}
-	\label{fig_embed}
-	\end{figure}
-
-%	\begin{figure}[ht]
-%	\centering
-%	\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=.4\columnwidth]{image_bw/embedding_1.jpg}
-%	\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=.4\columnwidth]{image_bw/embedding_1_1.jpg}
-%	\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=.4\columnwidth]{image_bw/embedding_2.jpg}
-%	\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=.4\columnwidth]{image_bw/embedding_3.jpg}
-%	\caption{Staggered mesh finite element quadrangulation and embedded domain boundary (top left: $\mathcal{T}_h^p$; top right: integral subcells that are cut by domain boundary segmented curves; bottom left: $\mathcal{T}_h^x$; bottom right: $\mathcal{T}_h^y$. The shaded region represents the active primal grid cells).}
-%	\vspace*{-.07in}
-%	\label{fig_embed_0}
-%	\end{figure}
-
-We additionally approximate the space for pressure $V_p=L^2(\Omega)$ with a piecewise constant finite element space $V_p^h$ defined on a quadrangulation $\mathcal{T}_h^p$ over the primary grid (or henceforth, the pressure grid) $\mathcal G^p_h$:
-	$$\mathcal G^p_h=\{((i+1/2)h,(j+1/2)h):(i,j)\in I_p\subset Z^2\},$$
-	$$T^p_{ij}=\{(x,y):ih<x<(i+1)h,jh<y<(j+1)h\},$$
-	$$\mathcal{T}_h^p=\{T^p_{ij}:T^p_{ij}\cap\Omega\neq\emptyset \},$$
-	$$V_p^h=\{p_h\in L^2(\Omega): p_h|_{T^p_{ij}}\in P_0(T^p_{ij})\; \forall \ T^p_{ij} \in \mathcal T_h^p\}$$
-where $P_0(T^p_{ij})$ is the space of constant functions on the quadrilateral $T^p_{ij}$. The grid $\mathcal G^p_h$ is a cell-centered grid (as opposed to a node-centered grid, such as
-$\mathcal G^x_h$ or $\mathcal G^y_h$). That is, we assume that pressure variables live at the cell centers of this grid. In other words, there is one pressure variable located in each
-$T^p_{ij}\in\mathcal{T}_h^p$. The set $I_p$ is defined similarly to $I_x$ and  $I_y$, however here it refers to the collection of cell centered indices in the grid $\mathcal G^p_h$ whose
-associated quadrilaterals $T^p_{ij}$ have a non-zero intersection with $\Omega$. For the sake of simplicity in subsequent equations, we again use a mapping
-$\eta_3:I_{3}=\{1,2,...,N_p\}\rightarrow{I_p}$ to associate each cell in the pressure grid with a unique integer between 1 and $N_p= |I_p|$. Thus, any approximated solution of the pressure has the following representation:
-	\begin{eqnarray}\label{StaggeredFEM_p}
-	p(\vec x) = \sum_{k_3\in I_{3}}p_{k_3}\chi_{T^p_{k_3}}(\vec x)
-	\end{eqnarray}
-where $\chi_{T^p_{k}}(\vec x)$ is the characteristic function for the quadrilateral $T^p_{k}$. That is,
-$$
-\chi_{T^p_{k}}(x)=\left\{\begin{array}{c} 1, \ \vec x\in{T^p_{k}}\\ 0, \ \vec x\notin{T^p_{k}.}\end{array}\right.
-$$	
-We choose test functions $\vec v(\vec x)=N_{mk_{m}}(\vec x)\vec e_{m}, \ m={1,2}$ and substitute the finite element discretization \eqref{StaggeredFEM}, \eqref{StaggeredFEM_p} into each term in the mixed variational form \eqref{WeakFormAugmented},
-\begin{eqnarray*}
-	&&2\mu\int_{\Omega}\frac{\nabla \vec u+(\nabla \vec u)^{T}}{2}:\frac{\nabla \vec v+(\nabla \vec v)^{T}}{2}\, d\vec{x}\\
-	&=&\mu\int_{\Omega}\nabla \vec u:(\nabla \vec v+(\nabla\vec  v)^{T})\, d\vec{x}\\
-	 & = & \mu\sum_{i,j\in\{1,2\}}\int_{\Omega}u_{i,j}(v_{i,j}+v_{j,i})\, d\vec{x}= \mu\sum_{i,j\in\{1,2\}}\int_{\Omega}u_{i,j}(N_{mk_{m},j}(\vec x)\delta_{mi}+N_{mk_{m},i}(\vec x)\delta_{mj})\, d\vec{x}\\
-         & = & \mu\sum_{i\in\{1,2\}}\int_{\Omega}(u_{i,m}+u_{m,i})N_{mk_{m},i}(\vec x) = \mu\sum_{i\in\{1,2\}}\int_{\Omega}\left(\sum_{k_{i}\in I_{i}}u_{ik_i}N_{ik_i,m}(\vec{x})+\sum_{k_{m}\in I_{m}}u_{mk_m}N_{mk_m,i}(\vec{x})\right)N_{mk_{m},i}(\vec x) \\
-         & = & \mu\sum_{i\in\{1,2\}}\sum_{k_{i}\in I_{i}}u_{ik_i}\int_{\Omega}N_{ik_i,m}(\vec{x})N_{mk_{m},i}(\vec x) + \mu\sum_{k_{m}\in I_{m}}u_{mk_m}\sum_{i\in\{1,2\}}\int_{\Omega}N_{mk_{m},i}^2(\vec x) \\
-	\end{eqnarray*}
-	\begin{eqnarray*}
-	-\mu\int_{\Omega}p\,\nabla\cdot \vec vd\vec{x}&=&-\mu\sum_{k_{p}\in I_{p}}p_{k_{p}}\int_{T^p_{k_p}\cap\Omega}N_{mk_{m},m}(\vec x)d\vec{x}\\
-	\int_{\Omega}\vec f\cdot \vec v\, d\vec{x}&=&\int_{\Omega}f_mN_{mk_{m}}(\vec x)\, d\vec{x}\\
-	\int_{\Gamma_n}\vec g\cdot \vec v\, ds&=&\int_{\Gamma_n}g_mN_{mk_{m}}(\vec x)\, ds .
-\end{eqnarray*}
-We can also choose $\vec{v}=0$ and $q(\vec x) = \chi_{T^p_{k_{p}}}(\vec x)$ to derive the pressure equations:
-	\begin{eqnarray*}
-	 &  & -\mu \sum_{i\in\{1,2\}} \sum_{k_{i}\in I_{i}}u_{ik_{i}}\int_{T^p_{k_p}\cap\Omega}N_{ik_{i},i}(\vec x)\, d\vec{x}-\frac{\mu^{2}}{\lambda}\sum_{k_{p}\in I_{p}}p_{k_{p}}\int_{T^p_{k_p}\cap\Omega}1\, d\vec{x}=0.\end{eqnarray*} 
-
-
-%\definecolor{grey}{rgb}{.7, .7,.7}
-%\setlength{\unitlength}{1.5cm}
-%\begin{figure}\centering
-%\begin{picture}(3,3)
-%  \linethickness{0.5pt}
-%  \multiput(1, 0)(1, 0){2}{\line(0, 1){3}}
-%  \multiput(0,1)(0,1){2}{\line(1, 0){3}}
-%  \put(.87,.43){\colorbox{white}{$x_1$}}
-%  \put(1.87,.43){\colorbox{white}{$x_2$}}
-%  \put(.87,1.43){\colorbox{white}{$x_3$}}
-%  \put(1.87,1.43){\colorbox{white}{$x_4$}}
-%  \put(.87,2.43){\colorbox{white}{$x_5$}}
-%  \put(1.87,2.43){\colorbox{white}{$x_6$}}
-%  \put(.36,.95){\colorbox{white}{$y_7$}}
-%  \put(1.36,.95){\colorbox{white}{$y_8$}}
-%  \put(2.36,.95){\colorbox{white}{$y_{9}$}}
-%  \put(.36,1.95){\colorbox{white}{$y_{10}$}}
-%  \put(1.36,1.95){\colorbox{white}{$y_{11}$}}
-%  \put(2.36,1.95){\colorbox{white}{$y_{12}$}}
-%  \put(1.35,1.44){\colorbox{white}{$p_{13}$}}
-%\end{picture}\hspace{5mm}
-%\begin{picture}(3,3)
-%  \linethickness{0.5pt}
-%  \multiput(1, 0)(1, 0){2}{\line(0, 1){3}}
-%  \multiput(0,1)(0,1){2}{\line(1, 0){3}}
-% % \multiput(1.05, 1.05)(.475, 0){2}{\multiput(0,0)(0,0.475){2}{
-% % 	%\dashbox{.02}(0.425,0.425){$\omega$}
-%%	{\multiput(0,0)(0.425,0){2}{\line(0,1){0.425}}\multiput(0,0)(0,0.425){2}{\line(1,0){0.425}}}
-% % }}
-%  \put(.87,.43){\colorbox{white}{$x_1$}}
-%  \put(1.87,.43){\colorbox{white}{$x_2$}}
-%  \put(.87,1.43){\colorbox{white}{$x_3$}}
-%  \put(1.87,1.43){\colorbox{white}{$x_4$}}
-%  \put(.36,.95){\colorbox{white}{$y_7$}}
-%  \put(1.36,.95){\colorbox{white}{$y_8$}}
-%  \put(.36,1.95){\colorbox{white}{$y_{10}$}}
-%  \put(1.36,1.95){\colorbox{white}{$y_{11}$}}
-%  \put(1.35,1.44){\colorbox{white}{$p_{13}$}}
-%  \linethickness{.6375cm}
-%  \multiput(1.2625, 1.05)(.475, 0){2}{\multiput(0,0)(0,0.475){2}{
-% 	\put(0,0){\color{grey}\line(0,1){.425}}}}
-%  \put(1.15, 1.2){$\omega_1$}
-%  \put(1.625, 1.2){$\omega_2$}
-%  \put(1.15, 1.675){$\omega_3$}
-%  \put(1.625, 1.675){$\omega_4$}
-%\end{picture}
-%\caption{Left: one interior pressure cell and the variables corresponding to the 13 degrees of freedom of the elemental stiffness matrix by taking integral over the pressure cell; right: four integral subcells of the pressure cell and the variables that an integral over subcell $\omega_1$ contributes to. }
-%\end{figure}
-
-Since the variational form is derived from an energy minimization problem, the discretized linear system can trivially be seen to be symmetric. Specifically, if we take the convention that $\vec u^{h}\in\mathbb{R}^{N_x+N_y}$ is our vector of displacement unknowns (where we assume that $x$ degrees of freedom are ordered first and $y$ second) and $\vec p^{h}\in\mathbb{R}^{N_p}$ is the vector of pressure unknowns, then our system over the vector $\hat{\vec u}^h$ of $N=N_x+N_y+N_p$ degrees of freedom is of the form:
-	\begin{eqnarray}\label{DiscreteALESystem}
-	\left(\begin{array}{cc}
-	\mathbf L_u^{h} & {\mathbf G^{h}}^{T}\\
-	\mathbf G^{h} & \mathbf D_p^{h}\end{array}\right)\left(\begin{array}{c}
-	\vec u^{h}\\
-	\vec p^{h}\end{array}\right)=\left(\begin{array}{c}
-	\vec f^{h}\\
-	\vec 0\end{array}\right)
-	\quad\quad\mbox{or}\quad\quad\hat{\mathbf L}^{h}\hat{\vec u}^h=\hat{\vec f}^h
-	\end{eqnarray}
-where $\hat {\vec u}^h=(\vec u^h,p^h)$ and $\hat{ \vec f}^h=(\vec f^h,0)$. 
-Furthermore, our use of regular grids gives the discrete equations a finite difference interpretation. If we scale the system by $\frac1{h^2}$, each block in the discrete system approximates the corresponding differential operator in \eqref{StrongFormAugmented}, i.e. \eqref{DiscreteALESystem} discretizes the following equation: 
-	\begin{eqnarray}\label{ALESystem}
-	h^2\left(\begin{array}{cc}
-	-\mu(\Delta+\nabla\nabla^T) & \mu\nabla\\
-	-\mu\nabla^T & -\frac{\mu^2}\lambda\end{array}\right)\left(\begin{array}{c}
-	\vec u\\
-	p\end{array}\right)=\left(\begin{array}{c}
-	\vec fh^2\\
-	0\end{array}\right).\end{eqnarray}	
-The linear system is the Hessian matrix of a saddle point problem, therefore the discretized system is symmetric but indefinite. In fact, the first diagonal block $\mathbf L_u^h$ is positive definite, and the other diagonal block is negative definite. 
 
 \subsection{Implementation details}
 \label{sec:implementation_details}
@@ -451,13 +396,13 @@ However for boundary cells where $T^p_{k_p}\cap\Omega \ {\neq} \ T^p_{k_p}$, we 
 	\end{figure}
 
 \subsection{Discrete geometric representation and cut cell integration}
-\label{sec:discrete_geometric_rep}
+\label{sec:ch5.discretizationrete_geometric_rep}
 
 	\begin{figure}[htp]
 	\centering
 	\subfigure[]{\includegraphics[trim=160mm 162mm 0mm 0mm, clip,width=.4\columnwidth]{image_bw/grid_zoomin8.png}}
 	\subfigure[]{\includegraphics[trim=160mm 162mm 0mm 0mm, clip,width=.4\columnwidth]{image_bw/grid_bdrycurve8.png}}
-	\caption{A zoom-in view of Figure \ref{fig_embed}(a). A levelset function is sampled on a doubly refined grid (left); a segmented curve $\partial\Omega_h$ is generated to approximate the boundary of the geometric domain (right).}
+	\caption{A zoom-in view of Figure \ref{fig:ch5.embedding}(a). A levelset function is sampled on a doubly refined grid (left); a segmented curve $\partial\Omega_h$ is generated to approximate the boundary of the geometric domain (right).}
 	\label{fig_bdry}
 	\end{figure}
 
@@ -500,15 +445,15 @@ We have thus far assumed that our solution satisfies the Dirichlet boundary cond
 Here, we introduce the Dirichlet condition as a constraint. Specifically, we require that the $L^2$ inner product of the solution and an arbitrary function $\vec w\in (H^{-1/2}(\Gamma_d))^2$ is the same as the inner product of the Dirichlet data $\vec u_0$ with $\vec w$. This makes the problem a constrained minimization.
 
 \subsection{Discretizing the Dirichlet problem}
-In order to discretize the Dirichlet condition in the weak formulation, we approximate $(H^{-1/2}(\Gamma_d))^2$ using a subspace $\Lambda_x^h\times\Lambda_y^h=P_0(\mathcal T^{x}\cap \Gamma_d^h)\times P_0(\mathcal T^y\cap\Gamma_d^h)$, which is composed of piecewise constant functions over $x$ and $y$ component grid cells that intersect the Dirichlet boundary. Here we use $\Gamma_d^h$ to denote the portion of $\partial\Omega^h$ over which the Dirichlet constraint is being enforced. We call any $x$ or $y$ cell $T^i$ with $T^i\cap\partial\Omega^h\neq\emptyset$ a boundary cell. The superscript $i$ is used to denote whether the cell is in the $x$ or $y$ grids with $i=1$ signifying an $x$ cell and $i=2$ signifying a $y$ cell. We use $\vec w_{T^i}=\chi_{T^i}(\vec x)\vec e_{i}$ as the basis functions for $\Lambda_x^h\times\Lambda_y^h=P_0(\mathcal T^{x}\cap \Gamma_d^h)\times P_0(\mathcal T^y\cap\Gamma_d^h)$. Here, $\chi_{T^i}(\vec x)$ is the characteristic function of the cell $T^i$:
+In order to discretize the Dirichlet condition in the weak formulation, we approximate $(H^{-1/2}(\Gamma_d))^2$ using a subspace $\Lambda_x^h\times\Lambda_y^h=P_0(\calT^{x}\cap \Gamma_d^h)\times P_0(\calT^y\cap\Gamma_d^h)$, which is composed of piecewise constant functions over $x$ and $y$ component grid cells that intersect the Dirichlet boundary. Here we use $\Gamma_d^h$ to denote the portion of $\partial\Omega^h$ over which the Dirichlet constraint is being enforced. We call any $x$ or $y$ cell $T^i$ with $T^i\cap\partial\Omega^h\neq\emptyset$ a boundary cell. The superscript $i$ is used to denote whether the cell is in the $x$ or $y$ grids with $i=1$ signifying an $x$ cell and $i=2$ signifying a $y$ cell. We use $\vec w_{T^i}=\chi_{T^i}(\vec x)\vec e_{i}$ as the basis functions for $\Lambda_x^h\times\Lambda_y^h=P_0(\calT^{x}\cap \Gamma_d^h)\times P_0(\calT^y\cap\Gamma_d^h)$. Here, $\chi_{T^i}(\vec x)$ is the characteristic function of the cell $T^i$:
 $$
 \chi_{T^i}(x)=\left\{\begin{array}{c} 1, \ \vec x\in{T^i}\\ 0, \ \vec x\notin{T^i}.\end{array}\right.
 $$
 Note that we have one basis function per boundary $x$ or $y$ cell. If we use $N_{xd}$ and $N_{yd}$ to denote the number of $x$ and $y$ boundary cells respectively, we can see that the dimension of the space $\Lambda_x^h\times\Lambda_y^h$ is $N_{xd}+N_{yd}$. 
 
-With this approximation, the Dirichlet boundary condition constraint can be expressed as a linear system $\mathbf B^h\vec u^h=\vec u_0^h$ ($\mathbf B^h\in\mathbb{R}^{{(N_{xd}+N_{yd})}\times{(N_x+N_y)}}$, $\vec u_0^h\in\mathbb{R}^{(N_{xd}+N_{yd})}$) where each equation enforces an integral constraint over the intersection of the discrete boundary $\Gamma_d^h$ with some $x$ or $y$ boundary cell $T^i$:
+With this approximation, the Dirichlet boundary condition constraint can be expressed as a linear system $\mathbf B^h\vec u^h=\vec u_0^h$ ($\mathbf B^h\in\bbR^{{(N_{xd}+N_{yd})}\times{(N_x+N_y)}}$, $\vec u_0^h\in\bbR^{(N_{xd}+N_{yd})}$) where each equation enforces an integral constraint over the intersection of the discrete boundary $\Gamma_d^h$ with some $x$ or $y$ boundary cell $T^i$:
 $$\sum_{k_i\in I_i}u_{ik_i}\int_{T^i\cap\Gamma_d^h}N_{ik_i}(\vec x)\,ds=\int_{T^i\cap\Gamma_d^h}u_{0i}(\vec x)\,ds$$
-where $\vec u_0=(u_{01},u_{02})$. In practice, we evaluate the integral for a given boundary cell $T^i$ over the portion of the Dirichlet boundary curve $T^i\cap\Gamma_d^h$ from the four subquadrilaterals of $T^i$ arising from the doubly refined grid (as discussed in section \ref{sec:discrete_geometric_rep}). This is simple because in each of these subquadrilaterals $\Gamma_d^h$ is just a single line segment. We use the following approximation for the right hand side terms in the constraint system:
+where $\vec u_0=(u_{01},u_{02})$. In practice, we evaluate the integral for a given boundary cell $T^i$ over the portion of the Dirichlet boundary curve $T^i\cap\Gamma_d^h$ from the four subquadrilaterals of $T^i$ arising from the doubly refined grid (as discussed in section \ref{sec:ch5.discretizationrete_geometric_rep}). This is simple because in each of these subquadrilaterals $\Gamma_d^h$ is just a single line segment. We use the following approximation for the right hand side terms in the constraint system:
 $$\int_{T^i\cap\Gamma_d^h}u_{0i}(\vec x)\,ds=\sum_{j=1}^4\int_{\omega^i_j\cap\Gamma_d^h}u_{0i}(\vec x)\,ds\approx \sum_{j=1}^4u_{0i}(c(\omega^i_j\cap\Gamma_d^h)) \int_{\omega^i_j\cap\Gamma_d^h}1\,ds$$
 where $\omega^i_j$ is one of the four subquadrilaterals of the cell $T^i$ and $c(\omega^i_j\cap\Gamma_d^h)$ is the midpoint of the segment $\omega^i_j\cap\Gamma_d^h$. We use the same treatment for the entries in the matrix on the left hand side:
 $$
@@ -528,7 +473,7 @@ The discrete constrained minimization problem can be solved using a Lagrange mul
 	\vec f^{h}\\ \vec 0\\ \vec u_0^h
 	\end{array}\right).
 \end{eqnarray}
-There is one Lagrange multiplier degree of freedom per Dirichlet constraint. In other words, $\vec \lambda^h$ is in $\mathbb{R}^{(N_{xd}+N_{yd})}$. When we consider boundary equations in the sections that follow, we temporarily eliminate pressure variables $\vec p^{h}$ with the following substitution $\mathbf L^h=\mathbf L_u^{h}-{\mathbf G^{h}}^{T}(\mathbf D_p^h)^{-1}\mathbf G^h$:
+There is one Lagrange multiplier degree of freedom per Dirichlet constraint. In other words, $\vec \lambda^h$ is in $\bbR^{(N_{xd}+N_{yd})}$. When we consider boundary equations in the sections that follow, we temporarily eliminate pressure variables $\vec p^{h}$ with the following substitution $\mathbf L^h=\mathbf L_u^{h}-{\mathbf G^{h}}^{T}(\mathbf D_p^h)^{-1}\mathbf G^h$:
 \begin{eqnarray}\label{UnaugmentedKKTSystem}
 	\left(\begin{array}{cc}
 	\mathbf L^h & {\mathbf B^h}^T\\
@@ -542,20 +487,20 @@ There is one Lagrange multiplier degree of freedom per Dirichlet constraint. In 
 This system is extremely ill-conditioned for nearly incompressible materials, however it will simplify the exposition of the forthcoming discussion of Dirichlet boundary condition treatment. Furthermore, when performing equation relaxation in our multigrid solver, we temporarily perform this elimination when treating equations near the boundary of the domain. Before discussing our geometric multigrid solution approach for these systems of equations, we would like to first discuss some important aspects of the Dirichlet system. Our treatment of the Dirichlet condition is somewhat nonstandard and we list here a few important details related to the constraint matrix $\mathbf B^h$.
 	
 \begin{enumerate}
-	\item $\mathbf B^h$ consists of two decoupled blocks. There is one block for the $x$ boundary equations and one for the $y$ equations. The only non-zero columns of $\mathbf B^h$ are associated with nodes that are incident on an $x$ or $y$ boundary cell. Therefore, for sufficiently interior degrees of freedom, the KKT system is exactly the same as  \eqref{ALESystem} or \eqref{eqn_unaugmentation}. That is, although the constraint matrix is in $\mathbb{R}^{(N_{xd}+N_{yd})\times (N_x+N_y)}$, it really only acts on a small subset of the $N_x+N_y$ displacement degrees of freedom.
-	\item $\mathbf B^h\in \mathbb{R}^{(N_{xd}+N_{yd})\times (N_x+N_y)}$, where $(N_{xd}+N_{yd})<(N_x+N_y)$. In fact,
+	\item $\mathbf B^h$ consists of two decoupled blocks. There is one block for the $x$ boundary equations and one for the $y$ equations. The only non-zero columns of $\mathbf B^h$ are associated with nodes that are incident on an $x$ or $y$ boundary cell. Therefore, for sufficiently interior degrees of freedom, the KKT system is exactly the same as  \eqref{ALESystem} or \eqref{eqn_unaugmentation}. That is, although the constraint matrix is in $\bbR^{(N_{xd}+N_{yd})\times (N_x+N_y)}$, it really only acts on a small subset of the $N_x+N_y$ displacement degrees of freedom.
+	\item $\mathbf B^h\in \bbR^{(N_{xd}+N_{yd})\times (N_x+N_y)}$, where $(N_{xd}+N_{yd})<(N_x+N_y)$. In fact,
 	\begin{eqnarray*}
 	\mathbf B^h=\left(\begin{array}{cc}\mathbf B^x & \mathbf 0\\ \mathbf 0 & \mathbf B^y \end{array}\right),
 	\end{eqnarray*}
-	where $\mathbf B^x\in \mathbb{R}^{N_{xd}\times N_x}$ and $\mathbf B^y\in \mathbb{R}^{N_{yd}\times N_y}$.
+	where $\mathbf B^x\in \bbR^{N_{xd}\times N_x}$ and $\mathbf B^y\in \bbR^{N_{yd}\times N_y}$.
 	However, it can be shown that $\mathbf B^h$ has full row rank. We refer the reader to the work \cite{BVZST10} for a more detailed discussion of why this is so.
-	\item Our numerical linear algebra approach to the problem is based on the construction of a (full column rank) matrix $\mathbf Z^h\in \mathbb{R}^{(N_x+N_y)\times((N_x+N_y)-(N_{xd}+N_{yd}))}$ whose columns span the kernel space of $\mathbf B^h$. Since $\mathbf B^h$ has full row rank, there exists a column permutation $\mathcal P$, such that $\mathbf B^h\mathcal P=\left[\mathbf B_m|\mathbf B_{n-m}\right]$, where $\mathbf B_m\in\mathbb{R}^{(N_{xd}+N_{yd})\times(N_{xd}+N_{yd})}$ is non-singular and $\mathbf B_{m-n}\in\mathbb{R}^{(N_{xd}+N_{yd})\times((N_x+N_y)-(N_{xd}+N_{yd}))}$. With this permutation, we can construct a so called fundamental basis for the null-space of $\mathbf B^h \mathcal P$: 
+	\item Our numerical linear algebra approach to the problem is based on the construction of a (full column rank) matrix $\mathbf Z^h\in \bbR^{(N_x+N_y)\times((N_x+N_y)-(N_{xd}+N_{yd}))}$ whose columns span the kernel space of $\mathbf B^h$. Since $\mathbf B^h$ has full row rank, there exists a column permutation $\mathcal P$, such that $\mathbf B^h\mathcal P=\left[\mathbf B_m|\mathbf B_{n-m}\right]$, where $\mathbf B_m\in\bbR^{(N_{xd}+N_{yd})\times(N_{xd}+N_{yd})}$ is non-singular and $\mathbf B_{m-n}\in\bbR^{(N_{xd}+N_{yd})\times((N_x+N_y)-(N_{xd}+N_{yd}))}$. With this permutation, we can construct a so called fundamental basis for the null-space of $\mathbf B^h \mathcal P$: 
 \begin{eqnarray}\label{eq_Z}
 \mathbf Z^h=\left[\begin{array}{c}-\mathbf B_m^{-1}\mathbf B_{n-m}\\ \mathbf I \end{array}\right].
 \end{eqnarray}
 	\item The vector 
 	\begin{eqnarray}\label{eq_c}\vec c^h=\left[\begin{array}{c}\mathbf B_m^{-1}\vec u_0^h\\ 0\end{array}\right]\end{eqnarray}
-	satisfies $\mathbf B^h\mathcal P \vec c^h=\vec u_0^h$. Therefore, all solutions can be expressed as $\vec u^h=\mathcal P(\vec c^h+\mathbf Z^h \vec v^h)$ with $\mathbf v^h\in \mathbb{R}^{((N_x+N_y)-(N_{xd}+N_{yd}))}$.
+	satisfies $\mathbf B^h\mathcal P \vec c^h=\vec u_0^h$. Therefore, all solutions can be expressed as $\vec u^h=\mathcal P(\vec c^h+\mathbf Z^h \vec v^h)$ with $\mathbf v^h\in \bbR^{((N_x+N_y)-(N_{xd}+N_{yd}))}$.
 	\item Our construction of a null-space for the Dirichlet constraint allows us to eliminate the Lagrange multipliers. Substituting $\vec u^h=\mathcal P(\vec c^h+\mathbf Z^h\vec v^h)$ in  \eqref{UnaugmentedKKTSystem}, we have
 	$$\mathbf L^h \mathcal P(\vec c^h+\mathbf Z^h \vec v^h)+ {\mathbf B^h}^T\vec \lambda^h=\vec f^h$$
 	Left multiplying this equation with $(\mathcal P\mathbf Z^h)^T$, and applying the property $\mathbf B^h\mathcal P \mathbf Z^h=0$, we have
@@ -653,11 +598,11 @@ constructed as follows:
 \item A level set function is computed over the respective doubly-refined subgrids $\mathcal{G}^\phi_h,\mathcal{G}^\phi_{2h},\mathcal{G}^\phi_{4h},\ldots$ for each level. Obviously,
   coarser levels may fail to resolve certain high-frequency features of the domain geometry, leading to possible discrepancies between the discrete systems at various levels, which will
   be further addressed in our discussion of the smoother and transfer operators. 
-\item Using the level set values associated with a given grid, we generate the discrete domains $\mathcal{T}^x_{2^lh}, \mathcal{T}^y_{2^lh}, \mathcal{T}^p_{2^lh}$, and
+\item Using the level set values associated with a given grid, we generate the discrete domains $\calT^x_{2^lh}, \calT^y_{2^lh}, \calT^p_{2^lh}$, and
  allocate the unknown arrays
   $\vec{u}^{2^lh}$ and $\vec{p}^{2^lh}$ as well as the right-hand sides $\vec{f}^{2^lh}$ and $\vec{f}^{2^lh}_p$ of the respective equations. 
-    The discrete operators $\mathbf{L}_u^{2^lh}$, $\mathbf{G}^{2^lh}$ and $\mathbf{D}_p^{2^lh}$ of the system (\ref{DiscreteALESystem}) are likewise defined on the discrete domain
-    associated with the $l$-th level of the hierarchy, following the same process detailed in section \ref{sec:disc}.
+    The discrete operators $\mathbf{L}_u^{2^lh}$, $\mathbf{G}^{2^lh}$ and $\mathbf{D}_p^{2^lh}$ of the system (\ref{eq:ch5.ALEsystem.discrete}) are likewise defined on the discrete domain
+    associated with the $l$-th level of the hierarchy, following the same process detailed in section \ref{sec:ch5.discretization}.
   Note that, although at the finest level of
   the hierarchy we have used $\vec{f}_p^h=0$ by virtue of our discretization, the right hand side $\vec{f}^{2^lh}_p$ for coarser levels ($l\geq 1$) will generally be nonzero in the
   Multigrid Correction Scheme (see Algorithm \ref{alg_mg}).
@@ -818,7 +763,7 @@ This derives a sparser distributive relaxation, shown in Algorithm \ref{alg_fdfe
 The previous two types of distributive relaxation are not applicable for variables near the domain boundary. In fact, near the boundary, some of the variables in the distribution stencil may not exist. We follow the idea in \cite{zhu2009efficient}, and temporarily build an unaugmented system in the boundary band (see Figure \ref{fig_bdry_band}, left).
 
 \subsection{Boundary relaxation}
-Near the domain boundary, the previous distributive relaxation is not well defined; a special relaxation is required. In the Neumann boundary condition case, we eliminate $p$ from the augmented system \eqref{DiscreteALESystem} by left multiplying the equation with 
+Near the domain boundary, the previous distributive relaxation is not well defined; a special relaxation is required. In the Neumann boundary condition case, we eliminate $p$ from the augmented system \eqref{eq:ch5.ALEsystem.discrete} by left multiplying the equation with 
 	$$
 	\mathbf{\hat U}=
 	\left(\begin{array}{cc}
@@ -1317,7 +1262,7 @@ Now that we have covered all the components of a multigrid method, we will next 
 %		transforming smoothers is applied for PDE constrained optimization problems including Navier-Stokes equations. 
 
 	% stability issue and staggered mesh fem
-%	When applying mixed finite element method to Stokes and Navier-Stokes equations, an inf-sup condition or Ladyzhenskaya-Babuska-Brezzi condition need to be satisfied in order to keep the equation stable \cite{arnold1984stable}. When applying a low-order mixed finite element method, special treatment is required in order to keep the system stable. A number of authors have addressed this issue in \cite{MR753954,MR548867,MR1320897,bochev2007stabilization}. Han et. al. introduced a new mixed finite element formulation for Stokes equation \cite{han1998new}, in which the velocity components and pressure are defined on a staggered grid. The marker and cell method (MAC) can be derived from the resulting finite element method. This method is then used in Navier-Stokes equation in \cite{han2008mixed}.
+%	When applying mixed finite element method to Stokes and Navier-Stokes equations, an inf-sup condition or Ladyzhenskaya-Babuska-Brezzi condition need to be satisfied in order to keep the equation stable \cite{arnold1984stable}. When applying a low-order mixed finite element method, special treatment is required in order to keep the system stable. A number of authors have addressed this issue in \cite{MR753954,MR548867,MR1320897,bochev2007stabilization}. Han et. al. introduced a new mixed finite element formulation for Stokes equation \cite{Han.Houde98}, in which the velocity components and pressure are defined on a staggered grid. The marker and cell method (MAC) can be derived from the resulting finite element method. This method is then used in Navier-Stokes equation in \cite{han2008mixed}.
 	%mixed finite element for elasticity
 %	For nonlinear hyperelasticity model, a stable mixed finite element method is also proposed in \cite{klaas1999stabilized}.
 

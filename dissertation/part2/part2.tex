@@ -37,7 +37,7 @@ We note that the relevant physics generally determine the jumps in the solution 
 \begin{align}
 -\nabla \cdot \bssigma(\bfu) & = \bff, \quad \in \Omega; \\
 \bfu & = \bfu_0, \quad \in \dOmega_d; \\
-\bssigma(\bfu) \cdot \hatn & = \bstau, \quad \in \dOmega_n;
+\bssigma(\bfu) \cdot \hatn & = \bfg, \quad \in \dOmega_n;
 \end{align}
 \end{subequations}
 where
@@ -47,20 +47,20 @@ where
 \item $\bssigma$ is the Cauchy stress tensor;
 \item $\bff$ is the external force per unit volume;
 \item $\bfu_0$ is the prescribed Dirichlet boundary displacements over $\dOmega_d \subset \dOmega$; and
-\item $\bstau$ is the prescribed external surface traction over $\dOmega_n \subset \dOmega$.
+\item $\bfg$ is the prescribed external surface traction over $\dOmega_n \subset \dOmega$.
 \end{itemize}
 In linear elasticity, the stress $\bssigma(\bfu)$ is linearly dependent on the Cauchy strain $\bsepsilon(\bfu)$ via
 \begin{align*}
-\bsepsilon(\bfu) & = \frac{1}{2} \lrp{\nabla \bfu + \lrp{\nabla \bfu}^T}, \\
+\bsepsilon(\bfu) & = \frac{1}{2} \lrp{\nabla \bfu + \lrp{\nabla \bfu}^t}, \\
 \bssigma(\bfu)   & = 2 \mu \bsepsilon(\bfu) + \lambda \lrp{\tr \bsepsilon(\bfu)} \bfI \\
-                 & = \mu \lrp{\nabla \bfu + \lrp{\nabla \bfu}^T} + \lambda \lrp{\nabla \cdot \bfu} \bfI.
+                 & = \mu \lrp{\nabla \bfu + \lrp{\nabla \bfu}^t} + \lambda \lrp{\nabla \cdot \bfu} \bfI.
 \end{align*}
 Therefore, the equations \eqref{eq:pt2.elasticity} are equivalently formulated as
 \begin{subequations} \label{eq:pt2.LE}
 \begin{align}
--\lrp{\Delta \bfI + (\lambda + \mu) \nabla \nabla^T} \bfu & = \bff \quad \in \Omega \label{eq:pt2.LE.PDE} \\
+-\lrp{\Delta \bfI + (\lambda + \mu) \nabla \nabla^t} \bfu & = \bff \quad \in \Omega \label{eq:pt2.LE.PDE} \\
 \bfu & = \bfu_0 \quad \in \dOmega_d \label{eq:pt2.LE.D} \\
-\mu \lrp{\bfu \cdot \hatn + \nabla \lrp{\bfu \cdot \hatn}} + \lambda \lrp{\nabla \cdot \bfu} \hatn & = \bstau \quad \in \dOmega_n \label{eq:pt2.LE.N}.
+\mu \lrp{\bfu \cdot \hatn + \nabla \lrp{\bfu \cdot \hatn}} + \lambda \lrp{\nabla \cdot \bfu} \hatn & = \bfg \quad \in \dOmega_n \label{eq:pt2.LE.N}.
 \end{align}
 \end{subequations}
 

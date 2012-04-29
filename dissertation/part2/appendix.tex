@@ -60,7 +60,7 @@ For embedded Neumann discretizations, to simplify implementation, we assume that
 
 \chapter{Double-Wide Constraint Conditioning} \label{ch:pt2.appendix.constraintconditioning}
 
-In the context of the constraint aggregation algorithm for the discretization of Dirichlet boundary conditions and interfacial jump conditions for Poisson's equation, as mentioned in \S\ref{subsubsec:ch4.constraintaggregation}, we found that the double-wide constraints introduced in \cite{Bedrossian10} present significant conditioning issues in $3$ dimensions that do not exist in $2$ dimensions. Table~\ref{tab:pt2.constraintconditioning} shows the condition numbers and the number of conjugate gradient solve iterations for the $Z^tAZ$ matrices resulting from the discretization of a simple Dirichlet problem and from the discretization of a similarly simple interface problem using each of two alternate discretizations $\bfLambda^h$ of the Lagrange multiplier space $\bfLambda$: $\bfLambda^h_2$, which corresponds to the double-wide constraints; and $\bfLambda^h_a$, which corresponds to the aggregate constraints constructed via the algorithm described in \S\ref{subsubsec:ch4.constraintaggregation}. We calculated these statistics using PETSc in exactly the same way as for Table~\ref{tab:ch4.examples.interface}. This includes applying Jacobi preconditioning and then solving with (incomplete Cholesky-preconditioned) conjugate gradient to a relative residual norm of $2.3 \times 10^{-13}$ of the Jacobi preconditioned system. Clearly, the conditioning of the $Z^tAZ$ system arising from the double-wide constraints is several orders of magnitude worse than that arising from the constraint aggregation algorithm described in \S\ref{subsubsec:ch4.constraintaggregation}.
+In the context of the constraint aggregation algorithm for the discretization of Dirichlet boundary conditions and interfacial jump conditions for Poisson's equation, as mentioned in \S\ref{subsubsec:ch4.constraintaggregation}, we found that the double-wide constraints introduced in \cite{Bedrossian10} present significant conditioning issues in $3$ dimensions that do not exist in $2$ dimensions. Table~\ref{tab:pt2.constraintconditioning} shows the condition numbers and the number of conjugate gradient solve iterations for the $Z^tAZ$ matrices resulting from the discretization of a simple Dirichlet problem and from the discretization of a similarly simple interface problem using each of two alternate discretizations $\Lambda^h$ of the Lagrange multiplier space $\Lambda$: $\Lambda^h_2$, which corresponds to the double-wide constraints; and $\Lambda^h_a$, which corresponds to the aggregate constraints constructed via the algorithm described in \S\ref{subsubsec:ch4.constraintaggregation}. We calculated these statistics using PETSc in exactly the same way as for Table~\ref{tab:ch4.examples.interface}. This includes applying Jacobi preconditioning and then solving with (incomplete Cholesky-preconditioned) conjugate gradient to a relative residual norm of $2.3 \times 10^{-13}$ of the Jacobi preconditioned system. Clearly, the conditioning of the $Z^tAZ$ system arising from the double-wide constraints is several orders of magnitude worse than that arising from the constraint aggregation algorithm described in \S\ref{subsubsec:ch4.constraintaggregation}.
 
 \begin{table}[htbp]
 \begin{center}
@@ -68,10 +68,10 @@ In the context of the constraint aggregation algorithm for the discretization of
 \hline
 Test case & cond. \# (no ICC) & cond. \# (w/ICC) & \# CG iter. & \# PCG iter. \\
 \hline
-Dirichlet, $\bfLambda^h = \bfLambda^h_2$ & $3.7 \times 10^{12}$ & $1.1 \times 10^{12}$ & $59846$ & $61568$ \\
-Interface, $\bfLambda^h = \bfLambda^h_2$ & $4.4 \times 10^{12}$ & $1.4 \times 10^{13}$ & $97061$ & $80225$ \\
-Dirichlet, $\bfLambda^h = \bfLambda^h_a$ & $9.3 \times 10^{ 2}$ & $2.3 \times 10^{ 1}$ &   $200$ &    $44$ \\
-Interface, $\bfLambda^h = \bfLambda^h_a$ & $3.9 \times 10^{ 3}$ & $4.1 \times 10^{ 1}$ &   $494$ &    $61$ \\
+Dirichlet, $\Lambda^h = \Lambda^h_2$ & $3.7 \times 10^{12}$ & $1.1 \times 10^{12}$ & $59846$ & $61568$ \\
+Interface, $\Lambda^h = \Lambda^h_2$ & $4.4 \times 10^{12}$ & $1.4 \times 10^{13}$ & $97061$ & $80225$ \\
+Dirichlet, $\Lambda^h = \Lambda^h_a$ & $9.3 \times 10^{ 2}$ & $2.3 \times 10^{ 1}$ &   $200$ &    $44$ \\
+Interface, $\Lambda^h = \Lambda^h_a$ & $3.9 \times 10^{ 3}$ & $4.1 \times 10^{ 1}$ &   $494$ &    $61$ \\
 \hline
 \end{tabular}
 \end{center}
