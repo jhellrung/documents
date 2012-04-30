@@ -468,7 +468,7 @@ Similarly, the Laplacian operator in \eqref{eq:ch5.distributive.transform} is di
 M_p := \frac{1}{h^2} \left] \begin{matrix} +1/3 & +1/3 & +1/3 \\ +1/3 & -8/3 & +1/3 \\ +1/3 & +1/3 & +1/3 \end{matrix} \right[.
 \end{equation*}
 
-Although the linear system $\tilde{A} \tilde{M}$ is not strictly block triangular, our numerical results (\S\ref{sec:ch5.examples}) show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently.
+Although the linear system $\tilde{A} \tilde{M}$ is not strictly block triangular, our numerical results in \S\ref{sec:ch5.examples} show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently.
 
 \subsubsection{High order defect correction}
 
@@ -568,7 +568,7 @@ and then applying the correction $\vec{v} \leftarrow \vec{v} + \delta \vec{e}_i$
 
 \subsection{Coarsening}
 
-In contrast to our smoothing operator discussed in the preceding subsections, our grid transfer operators are relatively straightforward. On the interior of the domain, we restrict fine grid residuals to the coarse grid by applying a restriction operator $R$ with the stencils illustrated in Figure~\ref{fig:ch5.restriction}. We consider two kinds of prolongation operators for our numerical examples in \S\ref{sec:ch5.examples}. First, we consider simply the transpose of the restriction operator: $P_{\text{lo}} := 4 R^t$. Second, we also consider piecewise bilinear interpolation for $\vec{u}$ in combination with the same pressure prolongation given by $P_{\text{lo}}$, which we denote as $P_{\text{hi}}$.
+In contrast to our smoothing operator discussed in the preceding subsections, our grid transfer operators are relatively straightforward. On the interior of the domain, we restrict fine grid residuals to the coarse grid by applying a restriction operator $R$ with the stencils illustrated in Figure~\ref{fig:ch5.restriction}. We consider two kinds of prolongation operators for our numerical examples in \S\ref{subsec:ch5.examples.multigrid}. First, we consider simply the transpose of the restriction operator: $P_{\text{lo}} := 4 R^t$. Second, we also consider piecewise bilinear interpolation for $\vec{u}$ in combination with the same pressure prolongation given by $P_{\text{lo}}$, which we denote as $P_{\text{hi}}$.
 
 \setlength{\unitlength}{1.2cm}
 \begin{figure}[htbp]
@@ -635,176 +635,132 @@ However, near the boundary, there is no guarantee that all dependencies of the c
 
 We implement prolongation distributively, i.e., we iterate over the coarse grid degrees of freedom and distribute a coarse grid scalar correction to all appropriate fine level degrees of freedom. Near the domain boundary this is equivalent to prolongating a zero correction from exterior coarse grid vertices, which we believe is reasonable. Notice that such a prolongation may shift the fine grid solution away from a fundamental basis solution. Hence we apply a projection onto the solution space after prolongation. We use the projection $\vec{u}' := \vec{c} + Z Q \vec{u}$ where $\vec{u}$ is the (possibly) shifted fine grid solution and $Q$ is a projection which simply removes those components corresponding to independent degrees of freedom with respect to the aggregate constraint system.
 
+\section{Numerical Examples} \label{sec:ch5.examples}
+
+We numerically investigate two aspects of our discretization: order of convergence and multigrid performance. In this section, we apply our method on various domains with Neumann or Dirichlet boundary conditions and with a wide range of Poisson's ratios. We considered three deformations defined on three geometric domains:
+
+\begin{enumerate}
+
+\item \textbf{Keyhole domain.} A Keyhole domain enclosed by a smooth curve connecting $8$ tangential circles with centers
+\begin{align*}
+\bfc_1 & = (0.2500, 0.2500); & \bfs_1 & = (0.5000, 0.6875); \\
+\bfc_2 & = (0.7500, 0.2500); & \bfs_2 & = (0.5000, 0.3125); \\
+\bfc_3 & = (0.2500, 0.7500); & \bfs_3 & = (0.3125, 0.5000); \\
+\bfc_4 & = (0.7500, 0.7500); & \bfs_4 & = (0.6875, 0.5000); \\
+\end{align*}
+and radius $0.2$ for the ``$\bfc$'' circles and $r_s = \sqrt{17}/4 - 0.2$ for the ``$\bfs$'' circles. The radius $r_s$ is chosen such that the circle curves are tangential and hence generate a smooth boundary. The boundary of the keyhole domain can also be represented by the zero isocontour of the level set function
+\begin{equation*}
+\varphi(\bfx) := \max \set{ \min \set{ \alpha \lrp{\bfx, \bfzero, r_0}, \min_i \set{ \alpha \lrp{\bfx, \bfc_i, 0.2} }}, -\min_i \set{ \alpha \lrp{\bfx, \bfs_i, r_s} } }
+\end{equation*}
+where
+\begin{equation*}
+\alpha \lrp{\bfx, \bfx_0, r} := \norm{\bfx - \bfx_0} - r, \quad
+r_0 := \norm{\frac{0.2}{\sqrt{17}} (4, 1) - (0.25, 0.25)}.
+\end{equation*}
+
+A constant divergence deformation is considered, giving the exact boundary conditions and the exact solution for the purpose of error computation:
+\begin{align*}
+\phi_1(x,y) & = 2x + \frac{1}{2} \cos \pi x \sin \pi y, \\
+\phi_2(x,y) & = 2y - \frac{1}{2} \sin \pi x \cos \pi y.
+\end{align*}
+
+\setlength{\figureheight}{0.40\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Undeformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/ginkgo}}
+\subfigure[Deformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/ginkgo_deformed}}
+\caption{Keyhole domain.}
+\end{center}
+\end{figure}
+
+\item \textbf{Flower domain.} A flower-shaped domain with inner radius $0.2$ and outer radius $0.4$. We represent the boundary of this domain by the zero isocontour of the level set function
+\begin{equation*}
+\varphi(\bfx) := \alpha \lrp{\bfx, \mathbf{0.5}, 0.3 + 0.1 \cos 5\theta},
+\end{equation*}
+where $\mathbf{0.5} := (0.5,0.5)$ and $\theta$ is the argument of $\bfx$. We use the following deformation with spatially varying divergence:
+\begin{align*}
+\phi_1(x,y) := \frac{2x}{\sqrt{\pi}} \cos \frac{\pi}{2} y, \\
+\phi_2(x,y) := \frac{2x}{\sqrt{\pi}} \sin \frac{\pi}{2} y.
+\end{align*}
+
+\setlength{\figureheight}{0.40\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Undeformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/flower}}
+\subfigure[Deformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/flower_deformed}}
+\caption{Flower domain.}
+\end{center}
+\end{figure}
+
+\item \textbf{Spiral domain} We represent the boundary of the spiral domain as the zero isocontour of the level set function
+\begin{equation*}
+\varphi(\bfx) := r(\bfy) - \lrp{0.33 + 0.08 \cos 5\theta(\bfy)^{1/3}}
+\end{equation*}
+where $\bfy = \bfy(\bfx)$ is $\bfx - (0.5,0.5)$ rotated around (0.5,0.5) by $\theta = 14 \lrp{2r(\bfx)}^{1/6}$. We use the deformation
+\begin{align*}
+\phi_1(x,y) & = \lrp{\frac{1}{2} x + \frac{1}{2}} \cos \lrp{\frac{\pi}{6} + \frac{2}{3} \pi y}, \\
+\phi_2(x,y) & = \lrp{\frac{1}{2} x + \frac{1}{2}} \sin \lrp{\frac{\pi}{6} + \frac{2}{3} \pi y}.
+\end{align*}
+
+\setlength{\figureheight}{0.40\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Undeformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/spiral}}
+\subfigure[Deformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/spiral_deformed}}
+\caption{Spiral domain.}
+\end{center}
+\end{figure}
+
+\end{enumerate}
+
+\subsection{Convergence} \label{subsec:ch5.examples.convergence}
+
+All our testing domains are embedded in a $[0,1]^2$ domain, and we discretize this square domain with a regular grid of different resolutions ranging from 32 to 1024 in each direction. We plotted $\log_2 |\vec u^{\mbox{\tiny{exact}}}-\vec u|_{\infty}$ versus $\log_2 \mbox{resolution}$ and estimated the solution accuracy order by fitting the data with a linear function. We remove the Neumann boundary condition null space by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16]^2$. From the plotted error convergence behavior, we observe a second-order convergence for all three types of domains (see Figures \ref{ginkgo_squeeze_noth}, \ref{egg_flower_noth}, and \ref{fan_spiral_noth}) for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters including near-incompressible materials. We notice that the order of accuracy is slightly smaller for domains with complicated boundaries. An important source of the inaccuracy is introduced by the inconsistent domain discretization at different resolutions.
+
+\begin{figure}[ht]\centering
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol.png}
+\vspace*{-.05in}
+\caption{Order of accuracy, $\rho$, for keyhole domain; top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
+\vspace*{-.07in}
+\label{ginkgo_squeeze_noth}
+\end{figure}
+
+\begin{figure}[h!]\centering
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol.png}
+\vspace*{-.05in}
+\caption{Order of accuracy, $\rho$, for flower domain. Top: Neumann boundary condition, bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
+\vspace*{-.07in}
+\label{egg_flower_noth}
+\end{figure}
+
+\begin{figure}[h!]\centering
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth.png}
+\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol.png}
+\vspace*{-.05in}
+\caption{Order of accuracy, $\rho$, for spiral domain. Top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
+\vspace*{-.07in}
+\label{fan_spiral_noth}
+\end{figure}
+
 \begin{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Numerical Examples} \label{sec:ch5.examples}
-	We investigate two aspects of our algorithm: discretization error and multigrid efficiency. In this section, we apply our method on various domains with Neumann or Dirichlet boundary conditions and with a wide range of Poisson's ratios.
-	We considered three deformations defined on three geometric domains:
-%\subsection{Disk domain}
-%
-%Domain description: disk with radius 0.42125.\\
-%
-%Level set function:
-%\begin{equation}
-%(x-0.5)^{2}+(y-0.5)^{2}-0.42125^{2};
-%\end{equation}
-%
-%Deformation:
-%\begin{equation}
-%u(x,y)=0.1653x^{2}+0.0832xy+3.2546y^{2}+1.245x-1.6313y+7.3;
-%\end{equation}
-%\begin{equation}
-%v(x,y)=0.232x^{2}+0.09314xy+0.1675y^{2}+5.9x-0.0312y+2.3343;
-%\end{equation}
-%
-%The current deformation is not good enough, we'll design a new one soon.
-%
-%\begin{figure}\centering
-%\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/disk.jpg}
-%\caption{disk domain}
-%\label{disk}
-%% \includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/flower_deformed.jpg}
-%% \caption{deformed flower domain}
-%% \label{flower_deformed}
-%\end{figure}
-%
-%\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr49_neu.png}
-%\vspace*{-.05in}
-%\caption{order of accuracy for Neumann problem on disk domain, Poisson ratio 0.49}
-%\vspace*{-.07in}
-%\label{quadratic_disk_pr49_neu}
-%\end{figure}
-%
-%\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr49_noth.png}
-%\vspace*{-.05in}
-%\caption{order of accuracy for Dirichlet problem on disk domain, Poisson ratio 0.49}
-%\vspace*{-.07in}
-%\label{quadratic_disk_pr49_noth}
-%\end{figure}
-%
-%\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr3_neu.png}
-%\vspace*{-.05in}
-%\caption{order of accuracy for Neumann problem on disk domain, Poisson ratio 0.3}
-%\vspace*{-.07in}
-%\label{quadratic_disk_pr3_neu}
-%\end{figure}
-%
-%\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr3_noth.png}
-%\vspace*{-.05in}
-%\caption{order of accuracy for Dirichlet problem on disk domain, Poisson ratio 0.3}
-%\vspace*{-.07in}
-%\label{quadratic_disk_pr3_oth}
-%\end{figure}
-\begin{enumerate}
-\item \textbf{Keyhole domain}
-	A Keyhole domain is enclosed by a smooth curve connecting 8 tangential circles with centers
-	\begin{eqnarray*}
-	\vec c_{1}=(0.25, 0.25);\quad
-	\vec c_{2}=(0.75, 0.25);\\
-	\vec c_{3}=(0.25, 0.75);\quad
-	\vec c_{4}=(0.75, 0.75);\\
-	\vec s_{1}=(0.5, 0.6875);\quad
-	\vec s_{2}=(0.5, 0.3125);\\
-	\vec s_{3}=(0.3125, 0.5);\quad
-	\vec s_{4}=(0.6875, 0.5);
-	\end{eqnarray*}
-	and radius $0.2$ for the first 4 circles and $r_s=\displaystyle\frac{\sqrt{17}}4-0.2$ for the last 4 circles. The radius $r_s$ is chosen such that the circle curves are tangential and hence generate a smooth boundary. The keyhole domain can also be represented by the zero levelset of the following function:
-	\begin{eqnarray*}
-	\varphi(\vec x)=\max\bigg{\{}\min\big{\{}  \mbox{dist}(\vec x,\vec 0, r_0 ) , \displaystyle\min_{i}\{\mbox{dist}(\vec x, \vec c_{i}, 0.2)\} \big{\}},-\displaystyle\min_{i}\{\mbox{dist}(\vec x,\vec s_i,r_s)\}\bigg{\}}
-	\end{eqnarray*}
-	where $\mbox{dist}(\mathbf x,\mathbf x_0,r)=|\mathbf x-\mathbf{x_0}|-r$, and $r_0=\left|\frac{0.2}{\sqrt{17}}(4,1)-(0.25,0.25)\right|$.
+\subsection{Multigrid} \label{subsec:ch5.examples.multigrid}
 
-	A constant divergence deformation is considered, giving the exact boundary conditions and the exact solution for the purpose of error computation.
-	\begin{eqnarray}
-	\phi_1(x,y)=2x+\frac12\cos{\pi x}\sin{\pi y}\\
-	\phi_2(x,y)=2y-\frac12\sin{\pi x}\cos{\pi y}
-	\end{eqnarray}
-
-	\begin{figure}[ht]\centering
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/ginkgo.jpg}
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/ginkgo_deformed.jpg}
-	\caption{Left: undeformed keyhole domain; right: deformed keyhole domain}
-	\label{ginkgo_deformed}
-	\end{figure}
-
-\item \textbf{Flower domain}
-	A flower-shaped domain with inner radius 0.2, outer radius 0.4 is considered with a levelset function:
-	\begin{equation*} \varphi(\vec x)=\mbox{dist}(\vec x,\vec 0.5, 0.3+0.1 \cos5\theta)\end{equation*}
-	where $\theta$ is the argument of $(x,y)$.
-	A deformation with spatially varying divergence is considered as an exact solution.
-	\begin{eqnarray}
-	\phi_1(x,y)=\frac{2x}{\sqrt{\pi}} \cos{\frac{\pi}2y}\\
-	\phi_2(x,y)=\frac{2x}{\sqrt{\pi}} \sin{\frac{\pi}2y}
-	\end{eqnarray}
-
-	\begin{figure}[ht]\centering
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/flower.jpg}
-	\label{flower}
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/flower_deformed.jpg}
-	\caption{Left: undeformed flower domain; right: deformed flower domain}
-	\label{flower_deformed}
-	\end{figure}
-
-\item \textbf{Spiral domain}
-	We consider a spiral shaped domain, defined by the zero levelset of
-	$$\varphi(\vec x)=r(\vec y)-(0.33+0.08\cos5\theta(\vec y)^{\frac{1}{3}})$$
-	where $\vec y$ is $\vec x-(0.5,0.5)$ rotated around $(0.5,0.5)$ by $\theta=14(2r(\vec x))^{\frac{1}{6}}$
-	and the deformation is given by:
-	\begin{eqnarray}
-	\phi_1(x,y)=\left(\frac12x+\frac12\right)\cos\left(\frac{\pi}{6}+\frac{2}{3}\pi y\right)\\
-	\phi_2(x,y)=\left(\frac12x+\frac12\right)\sin\left(\frac{\pi}{6}+\frac{2}{3}\pi y\right)
-	\end{eqnarray}
-
-	\begin{figure}[ht]\centering
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/spiral.jpg}
-	\label{spiral}
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/spiral_deformed.jpg}
-	\caption{Left: undeformed spiral domain, right: deformed spiral domain}
-	\label{spiral_deformed}
-	\end{figure}
-\end{enumerate}
-\subsection{Discretization error}
-	All our testing domains are embedded in a $[0,1]^2$ domain, and we discretize this square domain with a regular grid of different resolutions ranging from 32 to 1024 in each direction. We plotted $\log_2 |\vec u^{\mbox{\tiny{exact}}}-\vec u|_{\infty}$ versus $\log_2 \mbox{resolution}$ and estimated the solution accuracy order by fitting the data with a linear function. We remove the Neumann boundary condition null space by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16]^2$. From the plotted error convergence behavior, we observe a second-order convergence for all three types of domains (see Figures \ref{ginkgo_squeeze_noth}, \ref{egg_flower_noth}, and \ref{fan_spiral_noth}) for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters including near-incompressible materials. We notice that the order of accuracy is slightly smaller for domains with complicated boundaries. An important source of the inaccuracy is introduced by the inconsistent domain discretization at different resolutions.
-
-	\begin{figure}[ht]\centering
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol.png}
-	\vspace*{-.05in}
-	\caption{Order of accuracy, $\rho$, for keyhole domain; top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
-	\vspace*{-.07in}
-	\label{ginkgo_squeeze_noth}
-	\end{figure}
-
-	\begin{figure}[h!]\centering
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol.png}
-	\vspace*{-.05in}
-	\caption{Order of accuracy, $\rho$, for flower domain. Top: Neumann boundary condition, bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
-	\vspace*{-.07in}
-	\label{egg_flower_noth}
-	\end{figure}
-
-	\begin{figure}[h!]\centering
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol.png}
-	\vspace*{-.05in}
-	\caption{Order of accuracy, $\rho$, for spiral domain. Top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
-	\vspace*{-.07in}
-	\label{fan_spiral_noth}
-	\end{figure}
-
-\subsection{Multigrid efficiency}
 	We also investigated the efficiency of the multigrid methods. First, we consider a periodic boundary condition problem defined on $[0,1]^2$ and with the exact solution given by
 	\begin{eqnarray*}
 	\phi_1(x,y)=\sin{2\pi x}+\cos{2\pi y}\\
