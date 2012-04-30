@@ -24,11 +24,11 @@ Following the early methods of Hyman \cite{Hyman52} and Saul'ev \cite{Saul'ev63}
 
 The \emph{eXtended Finite Element Method} (XFEM) and related approaches in the finite element literature also make use of geometry embedded in regular elements. Although originally developed for crack-based field discontinuities in elasticity problems, these techniques are also used with embedded problems in irregular domains. Daux et al. first showed that these techniques can naturally capture embedded Neumann boundary conditions \cite{Daux00, Sukumar01}. These approaches are equivalent to the variational cut cell method of Almgren et al. in \cite{Almgren97}. Enforcement of Dirichlet constraints is more difficult with variational cut cell approaches \cite{Moes06, Lew.Adrian08} and typically involves a Lagrange multiplier or stabilization. Dolbow and Devan recently investigated the convergence of such approaches with incompressible materials and point out that much analysis in this context remains to be completed \cite{Dolbow04}. Despite the lack of thorough analysis, such XFEM approaches appear to be very accurate and have been used in many applications involving incompressible materials in irregular domains \cite{Wagner01, Chessa03, Coppola05, Gerstenberger08, Becker09}.
 
-There are also many \emph{Finite Difference Methods} (FDM) and \emph{Finite Volume Methods} (FVM) that utilize cut uniform grid cells. Many of these methods have been developed in the context of incompressible flow. For example, Almgren et al. use cut uniform bilinear cells to solve the Poisson equation for pressures in incompressible flow calculations \cite{Almgren97}. Marelle et al. use collocated grids and define define sub cell interface and boundary geometry in cut cells via level sets \cite{Marella05}. Ng et al. also use level set descriptions of the irregular domain and achieve second order accuracy in $L^{\infty}$ for incompressible flows \cite{Ng.YenTiang09}. The approach of Batty et al. is similar, but not as accurate \cite{Batty07}. Although not technically a cut cell approach, the immersed interface method has been used to improve accuracy for incompressible flow calculations in irregular domains \cite{Weigmann00, Rutka04, Li.Zhilin06b, Chen.Tianbing08, Rutka08, Xu.Sheng08}. Cut cell FDM and FVM have also been developed for incompressible and nearly incompressible elastic materials. Bijelonja et al. use cut cell FVM to enforce incompressibility more accurately than is typically seen with FEM \cite{Bijelonja06}. Beir\~{a}o da Veiga et al. use polygonal FVM cells to avoid remeshing with irregular domains \cite{BeiraodaVeiga09}. Barton et al. \cite{Barton10} and Hill et al. \cite{Hill10} use cut cells with Eulerian elastic/plastic flows. 
+There are also many \emph{Finite Difference Methods} (FDM) and \emph{Finite Volume Methods} (FVM) that utilize cut uniform grid cells. Many of these methods have been developed in the context of incompressible flow. For example, Almgren et al. use cut uniform bilinear cells to solve the Poisson equation for pressures in incompressible flow calculations \cite{Almgren97}. Marelle et al. use collocated grids and define define sub cell interface and boundary geometry in cut cells via level sets \cite{Marella05}. Ng et al. also use level set descriptions of the irregular domain and achieve second order accuracy in $L^{\infty}$ for incompressible flows \cite{Ng.YenTiang09}. The approach of Batty et al. is similar, but not as accurate \cite{Batty07}. Although not technically a cut cell approach, the immersed interface method has been used to improve accuracy for incompressible flow calculations in irregular domains \cite{Weigmann00, Rutka04, Li.Zhilin06b, Chen.Tianbing08, Rutka08, Xu.Sheng08}. Cut cell FDM and FVM have also been developed for incompressible and nearly incompressible elastic materials. Bijelonja et al. use cut cell FVM to enforce incompressibility more accurately than is typically seen with FEM \cite{Bijelonja06}. Beir\~{a}o da Veiga et al. use polygonal FVM cells to avoid remeshing with irregular domains \cite{BeiraodaVeiga09}. Barton et al. \cite{Barton10} and Hill et al. \cite{Hill10} use cut cells with Eulerian elastic/plastic flows.
 
 Many approaches have been proposed to solve elasticity equations in a scalable way at high resoultions. For this class of problems, iterative methods are usually employed rather than direct methods due to memory considerations. For iterative methods to be scalable, we mean that the method requires only a constant (and small) number of iterations, independent of the grid resolution, to obtain a solution. While many methods of this type have proven quite effective, accommodating mixed boundary conditions on an embedded interface is highly nontrivial, especially when efficiency of implementation is a priority. Most methods have also been created specifically to work with either purely Dirichlet or purely traction boundary conditions, but have not been demonstrated to be effective in both cases. Constructing preconditioners for solving the KKT systems that result from discretizing the equations in a mixed formulation have been studied by Klawonn \cite{Klawonn95, Klawonn98.1} and Bramble and Pasciak \cite{Bramble88}. Work has also been done on using domain decomposition methods with PCG \cite{Farhat00} and GMRES \cite{Klawonn98.2} to solve Stokes and elasticity problems. \emph{Balancing Domain Decomposition by Constraints} (BDDC) has also been used to build preconditioners for solving these problems \cite{Dohrmann03, Pavarino10}. Many authors have also looked at applying multigrid methods to problems in solid mechanics \cite{Verfurth84, Kocvara87, Haung90, Brenner93, Cai.Zhiqiang98, Axelsson99, Hiptmair99, Schoberl99, Wieners00, Heys04, Gaspar08, Lee.Young-Ju09, Zhu.Yongning10}, including handling issues arising from nearly incompressible materials. Mixed FEM formulations are one example that maintain good multigrid convergence properties for nearly incompressible materials demonstrated on the Dirichlet boundary case \cite{Brenner93, Schoberl99, Lee.Young-Ju09}. FOSLS methods have been demonstrated to produce systems that can be effectively solved using algebraic multigrid methods by rewriting the elasticity equations as a first order system using least squares \cite{Cai.Zhiqiang98, Heys04}. Multigrid applied to FEM discretized equations using a smoother based on a Schur complement has been studied by different authors \cite{Axelsson99, Wieners00}. While demonstrating the ability to solve large problems, the Schur complement approach requires the action of the inverse of the displacements matrix in the smoothing process which is a more expensive smoothing operation than that offered by other methods. Distributive smoothers offer a different option for the smoothing process that has proved effective on elasticity equations discretized with FEM \cite{Hiptmair99} and on staggered grids \cite{Gaspar08}. In our approach, we will look at using distributive smoothing similar to those described in Gaspar et al. \cite{Gaspar08}.
 
-\section{Mixed finite element formulation} \label{sec:ch5.mixedfem}
+\section{Mixed Finite Element Formulation} \label{sec:ch5.mixedfem}
 
 In order to accurately handle linear elastic materials near the incompressible limit, we use an augmented form of the equilibrium equations. By introducing a pressure variable as an unknown, we can achieve a stable numerical discretization independent of the degree of incompressibility. We will use the weak form of this augmented system to derive a mixed finite element formulation \cite{Brezzi91}. The augmented form of our equations arises by introducing $p := -(\lambda/\mu) \nabla \cdot \bfu$. With this definition, $\bssigma(\bfu) = \mu (\nabla \bfu + (\nabla \bfu)^t) - \mu p \bfI$ and the derived equations
 \begin{subequations} \label{eq:ch5.augmented.strong}
@@ -53,7 +53,7 @@ Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$, $\bfu \rvert_{\dOmega_d}
 \end{align}
 \end{subequations}
 
-\subsection{Discretization} \label{sec:ch5.discretization}
+\subsection{Discretization} \label{subsec:ch5.discretization}
 
 We discretize this variational formulation using a mixed finite element method defined on a MAC-type staggered grid. Han et al. demonstrated the stability and optimal convergence of this formulation applied to the Stokes equations on a square domain \cite{Han.Houde98}. We generalize this approach to the case of nearly incompressible linear elasticity in embedded domains. We approximate the Sobolev space $\bfV := (H^1(\Omega))^d$ with a finite element subspace $\bfV^h$, where each displacement component of a function in $\bfV^h$ is represented as a piecewise bilinear scalar function defined on a staggered quadrilateral grid (see Figure~\ref{fig:ch5.embedding}). To be more specific, consider the staggered grids
 \begin{align*}
@@ -112,7 +112,7 @@ We additionally approximate the pressure space $V_p := L^2(\Omega)$ with a piece
 \calG^p_h & := \set{ ((i + 1/2)h, (j + 1/2)h) : (i,j) \in \calI_p \subset \bbZ^2 }, \\
 T^p_{ij} & := \set{ (x,y) : ih < x < (i+1)h, \; jh < y < (j+1)h }, \\
 \calT^p_h & := \set{ T^p_{ij} : T^p_{ij} \cap \Omega \neq \emptyset }, \\
-V_p^h & := \set{ p^h \in L^2(\Omega) : p_h \rvert_{T^p_{ij}} \in P_0(T^p_{ij})\; \forall \, T^p_{ij} \in \calT^p_h },
+V_p^h & := \set{ p^h \in L^2(\Omega) : p_h \rvert_{T^p_{ij}} \in P_0(T^p_{ij}) \; \forall \, T^p_{ij} \in \calT^p_h },
 \end{align*}
 where $P_0(T^p_{ij})$ is the space of constant functions on the quadrilateral $T^p_{ij}$. The grid $\calG^p_h$ is a cell-centered grid (as opposed to a node-centered grid, such as $\calG^x_h$ or $\calG^y_h$); there is one pressure degree of freedom associated with the center of each pressure cell $T^p_{ij}\in \calT^p_h$. The set $\calI_p$ is defined similarly to $\calI_x$ and  $\calI_y$, however here it refers to the collection of cell-centered indices in the grid $\calG^p_h$ whose associated quadrilaterals $T^p_{ij}$ have a non-empty intersection with $\Omega$. For the sake of simplicity in subsequent equations, we again use a mapping
 \begin{equation*}
@@ -127,8 +127,9 @@ where (with some abuse of notation) $\chi_{T^p_k}(\bfx)$ is the characteristic f
 \chi_{T^p_k}(\bfx) := \begin{cases} 1, & \bfx \in T^p_k \\ 0, & \bfx \notin T^p_k \end{cases}.
 \end{equation*}
 
-We choose test functions $\bfv^h(\bfx) = N^m_{k_m}(\bfx) \bfe_m$ ($m \in \set{1,2}$) and substitute the finite element discretization \eqref{eq:ch5.staggeredapproximation.u}, \eqref{eq:ch5.staggeredapproximation.p} into each term in the mixed variational form \eqref{eq:ch5.augmented.weak}:
-\begin{align*}
+We choose test functions $\bfv^h(\bfx) = N^m_{k_m}(\bfx) \bfe_m$ ($m \in \set{1,2}$, $k_m \in I_m$) and substitute the finite element discretization \eqref{eq:ch5.staggeredapproximation.u}, \eqref{eq:ch5.staggeredapproximation.p} into each term in the mixed variational form \eqref{eq:ch5.augmented.weak}:
+\begin{subequations} \label{eq:ch5.integrations}
+\begin{align}
 & 2 \mu \int_{\Omega} \lrp{\frac{\nabla \bfu^h + (\nabla \bfu^h)^t}{2}} : \lrp{\frac{\nabla \bfv^h + (\nabla \bfv^h)^t}{2}} d\bfx \\
 & \qquad = \mu \int_{\Omega} \lrp{\nabla \bfu^h + (\nabla \bfu^h)^t} : \nabla \bfv^h d\bfx = \mu \sum_{i,j \in \set{1,2}} \int_{\Omega} (u^h_{i,j} + u^h_{j,i}) v^h_{j,i} d\bfx \\
 & \qquad = \mu \sum_{i,j \in \set{1,2}} \int_{\Omega} (u^h_{i,j} + u^h_{j,i}) N^m_{k_m,i} \delta_{mj} d\bfx = \mu \sum_{i \in \set{1,2}} \int_{\Omega} (u_{i,m}+u_{m,i}) N^m_{k_m,i} d\bfx \\
@@ -137,527 +138,306 @@ We choose test functions $\bfv^h(\bfx) = N^m_{k_m}(\bfx) \bfe_m$ ($m \in \set{1,
 & -\mu \int_{\Omega} p \nabla \cdot \bfv^h d\bfx = -\mu \sum_{k_3 \in I_3} p_{k_3} \int_{T^p_{k_3} \cap \Omega} N^m_{k_m,m} d\bfx; \\
 & \int_{\Omega} \bff \cdot \bfv^h d\bfx = \int_{\Omega} f_m N^m_{k_m} d\bfx; \\
 & \int_{\dOmega_n} \bfg \cdot \bfv^h d\bfS(\bfx) = \int_{\dOmega_n} g_m N^m_{k_m} d\bfS(\bfx).
-\end{align*}
-We can also choose $\bfv^h \equiv \bfzero$ and $q^h(\bfx) = \chi_{T^p_{k_3}}(\bfx)$ to give the corresponding pressure equations:
+\end{align}
+\end{subequations}
+We can also choose $\bfv^h \equiv \bfzero$ and $q^h(\bfx) = \chi_{T^p_{k_3}}(\bfx)$ ($k_3 \in I_3$) to give the corresponding pressure equations:
 \begin{equation*}
--\mu \sum_{i \in \set{1,2}} \sum_{k_i \in I_i} u^i_{k_i} \int_{T^p_{k_3} \cap \Omega} N^k_{k_i,i} d\bfx - \frac{\mu^2}{\lambda} p_{k_3} \int_{T^p_{k_3} \cap \Omega} d\bfx = 0.
+-\mu \sum_{i \in \set{1,2}} \sum_{k_i \in I_i} u^i_{k_i} \int_{T^p_{k_3} \cap \Omega} N^i_{k_i,i} d\bfx - \frac{\mu^2}{\lambda} p_{k_3} \int_{T^p_{k_3} \cap \Omega} d\bfx = 0.
 \end{equation*}
 
 Since the variational form is derived from an energy minimization problem, the discretized linear system can trivially be seen to be symmetric. Specifically, if $\vec{u} \in \bbR^{N_x + N_y}$ is our vector of displacement unknowns (where, say, the $x$ degrees of freedom are ordered first followed by the $y$ degrees of freedom second) and $\vec{p} \in \bbR^{N_p}$ our vector of pressure unknowns, then our system over the vector $\tilde{u}$ of $N := N_x + N_y + N_p$ degrees of freedom is of the form:
-\begin{equation} \label{eq:ch5.ALEsystem.discrete}
+\begin{equation} \label{eq:ch5.LEsystem.augmented.discrete}
 \begin{pmatrix} A_u & G^t \\ G & D_p \end{pmatrix}
 \begin{pmatrix} \vec{u} \\ \vec{p} \end{pmatrix}
 = \begin{pmatrix} \vec{f} \\ \vec{0} \end{pmatrix}
 \quad \text{or} \quad \tilde{A} \tilde{u} = \tilde{f}
 \end{equation}
-where $\tilde{u} = (\vec{u} \; \vec{p})$ and $\tilde{f} = (\vec{f} \; \vec{0})$. Furthermore, our use of regular grids gives the discrete equations a finite difference interpretation. If we scale the system by $1/h^2$, each block in the discrete system approximates the corresponding differential operator in \eqref{eq:ch5.augmented.strong}, i.e., \eqref{eq:ch5.ALEsystem.discrete} discretizes the following equation:
-\begin{equation} \label{eq:ch5.ALEsystem.continuous}
+where $\tilde{u} = (\vec{u} \; \vec{p})$ and $\tilde{f} = (\vec{f} \; \vec{0})$. Furthermore, our use of regular grids gives the discrete equations a finite difference interpretation. If we scale the system by $1/h^2$, each block in the discrete system approximates the corresponding differential operator in \eqref{eq:ch5.augmented.strong}, i.e., \eqref{eq:ch5.LEsystem.augmented.discrete} discretizes the following equation:
+\begin{equation} \label{eq:ch5.LEsystem.augmented.continuous}
 h^2 \begin{pmatrix} -\mu (\Delta + \nabla \nabla^t) & \mu \nabla \\ -\mu \nabla^t & -\mu^2/\lambda \end{pmatrix}
 \begin{pmatrix} \bfu \\ p \end{pmatrix}
 = \begin{pmatrix} h^2 \bff \\ 0 \end{pmatrix}.
 \end{equation}
-The linear system is the Hessian matrix of a saddle point problem, therefore the discretized system is symmetric but indefinite. In fact, the upper-left block $A_u$ is positive definite whie the lower-right block $D_p$ negative definite.
+The linear system is the Hessian matrix of a saddle point problem, therefore the discretized system is symmetric but indefinite. Indeed, the upper-left block $A_u$ is positive definite whie the lower-right block $D_p$ is negative definite.
+
+\subsection{Implementation Details} \label{subsec:ch5.implementation}
+
+For ease of implementation, we perform the integrations involved in the discrete equations \eqref{eq:ch5.integrations} in an element-by-element fashion. Each area integral is represented as a sum of integrals over spatially disjoint elements whose union is the embedded domain. Specifically, we individually address the integration over the intersection of each quadrilateral of the pressure grid with the domain $T^p_{k_3} \cap \Omega$:
+\begin{align*}
+\int_{\Omega} \lrp{N^m_{k_m,i}}^2 d\bfx & = \sum_{k_3 \in I_3} \int_{T^p_{k_3} \cap \Omega} \lrp{N^m_{k_m,i}}^2 d\bfx; \\
+\int_{\Omega} N^i_{k_i,m} N^m_{k_m,i} d\bfx & = \sum_{k_3 \in I_3} \int_{T^p_{k_3} \cap \Omega} N^i_{k_i,m} N^m_{k_m,i} d\bfx; \\
+\int_{\Omega} N^m_{k_m} d\bfx & = \sum_{k_3 \in I_3} \int_{T^p_{k_3} \cap \Omega} N^m_{k_m} d\bfx \\
+\int_{\dOmega_n} N^m_{k_m} d\bfS(\bfx) & = \sum_{k_3 \in I_3} \int_{T^p_{k_3} \cap \dOmega_n} N^m_{k_m} d\bfS(\bfx).
+\end{align*}
+In the interior, this simply amounts to evaluating the same integrals over each uncut quadrilateral $T^p_{k_3}$. However, at the boundary, care must be taken to respect the material region when the intersection between a pressure cell and the domain is non-trivial. In both the boundary and interior cases there will be $13$ degrees of freedom involved in the integration over such a pressure cell. This is because the staggering of various grids leads to $13$ interpolating basis functions supported over a given pressure cell: $6$ $x$-basis functions, $6$ $y$-basis functions, and $1$ pressure basis function. In other words, we express the stiffness matrix $A_u$ of our discrete linear system as a sum of $13 \times 13$ element stiffness matrices $A_u^{k_3}$. We further break the integrals involved in a given pressure cell $T^p_{k_3}$ up into four subintegrals over the sub-cell quadrants $\set{\omega_1, \omega_2, \omega_3, \omega_4}$ of $T^p_{k_p}$ (see Figure~\ref{fig:ch5:stiffnessmatrix.element}). This is because the integrands are smooth over each quadrant; indeed, the integrands are quadratic, and we simply perform these integrations analytically. This observation effectively decomposes the element stiffness matrix $A_u^{k_3}$ over the sub-cell quadrants $\set{\omega_i}$ into the sub-element stiffness matrices $\set{(A_u^{k_3})_{\omega_i}}$. For example, referring to Figure~\ref{fig:ch5:stiffnessmatrix.element}(c), $(A_u^{k_3})_{\omega_1}$ involves $x_1$, $x_2$, $x_3$, $x_4$, $y_7$, $y_8$, $y_{10}$ and $y_{11}$, so it only has nonzero values on rows and columns involving these degrees of freedom. The resulting equations based on those degrees of freedom are shown in Figure~\ref{fig:ch5:stiffnessmatrix.omega1}. If we order the $13$ nodes with indices shown in Figure~\ref{fig:ch5:stiffnessmatrix.element}(a), then on the interior of the domain, where $T^p_{k_3} \subset \Omega$, the sum of these four subintegrals is always the same:
+
+\begin{equation} \label{eq:ch5.stiffnessmatrix.interior}
+A_u^{k_3} =
+\mu
+\begin{pmatrix}
+\frac{1}{64}
+\lrp{\footnotesize \begin{array}{*{6}{r@{\,}}|*{6}{@{\,}r}}
++16&  0&  0&-16&  0&  0& +9& -6& -6& +6& -2& -1\\
+  0&+16&-16&  0&  0&  0& +6& +6& -9& +1& +2& -3\\
+  0&-16&+96&-64&  0&-16& -6& +4& +2& +6& -4& -2\\
+-16&  0&-64&+96&-16&  0& -2& -4& +6& +2& +4& -6\\
+  0&  0&  0&-16&+16&  0& -6& +2& +1& -9& +6& +3\\
+  0&  0&-16&  0&  0&+16& -1& -2& +3& -3& -6& +9\\\hline
+ +9& +3& -6& -2& -6& -1&+16&  0&  0&  0&-16&  0\\
+ -6& +6& +4& -4& +2& -2&  0&+96&  0&-16&-64&-16\\
+ -3& -9& +2& +6& +1& +3&  0&  0&+16&  0&-16&  0\\
+ +3& +1& +6& +2& -9& -3&  0&-16&  0&+16&  0&  0\\
+ -2& +2& -4& +4& +6& -6&-16&-64&-16&  0&+96&  0\\
+ -1& -3& -2& -6& +3& +9&  0&-16&  0&  0&  0&+16
+\end{array}} &
+-\frac{h}{8}
+\lrp{\begin{array}{c}
+-1\\+1\\-6\\+6\\-1\\+1\\\hline-1\\-6\\-1\\+1\\+6\\+1
+\end{array}} \\
+-\frac{h}{8}
+\lrp{\begin{array}{*{6}{r@{\;}}|*{6}{@{\;}r}}
+-1&+1&-6&+6&-1&+1&-1&-6&-1&+1&+6&+1
+\end{array}} &
+-h^2 \mu / \lambda
+\end{pmatrix}.
+\end{equation}
+
+\setlength{\figurewidth}{0.60\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/A_omega}
+\caption{Equations used to build the sub-element stiffness matrix $(A_u^{k_3})_{\omega_1}$.}
+\label{fig:ch5:stiffnessmatrix.omega1}
+\end{center}
+\end{figure}
+
+\setlength{\figurewidth}{0.30\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[]
+{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_esm2.png}}
+\subfigure[]
+{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_esm1.png}}
+\subfigure[]
+{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_esm3.png}}
+\caption{(a) A interior pressure cell and the $13$ degrees of freedom involved in the corresponding element stiffness matrix. (b) A typical boundary pressure cell. (c) The degrees of freedom involved in the sub-elemental stiffness matrix corresponding to quadrant $\omega_1$. }
+\label{fig:ch5:stiffnessmatrix.element}
+\end{center}
+\end{figure}
+
+The global stiffness matrix $A_u$ generated from the sum of all the element stiffness matrices $\set{A_u^{k_3}}$ at an interior degree of freedom ($x$, $y$, or $p$) has a stencil shown in Figure~\ref{fig:ch5:stiffnessmatrix.global}.
+
+\setlength{\figurewidth}{0.80\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/A_stencil_latex.png}
+\caption{Global stiffness matrix stencils centered at an interior $x$ degree of freedom (left), $y$ degree of freedom (middle), and $p$ degree of freedom (right).}
+\label{fig:ch5:stiffnessmatrix.global}
+\end{center}
+\end{figure}
+
+For boundary cells where $T^p_{k_3} \not\subset \Omega$, we must perform the integrations involved in each of the entries of $(A_u^{k_3})_{\omega_i}$ more carefully, taking into account the boundary geometry. The technique is similar to that presented in Chapter~\ref{ch:pt2.poisson}, specifically \S\ref{subsec:ch4.discretization.embedding}, and will be discussed in more detail in the following subsection. The process of constructing the global stiffness matrix $A_u$ from each of the $13 \times 13$ element stiffness matrices $A_u^{k_3}$ is explained in Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.stiffnessmatrix.construction}.
+
+\begin{algorithm}[htbp]
+\caption{Construction of global stiffness matrix $A_u$ from the element stiffness matrices $A_u^{k_3}$}
+\label{alg:ch5.stiffnessmatrix.construction}
+\begin{algorithmic}[1]
+\STATE $A_u \leftarrow 0$
+\FOR{$k_3 = 1, \dotsc, N_p$}
+    \IF{$T^p_{k_3} \subset \Omega$}
+        \STATE Use $A_u^{k_3}$ from \eqref{eq:ch5.stiffnessmatrix.interior}.
+    \ELSE
+        \STATE Evaluate integrations over each quadrant $\omega_i$ to compute $(A_u^{k_3})_{\omega_i}$
+        \STATE $A_u^{k_3} = \sum_i (A_u^{k_3})_{\omega_i}$
+    \ENDIF
+    \FOR{$i' = 1, \dotsc, 13$}
+        \STATE $i := \operatorname{mesh}(k_3,i')$ \COMMENT{$i$ is the global index corresponding to the local element index $i'$}
+        \FOR{$j' = 1, \dotsc, 13$}
+            \STATE $j := \operatorname{mesh}(k_3,j')$
+            \STATE $(A_u)_{ij} +\!= (A_u)^{k_3}_{i'j'}$
+        \ENDFOR
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Discrete Geometric Representation and Integration} \label{subsec:ch5.discretization.geometry}
+
+We discretize the domain $\Omega$ by embedding it in a regular Cartesian grid. Specifically, we use a level set function defined over a subgrid doubly refined with respect to $\calG^x_h, \calG^y_h, \calG^p_h$:
+\begin{equation*}
+\calG^{\phi} = \set{(ih/2, jh/2)}.
+\end{equation*}
+This doubly refined subgrid is thus a superset of the grids $\calG^x_h, \calG^y_h, \calG^p_h$. The level set function values at the vertices of the doubly refined subgrid $\calG^{\phi}$ are used to determine the points of intersection between the zero isocontour and the coordinate axes-aligned edges of $\calG^{\phi}$. The boundary of $\Omega$ is then approximated by a segmented curve $\dOmega^h$ connecting these intersection points. The geometric domain is approximated within the region enclosed by $\dOmega^h$ (see Figure~\ref{fig:ch5.boundary}). Near the boundary, the domain within each subgrid cell is approximated by a polygon determined from the boundary edges of the subgrid cell and by straight lines that connect boundary intersection points as demonstrated in Figure~\ref{fig:ch5.boundary}. Thus we can think of our discrete domain as a union of doubly refined uncut quadrilaterals on the interior and polygonal regions contained within doubly refined cut quadrilaterals on the boundary.
+
+\setlength{\figurewidth}{0.40\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[]
+{\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_zoomin8.png}}
+\subfigure[]
+{\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_bdrycurve8.png}}
+\caption{A zoomed-in view of Figure~\ref{fig:ch5.embedding}(a). We sample a the level set function implicitly defining $\Omega$ on the doubly refined subgrid depicted in (a), and use this to generate a segmend curve approximation $\dOmega_h$ to $\dOmega$, as in (b).}
+\label{fig:ch5.boundary}
+\end{center}
+\end{figure}
+
+This partitioning of the domain into doubly refined quadrilaterals naturally supports our integration conventions needed for the sub-element stiffness matrices $(A_u^{k_3})_{\omega_i}$ discussed in the previous section. The integrals needed for these matrices are trivially precomputed analytically when $\omega_i$ is uncut. On the other hand, when $\omega_i$ \emph{is} cut by the boundary, we can still perform the integrations analytically in the same fashion as in \cite{Bedrossian10} and analogous to \S\ref{subsec:ch4.discretization.embedding}. To summarize, the integrands of the requisite integrals necessary to compute the entries of $(A_u^{k_3})_{\omega_i}$ are (at most) degree $2$ polynomials, hence one may easily apply the divergence theorem to explicitly transform the area integrals over $\omega_i \cap \Omega$ into line integrals over $\partial(\omega_i \cap \Omega)$. One may then analytically evaluate these latter integrals via an explicit parameterization of the individual line segments; or via an appropriate $1$-dimensional Gaussian quadrature rule (which is, of course, more similar to the approach taken in \S\ref{subsec:ch4.discretization.embedding}). As with the discretization described in Chapter~\ref{ch:pt2.poisson}, this careful treatment of the integrals near the boundary is key to obtaining second order accuracy in $L^\infty$.
+
+\section{Dirichlet Boundary Conditions} \label{sec:ch5.dirichlet}
+
+We have thus far assumed that our solution satisfies the Dirichlet boundary conditions \eqref{eq:ch5.LE.D} and that our test functions vanish on the Dirichlet boundary. However, because we use a regular Cartesian grid that does not conform to the actual domain, it is not convenient to directly define a finite element space with a specific value at the irregular boundary. Instead, we enforce these conditions weakly (cf. \eqref{eq:ch5.augmented.weak}):
+\begin{center}
+Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$, such that
+\end{center}
+\begin{subequations} \label{eq:ch5.dirichlet.weak}
+\begin{align}
+& \int_{\Omega} 2 \mu \lrp{\frac{\nabla \bfu + (\nabla \bfu)^t}{2}} : \lrp{\frac{\nabla \bfv + (\nabla \bfv)^t}{2}} - \mu p (\nabla \cdot \bfv) d\bfx \\
+& \qquad = -\int_{\Omega} \bff \cdot \bfv d\bfx + \int_{\dOmega_n} \bfg \cdot \bfv d\bfS(\bfx) \quad \forall \bfv \in (H^1_{0,\dOmega_d}(\Omega))^d, \\
+& \int_{\Omega} \lrp{-\mu q \nabla \cdot \bfu - \frac{\mu^2}{\lambda} p q} d\bfx = 0 \quad \forall q \in L^2(\Omega), \\
+& \int_{\dOmega_d} \bfu \cdot \bfw d\bfS(\bfx) = \int_{\dOmega_d} \bfu_0 \cdot \bfw d\bfS(\bfx) \quad \forall \bfw \in (H^{-1/2}(\dOmega_d))^d. \label{eq:ch5.dirichlet.constraint.continuous}
+\end{align}
+\end{subequations}
+Here, we introduce the Dirichlet condition as a (weak) constraint. Specifically, we require that the $L^2$ inner product of the solution and an arbitrary function $\bfw \in (H^{-1/2}(\dOmega_d))^d$ is the same as the inner product of the Dirichlet data $\bfu_0$ with $\bfw$. This makes the problem a constrained minimization.
+
+\subsection{Discretizing the Dirichlet Problem} \label{subsec:ch5.dirichlet.discretization}
+
+We discretize the Dirichlet constraints in a similar manner as that described in Chapter~\ref{ch:pt2.poisson}, \S\ref{subsec:ch4.discretization.dirichlet}. We approximate $(H^{-1/2}(\dOmega_d))^d$ with a subspace $\Lambda_x^h \times \Lambda_y^h := P_0(\calT^{x} \cap \dOmega_d^h) \times P_0(\calT^y \cap \dOmega_d^h)$, which is composed of piecewise constant functions over $x$ and $y$ component grid cells that intersect the Dirichlet boundary. Here we use $\dOmega_d^h$ to denote the portion of $\dOmega^h$ over which the Dirichlet constraints are being enforced. We call any $x$ or $y$ cell $T^i$ with $T^i \cap \dOmega^h \neq \emptyset$ a boundary cell. The superscript $i$ is used to denote whether the cell is in the $x$ or $y$ grids with $i = 1$ signifying an $x$ cell and $i = 2$ signifying a $y$ cell. We use $\set{\bfw_{T^i} := \chi_{T^i} \bfe_i}$ as the basis functions for $\Lambda_x^h \times \Lambda_y^h = P_0(\calT^x \cap \dOmega_d^h) \times P_0(\calT^y \cap \dOmega_d^h)$. Here, $\chi_{T^i}$ is the characteristic function of the cell $T^i$:
+\begin{equation*}
+\chi_{T^i}(\bfx) := \begin{cases} 1, & \bfx \in T^i \\ 0, & \bfx \notin T^i \end{cases}.
+\end{equation*}
+Note that we have one basis function per boundary $x$ cell and one per $y$ cell. If we use $N^d_x$ and $N^d_y$ to denote the number of $x$ and $y$ boundary cells, respectively, we can see that the dimension of the space $\Lambda_x^h \times \Lambda_y^h$ is $N^d_x + N^d_y$.
+
+With this approximation, the discretized Dirichlet constraint can be expressed as a linear system $B \bfu^h = \bfu_0^h$ ($B \in \bbR^{(N^d_x + N^d_y) \times (N_x + N_y)}$, $\bfu_0^h \in \bbR^{N^d_x+N^d_y}$). Each equation enforces an integral constraint over the intersection of the discrete boundary $\dOmega_d^h$ with some $x$ or $y$ boundary cell $T^i$:
+\begin{equation} \label{eq:ch5.dirichlet.constraint.discrete}
+\sum_{k_i \in I_i} u^i_{k_i} \int_{T^i \cap \dOmega_d^h} N^i_{k_i} d\bfS(\bfx) = \int_{T^i \cap \dOmega_d^h} u^i_0 d\bfS(\bfx),
+\end{equation}
+where $\bfu_0 =: (u^1_0,u^2_0)$. In practice, similar to the integrals discussed in \S\ref{subsec:ch5.implementation}, we evaluate the above integrals for a given boundary cell $T^i$ from the four quadrants of $T^i$ arising from the doubly refined subgrid (see \S\ref{subsec:ch5.discretization.geometry}).
+
+The discrete constrained minimization problem may be formulated as an equivalent saddle point system involving Lagrange multipliers:
+\begin{equation} \label{eq:ch5.kkt.augmented}
+\begin{pmatrix} A_u & G^t & B^t \\ G & D_p & 0 \\ B & 0 & 0 \end{pmatrix}
+\begin{pmatrix} \vec{u} \\ \vec{p} \\ \vec{\lambda} \end{pmatrix}
+= \begin{pmatrix} \vec{f} \\ \vec{0} \\ \vec{u}_0 \end{pmatrix}.
+\end{equation}
+We have one Lagrange multiplier degree of freedom per discrete Dirichlet constraint; that is, $\vec{\lambda} \in \bbR^{N^d_x + N^d_y}$. When we consider boundary equations in the sections that follow, we temporarily eliminate pressure degrees of freedom $\vec{p}$ with the substitution $A := A_u - G^t D_p^{-1} G$:
+\begin{equation} \label{eq:ch5.kkt.unaugmented}
+\begin{pmatrix} A & B^t \\ B & 0 \end{pmatrix}
+\begin{pmatrix} \vec{u} \\ \vec{\lambda} \end{pmatrix}
+= \begin{pmatrix} \vec{f} \\ \vec{u}_0 \end{pmatrix}.
+\end{equation}
+Although this latter system is extremely ill-conditioned in the nearly incompressible regime, it will simplify the exposition of the forthcoming discussion of Dirichlet boundary condition treatment. Furthermore, our multigrid algorithms make use of this elimination near the boundary during relaxation.
+
+Ultimately, we use a constraint aggregation algorithm similar to that described in Chapter~\ref{ch:pt2.poisson}, \S\ref{subsubsec:ch4.constraintaggregation}, to reformulate the discretized Dirichlet constraints. But before continuing, we would like to point out a couple important details related to the constraint matrix $B$.
+
+\begin{itemize}
+
+\item $B \in \bbR^{(N^d_x + N^d_y) \times (N_x + N_y)}$, and $N^d_x + N^d_y \ll N_x + N_y$, so the presence of $B$ in \eqref{eq:ch5.kkt.augmented} or \eqref{eq:ch5.kkt.unaugmented} only directly affects a small subset of the $N_x + N_y$ displacement degrees of freedom.
+
+\item $B$ consists of two decoupled blocks: one for the $x$ boundary equations and one for the $y$ boundary equations:
+\begin{equation} \label{eq:ch5.BxBy}
+B = \begin{pmatrix} B_x & 0 \\ 0 & B_y \end{pmatrix},
+\end{equation}
+where $B_x \in \bbR^{N^d_x \times N_x}$ and $B_y \in \bbR^{N^d_y \times N_y}$. Further, the only nonzero columns of $B$ are associated with vertices incident to an $x$ or $y$ boundary grid cell. Therefore, for sufficiently interior degrees of freedom, the saddle point system \eqref{eq:ch5.kkt.augmented} is exactly the same as \eqref{eq:ch5.LEsystem.augmented.discrete}.
+
+\end{itemize}
+
+As in Chapter~\ref{ch:pt2.poisson}, and specifically motivated in \S\ref{subsubsec:ch4.nullspacemethod}, we reduce the saddle point system \eqref{eq:ch5.kkt.unaugmented} by eliminating the Lagrange multiplier $\vec{\lambda}$ via a \emph{null space method} using a \emph{fundamental basis} of the constraint matrix $B$. The discussion from \S\ref{subsubsec:ch4.nullspacemethod} carries over almost entirely without modification to the present setting. To summarize, we aim to construct a matrix $Z \in \bbR^{(N_x + N_y) \times ((N_x + N_y) - (N^d_x + N^d_y))}$ whose columns span the null space of $B$ and a vector $\vec{c} \in \bbR^{N_x + N_y}$ satisfying the constraint system $B \vec{c} = \vec{u}_0$. Given such a $Z$ and $\vec{c}$, we may solve \eqref{eq:ch5.kkt.unaugmented} by first solving for $\vec{v} \in \bbR^{(N_x + N_y) - (N^d_x + N^d_y)}$ in
+\begin{equation} \label{eq:ch5.ztaz}
+Z^tAZ \vec{v} = Z^t \lrp{\vec{f} - A \vec{c}}
+\end{equation}
+and setting $\vec{u} = \vec{c} + Z \vec{v}$. We construct $Z$ and $\vec{c}$ by reordering the degrees of freedom such that the leading square block of $B$ is easily invertible (indeed, as in Chapter~\ref{ch:pt2.poisson}, diagonal!), say, $B = (B_m | B_{n-m})$, and setting
+\begin{equation*} \label{eq:ch5.Zc}
+Z := \begin{pmatrix} -B_m^{-1} B_{n-m} \\ I_{n-m} \end{pmatrix}, \quad \vec{c} := \begin{pmatrix} B_m^{-1} \vec{u}_0 \\ 0_{n-m} \end{pmatrix}.
+\end{equation*}
+Note that the reordering of the degrees of freedom only makes the notation more convenient and, in practice, is not done explicitly.
+
+It turns out that, as for the $\Lambda^h_1$-induced (i.e., \emph{single-wide}) constraints from Chapter~\ref{ch:pt2.poisson}, the present discretization \eqref{eq:ch5.dirichlet.constraint.discrete} given above of the Dirichlet constraint \eqref{eq:ch5.dirichlet.constraint.continuous} does not readily lend itself to constructing a fundamental basis matrix $Z$ of $B$ (see \S\ref{subsubsec:ch4.constraintaggregation}). Additionally, while the $\Lambda^h_2$-induced (i.e., \emph{double-wide}) constraints from \S\ref{subsubsec:ch4.constraintaggregation} and \cite{Bedrossian10} appear to yield an adequately conditioned linear system for Poisson in $2$ dimensions, the analogous discrete constraints in the present context of nearly incompressible linear elasticity yield a relatively poorly conditioned linear system, similar to the situation of Poisson in $3$ dimensions (see Appendix~\ref{ch:pt2.appendix.constraintconditioning} for a specific example). We instead reformulate our discretization of \eqref{eq:ch5.dirichlet.constraint.continuous} using a constraint aggregation algorithm nearly identical to that described in \S\ref{subsubsec:ch4.constraintaggregation} and Algorithm~\ref{ch:pt2.poisson}.\ref{alg:ch4.dirichlet.constraintaggregation}. Indeed, since the $B_x$ and $B_y$ blocks from \eqref{eq:ch5.BxBy} are decoupled, one may aggregate each discrete constraint set independently, and each of these aggregations is identical to the case for Poisson Dirichlet constraints described in \S\ref{subsubsec:ch4.constraintaggregation} and Algorithm~\ref{ch:pt2.poisson}.\ref{alg:ch4.dirichlet.constraintaggregation}. We henceforth presume the aggregation of the single-wide constraints \eqref{eq:ch5.dirichlet.constraint.discrete} into \emph{aggregate constraints}.
+
+\section{Multigrid} \label{sec:ch5.multigrid}
+
+We develop an efficient multigrid framework for the discrete linear system \eqref{eq:ch5.kkt.augmented} / \eqref{eq:ch5.kkt.unaugmented}. Our method is purely geometric and based on the Multigrid Correction Scheme (see Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.multigrid}). The framework admits a simple implementation, and at a high level, it is very similar to that described in Chapter~\ref{ch:pt2.poisson}, \S\ref{sec:ch4.multigrid}. However, in contrast \S\ref{sec:ch4.multigrid}, the following multigrid components are significantly more sophisticated and customized to the present discretization, which is necessary to retain near-textbook multigrid convergence rates in the presence of highly irregular domains or near the incompressible limit. The subsections that follow will detail the key components of our multigrid algorithm: a hierarchy of discretizations, a smoothing operator, and appropriate transfer operators (i.e., restriction and prolongation) between levels of the hierarchy.
+
+\begin{algorithm}[htbp]
+\caption{Multigrid Defect Correction}
+\label{alg:ch5.multigrid}
+\begin{algorithmic}[1]
+\STATE \textbf{function} $\operatorname{V-Cycle} \lrp{\tilde{A}^h, \tilde{u}^h, \tilde{f}^h}$ \textbf{:}
+\IF{resolution is low enough}
+    \STATE $\tilde{u} \leftarrow \lrp{\tilde{A}^h}^{-1} \tilde{f}^h$
+    \RETURN
+\ENDIF
+\STATE $\operatorname{Pre-Relaxation} \lrp{\tilde{A}^h, \tilde{u}^h, \tilde{f}^h}$
+\STATE $\tilde{f}^{2h} \leftarrow R_h^{2h} \lrp{\tilde{f}^h - \tilde{A}^h \tilde{u}^h}$ \COMMENT{Restriction}
+\STATE $\operatorname{V-Cycle} \lrp{\tilde{A}^{2h}, \tilde{u}^{2h}, \tilde{f}^{2h}}$
+\STATE $\tilde{u}^h \leftarrow \tilde{u}^h + P_{2h}^h \tilde{u}^{2h}$ \COMMENT{Prolongation}
+\STATE $\operatorname{Post-Relaxation} \lrp{\tilde{A}^h, \tilde{u}^h, \tilde{f}^h}$
+\RETURN
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Discretization Hierarchy}
+
+We consider a hierarchy of grids, each corresponding to a discretization of \eqref{eq:ch5.dirichlet.weak} at a progressively larger grid resolutions. In particular, we employ a grid spacing of $h$ on the finest level of the hierarchy (level index zero), followed by discretizations with grid spacings of $2h, 4h, \dotsc, 2^Lh$, for a total of $L+1$ grid levels. In detail, we construct the hierarchy as follows:
+
+\begin{itemize}
+
+\item At level $\ell$ of the hierarchy we define the background grids $\calG^x_{2^{\ell}h}, \calG^y_{2^{\ell}h}, \calG^p_{2^{\ell}h}$ corresponding to the $x$, $y$, and $p$ degrees of freedom, respectively.
+
+\item We sample the level set function implicitly defining $\Omega$ over the respective doubly refined subgrids $\calG^\phi_h, \calG^\phi_{2h}, \calG^\phi_{4h}, \dotsc$ at each level. Clearly, coarser grids may fail to resolve some high frequency features of the domain geometry, leading to possible incoherency between the discrete systems at neighboring levels. We will addressed such issues in our discussion of the smoothing and transfer operators.
+
+\item Using the level set function values associated with a given grid, we generate the discretized domains $\calT^x_{2^{\ell}h}, \calT^y_{2^{\ell}h}, \calT^p_{2^{\ell}h}$ and allocate the arrays of unknowns $\vec{u}^{2^{\ell}h}, \vec{p}^{2^{\ell}h}$ and right-hand sides $\vec{f}^{2^{\ell}h}, \vec{f}_p^{2^{\ell}h}$ of the respective equations. The discrete operators $A_u^{2^{\ell}h}, \linebreak[0] G^{2^{\ell}h}, \linebreak[0] D_p^{2^{\ell}h}$ of the system \eqref{eq:ch5.LEsystem.augmented.discrete} are likewise defined on the discretized domain associated with hierarchy level $\ell$, following the same process detailed in section \ref{subsec:ch5.discretization}. Note that although $\vec{f}_p^h \equiv \vec{0}$ at the finest level of our hierarchy (at least initially), the right hand side $\vec{f}_p^{2^{\ell}h}$ at coarser levels ($\ell \geq 1$) will generally be nonzero in the Multigrid Correction Scheme (see Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.multigrid}).
+
+\end{itemize}
+
+From this point on, we will simply use $h$ instead of $2^{\ell}h$ to denote the grid spacing at any specific level of the multigrid hierarchy, whenever this does not incur any ambiguity. In the presence of a Dirichlet boundary condition \eqref{eq:ch5.LE.D}, we construct an \emph{aggregate constraint matrix} $B$ at each level, as summarized in \S\ref{subsec:ch5.dirichlet.discretization} and detailed in Chapter~\ref{ch:pt2.poisson}, \S\ref{subsubsec:ch4.constraintaggregation}. Each row of $B$ corresponds to one Lagrange multiplier. Following the null space method (again, summarized in \S\ref{subsec:ch5.dirichlet.discretization} and detailed in \S\ref{subsubsec:ch4.nullspacemethod}), we eliminate these multipliers by solving for the null basis coefficients $\vec{v}$ in $\vec{u} = \vec{c} + Z \vec{v}$. By definition \eqref{eq:ch5.Zc} of $\vec{c}$ and $Z$, there is a one-to-one mapping between $\vec{v}$ components and $x$ and $y$ degrees of freedom which are not independent (recall that the independent degrees of freedom correspond to the leading diagonal block $B_m$ of $B$; see Chapter~\ref{ch:pt2.poisson}, \S\ref{subsubsec:ch4.constraintaggregation}). Thus, the reduced system \eqref{eq:ch5.ztaz} is defined precisely over all non-independent degrees of freedom. Due to the fact that the reconstructed $\vec{u} := \vec{c} + Z \vec{v}$ satisfies the (aggregate) constraint equations automatically, we need not restrict any residuals for the constraint system. Further, we need not solve for $\vec{\lambda}$, thanks to our null space method, hence do not store any $\vec{\lambda}$ components nor prolongate any $\vec{\lambda}$ corrections. When we restrict the residuals of the governing equation, i.e., $\vec{r} = \vec{f} - A \vec{u} - B \vec{\lambda}$, we simply restrict zero for all equations that involve a $\vec{\lambda}$ component. In other words, we restrict zero residuals from equations involving any $x$ or $y$ degrees of freedom on an $x$ or $y$ boundary grid cell, respectively. Although omitting these equations from the intergrid transfers is a deviation from conventional practice, we compensate by moderately increasing the pre-restriction smoothing effort in a boundary band, effectively driving the residuals in this band very close to zero (which is the value that is actually restricted!). This approach avoids the use of specialized, elaborate transfer operators involving the $\vec{\lambda}$ variables, which are not in perfect correspondence between neighboring levels due to the independent constraint aggregations employed at each level. Note that this aspect of our multigrid framework is the same as that in Chapter~\ref{ch:pt2.poisson}, \S\ref{sec:ch4.multigrid}.
+
+\subsection{Relaxation}
+
+The interior equations are uniform and have the same properties, while near the boundary, the equations have very different stencils. In order to design a stable and efficient relaxation scheme while keeping the computational cost low, we define two (overlapping) sets of equations, and apply an appropriate relaxation subscheme to each one. The two sets correspond to equations in the interior of the discretized domain and equations near the boundary, respectively. We define the extent of the interior region by excluding $5 \times 5$ blocks of cells, each centered around any cell that intersects the Dirichlet boundary. See Figure~\ref{fig:ch5.boundaryband}(b) for an example using $1 \times 1$ cell blocks. This interior region is relaxed with the distributive process detailed in \S\ref{subsubsec:relaxation.distributive}.
+
+We then define the boundary band to be the union of all $7 \times 7$ blocks of cells centered at any cell that intersects the Dirichlet boundary (excluding any cells completely exterior to the domain). This defines the set of equations to which we will apply our boundary relaxation scheme. In each single level relaxation, we first sweep over the boundary band, apply a few iterations of boundary relaxations, then apply one iteration of interior relaxation, and finally follow this by another few iterations of boundary relaxations. In Figure~\ref{fig:ch5.boundaryband}(a), we show an example of the cells and equations that end up in a boundary region calculated with the method described above. Soely for the sake of example, due to the coarseness of the illustrated grid, Figure~\ref{fig:ch5.boundaryband} uses $3 \times 3$ cell blocks rather than the $7 \times 7$ cell blocks used in our examples.
+
+\setlength{\figureheight}{0.40\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[An example boundary band of pressure cells and boundary variables using $3 \times 3$ blocks of cells centered at each cell that intersects the boundary.]
+{\includegraphics[height=\figureheight]{part2/chapter5/figures/bw/grid_bdryband_new.png}}
+\subfigure[An example of distributive pressure cells and variables relaxed using distributive relaxation. This example region is defined by excluding $1 \times 1$ blocks of cells (i.e., a single cell) centered at each cell intersecting the boundary.]
+{\includegraphics[height=\figureheight]{part2/chapter5/figures/bw/grid_dist_final.png}}
+\caption{Boundary band and distributive region.}
+\label{fig:ch5.boundaryband}
+\end{center}
+\end{figure}
+
+The efficiency of a multigrid algorithm is closely related to the smoothing efficiency of a single level relaxation. With Poisson's equation, simple Jacobi or Gauss-Seidel will typically suffice as an efficient smoother. These techniques effectively reduce the high-frequency components of the error and make it possible for a coarse grid to provide a meaningful correction to a fine grid. This property is fundamentally important for the efficiency of the geometrically hierarchical approach. Unfortunately, the equations of nearly incompressible linear elasticity with augmented pressure require more care than the comparably simplistic discrete Poisson equation (cf. Chapter~\ref{ch:pt2.poisson}). Although our system is not symmetric positive definite, we can reformulate the equations in a more convenient form as in \cite{Zhu.Yongning10} to design an effective geometric multigrid smoother. Indeed, our change of variables leads to an approximate block triangularization of the discrete system with each diagonal block being a symmetric semi-definite discretization of the Laplacian. Our smoother is then constructed to be an application of the Gauss-Seidel relaxation on each block.
+
+\subsubsection{Approximate distributive relaxation} \label{subsubsec:relaxation.distributive}
+
+We follow the idea in \cite{Zhu.Yongning10} and develop a \emph{distributive relaxation scheme}. We apply the following transformation on the continuous variable $\tilde{\bfu} := (\bfu \; p)$:
+\begin{equation} \label{eq:ch5.distributive.transform}
+\begin{pmatrix} \bfu \\ p \end{pmatrix}
+= \begin{pmatrix} \bfI & -\nabla \\ \nabla^t & -2 \Delta \end{pmatrix}
+\begin{pmatrix} \bfv \\ q \end{pmatrix}
+\quad \text{or} \quad
+\tilde{\bfu} = \tilde{\bfM} \tilde{\bfv};
+\end{equation}
+substituting into \eqref{eq:ch5.augmented.strong} yields the auxiliary system
+\begin{equation} \label{eq:ch5.distributive.triangularized}
+\begin{pmatrix} \mu \Delta \bfI & 0 \\ \mu (1 + \mu / \lambda) \nabla^t & -\mu (1 + 2\mu / \lambda) \Delta \end{pmatrix}
+\begin{pmatrix} \bfv \\ q \end{pmatrix}
+= \begin{pmatrix} \bff \\ 0 \end{pmatrix}
+\quad \text{or} \quad
+\tilde{\bfA} \tilde{\bfM} \tilde{\bfv} = \tilde{\bff}
+\end{equation}
+for some auxiliary variable $\tilde{\bfv} := (\bfv \; q)$. This auxiliary system is a block lower triangular system and can be solved via forward substitution: first solve the $\bfv$ equations (which don't involve $q$), then solve for $q$ given the previously solved $\bfv$. Moreover, with an intelligent discretization, the same triangulation can be realized on the discretized system, i.e., $\tilde{A} \tilde{M}$ is also a block lower triangular linear system \cite{Zhu.Yongning10}.
+
+Since each of the diagonal blocks of the discrete auxiliary system is a discretization of the Laplacian operator, we can relax the whole system using a Gauss-Seidel relaxation on each component of the $\vec{v}$ degrees of freedom followed by a $3^{rd}$ Gauss-Seidel relaxation on the $\vec{q}$ degrees of freedom and achieve the same smoothing efficiency as Gauss-Seidel relaxation simply applied to Poisson's equation. Note that given any $\vec{v}$ and $\vec{q}$, one can reconstruct $\vec{u}$ and $\vec{p}$ via \eqref{eq:ch5.distributive.transform}.
 
 \begin{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Implementation details}
-\label{sec:implementation_details}
-For ease of implementation, we perform the integrations involved in the discrete equations in an element-by-element fashion. Each area integral is represented as a sum of integrals over spatially disjoint elements whose union is the embedded domain. Specifically, we individually address the integration over the intersection of each quadrilateral of the pressure grid with the embedded domain ${T^p_{k_p}\cap\Omega}$:
-$$ \int_{\Omega}N_{mk_m,i}^2(\vec x)\, d\vec{x}=\sum_{k_{p}\in I_{p}}\int_{T^p_{k_p}\cap\Omega}N_{mk_{m},i}^2(\vec x)\, d\vec{x}$$
-$$\int_{\Omega}N_{ik_{i},m}(\vec x)N_{mk_{m},i}(\vec x)\, d\vec{x}=\sum_{k_{p}\in I_{p}}\int_{T^p_{k_p}\cap\Omega}N_{ik_{i},m}(\vec x)N_{mk_{m},i}(\vec x)\, d\vec{x}$$
-$$
-\int_{\Omega}N_{mk_{m}}(\vec x)\, d\vec{x}=\sum_{k_{p}\in I_{p}}\int_{T^p_{k_p}\cap\Omega}N_{mk_{m}}(\vec x)\, d\vec{x}
-$$
-$$
-\int_{\Gamma_n}N_{mk_{m}}(\vec x)\, ds=\sum_{k_{p}\in I_{p}}\int_{T^p_{k_p}\cap\Gamma_n}N_{mk_{m}}(\vec x)\, ds.
-$$
-In the interior, this simply amounts to evaluating the same integrals over each full quadrilateral $T^p_{k_p}$. However, at the boundary, care must be taken to respect the material region alone when the intersection between the pressure cells and the embedded domain is non-trivial. In both the boundary and interior cases there will be 13 degrees of freedom involved in the integration over such a pressure cell. This is because the staggering of variables leads to 13 interpolating functions supported over a given pressure cell (6 $x$-components, 6 $y$-components and one pressure). In other words, we express the matrix (or stiffness matrix) in our discrete system as a sum of 13$\times$13 element stiffness matrices $\mathbf{A}^{k_p}$. Furthermore, we break the integrals involved in a given element $T^p_{k_p}$ up into four subintegrals over the subquadrants ($\omega_1,\omega_2,\omega_3,\omega_4$) of  $T^p_{k_p}$ (see Figure \ref{fig_esm}). This is because the integrands are all smooth over these regions. Notably, they are quadratic and we simply preform these integrations analytically. The elemental stiffness matrix is accumulated from the following sub-stiffness-matrices $\mathbf{A}^{k_p}=\mathbf{A}^{k_p}_{\omega_1}+\mathbf{A}^{k_p}_{\omega_2}+\mathbf{A}^{k_p}_{\omega_3}+\mathbf{A}^{k_p}_{\omega_4}$. For example, $\mathbf{A}^{k_p}_{\omega_1}$ involves $x_1$, $x_2$, $x_3$, $x_4$, $y_7$, $y_8$, $y_{10}$ and $y_{11}$ as demonstrated in Figure \ref{fig_esm} center, therefore, it only has non-zero values on rows and columns involving these degrees of freedom. The resulting equations based on those degrees of freedom are shown in Figure \ref{fig_omega1}. If we order the 13 nodes with indices shown in Figure \ref{fig_esm} left, then on the interior of the domain, where $T^p_{k_p}\cap\Omega=T^p_{k_p}$, the sum of these four subintegrals is always the same: 
-%
-%%subcell 1
-%$\mathbf{A}^{k_p}_{\omega_1}=${\footnotesize\begin{tabular}{c|cccccccccccc|c}
-%i\textbackslash j & 1& 2& 3& 4& 5& 6& 7 &8 &9 &10 &11 &12 &13\\ \hline
-%1&\multicolumn{4}{c}{\multirow{4}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_1}\nabla N_{xk_i}\cdot\nabla N_{xk_j}\\+N_{xk_i,x}N_{xk_j,x}\,d\vec x\end{array}$}}}&0&0
-%&\multicolumn{2}{c}{\multirow{4}{*}{$\mu\int_{\omega_1} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&0&\multicolumn{2}{c}{\multirow{4}{*}{$\mu\int_{\omega_1} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&0
-%&\multirow{4}{*}{$-\mu\int_{\omega_1} N_{xk_i,x}\,d\vec x$} \\ 
-%2& & & & &0&0& & &0& & &0&\\
-%3& & & & &0&0& & &0& & &0&\\
-%4& & & & &0&0& & &0& & &0&\\
-%5&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%6&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%7&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_1} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}&0&0
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_1}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_1}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multirow{2}{*}{$-\mu\int_{\omega_1} N_{yk_i,y}\,d\vec x$}\\ 
-%8& & & & &0&0& & &0& & &0&\\
-%9&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%10&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_1} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}&0&0
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_1}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_1}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multirow{2}{*}{$-\mu\int_{\omega_1} N_{yk_i,y}\,d\vec x$}\\ 
-%11& & & & &0&0& & &0& & &0&\\
-%12&0&0&0&0&0&0&0&0&0&0&0&0&0\\ \hline
-%13&\multicolumn{4}{c}{$-\mu\int_{\omega_1} N_{xk_j,x}\,d\vec x$} &0&0&\multicolumn{2}{c}{$-\mu\int_{\omega_1} N_{yk_j,y}\,d\vec x$}&0&\multicolumn{2}{c}{$-\mu\int_{\omega_1} N_{yk_j,y}\,d\vec x$}&0&$-\mu^2/\lambda\int_{\omega_1}1\,d\vec x$\\
-%\end{tabular}}
-%\\
-%\\
-%$\mathbf{A}^{k_p}_{\omega_2}=${\footnotesize\begin{tabular}{c|cccccccccccc|c}
-%i\textbackslash j & 1& 2& 3& 4& 5& 6& 7 &8 &9 &10 &11 &12 &13\\ \hline
-%1&\multicolumn{4}{c}{\multirow{4}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_2}\nabla N_{xk_i}\cdot\nabla N_{xk_j}\\+N_{xk_i,x}N_{xk_j,x}\,d\vec x\end{array}$}}}&0&0&0
-%&\multicolumn{2}{c}{\multirow{4}{*}{$\mu\int_{\omega_2} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&0&\multicolumn{2}{c|}{\multirow{4}{*}{$\mu\int_{\omega_2} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&
-%\multirow{4}{*}{$-\mu\int_{\omega_2} N_{xk_i,x}\,d\vec x$}\\ 
-%2& & & & &0&0&0& & &0& & \\
-%3& & & & &0&0&0& & &0& & \\
-%4& & & & &0&0&0& & &0& & \\
-%5&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%6&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%7&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%8&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_2} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}&0&0&0
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_2}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c|}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_2}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&\multirow{2}{*}{$-\mu\int_{\omega_2} N_{yk_i,y}\,d\vec x$}\\ 
-%9& & & & &0&0&0& & &0& & \\
-%10&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%11&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_2} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}&0&0&0
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_2}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c|}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_2}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&\multirow{2}{*}{$-\mu\int_{\omega_2} N_{yk_i,y}\,d\vec x$}\\ 
-%12& & & & &0&0&0& & &0& & \\\hline
-%13&\multicolumn{4}{c}{$-\mu\int_{\omega_2} N_{xk_j,x}\,d\vec x$} &0&0&0&\multicolumn{2}{c}{$-\mu\int_{\omega_2} N_{yk_j,y}\,d\vec x$}&0&\multicolumn{2}{c|}{$-\mu\int_{\omega_2} N_{yk_j,y}\,d\vec x$}&$-\mu^2/\lambda\int_{\omega_2}1\,d\vec x$\\
-%\end{tabular}}
-%\\
-%\\
-%$\mathbf{A}^{k_p}_{\omega_3}=${\footnotesize\begin{tabular}{c|cccccccccccc|c}
-%i\textbackslash j & 1& 2& 3& 4& 5& 6& 7 &8 &9 &10 &11 &12&13\\ \hline
-%1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%2&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%3&0&0&\multicolumn{4}{c}{\multirow{4}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_3}\nabla N_{xk_i}\cdot\nabla N_{xk_j}\\+N_{xk_i,x}N_{xk_j,x}\,d\vec x\end{array}$}}}
-%&\multicolumn{2}{c}{\multirow{4}{*}{$\mu\int_{\omega_3} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&0&\multicolumn{2}{c}{\multirow{4}{*}{$\mu\int_{\omega_3} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&0
-%&\multirow{4}{*}{$-\mu\int_{\omega_3} N_{xk_i,x}\,d\vec x$}\\ 
-%4&0&0& & & & & & &0& & &0\\
-%5&0&0& & & & & & &0& & &0\\
-%6&0&0& & & & & & &0& & &0\\
-%7&0&0&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_3} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_3}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_3}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multirow{2}{*}{$-\mu\int_{\omega_3} N_{yk_i,y}\,d\vec x$}\\ 
-%8&0&0& & & & & & &0& & &0\\
-%9&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%10&0&0&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_3} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_3}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_3}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multirow{2}{*}{$-\mu\int_{\omega_3} N_{yk_i,y}\,d\vec x$}\\ 
-%11&0&0& & & & & & &0& & &0\\
-%12&0&0&0&0&0&0&0&0&0&0&0&0&0\\ \hline
-%13&0&0&\multicolumn{4}{c}{$-\mu\int_{\omega_3} N_{xk_j,x}\,d\vec x$} &\multicolumn{2}{c}{$-\mu\int_{\omega_3} N_{yk_j,y}\,d\vec x$}&0&\multicolumn{2}{c}{$-\mu\int_{\omega_3} N_{yk_j,y}\,d\vec x$}&0&$-\mu^2/\lambda\int_{\omega_3}1\,d\vec x$\\
-%\end{tabular}}
-%\\
-%\\
-%$\mathbf{A}^{k_p}_{\omega_4}=${\footnotesize\begin{tabular}{c|cccccccccccc|c}
-%i\textbackslash j & 1& 2& 3& 4& 5& 6& 7 &8 &9 &10 &11 &12&13\\ \hline
-%1&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%2&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%3&\multicolumn{4}{c}{\multirow{4}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_4}\nabla N_{xk_i}\cdot\nabla N_{xk_j}\\+N_{xk_i,x}N_{xk_j,x}\,d\vec x\end{array}$}}}&0&0&0
-%&\multicolumn{2}{c}{\multirow{4}{*}{$\mu\int_{\omega_4} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&0&\multicolumn{2}{c|}{\multirow{4}{*}{$\mu\int_{\omega_4} N_{xk_i,y}N_{yk_j,x}\,d\vec x$}}&\multirow{4}{*}{$-\mu\int_{\omega_4} N_{xk_i,x}\,d\vec x$}
-%\\ 
-%4& & & & &0&0&0& & &0& & \\
-%5& & & & &0&0&0& & &0& & \\
-%6& & & & &0&0&0& & &0& & \\
-%7&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%8&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_4} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}&0&0&0
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_4}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c|}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_4}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&\multirow{2}{*}{$-\mu\int_{\omega_4} N_{yk_i,y}\,d\vec x$}\\ 
-%9& & & & &0&0&0& & &0& & \\
-%10&0&0&0&0&0&0&0&0&0&0&0&0&0\\
-%11&\multicolumn{4}{c}{\multirow{2}{*}{$\mu\int_{\omega_4} N_{yk_i,x}N_{xk_j,y}\,d\vec x$}}&0&0&0
-%&\multicolumn{2}{c}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_4}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&0&\multicolumn{2}{c|}{\multirow{2}{*}{\mbox{$\begin{array}{c}\mu\int_{\omega_4}\nabla N_{yk_i}\cdot\nabla N_{yk_j}\\+N_{yk_i,y}N_{yk_j,y}\,d\vec x\end{array}$}}}&\multirow{2}{*}{$-\mu\int_{\omega_4} N_{yk_i,y}\,d\vec x$}\\ 
-%12& & & & &0&0&0& & &0& & \\ \hline
-%13&0&0&\multicolumn{4}{c}{$-\mu\int_{\omega_4} N_{xk_j,x}\,d\vec x$} &0&\multicolumn{2}{c}{$-\mu\int_{\omega_4} N_{yk_j,y}\,d\vec x$}&0&\multicolumn{2}{c|}{$-\mu\int_{\omega_4} N_{yk_j,y}\,d\vec x$}&$-\mu^2/\lambda\int_{\omega_4}1\,d\vec x$\\
-%\end{tabular}}
-%\\
-\noindent\begin{eqnarray}\footnotesize\mathbf{A}^{k_p}=\left(\begin{array}{@{\hspace{-1mm}}c@{\hspace{0mm}}c@{\hspace{-.3mm}}} \mu\left(\begin{array}{r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r}
- 1/4  & 0  & 0& -1/4  & 0  & 0  & 9/64   &-3/32  &-3/64  & 3/64  &-1/32  &-1/64\\
-   0  &1/4& -1/4  & 0  & 0  & 0  & 3/64  & 3/32  &-9/64   & 1/64  & 1/32  &-3/64\\
-   0& -1/4  &3/2& -1  & 0& -1/4  &-3/32  & 1/16  & 1/32  & 3/32  &-1/16  &-1/32\\
- -1/4  & 0& -1  &3/2& -1/4  & 0  &-1/32  &-1/16  & 3/32  & 1/32  & 1/16  &-3/32\\
-   0  & 0  & 0& -1/4  &1/4  & 0  &-3/64  & 1/32  & 1/64  &-9/64   & 3/32  & 3/64\\
-   0  & 0& -1/4  & 0  & 0  &1/4  &-1/64  &-1/32  & 3/64  &-3/64  &-3/32  & 9/64 \\
-   9/64   & 3/64  &-3/32  &-1/32  &-3/64  &-1/64  &1/4  & 0  & 0  & 0& -1/4  & 0\\
-  -3/32  & 3/32  & 1/16  &-1/16  & 1/32  &-1/32  & 0  &3/2  & 0& -1/4& -1& -1/4\\
-  -3/64  &-9/64   & 1/32  & 3/32  & 1/64  & 3/64  & 0  & 0  &1/4  & 0& -1/4  & 0\\
-   3/64  & 1/64  & 3/32  & 1/32  &-9/64   &-3/64  & 0& -1/4  & 0  &1/4  & 0  & 0\\
-  -1/32  & 1/32  &-1/16  & 1/16  & 3/32  &-3/32& -1/4& -64& -1/4  & 0  &3/2  & 0
-   \end{array}\right) & -\mu h\left(\begin{array}{@{\hspace{.1mm}}c}-1/8\\1/8\\-3/4\\3/4\\-1/8\\1/8\\-1/8\\-3/4\\-1/8\\1/8\\3/4\\1/8\end{array}\right)\\
-  -\mu h\left(\begin{array}{r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r@{\hspace{.1mm}}r}
--1/{8}	&\hspace{1.6mm} \,\;1/{8}	& \hspace{1.6mm} -3/4	& \hspace{1.6mm} \,\;3/4	& \hspace{1.6mm} -1/{8}	&\hspace{1.6mm} \,\;1/{8}
-&  \hspace{1.6mm} -1/{8}	& \hspace{1.6mm} -3/4	& \hspace{1.6mm} -1/{8}	& \hspace{1.6mm} \,\;1/{8}	& \hspace{1.6mm}\,\;3/4	& \hspace{1.6mm} \,\;1/{8}	 \end{array}\right) &  -\displaystyle\frac{\mu^2}{\lambda} h^2
-\end{array}\right).\label{eq_esm}
-\end{eqnarray}
-
-\begin{figure}[h!]\centering
-	\includegraphics[width =.6\columnwidth]{image_bw/A_omega.png}
-\caption{Equations used to build the element stiffness matrix $\mathbf{A}^{k_p}_{\omega_1}$.}
-\label{fig_omega1}
-\end{figure}
-%\begin{figure}[h!]\centering
-%	\includegraphics[width =.6\columnwidth]{image_bw/pcellp.png}
-%	\caption{Left: one interior pressure cell and the variables corresponding to the 13 degrees of freedom of the elemental stiffness matrix by taking integral over the pressure cell; right: four integral subcells of the pressure cell and the variables that an integral over subcell $\omega_1$ contributes to. }
-%\label{fig_esm}
-%\end{figure}
-\begin{figure}[h!]\centering
-	\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width =.3\columnwidth]{image_bw/grid_esm2.png}
-	\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width =.3\columnwidth]{image_bw/grid_esm3.png}
-	\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width =.3\columnwidth]{image_bw/grid_esm1.png}
-	\caption{Left: one interior pressure cell and the variables corresponding to the 13 degrees of freedom of the elemental stiffness matrix by taking integral over the pressure cell. Right: the four integral subcells of the pressure cell. Center: the variables that an integral over subcell $\omega_1$ contributes to. }
-\label{fig_esm}
-\end{figure}
-
-\noindent The global stiffness matrix generated from $\mathbf{A}^{k_p}$ has a stencil shown in Figure \ref{fig_gsm}.
-
-However for boundary cells where $T^p_{k_p}\cap\Omega \ {\neq} \ T^p_{k_p}$, we have to perform the integrations involved in each of $\mathbf{A}^{k_p}_{\omega_i}$ carefully, taking into account the boundary geometry. We discuss this in the next section.  The process of constructing the global stiffness matrix $\mathbf{A}$ from each of the $13\times13$ element stiffness matrices $\mathbf{A}^{k_p}$ is explained in Algorithm \ref{matrix_construction}.
-
-\begin{algorithm}[htp] 
-\caption{Construction of global stiffness matrix $\mathbf{A}$ from elemental $\mathbf{A}^{k_p}$}\label{matrix_construction} 
-\begin{algorithmic}[1]
-	\State $\mathbf{A} \leftarrow \vec 0$
-	\For{$k_p=1$ to $N_p$}
-		\If {$T^p_{k_p}\cap\Omega=T^p_{k_p}$} \Comment{{\footnotesize Interior cell: use precomputed $\mathbf{A}^{k_p}$}}
-			\State Use $\mathbf{A}^{k_p}$ from equation \eqref{eq_esm}
-		\Else \Comment{{\footnotesize Boundary cell: compute $\mathbf{A}^{k_p}$ from $\mathbf{A}^{k_p}_{\omega_i}$}}
- 			\State Perform integration over each subquadrant $\omega_i$ to compute $\mathbf{A}^{k_p}_{\omega_i}$
-			\State $\mathbf{A}^{k_p}=\mathbf{A}^{k_p}_{\omega_1}+\mathbf{A}^{k_p}_{\omega_2}+\mathbf{A}^{k_p}_{\omega_3}+\mathbf{A}^{k_p}_{\omega_4}$
-		\EndIf
-		\For{$i^p=1$ to 13}  
-			\State $i=\textrm{mesh}(k_p,i^p)$ \Comment{{\footnotesize The mesh maps the 13 degrees of freedom involved in $\mathbf{A}^{k_p}$ to their position in a global array}}
-			\For{$j^p=1$ to 13}
-				\State $j=\textrm{mesh}(k_p,j^p)$
-				\State $A_{ij}+=A^{k_p}_{i^pj^p}$
-			\EndFor
-		\EndFor
-	\EndFor
-	\end{algorithmic}
-\end{algorithm}
-%
-%\setlength{\unitlength}{1.4cm}
-%\begin{figure}[ht]\centering
-%\footnotesize\begin{picture}(4,4)
-%  \linethickness{0.5pt}
-%  \multiput(1, 0)(1, 0){3}{\line(0, 1){4}}
-%  \multiput(0,.5)(0,1){4}{\line(1, 0){4}}
-%  \put(.67,.93){\colorbox{white}{$-\mu/2$}}
-%  \put(1.87,.93){\colorbox{white}{$0$}}
-%  \put(2.67,.93){\colorbox{white}{$-\mu/2$}}
-%  \put(.77,1.93){\colorbox{white}{$-\mu$}}
-%  \put(1.87,1.93){\colorbox{white}{$4\mu$}}
-%  \put(2.77,1.93){\colorbox{white}{$-\mu$}}
-%  \put(.67,2.93){\colorbox{white}{$-\mu/2$}}
-%  \put(1.87,2.93){\colorbox{white}{$0$}}
-%  \put(2.67,2.93){\colorbox{white}{$-\mu/2$}}
-%
-%  \put(.26,.43){\colorbox{white}{$-\displaystyle{\frac{1}{64}\mu}$}}
-%  \put(1.16,.43){\colorbox{white}{$-\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(2.26,.43){\colorbox{white}{$\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(3.26,.43){\colorbox{white}{$\displaystyle{\frac{1}{64}\mu}$}}
-%  \put(.16,1.43){\colorbox{white}{$-\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(1.1,1.43){\colorbox{white}{$-\displaystyle{\frac{25}{64}\mu}$}}
-%  \put(2.16,1.43){\colorbox{white}{$\displaystyle{\frac{25}{64}\mu}$}}
-%  \put(3.16,1.43){\colorbox{white}{$\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(.16,2.43){\colorbox{white}{$\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(1.16,2.43){\colorbox{white}{$\displaystyle{\frac{25}{64}\mu}$}}
-%  \put(2.1,2.43){\colorbox{white}{$-\displaystyle{\frac{25}{64}\mu}$}}
-%  \put(3.16,2.43){\colorbox{white}{$-\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(.26,3.43){\colorbox{white}{$\displaystyle{\frac{1}{64}\mu}$}}
-%  \put(1.26,3.43){\colorbox{white}{$\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(2.16,3.43){\colorbox{white}{$-\displaystyle{\frac{5}{64}\mu}$}}
-%  \put(3.26,3.43){\colorbox{white}{$-\displaystyle{\frac{1}{64}\mu}$}}
-%
-%  \put(1.15,.94){\colorbox{white}{$-\mu h/8$}}
-%  \put(1.1,1.94){\colorbox{white}{$-3\mu h/4$}}
-%  \put(1.15,2.94){\colorbox{white}{$-\mu h/8$}}
-%  \put(2.25,.94){\colorbox{white}{$\mu h/8$}}
-%  \put(2.2,1.94){\colorbox{white}{$3\mu h/4$}}
-%  \put(2.25,2.94){\colorbox{white}{$\mu h/8$}}
-%\end{picture}\hspace{5mm}
-%\begin{picture}(3,3)
-%\put(.5,.5){
-%  \linethickness{0.5pt}
-%  \multiput(1, 0)(1, 0){2}{\line(0, 1){3}}
-%  \multiput(0,1)(0,1){2}{\line(1, 0){3}}
-%  \put(.7,.43){\colorbox{white}{$\displaystyle\frac{\mu h}8$}}
-%  \put(1.7,.43){\colorbox{white}{$-\displaystyle\frac{\mu h}8$}}
-%  \put(.65,1.43){\colorbox{white}{$\displaystyle\frac{3\mu h}4$}}
-%  \put(1.69,1.43){\colorbox{white}{$-\displaystyle\frac{3\mu h}4$}}
-%  \put(.7,2.43){\colorbox{white}{$\displaystyle\frac{\mu h}8$}}
-%  \put(1.7,2.43){\colorbox{white}{$-\displaystyle\frac{\mu h}8$}}
-%  \put(.36,.95){\colorbox{white}{$\displaystyle\frac{\mu h}8$}}
-%  \put(1.3,.95){\colorbox{white}{$\displaystyle\frac{3\mu h}4$}}
-%  \put(2.36,.95){\colorbox{white}{$\displaystyle\frac{\mu h}8$}}
-%  \put(.3,1.95){\colorbox{white}{$-\displaystyle\frac{\mu h}8$}}
-%  \put(1.2,1.95){\colorbox{white}{$-\displaystyle\frac{3\mu h}4$}}
-%  \put(2.3,1.95){\colorbox{white}{$-\displaystyle\frac{\mu h}8$}}
-%  \put(1.15,1.43){\colorbox{white}{$-\frac{\mu^2h^2}\lambda$}}
-%}\end{picture}
-%\caption{Global stiffness matrix stencils. Left: $x$ equation stencil, right: $p$ equation stencil. }\label{fig_gsm}
-%\end{figure}
-
-
-	\begin{figure}[htp]
-	\centering
-	\includegraphics[width=.8\columnwidth]{image_bw/A_stencil_latex.png}
-	\caption{Global stiffness matrix stencils centered at an interior $x$ variable (left), $y$ variable (middle) and $p$ variable (right).}
-	\label{fig_gsm}
-	\end{figure}
-
-\subsection{Discrete geometric representation and cut cell integration}
-\label{sec:ch5.discretizationrete_geometric_rep}
-
-	\begin{figure}[htp]
-	\centering
-	\subfigure[]{\includegraphics[trim=160mm 162mm 0mm 0mm, clip,width=.4\columnwidth]{image_bw/grid_zoomin8.png}}
-	\subfigure[]{\includegraphics[trim=160mm 162mm 0mm 0mm, clip,width=.4\columnwidth]{image_bw/grid_bdrycurve8.png}}
-	\caption{A zoom-in view of Figure \ref{fig:ch5.embedding}(a). A levelset function is sampled on a doubly refined grid (left); a segmented curve $\partial\Omega_h$ is generated to approximate the boundary of the geometric domain (right).}
-	\label{fig_bdry}
-	\end{figure}
-
-We discretize the domain $\Omega$ by embedding it in a regular grid. Specifically, we use a signed distance level set function defined over a doubly refined subgrid:
-	$$\mathcal{G}^{\phi}=\{(ih/2,jh/2)\}.$$
-This doubly refined subgrid is thus a superset of all grid nodes in the $x$, $y$ and $p$ grids. The signed distance values at the nodes of the doubly refined grid $\mathcal{G}^{\phi}$ are used to determine the points of intersection between the zero isocontour and the coordinate axes aligned edges of $\mathcal{G}^{\phi}$. The boundary of $\Omega$ is then approximated by a segmented curve $\partial\Omega^h$ connecting these intersection points. The geometric domain is approximated within the region enclosed by $\partial\Omega^h$ (see Figure \ref{fig_bdry}). Near the boundary, the domain within each subgrid cell is approximated by a polygon determined from the boundary edges of the subgrid cell and by straight lines that connect boundary intersection points as demonstrated in Figure \ref{fig_bdry}. Thus we can think of our discrete domain as a union of doubly refined uncut quadrilaterals on the interior and cut polygonal regions contained in doubly refined quadrilaterals on the boundary.
-
-This partitioning of the domain into doubly refined quadrilaterals naturally supports our integration conventions needed for the matrices $\mathbf{A}^{k_p}_{\omega_i}$ discussed in the previous section. The integrals needed for these matrices are evaluated trivially when ${\omega_i}$ is not cut. However when ${\omega_i}$ is cut by the boundary, we can still perform the integrations analytically following ideas from the recent cut cell approach in \cite{BVZST10}. The integrands of each term in the matrices $\mathbf{A}^{k_p}_{\omega_i}$ are polynomials in $x$ and $y$ of degree 2. That is, each integral is of the form:
-$$
-\int_{\omega_i\cap\Omega} a{x^2}+bxy+cy^2+dx+ey+fd\vec{x}
-$$
-Our level set based representation of the geometry means that the domain of integration ${\omega_i\cap\Omega}$ is polygonal. In other words, we need to evaluate a second order polynomial over a polygonal domain. This task can be done trivially by noting that
-$$
-\int_{\omega_i\cap\Omega} a{x^2}+bxy+cy^2+dx+ey+fd\vec{x}=\int_{\omega_i\cap\Omega}\nabla\cdot\left(\begin{array}{c}\frac{ax^3}{3} + \frac{bx^2y}{2} + cxy^2 + \frac{dx^2}{2} + exy + fx \\ 0\end{array}\right)d\vec{x}.
-$$
-That is, because ${\omega_i\cap\Omega}$ is polygonal and our integrand can be expressed in terms of the divergence of a (non-unique) cubic function, application of the divergence theorem yields the easily evaluated forumula:
-$$
-\int_{\omega_i\cap\Omega}\nabla\cdot\left(\begin{array}{c}\frac{ax^3}{3} + \frac{bx^2y}{2} + cxy^2 + \frac{dx^2}{2} + exy + fx \\ 0\end{array}\right)d\vec{x}=\sum_{s=1}^{N_{\partial{(\omega_i\cap\Omega})}}n_{1s}\int_{\partial{(\omega_i\cap\Omega})_s}\left(\hat{a}(s)t^3+\hat{b}(s)t^2+\hat{c}(s)t+\hat{d}(s)\right)dt.
-$$
-Here, the ${N_{\partial{(\omega_i\cap\Omega})}}$ is the number of line segments in the boundary of the polygonal domain, ${\partial{(\omega_i\cap\Omega})_s}$ is the $s$-th segment in the
-polygonal boundary, parameterized by the arc-length variable $t$, $n_{1s}$ is the $x$ component of the outward normal to the $s$-th segment and $\hat{a}(s),\hat{b}(s),\hat{c}(s),\hat{d}(s)$ are the cubic coefficients arising in the boundary integrals over each segment. Again, each term in the sum can be evaluated analytically. This careful treatment of the integrals arising in each $\mathbf{A}^{k_p}_{\omega_i}$ is the key to obtaining second order accuracy in $L^\infty$.
-	
-%\begin{figure}[ht]
-%	\centering
-%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{image_bw/embedding_2_1.jpg}
-%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{image_bw/embedding_3_1.jpg}
-%	\caption{Boundary cut subcells and embedding $x$ and $y$ grids.}
-%	\label{fig:cutcell}
-%\end{figure}
-%
-\section{Dirichlet boundary conditions}\label{sec:dirichlet}
-We have thus far assumed that our solution satisfies the Dirichlet boundary conditions and that our test functions vanish on the Dirichlet boundary. However, because we use a regular grid that does not conform to the actual domain, it is not convenient to directly define a finite element space with a specific value at the irregular boundary. Instead, we can enforce these conditions weakly using the following variational problem:
-\begin{eqnarray}\label{DirichletWeakForm}
-	&&\mbox{find }(\vec u,p)\in H^1(\Omega)\times H^1(\Omega)\times L^2(\Omega)\mbox{, such that}\notag \\
-	&&\int_\Omega 2\mu\left(\frac{\nabla \vec u+\nabla \vec u^T}2\right):\left(\frac{\nabla \vec v+\nabla \vec v^T}2\right)+\mu p(\nabla\cdot \vec v) \,d\vec{x}\notag \\
-	&&\quad =-\int_\Omega \vec f\cdot \vec v\,d\vec{x}+\int_{\partial\Omega}\vec g\cdot \vec v\,ds \quad \forall \vec v \in H_{0,\Gamma_d}^1(\Omega)\times H_{0,\Gamma_d}^1(\Omega) \\
-	&& \int_\Omega\left( -\mu q\nabla\cdot \vec u-\frac{\mu^2}{\lambda}pq\right)\,d\vec{x}=0\quad\forall q\in L^2(\Omega)\\
-	&&\int_{\Gamma_d}\vec u\cdot \vec w\,ds=\int_{\Gamma_d}\vec u_0\cdot \vec w\,ds\quad\forall \vec w\in (H^{-1/2}(\Gamma_d))^2.
-\end{eqnarray}
-Here, we introduce the Dirichlet condition as a constraint. Specifically, we require that the $L^2$ inner product of the solution and an arbitrary function $\vec w\in (H^{-1/2}(\Gamma_d))^2$ is the same as the inner product of the Dirichlet data $\vec u_0$ with $\vec w$. This makes the problem a constrained minimization.
-
-\subsection{Discretizing the Dirichlet problem}
-In order to discretize the Dirichlet condition in the weak formulation, we approximate $(H^{-1/2}(\Gamma_d))^2$ using a subspace $\Lambda_x^h\times\Lambda_y^h=P_0(\calT^{x}\cap \Gamma_d^h)\times P_0(\calT^y\cap\Gamma_d^h)$, which is composed of piecewise constant functions over $x$ and $y$ component grid cells that intersect the Dirichlet boundary. Here we use $\Gamma_d^h$ to denote the portion of $\partial\Omega^h$ over which the Dirichlet constraint is being enforced. We call any $x$ or $y$ cell $T^i$ with $T^i\cap\partial\Omega^h\neq\emptyset$ a boundary cell. The superscript $i$ is used to denote whether the cell is in the $x$ or $y$ grids with $i=1$ signifying an $x$ cell and $i=2$ signifying a $y$ cell. We use $\vec w_{T^i}=\chi_{T^i}(\vec x)\vec e_{i}$ as the basis functions for $\Lambda_x^h\times\Lambda_y^h=P_0(\calT^{x}\cap \Gamma_d^h)\times P_0(\calT^y\cap\Gamma_d^h)$. Here, $\chi_{T^i}(\vec x)$ is the characteristic function of the cell $T^i$:
-$$
-\chi_{T^i}(x)=\left\{\begin{array}{c} 1, \ \vec x\in{T^i}\\ 0, \ \vec x\notin{T^i}.\end{array}\right.
-$$
-Note that we have one basis function per boundary $x$ or $y$ cell. If we use $N_{xd}$ and $N_{yd}$ to denote the number of $x$ and $y$ boundary cells respectively, we can see that the dimension of the space $\Lambda_x^h\times\Lambda_y^h$ is $N_{xd}+N_{yd}$. 
-
-With this approximation, the Dirichlet boundary condition constraint can be expressed as a linear system $\mathbf B^h\vec u^h=\vec u_0^h$ ($\mathbf B^h\in\bbR^{{(N_{xd}+N_{yd})}\times{(N_x+N_y)}}$, $\vec u_0^h\in\bbR^{(N_{xd}+N_{yd})}$) where each equation enforces an integral constraint over the intersection of the discrete boundary $\Gamma_d^h$ with some $x$ or $y$ boundary cell $T^i$:
-$$\sum_{k_i\in I_i}u_{ik_i}\int_{T^i\cap\Gamma_d^h}N_{ik_i}(\vec x)\,ds=\int_{T^i\cap\Gamma_d^h}u_{0i}(\vec x)\,ds$$
-where $\vec u_0=(u_{01},u_{02})$. In practice, we evaluate the integral for a given boundary cell $T^i$ over the portion of the Dirichlet boundary curve $T^i\cap\Gamma_d^h$ from the four subquadrilaterals of $T^i$ arising from the doubly refined grid (as discussed in section \ref{sec:ch5.discretizationrete_geometric_rep}). This is simple because in each of these subquadrilaterals $\Gamma_d^h$ is just a single line segment. We use the following approximation for the right hand side terms in the constraint system:
-$$\int_{T^i\cap\Gamma_d^h}u_{0i}(\vec x)\,ds=\sum_{j=1}^4\int_{\omega^i_j\cap\Gamma_d^h}u_{0i}(\vec x)\,ds\approx \sum_{j=1}^4u_{0i}(c(\omega^i_j\cap\Gamma_d^h)) \int_{\omega^i_j\cap\Gamma_d^h}1\,ds$$
-where $\omega^i_j$ is one of the four subquadrilaterals of the cell $T^i$ and $c(\omega^i_j\cap\Gamma_d^h)$ is the midpoint of the segment $\omega^i_j\cap\Gamma_d^h$. We use the same treatment for the entries in the matrix on the left hand side:
-$$
-\int_{T^i\cap\Gamma_d^h}N_{ik_i}(\vec x)\,ds=\sum_{j=1}^4\int_{\omega^i_j\cap\Gamma_d^h}N_{ik_i}(\vec x)\,ds.
-$$
-We note that the integrand here is simply an $x$ or $y$ bilinear interpolating function. Therefore, the four terms in the sum can be evaluated analytically because they are simply quadratics in any linear parameterization of a given boundary segment $\omega^i_j\cap\Gamma_d^h$.
-	
-The discrete constrained minimization problem can be solved using a Lagrange multiplier method resulting in the following KKT system:
-\begin{eqnarray}\label{KKTSystem}
-	\left(\begin{array}{ccc}
-	\mathbf L_u^{h} & {\mathbf G^{h}}^{T} & {\mathbf B^h}^T\\
-	\mathbf G^{h} & \mathbf D_p^{h} & \mathbf 0\\
-	\mathbf B^h & \mathbf 0 & \mathbf 0
-	\end{array}\right)\left(\begin{array}{c}
-	\vec u^{h}\\ \vec p^{h}\\ \vec \lambda^h
-	\end{array}\right)=\left(\begin{array}{c}
-	\vec f^{h}\\ \vec 0\\ \vec u_0^h
-	\end{array}\right).
-\end{eqnarray}
-There is one Lagrange multiplier degree of freedom per Dirichlet constraint. In other words, $\vec \lambda^h$ is in $\bbR^{(N_{xd}+N_{yd})}$. When we consider boundary equations in the sections that follow, we temporarily eliminate pressure variables $\vec p^{h}$ with the following substitution $\mathbf L^h=\mathbf L_u^{h}-{\mathbf G^{h}}^{T}(\mathbf D_p^h)^{-1}\mathbf G^h$:
-\begin{eqnarray}\label{UnaugmentedKKTSystem}
-	\left(\begin{array}{cc}
-	\mathbf L^h & {\mathbf B^h}^T\\
-	\mathbf B^h & \mathbf 0 
-	\end{array}\right)\left(\begin{array}{c}
-	\vec u^{h}\\ \vec \lambda^h
-	\end{array}\right)=\left(\begin{array}{c}
-	\vec f^{h}\\ \vec u_0^h
-	\end{array}\right).
-\end{eqnarray}
-This system is extremely ill-conditioned for nearly incompressible materials, however it will simplify the exposition of the forthcoming discussion of Dirichlet boundary condition treatment. Furthermore, when performing equation relaxation in our multigrid solver, we temporarily perform this elimination when treating equations near the boundary of the domain. Before discussing our geometric multigrid solution approach for these systems of equations, we would like to first discuss some important aspects of the Dirichlet system. Our treatment of the Dirichlet condition is somewhat nonstandard and we list here a few important details related to the constraint matrix $\mathbf B^h$.
-	
-\begin{enumerate}
-	\item $\mathbf B^h$ consists of two decoupled blocks. There is one block for the $x$ boundary equations and one for the $y$ equations. The only non-zero columns of $\mathbf B^h$ are associated with nodes that are incident on an $x$ or $y$ boundary cell. Therefore, for sufficiently interior degrees of freedom, the KKT system is exactly the same as  \eqref{ALESystem} or \eqref{eqn_unaugmentation}. That is, although the constraint matrix is in $\bbR^{(N_{xd}+N_{yd})\times (N_x+N_y)}$, it really only acts on a small subset of the $N_x+N_y$ displacement degrees of freedom.
-	\item $\mathbf B^h\in \bbR^{(N_{xd}+N_{yd})\times (N_x+N_y)}$, where $(N_{xd}+N_{yd})<(N_x+N_y)$. In fact,
-	\begin{eqnarray*}
-	\mathbf B^h=\left(\begin{array}{cc}\mathbf B^x & \mathbf 0\\ \mathbf 0 & \mathbf B^y \end{array}\right),
-	\end{eqnarray*}
-	where $\mathbf B^x\in \bbR^{N_{xd}\times N_x}$ and $\mathbf B^y\in \bbR^{N_{yd}\times N_y}$.
-	However, it can be shown that $\mathbf B^h$ has full row rank. We refer the reader to the work \cite{BVZST10} for a more detailed discussion of why this is so.
-	\item Our numerical linear algebra approach to the problem is based on the construction of a (full column rank) matrix $\mathbf Z^h\in \bbR^{(N_x+N_y)\times((N_x+N_y)-(N_{xd}+N_{yd}))}$ whose columns span the kernel space of $\mathbf B^h$. Since $\mathbf B^h$ has full row rank, there exists a column permutation $\mathcal P$, such that $\mathbf B^h\mathcal P=\left[\mathbf B_m|\mathbf B_{n-m}\right]$, where $\mathbf B_m\in\bbR^{(N_{xd}+N_{yd})\times(N_{xd}+N_{yd})}$ is non-singular and $\mathbf B_{m-n}\in\bbR^{(N_{xd}+N_{yd})\times((N_x+N_y)-(N_{xd}+N_{yd}))}$. With this permutation, we can construct a so called fundamental basis for the null-space of $\mathbf B^h \mathcal P$: 
-\begin{eqnarray}\label{eq_Z}
-\mathbf Z^h=\left[\begin{array}{c}-\mathbf B_m^{-1}\mathbf B_{n-m}\\ \mathbf I \end{array}\right].
-\end{eqnarray}
-	\item The vector 
-	\begin{eqnarray}\label{eq_c}\vec c^h=\left[\begin{array}{c}\mathbf B_m^{-1}\vec u_0^h\\ 0\end{array}\right]\end{eqnarray}
-	satisfies $\mathbf B^h\mathcal P \vec c^h=\vec u_0^h$. Therefore, all solutions can be expressed as $\vec u^h=\mathcal P(\vec c^h+\mathbf Z^h \vec v^h)$ with $\mathbf v^h\in \bbR^{((N_x+N_y)-(N_{xd}+N_{yd}))}$.
-	\item Our construction of a null-space for the Dirichlet constraint allows us to eliminate the Lagrange multipliers. Substituting $\vec u^h=\mathcal P(\vec c^h+\mathbf Z^h\vec v^h)$ in  \eqref{UnaugmentedKKTSystem}, we have
-	$$\mathbf L^h \mathcal P(\vec c^h+\mathbf Z^h \vec v^h)+ {\mathbf B^h}^T\vec \lambda^h=\vec f^h$$
-	Left multiplying this equation with $(\mathcal P\mathbf Z^h)^T$, and applying the property $\mathbf B^h\mathcal P \mathbf Z^h=0$, we have
-	$$(\mathcal P\mathbf Z^h)^T\mathbf L^h \mathcal P\mathbf Z^h \vec v^h+({\mathbf B^h\mathcal P \mathbf Z^h})^T\vec \lambda^h=(\mathcal P\mathbf Z^h)^T(\vec f^h-\mathbf L^h\mathcal P\vec c^h)$$
-
-        \vspace{-2em}
-
-	\begin{eqnarray}\label{ReducedSystem}
-	({\mathbf Z^h}^T\mathcal P^T\mathbf L^h \mathcal P\mathbf Z^h) \vec v^h=(\mathcal P\mathbf Z^h)^T(\vec f^h-\mathbf L^h\mathcal P\vec c^h).
-	\end{eqnarray}
-That is, if we can solve $\vec v^h$ from the reduced system \eqref{ReducedSystem}, then the KKT system solution can be reconstructed with $\vec u^h=\mathcal P(\vec c^h+\mathbf Z^h\vec v^h)$. Without loss of generality, we assume the variables to be reordered such that $\mathcal P=\mathcal I$. 
-We will make use of this property in the smoother for our geometric multigrid method.
-\end{enumerate}
-	
-\subsection{Constructing the null-space for the Dirichlet constraints}
-Our treatment of the Dirichlet conditions is based on our ability to construct a null-space $\mathbf Z^h$ satisfying $\mathbf B^h\mathbf Z^h=0$ and a special solution $\vec c^h$ satisfying $\mathbf B^h\vec c^h=\vec u_0^h$. The main issue we will discuss now is how to find a fundamental basis $\mathbf Z^h$ that produces a numerically well-conditioned system of equations. This topic was originally discussed in the work of Bedrossian et al., \cite{BVZST10}. However, we found that in our case of nearly incompressible materials, an even more aggressive approach is needed. Bedrossian et al. first suggested an ordering for the boundary integral equations and incident boundary nodes that led to a readily inverted upper triangular $\mathbf B_m$. However, they showed that although this construction was straightforward, the conditioning of this $\mathbf B_m$ deteriorated exponentially in the discretization resolution and was thus not practical. They then showed that it is possible to derive a diagonal $\mathbf B_m$ with a slight modification to the definition of the constraints. Specifically, they showed that an aggregation scheme where cells of a "double-wide" grid were used to define the extent of the line integral constraints led to a diagonal $\mathbf B_m$. This was done by choosing the center node of the 9 nodes incident on the four original cells in the "double-wide" cell as the representative node in the permutation of columns in $\mathbf B^h$. In other words, the center node of the four aggregated cells was given the same index as the row associated with the constraint over those cells. This aggregation of cells is equivalent to replacing a collection of rows in the original "single-wide" $\mathbf B^h$ with the sum of the collection of rows. The choice of which rows to sum together is determined by the "double-wide" cell they belong to. Since no aggregated rows have a non-zero entry associated with the center node of any other aggregate, the $\mathbf B_m$ is diagonal and thus $\mathbf Z^h$ is trivially constructed. This aggregation can equivalently be seen as using a subspace $\Lambda_x^{2h}\times\Lambda_y^{2h}\cap{H^{-1/2}(\Gamma_d)}$ that is based on a coarsened grid. Remarkably, this process does not affect the $L^\infty$ convergence behavior of the scheme. Unfortunately, while the reduced system in \cite{BVZST10} had a satisfactory condition number for the Poisson equation with an incomplete Choleksy preconditioned conjugate gradient solver, we found that this was not the case for nearly incompressible linear elasticity and geometric multigrid. Specifically, the conditioning of the equations at the boundary was poor enough to make the treatment of boundary regions prohibitively costly when performing the smoothing operations used in geometric multigrid. 
-
-We propose a new boundary integral constraint aggregation that allows us to generate a diagonal $\mathbf B_m$ and a better-conditioned reduced system. We note that the elements of the original $\mathbf B^h$ are scaled by a segment length; therefore, a very small segment (associated with a node that is far from the boundary) will generate very small diagonal elements for a $\mathbf B_m$ arising from aggregation. We found this to be a source of the suboptimal conditioning. We propose a modification to the aggregation process that is designed to provide larger diagonal entries in subsequent $\mathbf B_m$. We first define the weight of each node to be the sum of the column in the original "single-wide" $\mathbf B^h$. This weight is the diagonal entry in $\mathbf B_m$ that would arise from an aggregation of the four cells centered around the node. To increase the diagonal entries in the final $\mathbf B_m$, we simply select four cell aggregates such that the associated representative nodes will be chosen in descending order of the total weight of each node. After we choose a node to define a four cell aggregate, the nine nodes incident on the four cells are eliminated from consideration. This process of prioritizing the aggregation rather than inheriting it from the coarse grid has a drawback. There may be some rows that are never added to an aggregate region. For these rows, it may be impossible to choose a representative node. We resolve this by aggregating such a row into a spatially adjacent aggregate. In practice, we also found that limiting representative nodes in the aggregation to ghost nodes (i.e. those geometrically outside the domain $\Omega$) gave even better conditioning. We briefly summarize this process in Algorithm \ref{alg_aggregation}. 
-	
-\begin{algorithm}[ht]
-	\caption{Aggregation Selection}\label{alg_aggregation}
-	\begin{algorithmic}[1]
-	\Procedure{AggregationSelection}{$\mathbf B^x$, $\mathbf B^y$}
-         \For{$v\textbf{\ in\ }\{1,2\}$}
-	\State aggregation cells list $\mathcal Aggr^v=\{\}$
-	\State aggregation representative list $\mathcal Rep^v=\{\}$
-	\State set all active node$^v$ variables and all integral cells$^v$ active
-	\State row weight sum $w_i\gets\sum_j{\mathbf B_{ij}^v}$
-	\State \textbf{Sort} $w$ in a decreasing order
-	\For{$w_j \textbf{\ in\ } w$}
-	    \If {node$^v_j$ is active} 
-	       \State $\mathcal Rep^v\gets \mathcal Rep^v\cup\{j\}$
-	       \State $\mathcal Aggr^v\gets\mathcal Aggr^v\cup\{c\mbox{ for all cell$_c$ adjacent to node$^v_j$}\}$
-	       \State deactivate all cells adjacent to node$^v_j$
-	       \State deactivate all nodes adjacent to node$^v_j$
-	    \EndIf
-	\EndFor\Comment{Now every ghost node belongs to at least one aggregation}
-	\For{all boundary cell$^v_i$}
-		\If{cell$_i$ is inactive}
-			\State \textbf{Find} the closest aggregation of cell$^v_i$ $\mathcal Aggr^v_k$
-			\State $\mathcal Aggr^v_k\gets\mathcal Aggr^v_k\cup\{i\}$
-		\EndIf
-	\EndFor\Comment{Pickup orphans}
-       \EndFor
-	\EndProcedure
-	\end{algorithmic}
-\end{algorithm}
-
-\begin{figure}[h!]
-	\centering
- 	\subfigure[]{\includegraphics[width=0.3 \columnwidth]{image_bw/new_grid_xdirichlet1_w_labels.png}}
- 	\subfigure[]{\includegraphics[width=0.3 \columnwidth]{image_bw/new_grid_xdirichlet3_w_labels.png}}
- 	\subfigure[]{\includegraphics[width=0.3 \columnwidth]{image_bw/new_grid_xdirichlet4_w_labels.png}}
-	\caption{Cell aggregations for $x$ nodes with representative nodes denoted by their number. a) $x$ component boundary cells and the first two representative nodes and the incident $x-$ cells of each representative node; b) all representative nodes for $x$ component cells and their incident cells, orphan cells will be attached to their nearest neighbor cells; c) final cell aggregations together with their representative nodes for the $x$ grid.}
-	\label{fig:aggregation}
-\end{figure}	
-
-
-\section{Multigrid}\label{sec:mg}
-
-We develop an efficient multigrid solver for the discrete systems produced by our method. Our method is purely geometric, and based on the Multigrid Correction Scheme (see Algorithm
-\ref{alg_mg}). The framework admits a simple implementation, however special care is needed to retain near-textbook multigrid convergence rates, especially in the presence of highly
-irregular domains or nearly incompressible materials. The sections that follow will detail the key components of our multigrid solver: a hierarchy of discretizations, a smoothing
-procedure, and appropriate transfer operators (i.e.\ restriction and prolongation) between levels of the hierarchy. Although our design decisions include certain common practices, these
-components have been significantly customized to fit the needs of the specific discretization being followed, and facilitate both convergence and computational efficiency even near the
-incompressible limit. 
-
- %% The key components of our solver are discussed in the sections that follow. Geometric multigrid consists of just a few basic operations: equation smoothing (or relaxation), restriction/prolongation and coarse grid solution. Our smoother is designed for performance in the incompressible limit and for efficient treatment of boundary equations. The level set description of our domain combined with the regular structure of our embedding lattice naturally allows for the creation of a hierarchy of discretizations. The regular grid structure also simplifies the definition of the restriction and prolongation operators. We elaborate on our construction of these key components of our geometric multigrid solver in the subsections that follow.
-
-\begin{algorithm}[ht]
-	\caption{Multigrid defect correction}\label{alg_mg}
-	\begin{algorithmic}[1]
-	\Procedure{V-Cycle}{$\mathbf{\hat L}^{h}$,$\hat{\vec u^h}$,$\hat{\vec f}^{h}$}
-	\If {problem at low resolution and easy to solve}\State $\hat{\vec u}^h\gets({\mathbf{\hat L}^h})^{-1}\hat{\vec f}^h$ and return;
-	\EndIf
-	\State PreRelaxation($\mathbf{\hat L}^{h}$,$\hat{\vec u^h}$,$\hat{\vec f}^{h}$)
-	\State Restriction: $\hat{\vec f}^{2h}\gets\mathbf R(\hat{\vec f}^h-\mathbf{\hat L}^{h}\hat{\vec u^h})$
-	\State V-Cycle($\mathbf{\hat L}^{2h}$,$\hat{\vec u^{2h}}$,$\hat{\vec f}^{2h}$)
-	\State Prolongation: $\hat{\vec u}^{h}\gets\hat{\vec u}^{h}+\mathbf P\hat{\vec u}^{2h}$
-	\State PostRelaxation($\mathbf{\hat L}^{h}$,$\hat{\vec u^h}$,$\hat{\vec f}^{h}$)
-	
-	\EndProcedure
-	\end{algorithmic}
-\end{algorithm}
-
-\subsection{Discretization hierarchy}
-
-We consider a hierarchy of resolutions, each corresponding to a discretization on a progressively larger grid size. In particular, we employ a grid step of $h$ on the finest level of the
-hierarchy (numbered as level zero), followed by discretizations with grid step sizes of $2h,4h,\ldots,2^Lh$, for a total of $L+1$ hierarchy levels. In detail, the hierarchy is
-constructed as follows:
-
-\begin{itemize}
-\item At every level of the hierarchy, say the $l$-th one, we define the background grids $\mathcal{G}^x_{2^lh}, \mathcal{G}^y_{2^lh}, \mathcal{G}^p_{2^lh}$ corresponding to the $x$-,
-  $y$-, and $p$-variables respectively.
-\item A level set function is computed over the respective doubly-refined subgrids $\mathcal{G}^\phi_h,\mathcal{G}^\phi_{2h},\mathcal{G}^\phi_{4h},\ldots$ for each level. Obviously,
-  coarser levels may fail to resolve certain high-frequency features of the domain geometry, leading to possible discrepancies between the discrete systems at various levels, which will
-  be further addressed in our discussion of the smoother and transfer operators. 
-\item Using the level set values associated with a given grid, we generate the discrete domains $\calT^x_{2^lh}, \calT^y_{2^lh}, \calT^p_{2^lh}$, and
- allocate the unknown arrays
-  $\vec{u}^{2^lh}$ and $\vec{p}^{2^lh}$ as well as the right-hand sides $\vec{f}^{2^lh}$ and $\vec{f}^{2^lh}_p$ of the respective equations. 
-    The discrete operators $\mathbf{L}_u^{2^lh}$, $\mathbf{G}^{2^lh}$ and $\mathbf{D}_p^{2^lh}$ of the system (\ref{eq:ch5.ALEsystem.discrete}) are likewise defined on the discrete domain
-    associated with the $l$-th level of the hierarchy, following the same process detailed in section \ref{sec:ch5.discretization}.
-  Note that, although at the finest level of
-  the hierarchy we have used $\vec{f}_p^h=0$ by virtue of our discretization, the right hand side $\vec{f}^{2^lh}_p$ for coarser levels ($l\geq 1$) will generally be nonzero in the
-  Multigrid Correction Scheme (see Algorithm \ref{alg_mg}).
-\end{itemize}
-
-
-From this point on, we will simply use $h$ instead of $2^lh$ to denote the grid spacing at any specific level of the multigrid hierarchy, whenever this does not incur any ambiguity.
-When there is a Dirichlet boundary condition, a constraint matrix $\mathbf B^h$ is defined for each level, enforcing the integral of $x$ or $y$ displacement components along the discretized domain boundary $\partial\Omega^h$ of the current level and within each cell aggregation (each cell group with the same color in Figure \ref{fig:aggregation}) precomputed on the same level, to be the same as that of the Dirichlet values for the corresponding displacement component. Each of these constraints (or cell aggregations) corresponds to one Lagrange multiplier. In the fundamental basis method, we eliminate these multipliers by solving for the fundamental basis coefficients $\vec v^h$ in $\vec c^h+\mathbf Z^h\vec v^h$. By definition of $\vec{c}^h$ \eqref{eq_c} and $\mathbf Z^h$ \eqref{eq_Z}, there is a one-to-one mapping between $\vec v^h$ components and active $x$ and $y$ degrees of freedom that are not aggregation representatives. Thus, the reduced system (\ref{ReducedSystem}) is defined on these degrees of freedom only. Due to the fact that the reconstructed $\vec{u}^h=\vec{c}^h+\mathbf Z^h\vec v^h$ satisfies the constraints automatically, we do not need to restrict any residual for the constraint system, i.e. on coarser levels, the Dirichlet boundary constraint values are always zero. Also, $\vec \lambda^h$ do not need to be solved, therefore, we do not need to record their values, nor prolongate their corrections. 
-When we restrict the residuals of the governing equation, i.e. $\vec r^h=\vec f^h-\mathbf L^h\vec u^h-\mathbf {B^h}^T\vec \lambda^h$, we restrict zero for all equations that will need a $\vec\lambda^h$ value. In other words, we restrict zero residuals from equations involving boundary nodes, i.e. the nodes in Figure \ref{fig:aggregation} cells.
-Although omitting these equations from the inter-grid transfers is a deviation from conventional practice, we compensate by moderately increasing the smoothing effort in
-  the boundary band, effectively driving the residuals closer to zero (which is the value that is actually restricted). This approach avoids the use of specialized, elaborate transfer
-  operators between the $\vec\lambda$ variables, which are not in perfect correspondence across levels due to the potentially different aggregations employed at each level.
-Thus, a single level discretization is defined for all levels with powers of 2 resolutions. 
-
-\subsection{Relaxation}
-The interior equations are uniform and have the same properties, while near the boundary, the equations have very different stencils.
-In order to design a stable and efficient relaxation while keeping the computational cost low, we define two (overlapping) sets of equations, and apply an appropriate relaxation scheme
-to each one. The two sets correspond to equations in the interior of the discrete domain, and equations near the boundary, respectively. We define the extent of the interior region by
-excluding a $5\times 5$ block of cells, centered around any cell that is either entirely exterior to the domain, or intersects a Dirichlet boundary. See Figure \ref{fig_bdry_band},
-right, for an example using a single cell block. The interior region is relaxed with the distributive process detailed in section \ref{sec:distributive}.
-
-We then define the boundary band to be the union of all $7\times7$ blocks of cells centered at each cell that intersects the Dirichlet boundary and then removing all the non-active cells (i.e. cells that are completely exterior to the domain). This defines the set of equations to which we will apply a boundary relaxation. In each single level relaxation, we first sweep over the boundary band, and apply a few iterations of boundary relaxations, then apply one iteration of interior relaxation followed by another few iterations of boundary relaxations. In Figure \ref{fig_bdry_band}, left, we show an example of the cells and equations that end up in a boundary region calculated with the method described above, but using a $3\times3$ box rather than the $7\times7$ box used in our simulations.
-
-  
-	\begin{figure}[ht]\centering
-	\subfigure[An example of boundary band pressure cells and boundary variables using a $3\times3$ box centered at each cell that contains the boundary.]{\includegraphics[height=.4\columnwidth]{image_bw/grid_bdryband_new.png}} \quad
-	\subfigure[An example of distributive pressure cells and variables relaxed using distributive relaxation.  The region is defined by excluding a single cell box centered at each cell containing the boundary.]{\includegraphics[height=.4\columnwidth]{image_bw/grid_dist_final.png}}
-	%\hspace{-5mm}\includegraphics[height=.37\columnwidth]{image_bw/grid_legend.png}
-	%\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/egg_cell_type_bdry.jpg}
-	%\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/egg_cell_type_distri.jpg}
-	\caption{Boundary band and distributive region.}
-	\label{fig_bdry_band}
-	\end{figure}
-
-The efficiency of a multigrid method is closely related to the smoothing efficiency of a single level relaxation. With Poisson's equation, simple Jacobi or Gauss-Seidel will typically suffice as an efficient smoother. These techniques efficiently reduce the high-frequency component of the error and make it possible for a coarse grid to provide a meaningful correction to a finer grid. This property is fundamentally important for the efficiency of the geometrically hierarchical approach to solving the equations. Unfortunately, the equations of nearly incompressible linear elasticity with augmented pressure require more care than the comparably simplistic discrete Poisson equation. Although our system is not symmetric positive definite, we can modify the equations to a more convenient form as in \cite{zhu2009efficient} to design a proper geometric multigrid smoother. We confirm that a change of variables leads to an approximate block triangularization of the discrete system with each diagonal block being a symmetric semi-definite discretization of the Laplacian. Our smoother is then constructed to be an emulation of the Gauss-Seidel relaxation applied on each block.
-
-\subsubsection{Approximated distributive relaxation}
-\label{sec:distributive}
-We follow the idea in \cite{zhu2009efficient} and develop a distributive relaxation. At the continuous PDE level, we apply a change of variable:
-\begin{eqnarray}\label{eq_change_of_variables}
-	\left(\begin{array}{c}\vec u \\ p \end{array}\right)=
-	\left(\begin{array}{cc}\mathbf I &-\nabla\\ \nabla^T & -2\Delta \end{array}\right)
-	\left(\begin{array}{c}\vec v \\ q \end{array}\right) \quad\quad\mbox{or}\quad\quad\hat{\vec u}=\hat{\mathbf M} \hat{\vec v}
-\end{eqnarray}
-and substitute into \eqref{eq:strong2} to achieve a new system
-\begin{eqnarray}\label{eq_triangularized}
-	\left(\begin{array}{cc}\mu\Delta\mathbf I & 0\\ \mu(1+\frac\mu\lambda)\nabla^T & -\mu(1+\frac{2\mu}{\lambda})\Delta \end{array}\right)\left(\begin{array}{c}\vec v \\ q 	\end{array}\right)=\left(\begin{array}{c}\vec f \\ 0 \end{array}\right) \quad\quad\mbox{or}\quad\quad\hat{\mathbf L}\hat{\mathbf M} \hat{\vec v}=\hat{\vec f}
-\end{eqnarray}
-for some auxiliary variable $\hat{\vec v}=(\vec v,q)$.
-The derived PDE system is a block lower triangular system, and can be solved in a forward substitution process, i.e. first solve the  $\vec v$ equations, and then freeze the $\vec v$ variables in the second equation and solve the $q$ equation. Moreover, with a certain choice of discretizations, the same triangulation can be realized on the discretized system, i.e. $\hat{\mathbf L}^h\hat{\mathbf M}^h$ is also a block lower triangular linear system \cite{zhu2009efficient}. 
-
-Due to the fact that each of the diagonal blocks of the discrete auxiliary system is a discretization of the Laplacian operator, we can relax the whole system using a Gauss-Seidel relaxation on each component of the $\vec v$ variables followed by another Gauss-Seidel relaxation on the $q$ variables and achieve the same smoothing efficiency as that of the Gauss-Seidel relaxation applied on Poisson's equation. At any approximation of  $\vec v$ and $q$, the approximate solutions to the augmented system can be reconstructed using \eqref{eq_change_of_variables}. 
-
-In practice, we do not need to explicitly construct $\hat{\vec v}$. 
-In a Gauss-Seidel relaxation applied on $\hat{\vec v}$, we iteratively solve for local corrections $\hat v_i\gets \hat v_i+\delta e_i$, such that the local residual $(\hat{\vec{f}}-\hat{\mathbf L}\hat{\mathbf M} \hat{\vec{v}})_i$ is zeroed out. Therefore, $\delta=(\hat{\mathbf L}\hat{\mathbf M})_{ii}^{-1}\hat r_i$. 
+In practice, we do not need to explicitly construct $\hat{\vec v}$.
+In a Gauss-Seidel relaxation applied on $\hat{\vec v}$, we iteratively solve for local corrections $\hat v_i\gets \hat v_i+\delta e_i$, such that the local residual $(\hat{\vec{f}}-\hat{\mathbf L}\hat{\mathbf M} \hat{\vec{v}})_i$ is zeroed out. Therefore, $\delta=(\hat{\mathbf L}\hat{\mathbf M})_{ii}^{-1}\hat r_i$.
 Such corrections invoke local corrections to $\hat{\vec u}$ in a distributive pattern, i.e. $\hat u_i\gets\hat u_i+\delta \hat{\mathbf M}e_i$, thus defines the distributive relaxation scheme in Algorithm \ref{alg_distributive_smoothing}.
 
 \begin{algorithm}[ht]
@@ -677,11 +457,11 @@ Such corrections invoke local corrections to $\hat{\vec u}$ in a distributive pa
 \end{algorithm}
 
 For a staggered finite difference discretization, the triangularization of the discretized system can be achieved by discretizing the change of variable operator using centered
-differences for the gradient and divergence operators and a five point stencil for the Laplacian operator as shown in \cite{zhu2009efficient}. However, when we use a finite element
+differences for the gradient and divergence operators and a five point stencil for the Laplacian operator as shown in \cite{Zhu.Yongning10}. However, when we use a finite element
 discretization, there is no discrete change of variables with same sparsity that leads to an exact triangularization. Instead, we discretize the gradient operator in
-\eqref{eq_change_of_variables} using the stencils derived in a finite element method, i.e. $\nabla^h=\frac 1 {\mu h^2} {\mathbf
-  G^h}^T=\left(\begin{array}{c}D_x^h\\D_y^h\end{array}\right)$ mapping from $p$ variables to $x$ and $y$ variables with the locations illustrated in Figure \ref{fig_gsm}-right and the
-  stencils being: 
+\eqref{eq:ch5.distributive.transform} using the stencils derived in a finite element method, i.e. $\nabla^h=\frac 1 {\mu h^2} {\mathbf
+  G^h}^T=\left(\begin{array}{c}D_x^h\\D_y^h\end{array}\right)$ mapping from $p$ variables to $x$ and $y$ variables with the locations illustrated in Figure \ref{fig:ch5:stiffnessmatrix.global}-right and the
+  stencils being:
 \begin{eqnarray}
 D_x^h=\frac 1{h}\left]\begin{array}{cc}
 -1/8&1/8\\
@@ -693,7 +473,7 @@ D_y^h=\frac 1{h}\left]\begin{array}{ccc}
 -1/8&-3/4&-1/8
 \end{array}\right[.
 \end{eqnarray}
-Similarly, the Laplacian operator in \eqref{eq_change_of_variables} is discretized from a standard piecewise bi-linear finite element discretization.
+Similarly, the Laplacian operator in \eqref{eq:ch5.distributive.transform} is discretized from a standard piecewise bi-linear finite element discretization.
 \begin{eqnarray}
 M_p^h=\frac 1{h^2}\left]\begin{array}{ccc}
 1/3&1/3&1/3\\
@@ -702,22 +482,22 @@ M_p^h=\frac 1{h^2}\left]\begin{array}{ccc}
 \end{array}\right[
 \end{eqnarray}
 
-Although, the linear system $\hat{\mathbf L}^h\hat{\mathbf M}^h$ is not block triangular, our numerical results show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently. Results of using this relaxation scheme will be shown in section \ref{sec:results}. 
+Although, the linear system $\hat{\mathbf L}^h\hat{\mathbf M}^h$ is not block triangular, our numerical results show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently. Results of using this relaxation scheme will be shown in section \ref{sec:results}.
 
 \subsubsection{Higher order defect correction}
 We also adopt the idea of higher order defect correction, which will allow us to develop a less expensive distributive relaxation.
 In a defect correction scheme for an arbitrary linear system $\mathbf  L \vec u=\vec f$, we solve for the correction $\delta \vec u=\vec u^{\mbox{\tiny{exact}}}-\vec u$, which satisfies an equation $\mathbf  L\delta\vec u=\vec f-\mathbf L\vec u$. In practice, we approximate the equation with another system $\mathbf  L^{\mbox{\tiny{approx}}}\delta\vec u=\vec f-\mathbf L\vec u$ that is easier to solve. For example, in a multigrid correction scheme, a coarse grid system is used as the approximated equation for solving the correction at the fine grid resolution, i.e. $\mathbf L=\mathbf L^{\mbox{\tiny{fine}}},\; \mathbf L^{\mbox{\tiny{approx}}}=\mathbf L^{\mbox{\tiny{coarse}}}$.
-In the high order defect correction scheme, a lower order discretization is employed as the approximated system for solving a higher order discretization correction. 
-In our case, the finite difference discretization is a lower order system, and the finite element discretization is a high order system, i.e. 
+In the high order defect correction scheme, a lower order discretization is employed as the approximated system for solving a higher order discretization correction.
+In our case, the finite difference discretization is a lower order system, and the finite element discretization is a high order system, i.e.
 $\mathbf L=\mathbf L^{\mbox{\tiny{fem}}},\; \mathbf L^{\mbox{\tiny{approx}}}=\mathbf L^{\mbox{\tiny{fdm}}}$.
-In other words, we consider solving the following correction equation: 
+In other words, we consider solving the following correction equation:
 $$\mathbf {\hat L}^{fd,h}\delta\hat{\vec u}=\hat{\vec f}-\mathbf {\hat L}^{fe,h}\hat{\vec u}.$$
 
-\noindent In our case, the lower order operator $\mathbf {\hat L}^{fd,h}$ is the staggered finite difference scheme detailed in \cite{zhu2009efficient}. Note that this operator is only lower
+\noindent In our case, the lower order operator $\mathbf {\hat L}^{fd,h}$ is the staggered finite difference scheme detailed in \cite{Zhu.Yongning10}. Note that this operator is only lower
  order near the boundary, yet second order in the interior; however, we still use this finite difference scheme as the lower order operator in the defect correction process, even when we
  only focus on the domain interior.
  One of the benefits we obtain from such an approximation is that we can use the existing distributive relaxation with the exact triangulation of the
- discretized system \eqref{eq_triangularized}. To be specific, let us rewrite the finite difference system as  
+ discretized system \eqref{eq:ch5.distributive.triangularized}. To be specific, let us rewrite the finite difference system as
 \begin{eqnarray}
 	\mathbf {\hat L}^{fd,h}\hat{\vec u}=
 	\left(\begin{array}{cc}
@@ -740,7 +520,7 @@ and rewrite the finite element system scaled by $1/h^2$ to match the scaling of 
 	\vec 0\end{array}\right)
 \end{eqnarray}
 
-\noindent In a high order defect correction scheme employing a finite difference discretization, we solve for a correction $\delta \hat{\vec u}=\mathbf {\hat M}^{fd,h}{\delta\hat{\vec v}}$ to locally satisfy  
+\noindent In a high order defect correction scheme employing a finite difference discretization, we solve for a correction $\delta \hat{\vec u}=\mathbf {\hat M}^{fd,h}{\delta\hat{\vec v}}$ to locally satisfy
 	$$\mathbf{\hat L}^{fd,h}\mathbf {\hat M}^{fd,h}{\delta\hat {\vec v}}= \frac1{h^2}(\hat{\vec f}^{fe,h}-\mathbf {\hat L}^{fe,h}{\hat {\vec u}}^{\mbox{\tiny{current}}})$$
 This derives a sparser distributive relaxation, shown in Algorithm \ref{alg_fdfe_distribution}.
 
@@ -760,10 +540,10 @@ This derives a sparser distributive relaxation, shown in Algorithm \ref{alg_fdfe
 	\end{algorithmic}
 \end{algorithm}
 
-The previous two types of distributive relaxation are not applicable for variables near the domain boundary. In fact, near the boundary, some of the variables in the distribution stencil may not exist. We follow the idea in \cite{zhu2009efficient}, and temporarily build an unaugmented system in the boundary band (see Figure \ref{fig_bdry_band}, left).
+The previous two types of distributive relaxation are not applicable for variables near the domain boundary. In fact, near the boundary, some of the variables in the distribution stencil may not exist. We follow the idea in \cite{Zhu.Yongning10}, and temporarily build an unaugmented system in the boundary band (see Figure \ref{fig:ch5.boundaryband}, left).
 
 \subsection{Boundary relaxation}
-Near the domain boundary, the previous distributive relaxation is not well defined; a special relaxation is required. In the Neumann boundary condition case, we eliminate $p$ from the augmented system \eqref{eq:ch5.ALEsystem.discrete} by left multiplying the equation with 
+Near the domain boundary, the previous distributive relaxation is not well defined; a special relaxation is required. In the Neumann boundary condition case, we eliminate $p$ from the augmented system \eqref{eq:ch5.LEsystem.augmented.discrete} by left multiplying the equation with
 	$$
 	\mathbf{\hat U}=
 	\left(\begin{array}{cc}
@@ -778,24 +558,24 @@ Therefore,
 	=\mathbf{\hat U}\vec{\hat f}.
 \end{equation}
 In the first equation for $\vec u$, the equation is symmetric and positive definite, and hence can be solved again using Gauss-Seidel relaxation.
-This unaugmented system is a consistent discretization to the original PDE \eqref{eq:strong2}. Although Gauss-Seidel relaxation is not an efficient smoother for the unaugmented system if defined everywhere, for the purpose of boundary relaxation, we only build the temporary unaugmented system and relax it within a very narrow boundary band as demonstrated in Figure \ref{fig_bdry_band}, and temporarily freeze the interior variables. The solution is strongly restricted by nearby interior values, therefore the Gauss-Seidel relaxation is still efficient and stable. Typically, with about 5 to 10 sweeps of boundary relaxation before and after each interior relaxation sweep, the boundary residual is reduced to as small as the interior residual. 
-Once we relaxed $\vec u$ well enough, we freeze $\vec u$ and substitute into the second equation in \eqref{eqn_unaugmentation} to resolve pressure variables. 
+This unaugmented system is a consistent discretization to the original PDE \eqref{eq:ch5.augmented.strong}. Although Gauss-Seidel relaxation is not an efficient smoother for the unaugmented system if defined everywhere, for the purpose of boundary relaxation, we only build the temporary unaugmented system and relax it within a very narrow boundary band as demonstrated in Figure \ref{fig:ch5.boundaryband}, and temporarily freeze the interior variables. The solution is strongly restricted by nearby interior values, therefore the Gauss-Seidel relaxation is still efficient and stable. Typically, with about 5 to 10 sweeps of boundary relaxation before and after each interior relaxation sweep, the boundary residual is reduced to as small as the interior residual.
+Once we relaxed $\vec u$ well enough, we freeze $\vec u$ and substitute into the second equation in \eqref{eqn_unaugmentation} to resolve pressure variables.
 %Therefore, the boundary residual does not dominate and does not affect the multigrid efficiency.
 
 %
 %\begin{figure}[ht]
 %	\centering
-%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{image_bw/embedding_2_3.jpg}
-%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{image_bw/embedding_3_3.jpg}
+%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{part2/chapter5/figures/bw/embedding_2_3.jpg}
+%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{part2/chapter5/figures/bw/embedding_3_3.jpg}
 %	\caption{Approximated boundary segment curves and embedding grids. Red: active boundary nodes and cells for $x$ grid; blue: active boundary nodes and cells for $y$ grid.}
 %	\label{fig:segcurve}
 %\end{figure}
 
 \subsection{Boundary relaxation for the reduced system in Dirichlet boundary condition case}
-	In the Dirichlet boundary condition case, the boundary system \eqref{UnaugmentedKKTSystem} is a KKT system, which is indefinite, and cannot be resolved using Gauss-Seidel relaxations. Alternative approaches such as Kaczmarz relaxation or box relaxation may be efficient smoothers, however, their computational cost is much more expensive. Instead, we follow the fundamental basis method, to solve $\vec v^h$ from the reduced system \eqref{ReducedSystem}, and reconstruct the solution of the KKT system \eqref{UnaugmentedKKTSystem}  using $\vec u^h=\vec c^h+\mathbf Z^h\vec v^h$. 
-	Since $\mathbf L^h$ is symmetric positive definite, ${\mathbf Z^h}^T\mathbf L^h\mathbf Z^h$ is also symmetric positive definite, and hence can be solved using Gauss-Seidel relaxation (see Algorithm \ref{alg:bdry_kernel_relaxation_v}). 
+	In the Dirichlet boundary condition case, the boundary system \eqref{eq:ch5.kkt.unaugmented} is a KKT system, which is indefinite, and cannot be resolved using Gauss-Seidel relaxations. Alternative approaches such as Kaczmarz relaxation or box relaxation may be efficient smoothers, however, their computational cost is much more expensive. Instead, we follow the fundamental basis method, to solve $\vec v^h$ from the reduced system \eqref{eq:ch5.ztaz}, and reconstruct the solution of the KKT system \eqref{eq:ch5.kkt.unaugmented}  using $\vec u^h=\vec c^h+\mathbf Z^h\vec v^h$.
+	Since $\mathbf L^h$ is symmetric positive definite, ${\mathbf Z^h}^T\mathbf L^h\mathbf Z^h$ is also symmetric positive definite, and hence can be solved using Gauss-Seidel relaxation (see Algorithm \ref{alg:bdry_kernel_relaxation_v}).
 
-	In practice, a Gauss-Seidel iteration on \eqref{ReducedSystem} iteratively solves for a correction on each single degree of freedom by solving the following scalar equation
+	In practice, a Gauss-Seidel iteration on \eqref{eq:ch5.ztaz} iteratively solves for a correction on each single degree of freedom by solving the following scalar equation
 	\begin{eqnarray}
 	\vec e_i^T \mathbf L_r^h(\vec v^{h}+\delta \vec e_i) =\vec e_i^T{\mathbf Z^h}^T(\vec f^{h}-\mathbf L^h\vec c^h),
 	\end{eqnarray}
@@ -829,16 +609,16 @@ Once we relaxed $\vec u$ well enough, we freeze $\vec u$ and substitute into the
 
 
 \subsection{Coarsening}
-In a geometric multigrid method, we define a discretization on each level. On the interior of the region, we restrict residuals from the fine grid to coarse grid by applying a restriction operator $\mathbf R$ for each component defined on the staggered grids with stencils illustrated in Figure \ref{fig_restriction} . We consider two types of prolongation stencils. First, we consider prolongation $\mathbf P_{lo}=4\mathbf R^T$. Second, we consider piecewise bi-linear interpolation for $\vec u$ in combination with the same pressure prolongation as in $\mathbf P_{lo}$, which we donate as $\mathbf P_{hi}$. 
+In a geometric multigrid method, we define a discretization on each level. On the interior of the region, we restrict residuals from the fine grid to coarse grid by applying a restriction operator $\mathbf R$ for each component defined on the staggered grids with stencils illustrated in Figure \ref{fig_restriction} . We consider two types of prolongation stencils. First, we consider prolongation $\mathbf P_{lo}=4\mathbf R^T$. Second, we consider piecewise bi-linear interpolation for $\vec u$ in combination with the same pressure prolongation as in $\mathbf P_{lo}$, which we donate as $\mathbf P_{hi}$.
 
 
 \begin{figure}[h!]
 	\centering
-	\subfigure[Fine grid active cells]{\hspace{-1.6cm}\includegraphics[width=0.4 \columnwidth]{image_bw/grid_fine.png}}
-	\subfigure[Coarse grid active cells, overlaid with the fine active cells demonstrated using dashed lines]{\includegraphics[width=0.4 \columnwidth]{image_bw/grid_coarse.png}}\\
+	\subfigure[Fine grid active cells]{\hspace{-1.6cm}\includegraphics[width=0.4 \columnwidth]{part2/chapter5/figures/bw/grid_fine.png}}
+	\subfigure[Coarse grid active cells, overlaid with the fine active cells demonstrated using dashed lines]{\includegraphics[width=0.4 \columnwidth]{part2/chapter5/figures/bw/grid_coarse.png}}\\
 	\caption{Coarsening of grid variables}
 	\label{fig:coarsening}
-\end{figure}	
+\end{figure}
 
 \setlength{\unitlength}{1.2cm}
 \begin{figure}[ht]\centering
@@ -898,18 +678,18 @@ In a geometric multigrid method, we define a discretization on each level. On th
 \caption{Restriction operator stencils. }\label{fig_restriction}
 \end{figure}
 
-However, on the boundary, there is no guarantee that all dependencies of the coarse grid variable restriction stencils are active fine grid degrees of freedom. Therefore, we truncate our restriction stencils to the active degrees of freedom, which is equivalent to restricting zero residuals from inactive regions. Also, when a Dirichlet boundary condition presents, we cannot compute the residuals $\vec r^h=\vec f^h-\mathbf L^h\vec u^h-\mathbf {B^h}^T\vec \lambda^h$ when a $\vec \lambda$ value is involved. In this case, we apply a boundary relaxation strong enough such that the boundary residual is smaller than interior relaxations, and restrict zero boundary residual for these equations. 
+However, on the boundary, there is no guarantee that all dependencies of the coarse grid variable restriction stencils are active fine grid degrees of freedom. Therefore, we truncate our restriction stencils to the active degrees of freedom, which is equivalent to restricting zero residuals from inactive regions. Also, when a Dirichlet boundary condition presents, we cannot compute the residuals $\vec r^h=\vec f^h-\mathbf L^h\vec u^h-\mathbf {B^h}^T\vec \lambda^h$ when a $\vec \lambda$ value is involved. In this case, we apply a boundary relaxation strong enough such that the boundary residual is smaller than interior relaxations, and restrict zero boundary residual for these equations.
 
-The coarse grid constraint system right hand side should have been computed from the restriction of the fine grid constraint system residual. However, due to the fact that our solutions $\vec u_p^h=\vec c^h+\mathbf Z^h\vec v^h$ always satisfy the boundary constraints exactly, the coarse grid Dirichlet boundary condition is always zero. 
+The coarse grid constraint system right hand side should have been computed from the restriction of the fine grid constraint system residual. However, due to the fact that our solutions $\vec u_p^h=\vec c^h+\mathbf Z^h\vec v^h$ always satisfy the boundary constraints exactly, the coarse grid Dirichlet boundary condition is always zero.
 
-Also, prolongation is implemented in a distributive way, i.e. we iterate over the active coarse grid corrections, and distribute their values to all active fine level degrees of freedom. Near the domain boundary this is equivalent to prolongating a zero correction from exterior coarse grid locations, which is reasonable. We notice that this prolongation may lead to a solution away from the fundamental basis solution. Therefore, a projection onto the solution space needs to be applied after the prolongation step. The projected solution is $\vec u_p^h=\vec c^h+\mathbf Z^h\vec v^h$, for some $\vec v^h$, and according to the definition of $\mathbf Z^h$ and $\vec c^h$ in \eqref{eq_Z} and \eqref{eq_c}, we have $\vec v^h=\mathcal Q\vec{u}^h$, where $\mathcal Q$ projects a solution vector to a sub-vector by eliminating the degrees of freedom that correspond to aggregation representative nodes. Therefore, the projected solution is $\vec{u}_p^h=\vec c^h+\mathbf Z^h\mathcal Q\vec u^h$.
+Also, prolongation is implemented in a distributive way, i.e. we iterate over the active coarse grid corrections, and distribute their values to all active fine level degrees of freedom. Near the domain boundary this is equivalent to prolongating a zero correction from exterior coarse grid locations, which is reasonable. We notice that this prolongation may lead to a solution away from the fundamental basis solution. Therefore, a projection onto the solution space needs to be applied after the prolongation step. The projected solution is $\vec u_p^h=\vec c^h+\mathbf Z^h\vec v^h$, for some $\vec v^h$, and according to the definition of $\mathbf Z^h$ and $\vec c^h$ in \eqref{eq:ch5.Zc} and \eqref{eq_c}, we have $\vec v^h=\mathcal Q\vec{u}^h$, where $\mathcal Q$ projects a solution vector to a sub-vector by eliminating the degrees of freedom that correspond to aggregation representative nodes. Therefore, the projected solution is $\vec{u}_p^h=\vec c^h+\mathbf Z^h\mathcal Q\vec u^h$.
 
 
-%So far, we discussed the components of a multigrid method, and we continue by discussing the numerical results. 
+%So far, we discussed the components of a multigrid method, and we continue by discussing the numerical results.
 Now that we have covered all the components of a multigrid method, we will next look at the results we are able to obtain using these methods.
 
 \section{Numerical examples}\label{sec:results}
-	We investigate two aspects of our algorithm: discretization error and multigrid efficiency. In this section, we apply our method on various domains with Neumann or Dirichlet boundary conditions and with a wide range of Poisson's ratios. 
+	We investigate two aspects of our algorithm: discretization error and multigrid efficiency. In this section, we apply our method on various domains with Neumann or Dirichlet boundary conditions and with a wide range of Poisson's ratios.
 	We considered three deformations defined on three geometric domains:
 %\subsection{Disk domain}
 %
@@ -931,16 +711,16 @@ Now that we have covered all the components of a multigrid method, we will next 
 %The current deformation is not good enough, we'll design a new one soon.
 %
 %\begin{figure}\centering
-%\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/disk.jpg}
+%\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/disk.jpg}
 %\caption{disk domain}
 %\label{disk}
-%% \includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/flower_deformed.jpg}
+%% \includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/flower_deformed.jpg}
 %% \caption{deformed flower domain}
 %% \label{flower_deformed}
 %\end{figure}
 %
 %\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{image_bw/quadratic_disk_pr49_neu.png}
+%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr49_neu.png}
 %\vspace*{-.05in}
 %\caption{order of accuracy for Neumann problem on disk domain, Poisson ratio 0.49}
 %\vspace*{-.07in}
@@ -948,7 +728,7 @@ Now that we have covered all the components of a multigrid method, we will next 
 %\end{figure}
 %
 %\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{image_bw/quadratic_disk_pr49_noth.png}
+%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr49_noth.png}
 %\vspace*{-.05in}
 %\caption{order of accuracy for Dirichlet problem on disk domain, Poisson ratio 0.49}
 %\vspace*{-.07in}
@@ -956,7 +736,7 @@ Now that we have covered all the components of a multigrid method, we will next 
 %\end{figure}
 %
 %\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{image_bw/quadratic_disk_pr3_neu.png}
+%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr3_neu.png}
 %\vspace*{-.05in}
 %\caption{order of accuracy for Neumann problem on disk domain, Poisson ratio 0.3}
 %\vspace*{-.07in}
@@ -964,7 +744,7 @@ Now that we have covered all the components of a multigrid method, we will next 
 %\end{figure}
 %
 %\begin{figure}\centering
-%\includegraphics[height=.37\columnwidth]{image_bw/quadratic_disk_pr3_noth.png}
+%\includegraphics[height=.37\columnwidth]{part2/chapter5/figures/bw/quadratic_disk_pr3_noth.png}
 %\vspace*{-.05in}
 %\caption{order of accuracy for Dirichlet problem on disk domain, Poisson ratio 0.3}
 %\vspace*{-.07in}
@@ -988,16 +768,16 @@ Now that we have covered all the components of a multigrid method, we will next 
 	\varphi(\vec x)=\max\bigg{\{}\min\big{\{}  \mbox{dist}(\vec x,\vec 0, r_0 ) , \displaystyle\min_{i}\{\mbox{dist}(\vec x, \vec c_{i}, 0.2)\} \big{\}},-\displaystyle\min_{i}\{\mbox{dist}(\vec x,\vec s_i,r_s)\}\bigg{\}}
 	\end{eqnarray*}
 	where $\mbox{dist}(\mathbf x,\mathbf x_0,r)=|\mathbf x-\mathbf{x_0}|-r$, and $r_0=\left|\frac{0.2}{\sqrt{17}}(4,1)-(0.25,0.25)\right|$.
-	
+
 	A constant divergence deformation is considered, giving the exact boundary conditions and the exact solution for the purpose of error computation.
 	\begin{eqnarray}
 	\phi_1(x,y)=2x+\frac12\cos{\pi x}\sin{\pi y}\\
 	\phi_2(x,y)=2y-\frac12\sin{\pi x}\cos{\pi y}
 	\end{eqnarray}
-	
+
 	\begin{figure}[ht]\centering
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/ginkgo.jpg}
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/ginkgo_deformed.jpg}
+	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/ginkgo.jpg}
+	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/ginkgo_deformed.jpg}
 	\caption{Left: undeformed keyhole domain; right: deformed keyhole domain}
 	\label{ginkgo_deformed}
 	\end{figure}
@@ -1011,17 +791,17 @@ Now that we have covered all the components of a multigrid method, we will next 
 	\phi_1(x,y)=\frac{2x}{\sqrt{\pi}} \cos{\frac{\pi}2y}\\
 	\phi_2(x,y)=\frac{2x}{\sqrt{\pi}} \sin{\frac{\pi}2y}
 	\end{eqnarray}
-		
+
 	\begin{figure}[ht]\centering
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/flower.jpg}
+	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/flower.jpg}
 	\label{flower}
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/flower_deformed.jpg}
+	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/flower_deformed.jpg}
 	\caption{Left: undeformed flower domain; right: deformed flower domain}
 	\label{flower_deformed}
 	\end{figure}
 
 \item \textbf{Spiral domain}
-	We consider a spiral shaped domain, defined by the zero levelset of 
+	We consider a spiral shaped domain, defined by the zero levelset of
 	$$\varphi(\vec x)=r(\vec y)-(0.33+0.08\cos5\theta(\vec y)^{\frac{1}{3}})$$
 	where $\vec y$ is $\vec x-(0.5,0.5)$ rotated around $(0.5,0.5)$ by $\theta=14(2r(\vec x))^{\frac{1}{6}}$
 	and the deformation is given by:
@@ -1029,45 +809,45 @@ Now that we have covered all the components of a multigrid method, we will next 
 	\phi_1(x,y)=\left(\frac12x+\frac12\right)\cos\left(\frac{\pi}{6}+\frac{2}{3}\pi y\right)\\
 	\phi_2(x,y)=\left(\frac12x+\frac12\right)\sin\left(\frac{\pi}{6}+\frac{2}{3}\pi y\right)
 	\end{eqnarray}
-	
+
 	\begin{figure}[ht]\centering
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/spiral.jpg}
+	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/spiral.jpg}
 	\label{spiral}
-	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{image_bw/spiral_deformed.jpg}
+	\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=.37\columnwidth]{part2/chapter5/figures/bw/spiral_deformed.jpg}
 	\caption{Left: undeformed spiral domain, right: deformed spiral domain}
 	\label{spiral_deformed}
 	\end{figure}
 \end{enumerate}
 \subsection{Discretization error}
-	All our testing domains are embedded in a $[0,1]^2$ domain, and we discretize this square domain with a regular grid of different resolutions ranging from 32 to 1024 in each direction. We plotted $\log_2 |\vec u^{\mbox{\tiny{exact}}}-\vec u|_{\infty}$ versus $\log_2 \mbox{resolution}$ and estimated the solution accuracy order by fitting the data with a linear function. We remove the Neumann boundary condition null space by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16]^2$. From the plotted error convergence behavior, we observe a second-order convergence for all three types of domains (see Figures \ref{ginkgo_squeeze_noth}, \ref{egg_flower_noth}, and \ref{fan_spiral_noth}) for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters including near-incompressible materials. We notice that the order of accuracy is slightly smaller for domains with complicated boundaries. An important source of the inaccuracy is introduced by the inconsistent domain discretization at different resolutions. 
+	All our testing domains are embedded in a $[0,1]^2$ domain, and we discretize this square domain with a regular grid of different resolutions ranging from 32 to 1024 in each direction. We plotted $\log_2 |\vec u^{\mbox{\tiny{exact}}}-\vec u|_{\infty}$ versus $\log_2 \mbox{resolution}$ and estimated the solution accuracy order by fitting the data with a linear function. We remove the Neumann boundary condition null space by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16]^2$. From the plotted error convergence behavior, we observe a second-order convergence for all three types of domains (see Figures \ref{ginkgo_squeeze_noth}, \ref{egg_flower_noth}, and \ref{fan_spiral_noth}) for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters including near-incompressible materials. We notice that the order of accuracy is slightly smaller for domains with complicated boundaries. An important source of the inaccuracy is introduced by the inconsistent domain discretization at different resolutions.
 
 	\begin{figure}[ht]\centering
-	\includegraphics[width=.45\columnwidth]{image_bw/ginkgo_squeeze_pr3_neu.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/ginkgo_squeeze_pr49_neu.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/ginkgo_squeeze_pr3_noth.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/ginkgo_squeeze_pr49_noth_hiprol.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol.png}
 	\vspace*{-.05in}
 	\caption{Order of accuracy, $\rho$, for keyhole domain; top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
 	\vspace*{-.07in}
 	\label{ginkgo_squeeze_noth}
 	\end{figure}
-	
+
 	\begin{figure}[h!]\centering
-	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_pr3_neu.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_pr49_neu.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_pr3_noth.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_pr49_noth_hiprol.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol.png}
 	\vspace*{-.05in}
 	\caption{Order of accuracy, $\rho$, for flower domain. Top: Neumann boundary condition, bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
 	\vspace*{-.07in}
 	\label{egg_flower_noth}
 	\end{figure}
-	
+
 	\begin{figure}[h!]\centering
-	\includegraphics[width=.45\columnwidth]{image_bw/fan_spiral_pr3_neu.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/fan_spiral_pr49_neu.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/fan_spiral_pr3_noth.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/fan_spiral_pr49_noth_hiprol.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol.png}
 	\vspace*{-.05in}
 	\caption{Order of accuracy, $\rho$, for spiral domain. Top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
 	\vspace*{-.07in}
@@ -1082,18 +862,18 @@ Now that we have covered all the components of a multigrid method, we will next 
 	\end{eqnarray*}
 
 %	\begin{figure}[ht]\centering
-%	\includegraphics[width=.45\columnwidth]{image_bw/periodic_square_deformed.jpg}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/periodic_square_deformed.jpg}
 %	\vspace*{-.05in}
 %	\caption{Deformation of a periodic example.}
 %	\vspace*{-.07in}
 %	\label{periodic_domain}
 %	\end{figure}
 %
-	Although periodic boundary conditions will not appear in practical elasticity problems, we consider the periodic boundary condition problem to evaluate the multigrid solver while avoiding issues that may arise with boundary relaxation. 
-	We first fix the problem resolution to $128\times128$ and apply finite element distributive relaxation and the distributive relaxation for the finite difference defect correction problem as the interior relaxations. We also apply the bilinear prolongation and a  prolongation with $\mathbf P=4\mathbf R^T$. 	
+	Although periodic boundary conditions will not appear in practical elasticity problems, we consider the periodic boundary condition problem to evaluate the multigrid solver while avoiding issues that may arise with boundary relaxation.
+	We first fix the problem resolution to $128\times128$ and apply finite element distributive relaxation and the distributive relaxation for the finite difference defect correction problem as the interior relaxations. We also apply the bilinear prolongation and a  prolongation with $\mathbf P=4\mathbf R^T$.
 	While low incompressibility problems generate convergence rates no larger than 0.3 for a multigrid V-(1,1) cycle with all different prolongation and distribution options,
-	we focus on the the harder high-incompressible case with Poisson's ratio being 0.49, and investigate both V-(1,1) cycle and W-(1,1) cycle convergence. 
-	As shown in Table \ref{tab_mg_convergence}, both finite element distributive relaxation and the finite difference defect correction scheme generate convergence rates less than $0.5$ with a multigrid V-(1,1) cycle. Although finite difference defect correction distributive relaxation generates slower convergence than finite element distributive relaxation for the V-(1,1) cycle, with the help of a bilinear interpolation or W-(1,1) cycle, we are able to generate a better convergence rate of 0.23. 
+	we focus on the the harder high-incompressible case with Poisson's ratio being 0.49, and investigate both V-(1,1) cycle and W-(1,1) cycle convergence.
+	As shown in Table \ref{tab_mg_convergence}, both finite element distributive relaxation and the finite difference defect correction scheme generate convergence rates less than $0.5$ with a multigrid V-(1,1) cycle. Although finite difference defect correction distributive relaxation generates slower convergence than finite element distributive relaxation for the V-(1,1) cycle, with the help of a bilinear interpolation or W-(1,1) cycle, we are able to generate a better convergence rate of 0.23.
 %	\begin{table}[ht]\centering
 %	\begin{tabular}{c c c c}
 %	\hline
@@ -1147,20 +927,20 @@ Now that we have covered all the components of a multigrid method, we will next 
 	\hline
 	\end{tabular}
 	\caption{Multigrid asymptotic convergence rates for different combinations of boundary conditions, interpolation and distributive relaxation on the flower domain (Poisson's ratio=0.49, resolution=$128\times128$). For optional prolongations, $\mathbf P_{hi}$ is bilinear interpolation and $\mathbf P_{lo}$ is for $\mathbf P=4\mathbf R^T$. For the optional distributions, FE is the distribution matrix discretized with the bilinear finite element method, and FD is using defect correction by employing finite difference distributive relaxation. } \label{tab_mg_convergence} \end{table}
-	
-	We further investigate the multigrid convergence rate for various resolutions by sticking to one scheme which uses finite element distribution, low order prolongation and a V-(1,1) cycle, and plot the convergence rate for problems discretized with resolutions from 32 to 1024 (see Figure \ref{periodic_convergence}). A consistent multigrid convergence rate is observed under refinement. 
+
+	We further investigate the multigrid convergence rate for various resolutions by sticking to one scheme which uses finite element distribution, low order prolongation and a V-(1,1) cycle, and plot the convergence rate for problems discretized with resolutions from 32 to 1024 (see Figure \ref{periodic_convergence}). A consistent multigrid convergence rate is observed under refinement.
 
 	\begin{figure}[ht]\centering
-	\includegraphics[width=.45\columnwidth]{image_bw/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
 	\vspace*{-.05in}
 	\caption{Multigrid V-(1,1) cycle convergence under refinement (Poisson's ratio = 0.49, periodic boundary conditions, finite element distribution). }
 	\vspace*{-.07in}
 	\label{periodic_convergence}
 	\end{figure}
 
-	While all schemes give a nice convergence rate in periodic cases, the convergence rate with Neumann boundary conditions and Dirichlet boundary conditions varies. In non-trivial boundary condition cases, the convergence rate is mainly restricted by the efficiency of the boundary relaxation. Therefore, the convergence rate of a V-(1,1) cycle and a W-(1,1) cycle are very similar. Also different prolongation schemes generate very similar convergence rates (see Table \ref{tab_mg_convergence} for the convergence rate of all algorithm options for the flower domain problem at a fixed resolution of $128\times128$). The difference between using a finite element distributive relaxation and a finite difference defect correction distributive relaxation reflects the efficiency of the whole smoother in combination with the boundary relaxations. 
-	
-	% It is noticed that our aggregation scheme really mollifies the difficulty in boundary smoother. In fact, if we allow both ghost and non-ghost as aggregation representative, then the multigrid average convergence rate slows down to $0.8$ even with a lot of boundary relaxations, a high order prolongation and a W-(1,1) cycle, while restricting aggregation representatives to ghost nodes only improves the resulting multigrid convergence rate to $<0.5$ with 5 boundary iterations. 
+	While all schemes give a nice convergence rate in periodic cases, the convergence rate with Neumann boundary conditions and Dirichlet boundary conditions varies. In non-trivial boundary condition cases, the convergence rate is mainly restricted by the efficiency of the boundary relaxation. Therefore, the convergence rate of a V-(1,1) cycle and a W-(1,1) cycle are very similar. Also different prolongation schemes generate very similar convergence rates (see Table \ref{tab_mg_convergence} for the convergence rate of all algorithm options for the flower domain problem at a fixed resolution of $128\times128$). The difference between using a finite element distributive relaxation and a finite difference defect correction distributive relaxation reflects the efficiency of the whole smoother in combination with the boundary relaxations.
+
+	% It is noticed that our aggregation scheme really mollifies the difficulty in boundary smoother. In fact, if we allow both ghost and non-ghost as aggregation representative, then the multigrid average convergence rate slows down to $0.8$ even with a lot of boundary relaxations, a high order prolongation and a W-(1,1) cycle, while restricting aggregation representatives to ghost nodes only improves the resulting multigrid convergence rate to $<0.5$ with 5 boundary iterations.
 	%	\begin{table}[ht]\centering
 %	\begin{tabular}{c c c c}
 %	\hline
@@ -1188,23 +968,23 @@ Now that we have covered all the components of a multigrid method, we will next 
 %	\caption{Neumann boundary condition multigrid convergence rate(Poisson's ratio=0.49, resolution=$128\times128$).} \label{tab_dirichlet} \end{table}
 
 %	\begin{figure}[ht]\centering
-%	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_pr0_49_br5_residual.png}
-%	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Neumann_FED_Vcycle_PHi_pr0_49_br5_residual.png}
-%	\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
-%	\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Neumann_FED_Vcycle_PHi_pr0_49_br10_residual.png}
+%	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_pr0_49_br5_residual.png}
+%	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_pr0_49_br5_residual.png}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_pr0_49_br10_residual.png}
 %	\vspace*{-.05in}
 %	\caption{Multigrid V-(1,1) cycle convergence under refinement (Poisson's ratio = 0.49). Left: Dirichlet boundary condition proposed as ghost aggregation boundary integral constraints; right: Neumann boundary condition. In both cases, we use finite element distribution and 5 boundary iterations. }
 %	\vspace*{-.07in}
 %	\label{fig_flower_mgrates}
 %	\end{figure}
 
-	We further investigate the convergence rate under refinement, due to the fact that different prolongation schemes and multigrid cycles generate similar convergence rates. We only plot the asymptotic convergence rate of a V-(1,1) cycle with $\mathbf P=4\mathbf R^T$ and using finite element distributive relaxation in the interior. For both the Dirichlet and Neumann boundary condition problem, we plot the asymptotic convergence rate for resolutions from 32 to 1024 and the residual reduction at each iteration for representative resolution numbers that are powers of 2. We observed consistent convergence rate at all resolutions (see Figure \ref{fig_flower_mgrates_0} and Figure \ref{fig_flower_mgrates_1}). 
+	We further investigate the convergence rate under refinement, due to the fact that different prolongation schemes and multigrid cycles generate similar convergence rates. We only plot the asymptotic convergence rate of a V-(1,1) cycle with $\mathbf P=4\mathbf R^T$ and using finite element distributive relaxation in the interior. For both the Dirichlet and Neumann boundary condition problem, we plot the asymptotic convergence rate for resolutions from 32 to 1024 and the residual reduction at each iteration for representative resolution numbers that are powers of 2. We observed consistent convergence rate at all resolutions (see Figure \ref{fig_flower_mgrates_0} and Figure \ref{fig_flower_mgrates_1}).
 
 	\begin{figure}[ht]\centering
-	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_bw42_pr0_49_br10.png}    
-	\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10.png}
-	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Neumann_FED_Vcycle_PHi_bw42_pr0_49_br10.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10.png}
+	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_bw42_pr0_49_br10.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10.png}
+	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_bw42_pr0_49_br10.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10.png}
 	\vspace*{-.05in}
 	\caption{Multigrid V-(1,1) cycle convergence rate at resolutions from 32 to 1024 (Poisson's ratio = 0.49). Left: Dirichlet boundary condition; right: Neumann boundary condition. }
 	\vspace*{-.07in}
@@ -1212,12 +992,12 @@ Now that we have covered all the components of a multigrid method, we will next 
 	\end{figure}
 
 	\begin{figure}[ht]\centering
-	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_bw42_pr0_49_br10_residual.png}    
-	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
-	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_Neumann_FED_Vcycle_PHi_bw42_pr0_49_br10_residual.png}
-	%\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
-	\includegraphics[width=.45\columnwidth]{image_bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
+	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_bw42_pr0_49_br10_residual.png}
+	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
+	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_bw42_pr0_49_br10_residual.png}
+	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
+	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
 	\vspace*{-.05in}
 	\caption{Multigrid V-(1,1) cycle convergence under refinement (Poisson's ratio = 0.49). Left: Dirichlet boundary condition; right: Neumann boundary condition. }
 	\vspace*{-.07in}
@@ -1226,10 +1006,10 @@ Now that we have covered all the components of a multigrid method, we will next 
 
 %
 %	\begin{figure}[ht]\centering
-%	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_convergence_rates_pr3_neu_hiprol.png}
-%	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_convergence_rates_pr49_neu.png}
-%	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_convergence_rates_pr3_noth_hiprol.png}
-%	\includegraphics[width=.45\columnwidth]{image_bw/egg_flower_convergence_rates_pr49_noth.png}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr3_neu_hiprol.png}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr49_neu.png}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr3_noth_hiprol.png}
+%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr49_noth.png}
 %	\vspace*{-.05in}
 %	\caption{Convergence rates of flower domain problem; top: Neumann boundary condition, bottom: Dirichlet boundary condition; Poisson ratio=0.3(left) and 0.49(right); }
 %	\vspace*{-.07in}
@@ -1237,38 +1017,38 @@ Now that we have covered all the components of a multigrid method, we will next 
 %	\end{figure}
 
 \section{Conclusion and future work}
-	We developed a second-order mixed finite element discretization for linear elasticity of all material parameters from compressible to highly incompressible. We developed a multigrid method for the linear system induced by the discretization. By applying approximated distributive relaxation, we can achieve a fast and parameter-independent convergence rate when no boundary conditions are present. With specified boundary conditions defined on a variety of domains, we also demonstrated that the multigrid method can maintain a good convergence rate with only a small number of boundary relaxations. However, the optimum convergence demonstrated in the periodic boundary condition case was not achieved. In the future, we are interested in investigating a more efficient boundary smoother that avoids unaugmentation as well as a continuous extension to Stokes equations. 
-	
+	We developed a second-order mixed finite element discretization for linear elasticity of all material parameters from compressible to highly incompressible. We developed a multigrid method for the linear system induced by the discretization. By applying approximated distributive relaxation, we can achieve a fast and parameter-independent convergence rate when no boundary conditions are present. With specified boundary conditions defined on a variety of domains, we also demonstrated that the multigrid method can maintain a good convergence rate with only a small number of boundary relaxations. However, the optimum convergence demonstrated in the periodic boundary condition case was not achieved. In the future, we are interested in investigating a more efficient boundary smoother that avoids unaugmentation as well as a continuous extension to Stokes equations.
+
 %\section{Mixed finite element}
-%	The term mixed finite element method was originally used in 1960's to describe systems where both stress and displacement are considered as primary variables. A synthetic system has been established since then, including the concepts of convergence, approximation and stability. Mixed finite element method has then developed to various forms in application. 
-%	We refer the audience to \cite{arnold:90:mfem} as an early review about different variational principles, and the concepts of convergence, approximability and stability and their relations. 
+%	The term mixed finite element method was originally used in 1960's to describe systems where both stress and displacement are considered as primary variables. A synthetic system has been established since then, including the concepts of convergence, approximation and stability. Mixed finite element method has then developed to various forms in application.
+%	We refer the audience to \cite{arnold:90:mfem} as an early review about different variational principles, and the concepts of convergence, approximability and stability and their relations.
 	% application
-%	Mixed finite element method has be broadly applied to of fluid simulation, elasticity simulation, physics and mechanics simulations, geophysics, semiconductor simulation, computational fluid dynamics and mechanics. 
+%	Mixed finite element method has be broadly applied to of fluid simulation, elasticity simulation, physics and mechanics simulations, geophysics, semiconductor simulation, computational fluid dynamics and mechanics.
 
 	% what is mixed
 %	Traditional finite element method directly propose problem taking the displacement function as fundamental unknown to solve. However, under certain  circumstances,  it may be beneficial to simultaneously solve for dependent variables including displacement, stress \cite{arnold2002mixed} and pressure\cite{stenberg1996mixed}. Therefore, stress-displacement and pressure-displacement formulation has been developed respectively. In either approach, since a unique problem is proposed in equivalent ways, the derived systems are often mathematically equivalent in the interesting regime. However, the derived numerical problem may vary in accuracy, numerical condition, stability, and be applicable for different numerical methods with varying efficiency. In certain complications, we may benefit from the introduction of auxiliary unknowns.
-	
+
 	%difficulty in requesting high accuracy on pressures
-%	First, for some physics problems, stress and pressure may be of more interesting. For example, in cracking problem, accurate approximation to stress is of substantial importance \cite{belhachmi}. 
+%	First, for some physics problems, stress and pressure may be of more interesting. For example, in cracking problem, accurate approximation to stress is of substantial importance \cite{belhachmi}.
 	% difficulty in constructing fem spaces
-%	Also, some of the interesting problems require finite element space that is not easy to construct or requires higher order finite element spaces. For elasticity problems, the construction of incompressible deformation function space is not trivial. Some investigation of its approximation such as divergence free functions can be found in see \cite{ye1997discrete}, \cite{brenner2007locally}, \cite{AlexanderLinkeDissertation},\cite{wang2009robust}. Special treatment is required to construct such functional spaces. And more elaborate cases including nonlinear compressibility is even harder to construct. 
+%	Also, some of the interesting problems require finite element space that is not easy to construct or requires higher order finite element spaces. For elasticity problems, the construction of incompressible deformation function space is not trivial. Some investigation of its approximation such as divergence free functions can be found in see \cite{ye1997discrete}, \cite{brenner2007locally}, \cite{AlexanderLinkeDissertation},\cite{wang2009robust}. Special treatment is required to construct such functional spaces. And more elaborate cases including nonlinear compressibility is even harder to construct.
 	% instability under extreme cases
 %	The complication may also be introduced due to the loss of robustness at certain extreme situations. For the elasticity problem, under incompressible limit, the stress will blow up. And for high incompressibility problems, it will be very large, leading to nearly singular problem. In fact, similar observations may be found in a broad applications, in which a system is dominated by singular terms under limiting situation. Moreover, a locking phenomena is observed, and there can be a significant decrease in accuracy in pressure\cite{babu?ka1992locking}.
 	% broad applications
-%	Similar issue is also observed in the simulation of flow in porous media \cite{arbogast1996nonlinear}, cartilaginous tissues \cite{kaasschieter2003mixed} and semiconductor device modelling\cite{chen1995mixed,brezzi2005discretization} and geophysics \cite{cai1997control}, in which mixed formulations have demonstrated to be advantageous. %From linear algebra point of view, introducing certain auxiliary variables may alleviate this numerical difficulty. 
-	
+%	Similar issue is also observed in the simulation of flow in porous media \cite{arbogast1996nonlinear}, cartilaginous tissues \cite{kaasschieter2003mixed} and semiconductor device modelling\cite{chen1995mixed,brezzi2005discretization} and geophysics \cite{cai1997control}, in which mixed formulations have demonstrated to be advantageous. %From linear algebra point of view, introducing certain auxiliary variables may alleviate this numerical difficulty.
+
 	% challange using mixed	:  numerical solver for saddle point problems
-%	There are also several complexity introduced by using mixed finite element method. First of all, additional degrees of freedom are introduced requiring solution to larger linear algebra systems. Also, while energy minimization often derives positive definite algebra equations, a mixed finite element problem is often equivalent to a saddle point problem, which leads to indefinite system. As a consequence, traditional methods like Conjugate gradient method and Gauss-Seidel method may fail to converge. Some investigation on eliminating additional degrees of freedom while keeping some property of mixed formulation has been discussed \cite{kui1985generalized}. Others have discussed preconditioned Krylov subspace methods\cite{vassilevski1996preconditioning,benzi2005preconditioner} and fast Uzawa algorithm\cite{cao2003fast, brenner2009fast}. %In addition, distributive relaxation was first introduced for Stokes equation by Brandt et. al., and 
-%		transforming smoothers is applied for PDE constrained optimization problems including Navier-Stokes equations. 
+%	There are also several complexity introduced by using mixed finite element method. First of all, additional degrees of freedom are introduced requiring solution to larger linear algebra systems. Also, while energy minimization often derives positive definite algebra equations, a mixed finite element problem is often equivalent to a saddle point problem, which leads to indefinite system. As a consequence, traditional methods like Conjugate gradient method and Gauss-Seidel method may fail to converge. Some investigation on eliminating additional degrees of freedom while keeping some property of mixed formulation has been discussed \cite{kui1985generalized}. Others have discussed preconditioned Krylov subspace methods\cite{vassilevski1996preconditioning,benzi2005preconditioner} and fast Uzawa algorithm\cite{cao2003fast, brenner2009fast}. %In addition, distributive relaxation was first introduced for Stokes equation by Brandt et. al., and
+%		transforming smoothers is applied for PDE constrained optimization problems including Navier-Stokes equations.
 
 	% stability issue and staggered mesh fem
 %	When applying mixed finite element method to Stokes and Navier-Stokes equations, an inf-sup condition or Ladyzhenskaya-Babuska-Brezzi condition need to be satisfied in order to keep the equation stable \cite{arnold1984stable}. When applying a low-order mixed finite element method, special treatment is required in order to keep the system stable. A number of authors have addressed this issue in \cite{MR753954,MR548867,MR1320897,bochev2007stabilization}. Han et. al. introduced a new mixed finite element formulation for Stokes equation \cite{Han.Houde98}, in which the velocity components and pressure are defined on a staggered grid. The marker and cell method (MAC) can be derived from the resulting finite element method. This method is then used in Navier-Stokes equation in \cite{han2008mixed}.
 	%mixed finite element for elasticity
 %	For nonlinear hyperelasticity model, a stable mixed finite element method is also proposed in \cite{klaas1999stabilized}.
 
-%Multigrid method as a linear solver for mixed system has also be disussed. 
+%Multigrid method as a linear solver for mixed system has also be disussed.
 %Distributive relaxation was first introduced for fluid simulations in \cite{brandt1978multi}, and theoretical analysis about convergence is established in \cite{wittum1989multi, wittum1990convergence}. A stable multigrid method for near-incompressible elasticity is developed in \cite{wieners2000robust}
-%The stability of a mixed finite element method for near-incompressible elasticity is investigated in \cite{braess2005finite} .	
+%The stability of a mixed finite element method for near-incompressible elasticity is investigated in \cite{braess2005finite} .
 
 %
 %\begin{eqnarray*}
@@ -1366,8 +1146,8 @@ Now that we have covered all the components of a multigrid method, we will next 
 %\definecolor{Green}{rgb}{0,.5,0}
 %\begin{eqnarray*}
 %\left(\begin{array}{c}
-%\color{red}\delta\phi_1 \\ 
-%\color{Green}\delta\phi_2 \\ 
+%\color{red}\delta\phi_1 \\
+%\color{Green}\delta\phi_2 \\
 %\color{black}
 %\delta p \end{array}\right)\end{eqnarray*}
 %
