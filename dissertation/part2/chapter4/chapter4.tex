@@ -916,7 +916,7 @@ Lastly, we demonstrate our multigrid algorithm on the embedded interface example
 \end{center}
 \end{figure}
 
-\section{Discussion and Conclusion} \label{sec:ch4.conclusion}
+\section{Discussion, Conclusion, and Future Work}
 
 We presented a virtual node method to solve embedded Neumann, Dirichlet, and interface problems \eqref{eq:ch4.poisson} (cf. \cite{Bedrossian10}) which uses Lagrange multipliers to enforce the Dirichlet condition \eqref{eq:ch4.poisson.D} and the jump condition \eqref{eq:ch4.poisson.DJ} weakly. We described a general algorithm to define the Lagrange multiplier space that ultimately yields a symmetric positive definite system with better conditioning than that yielded when using the double-wide constraints described in \cite{Bedrossian10}. The geometric intuitiveness of our method makes it relatively easy to implement, and the numerical examples in \S\ref{sec:ch4.examples} demonstrate its second order accuracy in $L^{\infty}$. Although simpler embedded domain discretizations exist (see, for example, \cite{Gibou02} and \cite{Ng.YenTing09}), we believe one distinct advantage of our embedded domain discretizations is that they naturally extend to our embedded interface discretization. Thus, it takes relatively little machinery to understand and implement all three methods.
 

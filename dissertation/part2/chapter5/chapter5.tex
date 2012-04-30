@@ -327,7 +327,7 @@ We have one Lagrange multiplier degree of freedom per discrete Dirichlet constra
 \end{equation}
 Although this latter system is extremely ill-conditioned in the nearly incompressible regime, it will simplify the exposition of the forthcoming discussion of Dirichlet boundary condition treatment. Furthermore, our multigrid algorithms make use of this elimination near the boundary during relaxation.
 
-Ultimately, we use a constraint aggregation algorithm similar to that described in Chapter~\ref{ch:pt2.poisson}, \S\ref{subsubsec:ch4.constraintaggregation}, to reformulate the discretized Dirichlet constraints. But before continuing, we would like to point out a couple important details related to the constraint matrix $B$.
+Ultimately, we use a constraint aggregation algorithm similar to that described in Chapter~\ref{ch:pt2.poisson}, \S\ref{subsubsec:ch4.constraintaggregation}, to reformulate the discretized Dirichlet constraints. But before continuing, we would like to point out a couple important details related to the constraint matrix $B$ (cf. \S\ref{subsec:ch4.discretization.dirichlet}).
 
 \begin{itemize}
 
@@ -393,7 +393,7 @@ From this point on, we will simply use $h$ instead of $2^{\ell}h$ to denote the 
 
 \subsection{Relaxation}
 
-The interior equations are uniform and have the same properties, while near the boundary, the equations have very different stencils. In order to design a stable and efficient relaxation scheme while keeping the computational cost low, we define two (overlapping) sets of equations, and apply an appropriate relaxation subscheme to each one. The two sets correspond to equations in the interior of the discretized domain and equations near the boundary, respectively. We define the extent of the interior region by excluding $5 \times 5$ blocks of cells, each centered around any cell that intersects the Dirichlet boundary. See Figure~\ref{fig:ch5.boundaryband}(b) for an example using $1 \times 1$ cell blocks. This interior region is relaxed with the distributive process detailed in \S\ref{subsubsec:relaxation.distributive}.
+The interior equations are uniform and have the same properties, while near the boundary, the equations have very different stencils. In order to design a stable and efficient relaxation scheme while keeping the computational cost low, we define two (overlapping) sets of equations, and apply an appropriate relaxation subscheme to each one. The two sets correspond to equations in the interior of the discretized domain and equations near the boundary, respectively. We define the extent of the interior region by excluding $5 \times 5$ blocks of cells, each centered around any cell that intersects the Dirichlet boundary. See Figure~\ref{fig:ch5.boundaryband}(b) for an example using $1 \times 1$ cell blocks. This interior region is relaxed with the distributive process detailed in \S\ref{subsubsec:ch5.multigrid.relaxation.distributive}.
 
 We then define the boundary band to be the union of all $7 \times 7$ blocks of cells centered at any cell that intersects the Dirichlet boundary (excluding any cells completely exterior to the domain). This defines the set of equations to which we will apply our boundary relaxation scheme. In each single level relaxation, we first sweep over the boundary band, apply a few iterations of boundary relaxations, then apply one iteration of interior relaxation, and finally follow this by another few iterations of boundary relaxations. In Figure~\ref{fig:ch5.boundaryband}(a), we show an example of the cells and equations that end up in a boundary region calculated with the method described above. Soely for the sake of example, due to the coarseness of the illustrated grid, Figure~\ref{fig:ch5.boundaryband} uses $3 \times 3$ cell blocks rather than the $7 \times 7$ cell blocks used in our examples.
 
@@ -411,7 +411,7 @@ We then define the boundary band to be the union of all $7 \times 7$ blocks of c
 
 The efficiency of a multigrid algorithm is closely related to the smoothing efficiency of a single level relaxation. With Poisson's equation, simple Jacobi or Gauss-Seidel will typically suffice as an efficient smoother. These techniques effectively reduce the high-frequency components of the error and make it possible for a coarse grid to provide a meaningful correction to a fine grid. This property is fundamentally important for the efficiency of the geometrically hierarchical approach. Unfortunately, the equations of nearly incompressible linear elasticity with augmented pressure require more care than the comparably simplistic discrete Poisson equation (cf. Chapter~\ref{ch:pt2.poisson}). Although our system is not symmetric positive definite, we can reformulate the equations in a more convenient form as in \cite{Zhu.Yongning10} to design an effective geometric multigrid smoother. Indeed, our change of variables leads to an approximate block triangularization of the discrete system with each diagonal block being a symmetric semi-definite discretization of the Laplacian. Our smoother is then constructed to be an application of the Gauss-Seidel relaxation on each block.
 
-\subsubsection{Approximate distributive relaxation} \label{subsubsec:relaxation.distributive}
+\subsubsection{Approximate distributive relaxation} \label{subsubsec:ch5.multigrid.relaxation.distributive}
 
 We follow the idea in \cite{Zhu.Yongning10} and develop a \emph{distributive relaxation scheme}. We apply the following transformation on the continuous variable $\tilde{\bfu} := (\bfu \; p)$:
 \begin{equation} \label{eq:ch5.distributive.transform}
@@ -470,7 +470,7 @@ M_p := \frac{1}{h^2} \left] \begin{matrix} +1/3 & +1/3 & +1/3 \\ +1/3 & -8/3 & +
 
 Although the linear system $\tilde{A} \tilde{M}$ is not strictly block triangular, our numerical results in \S\ref{sec:ch5.examples} show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently.
 
-\subsubsection{High order defect correction}
+\subsubsection{High order defect correction} \label{subsubsec:ch5.multigrid.relaxation.defectcorrection}
 
 We can decrease the cost of our distributive relaxation via \emph{high order defect correction}. To introduce the idea, suppose we wish to solve the linear system $L \vec{u} = \vec{f}$ for the unknown $\vec{u}$. In a \emph{defect correction} scheme, we solve for a correction $\delta\vec{u}$ to a current approximation $\vec{u}$ via some alternate, typically easier system $L' \delta\vec{u} = \vec{f} - L \vec{u}$. For example, in a multigrid correction scheme with $L$ a fine grid operator, $L'$ (roughly) corresponds to the coarse grid operator. In a \emph{high order} defect correction scheme, a lower order discretization alternate system is used to to solve for a higher order discretization correction. In our case, the lower order operator is based on a finite difference approximation while the high order operators corresponds to our finite element discretization described in \S\ref{subsec:ch5.discretization}. In other words, we solve the following correction equation:
 \begin{equation*}
@@ -492,17 +492,17 @@ and scale finite element system by $1/h^2$ to match the scaling of the both the 
 \begin{pmatrix} \vec{u}^{\text{FEM}} \\ \vec{p}^{\text{FEM}} \end{pmatrix}, \quad
 \frac{1}{h^2} \tilde{f}^{\text{FEM}} = \frac{1}{h^2} \begin{pmatrix} \vec{f}^{\text{FEM}} \\ \vec{0} \end{pmatrix}.
 \end{equation*}
-(Note that $\tilde{A}^{\text{FEM}}$ is precisely the operator $\tilde{A}$ defined in \eqref{eq:ch5.LEsystem.augmented.discrete}, and similarly for the other variables marked with $\cdot^{\text{FEM}}$; we only add the subscript to emphasize the difference with the $\cdot^{\text{FD}}$ variables.) We thus solve for a correction $\delta\tilde{u} = \tilde{M}^{\text{FD}} \delta\tilde{v}$ via
+(Note that $\tilde{A}^{\text{FEM}}$ is precisely the operator $\tilde{A}$ defined in \eqref{eq:ch5.LEsystem.augmented.discrete}, and similarly for the other variables marked with $\cdot^{\text{FEM}}$; we only add the superscript to emphasize the difference with the $\cdot^{\text{FD}}$ variables.) We thus solve for a correction $\delta\tilde{u} = \tilde{M}^{\text{FD}} \delta\tilde{v}$ via
 \begin{equation*}
 \tilde{A}^{\text{FD}} \tilde{M}^{\text{FD}} \delta\tilde{v} = \frac{1}{h^2} \lrp{\tilde{f}^{\text{FEM}} - \tilde{A}^{\text{FEM}} \tilde{u}^{\text{current}}}.
 \end{equation*}
 This induces a sparser distributive relaxation scheme; the details are given in Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.distributive.defectcorrection}.
 
 \begin{algorithm}[htbp]
-\caption{Distributive relaxation with high order defect correction (WHODC).}
+\caption{Distributive relaxation with \emph{finite difference defect correction} (FDDC).}
 \label{alg:ch5.distributive.defectcorrection}
 \begin{algorithmic}[1]
-\STATE \textbf{function} $\operatorname{DistributiveSmoothWHODC} \lrp{\tilde{A}^{\text{FD}}, \tilde{M}^{\text{FD}}, \tilde{A}^{\text{FEM}}, \tilde{M}^{\text{FEM}}, \tilde{u}, \tilde{f}^{\text{FEM}}}$ \textbf{:}
+\STATE \textbf{function} $\operatorname{DistributiveSmoothWithFDDC} \lrp{\tilde{A}^{\text{FD}}, \tilde{M}^{\text{FD}}, \tilde{A}^{\text{FEM}}, \tilde{M}^{\text{FEM}}, \tilde{u}, \tilde{f}^{\text{FEM}}}$ \textbf{:}
 \FOR{$\vec{w} \in \set{\vec{u}^1, \vec{u}^2, \vec{p}}$}
     \FOR{$i \in \operatorname{Lattice}(\vec{w})$}
         \STATE $r \leftarrow \tilde{f}^{\text{FEM}}_i - \tilde{A}^{\text{FEM}} \tilde{u}$
@@ -566,7 +566,7 @@ and then applying the correction $\vec{v} \leftarrow \vec{v} + \delta \vec{e}_i$
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Coarsening}
+\subsection{Coarsening} \label{subsec:ch5.multigrid.coarsening}
 
 In contrast to our smoothing operator discussed in the preceding subsections, our grid transfer operators are relatively straightforward. On the interior of the domain, we restrict fine grid residuals to the coarse grid by applying a restriction operator $R$ with the stencils illustrated in Figure~\ref{fig:ch5.restriction}. We consider two kinds of prolongation operators for our numerical examples in \S\ref{subsec:ch5.examples.multigrid}. First, we consider simply the transpose of the restriction operator: $P_{\text{lo}} := 4 R^t$. Second, we also consider piecewise bilinear interpolation for $\vec{u}$ in combination with the same pressure prolongation given by $P_{\text{lo}}$, which we denote as $P_{\text{hi}}$.
 
@@ -721,209 +721,142 @@ where $\bfy = \bfy(\bfx)$ is $\bfx - (0.5,0.5)$ rotated around (0.5,0.5) by $\th
 
 \subsection{Convergence} \label{subsec:ch5.examples.convergence}
 
-All our testing domains are embedded in a $[0,1]^2$ domain, and we discretize this square domain with a regular grid of different resolutions ranging from 32 to 1024 in each direction. We plotted $\log_2 |\vec u^{\mbox{\tiny{exact}}}-\vec u|_{\infty}$ versus $\log_2 \mbox{resolution}$ and estimated the solution accuracy order by fitting the data with a linear function. We remove the Neumann boundary condition null space by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16]^2$. From the plotted error convergence behavior, we observe a second-order convergence for all three types of domains (see Figures \ref{ginkgo_squeeze_noth}, \ref{egg_flower_noth}, and \ref{fan_spiral_noth}) for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters including near-incompressible materials. We notice that the order of accuracy is slightly smaller for domains with complicated boundaries. An important source of the inaccuracy is introduced by the inconsistent domain discretization at different resolutions.
+We embed all our testing domains in a regular square Cartesian grid over $[0,1] 
+\times [0,1]$ with resolutions ranging from $32 \times 32$ to $1024 \times 1024$. We use a log-log plot of the error ($\log_2 \norm{\vec{u}^{\text{exact}} - \vec{u}^{\text{approx}}}_{\infty}$) versus the resolution ($\log_2 \text{resolution}$) to estimate the order of convergence via a least squares linear regression. We remove any solution null space in an example with entirely Neumann boundary conditions by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16] \times [7/16,9/16]$. We observe second order convergence over all three example domains for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters, including in the nearly incompressible regime (see Figures~\ref{fig:ch5.examples.convergence.ginkgo}, \ref{fig:ch5.examples.convergence.flower}, and \ref{fig:ch5.examples.convergence.spiral}).
 
-\begin{figure}[ht]\centering
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol.png}
-\vspace*{-.05in}
-\caption{Order of accuracy, $\rho$, for keyhole domain; top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
-\vspace*{-.07in}
-\label{ginkgo_squeeze_noth}
+\setlength{\figurewidth}{0.45\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Neumann BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu.png}}
+\subfigure[Neumann BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu.png}} \\
+\subfigure[Dirichlet BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth.png}}
+\subfigure[Dirichlet BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol.png}}
+\caption{Log-log plots of the $L^{\infty}$-error of the approximate solution versus the grid resolution, and the corresponding computed orders of convergence, $\rho$, for the keyhole domain. We stipulate an embedded Neumann boundary condition for the top ((a), (b)) examples and an embedded Dirichlet boundary condition for the bottom ((c), (d)) examples. The left ((a), (c)) examples have a Poisson's ratio of $\nu = 0.3$, while the right ((b), (d)) use a Poisson's ratio of $\nu = 0.49$, very close to the incompressible limit. Square (circle) markers in the above error plots correspond to errors in the $x$ ($y$) component.}
+\label{fig:ch5.examples.convergence.ginkgo}
+\end{center}
 \end{figure}
 
-\begin{figure}[h!]\centering
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol.png}
-\vspace*{-.05in}
-\caption{Order of accuracy, $\rho$, for flower domain. Top: Neumann boundary condition, bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
-\vspace*{-.07in}
-\label{egg_flower_noth}
+\setlength{\figurewidth}{0.45\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Neumann BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu.png}}
+\subfigure[Neumann BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu.png}}
+\subfigure[Dirichlet BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth.png}}
+\subfigure[Dirichlet BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol.png}}
+\caption{Log-log plots of the $L^{\infty}$-error of the approximate solution versus the grid resolution, and the corresponding computed orders of convergence, $\rho$, for the flower domain. We stipulate an embedded Neumann boundary condition for the top ((a), (b)) examples and an embedded Dirichlet boundary condition for the bottom ((c), (d)) examples. The left ((a), (c)) examples have a Poisson's ratio of $\nu = 0.3$, while the right ((b), (d)) use a Poisson's ratio of $\nu = 0.49$, very close to the incompressible limit. Square (circle) markers in the above error plots correspond to errors in the $x$ ($y$) component.}
+\label{fig:ch5.examples.convergence.flower}
+\end{center}
 \end{figure}
 
-\begin{figure}[h!]\centering
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth.png}
-\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol.png}
-\vspace*{-.05in}
-\caption{Order of accuracy, $\rho$, for spiral domain. Top: Neumann boundary condition; bottom: Dirichlet boundary condition; left: Poisson's ratio=0.3; right: Poisson's ratio=0.49; square marker: $x$ component; circle marker: $y$ component. }
-\vspace*{-.07in}
-\label{fan_spiral_noth}
+\setlength{\figurewidth}{0.45\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Neumann BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu.png}}
+\subfigure[Neumann BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu.png}}
+\subfigure[Dirichlet BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth.png}}
+\subfigure[Dirichlet BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol.png}}
+\caption{Log-log plots of the $L^{\infty}$-error of the approximate solution versus the grid resolution, and the corresponding computed orders of convergence, $\rho$, for the spiral domain. We stipulate an embedded Neumann boundary condition for the top ((a), (b)) examples and an embedded Dirichlet boundary condition for the bottom ((c), (d)) examples. The left ((a), (c)) examples have a Poisson's ratio of $\nu = 0.3$, while the right ((b), (d)) use a Poisson's ratio of $\nu = 0.49$, very close to the incompressible limit. Square (circle) markers in the above error plots correspond to errors in the $x$ ($y$) component.}
+\label{fig:ch5.examples.convergence.spiral}
+\end{center}
 \end{figure}
-
-\begin{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Multigrid} \label{subsec:ch5.examples.multigrid}
 
-	We also investigated the efficiency of the multigrid methods. First, we consider a periodic boundary condition problem defined on $[0,1]^2$ and with the exact solution given by
-	\begin{eqnarray*}
-	\phi_1(x,y)=\sin{2\pi x}+\cos{2\pi y}\\
-	\phi_2(x,y)=\cos{2\pi x}+\sin{2\pi y} .
-	\end{eqnarray*}
+We now numerically investigate the efficiency of our multigrid framework from \S\ref{sec:ch5.multigrid}. First, we consider a periodic boundary condition problem defined on $[0,1] \times [0,1]$ with exact solution
+\begin{align*}
+\phi_1(x,y) & = \sin 2\pi x + \cos 2 \pi y, \\
+\phi_2(x,y) & = \cos 2\pi x + \sin 2 \pi y.
+\end{align*}
+Although periodic boundary conditions will not appear in practical elasticity problems, we initially consider periodic boundary conditions to evaluate various algorithm parameters while avoiding complications due to boundary relaxation.
 
-%	\begin{figure}[ht]\centering
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/periodic_square_deformed.jpg}
-%	\vspace*{-.05in}
-%	\caption{Deformation of a periodic example.}
-%	\vspace*{-.07in}
-%	\label{periodic_domain}
-%	\end{figure}
-%
-	Although periodic boundary conditions will not appear in practical elasticity problems, we consider the periodic boundary condition problem to evaluate the multigrid solver while avoiding issues that may arise with boundary relaxation.
-	We first fix the problem resolution to $128\times128$ and apply finite element distributive relaxation and the distributive relaxation for the finite difference defect correction problem as the interior relaxations. We also apply the bilinear prolongation and a  prolongation with $\mathbf P=4\mathbf R^T$.
-	While low incompressibility problems generate convergence rates no larger than 0.3 for a multigrid V-(1,1) cycle with all different prolongation and distribution options,
-	we focus on the the harder high-incompressible case with Poisson's ratio being 0.49, and investigate both V-(1,1) cycle and W-(1,1) cycle convergence.
-	As shown in Table \ref{tab_mg_convergence}, both finite element distributive relaxation and the finite difference defect correction scheme generate convergence rates less than $0.5$ with a multigrid V-(1,1) cycle. Although finite difference defect correction distributive relaxation generates slower convergence than finite element distributive relaxation for the V-(1,1) cycle, with the help of a bilinear interpolation or W-(1,1) cycle, we are able to generate a better convergence rate of 0.23.
-%	\begin{table}[ht]\centering
-%	\begin{tabular}{c c c c}
-%	\hline
-%	distribution&multigrid cycle& asymptotic convergence rate / average convergence rate \\
-%	\hline
-%	FD&V-(1,1)& 0.47/0.35\\
-%	FE&V-(1,1)& 0.27/0.25\\
-%	\hline
-%	\end{tabular}
-%	\caption{Periodic boundary condition multigrid convergence rate(Poisson's ratio=0.49, resolution=$256\times256$). For the optional distributions, FE is the distribution matrix discretized with bilinear finite element method, and FD is using defect correction by employing finite difference distributive relaxation. } \label{tab_periodic} \end{table}
-	\begin{table}[ht]\centering
-	\begin{tabular}{c c c c c}
-	\hline
-	boundary condition&distribution&multigrid cycle& $\mathbf P_{hi}$ & $\mathbf P_{lo}$ \\
-	\hline
-	Periodic &FD&V-(1,1)& 0.24 & 0.42\\
-	&FD&W-(1,1)& 0.23 & 0.25\\
-	&FE&V-(1,1)& 0.13 & 0.24\\
-	&FE&W-(1,1)& 0.13 & 0.30\\
-%	FD&V-(1,1)& 0.24/0.25(0.52/0.45) & 0.42/0.43\\
-%	FD&W-(1,1)& 0.23/0.20(0.40/0.32) & 0.25/0.22\\
-%	FE&V-(1,1)& 0.13/0.13(0.45/0.32) & 0.24/0.20\\
-%	FE&W-(1,1)& 0.13/0.10(0.31/0.28) & 0.30/0.32\\
-	% inside bracket: bilinear also for prolongation
-	\hline
-	Dirichlet&FD&V-(1,1)& 0.72& 0.72\\
-	&FD&W-(1,1)& 0.72& 0.72\\
-	&FE&V-(1,1)& 0.37& 0.36\\
-	&FE&W-(1,1)& 0.42& 0.42\\
-%	FD&V-(1,1)& 0.72/0.61 & 0.72/0.61\\
-%	FD&W-(1,1)& 0.72/0.56 & 0.72/0.61\\
-%	FE&V-(1,1)& 0.37/0.32 & 0.36/0.31\\
-%	FE&W-(1,1)& 0.42/0.35 & 0.42/0.37\\
-%	distribution&multigrid cycle&  asymptotic convergence rate / average convergence rate  \\
-%	\hline
-%	FD&V-(1,1)& 0.76/0.59\\
-%	FE&V-(1,1)& 0.34/0.33\\
-	\hline
-	Neumann&FD&V-(1,1)& 0.70& 0.70\\
-	&FD&W-(1,1)& 0.68& 0.68\\
-	&FE&V-(1,1)& 0.50& 0.50\\
-	&FE&W-(1,1)& 0.35& 0.35\\
-%	FD&V-(1,1)& 0.69/0.62 & 0.69/0.63\\
-%	FD&W-(1,1)& 0.68/0.62 & ~1\\
-%	FE&V-(1,1)& 0.42/0.34 & 0.60/0.47\\
-%	FE&W-(1,1)& 0.36/0.31 & ~1\\
-%	distribution&multigrid cycle& asymptotic convergence rate / average convergence rate  \\
-%	\hline
-%	FD&V-(1,1)& 0.64/0.60\\
-%	FE&V-(1,1)& 0.25/0,39\\
-	\hline
-	\end{tabular}
-	\caption{Multigrid asymptotic convergence rates for different combinations of boundary conditions, interpolation and distributive relaxation on the flower domain (Poisson's ratio=0.49, resolution=$128\times128$). For optional prolongations, $\mathbf P_{hi}$ is bilinear interpolation and $\mathbf P_{lo}$ is for $\mathbf P=4\mathbf R^T$. For the optional distributions, FE is the distribution matrix discretized with the bilinear finite element method, and FD is using defect correction by employing finite difference distributive relaxation. } \label{tab_mg_convergence} \end{table}
+We first consider a fixed resolution of $128 \times 128$ and compare finite element distributive relaxation (described \S\ref{subsubsec:ch5.multigrid.relaxation.distributive}) and the distributive relaxation derived from the finite difference defect correction (FDDC) (described in \S\ref{subsubsec:ch5.multigrid.relaxation.defectcorrection}) as the interior relaxations. We also compare the prolongation operators $P_{\text{lo}}$ (transpose of restriction) and $P_{\text{hi}}$ (bilinear interpolation) (both described in \S\ref{subsec:ch5.multigrid.coarsening}).
 
-	We further investigate the multigrid convergence rate for various resolutions by sticking to one scheme which uses finite element distribution, low order prolongation and a V-(1,1) cycle, and plot the convergence rate for problems discretized with resolutions from 32 to 1024 (see Figure \ref{periodic_convergence}). A consistent multigrid convergence rate is observed under refinement.
+While relatively compressible problems exhibit stablized convergence rates no larger than $0.3$ for a multigrid V-$(1,1)$ cycle with all discussed combinations of prolongation and distributive relaxation, we focus on the harder nearly incompressible case with Poisson's ratio $\nu = 0.49$ and investigate both V-$(1,1)$ cycle and W-$(1,1)$ cycle convergence. As shown in Table~\ref{tab:ch5.multigrid.convergence}, both finite element distributive relaxation and FDDC distributive relaxation give convergence rates less than $0.5$ with a multigrid V-$(1,1)$ cycle. Although the FDDC distributive relaxation generally gives a slower convergence than the finite element distributive relaxation for the V-$(1,1)$ cycle, combining it with bilinear interpolation prolongation or using a W-$(1,1)$ cycle brings the convergence rate down to $0.23$.
 
-	\begin{figure}[ht]\centering
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
-	\vspace*{-.05in}
-	\caption{Multigrid V-(1,1) cycle convergence under refinement (Poisson's ratio = 0.49, periodic boundary conditions, finite element distribution). }
-	\vspace*{-.07in}
-	\label{periodic_convergence}
-	\end{figure}
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{*{5}{r}}
+\hline
+BC & relaxation & MG cycle & $P_{\text{hi}}$ & $P_{\text{lo}}$ \\
+\hline\hline
+periodic & FD  & V-$(1,1)$ & 0.24 & 0.42 \\
+         & FD  & W-$(1,1)$ & 0.23 & 0.25 \\
+         & FEM & V-$(1,1)$ & 0.13 & 0.24 \\
+         & FEM & W-$(1,1)$ & 0.13 & 0.30 \\
+\hline
+Dirichlet & FD  & V-$(1,1)$ & 0.72 & 0.72 \\
+          & FD  & W-$(1,1)$ & 0.72 & 0.72 \\
+          & FEM & V-$(1,1)$ & 0.37 & 0.36 \\
+          & FEM & W-$(1,1)$ & 0.42 & 0.42 \\
+\hline
+Neumann & FD  & V-$(1,1)$ & 0.70 & 0.70 \\
+        & FD  & W-$(1,1)$ & 0.68 & 0.68 \\
+        & FEM & V-$(1,1)$ & 0.50 & 0.50 \\
+        & FEM & W-$(1,1)$ & 0.35 & 0.35 \\
+\hline
+\end{tabular}
+\caption{Asymptotic multigrid cycle convergence rates for different combinations of boundary conditions, distributive relaxation (``FEM'' refers to the finite element distributive relaxation described in \S\ref{subsubsec:ch5.multigrid.relaxation.distributive}; ``FD'' refers to the distributive relaxation based on the finite difference defect correction described in \S\ref{subsubsec:ch5.multigrid.relaxation.defectcorrection}), and prolongation ($P_{\text{lo}}$ and $P_{\text{hi}}$; see \S\ref{subsec:ch5.multigrid.coarsening}). For these results, we used the flower domain at resolution $128 \times 128$ with Poisson's ratioa $\nu = 0.49$.}
+\label{tab:ch5.multigrid.convergence}
+\end{center}
+\end{table}
 
-	While all schemes give a nice convergence rate in periodic cases, the convergence rate with Neumann boundary conditions and Dirichlet boundary conditions varies. In non-trivial boundary condition cases, the convergence rate is mainly restricted by the efficiency of the boundary relaxation. Therefore, the convergence rate of a V-(1,1) cycle and a W-(1,1) cycle are very similar. Also different prolongation schemes generate very similar convergence rates (see Table \ref{tab_mg_convergence} for the convergence rate of all algorithm options for the flower domain problem at a fixed resolution of $128\times128$). The difference between using a finite element distributive relaxation and a finite difference defect correction distributive relaxation reflects the efficiency of the whole smoother in combination with the boundary relaxations.
+We now investigate the multigrid cycle convergence rates at various resolutions by fixing the multigrid cycle to a V-$(1,1)$ cycle with finite element distributive relaxation and low order prolongation $P_{\text{lo}}$. We observe a consistent convergence rate across a spectrum of resolutions from $32 \times 32$ to $1024 \times 1024$; see Figure~\ref{fig:ch5.multigrid.convergence.resolution}.
 
-	% It is noticed that our aggregation scheme really mollifies the difficulty in boundary smoother. In fact, if we allow both ghost and non-ghost as aggregation representative, then the multigrid average convergence rate slows down to $0.8$ even with a lot of boundary relaxations, a high order prolongation and a W-(1,1) cycle, while restricting aggregation representatives to ghost nodes only improves the resulting multigrid convergence rate to $<0.5$ with 5 boundary iterations.
-	%	\begin{table}[ht]\centering
-%	\begin{tabular}{c c c c}
-%	\hline
-%	distribution&multigrid cycle& $\mathbf P_{hi}$ & $\mathbf P_{lo}$ \\
-%	\hline
-%	FD&V-(1,1)& 0.76/0.59 & 0.72/0.61 \\
-%	FD&W-(1,1)& 0.66/0.57 & 0.72/0.61\\
-%	FE&V-(1,1)& 0.34/0.33 & 0.37/0.31\\
-%	FE&W-(1,1)& 0.34/0.33 & 0.43/0.37\\
-%	\hline
-%	\end{tabular}
-%	\caption{Dirichlet boundary condition multigrid convergence rate(Poisson's ratio=0.49, resolution=$128\times128$).} \label{tab_dirichlet} \end{table}
-%
-%	\begin{table}[ht]\centering
-%	\begin{tabular}{c c c c}
-%	\hline
-%	distribution&multigrid cycle& $\mathbf P_{hi}$ & $\mathbf P_{lo}$ \\
-%	\hline
-%	FD&V-(1,1)& 0.64/0.60 & 0.69/0.62 \\
-%	FD&W-(1,1)& 0.70/0.58 & unstable\\
-%	FE&V-(1,1)& 0.25/0,39 & 0.61/0.45\\
-%	FE&W-(1,1)& 0.39/0.39 & unstable\\
-%	\hline
-%	\end{tabular}
-%	\caption{Neumann boundary condition multigrid convergence rate(Poisson's ratio=0.49, resolution=$128\times128$).} \label{tab_dirichlet} \end{table}
+\setlength{\figurewidth}{0.45\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
+\caption{Multigrid V-$(1,1)$ cycle convergence for a variety of resolutions between $32 \times 32$ and $1024 \times 1024$ ($\nu = 0.49$, periodic boundary conditions, finite element distributive relaxation, and low order prolongation $P_{\text{lo}}$).}
+\label{fig:ch5.multigrid.convergence.resolution}
+\end{center}
+\end{figure}
 
-%	\begin{figure}[ht]\centering
-%	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_pr0_49_br5_residual.png}
-%	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_pr0_49_br5_residual.png}
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_pr0_49_br10_residual.png}
-%	\vspace*{-.05in}
-%	\caption{Multigrid V-(1,1) cycle convergence under refinement (Poisson's ratio = 0.49). Left: Dirichlet boundary condition proposed as ghost aggregation boundary integral constraints; right: Neumann boundary condition. In both cases, we use finite element distribution and 5 boundary iterations. }
-%	\vspace*{-.07in}
-%	\label{fig_flower_mgrates}
-%	\end{figure}
+While all combinations of parameters discussed thus far give nice convergence rates for periodic boundary conditions, convergence rates in the presence of embedded Neumann and Dirichlet boundary conditions varies; the main bottleneck is the efficacy of the boundary relaxation. Therefore, a W-$(1,1)$ cycle provides little if any advantage over a V-$(1,1)$ cycle; similarly, our two prolongation operators under consideration, $P_{\text{lo}}$ and $P_{\text{hi}}$, yield very similar convergence rates, everything else equal. The choice of interior relaxation seems to be the most differentiating characteristic when embedded boundary conditions are present; see Table~\ref{tab:ch5.multigrid.convergence}.
 
-	We further investigate the convergence rate under refinement, due to the fact that different prolongation schemes and multigrid cycles generate similar convergence rates. We only plot the asymptotic convergence rate of a V-(1,1) cycle with $\mathbf P=4\mathbf R^T$ and using finite element distributive relaxation in the interior. For both the Dirichlet and Neumann boundary condition problem, we plot the asymptotic convergence rate for resolutions from 32 to 1024 and the residual reduction at each iteration for representative resolution numbers that are powers of 2. We observed consistent convergence rate at all resolutions (see Figure \ref{fig_flower_mgrates_0} and Figure \ref{fig_flower_mgrates_1}).
+This time with embedded boundary conditions, we again investigate the multigrid cycle convergence rate over a variety of resolutions. Since, in the presence of embedded boundary conditions, the multigrid cycles and prolongation operators discussed previously yield largely similar convergence rates, we only give results for a V-$(1,1)$ cycle with prolongation operator $P_{\text{lo}}$. Further, motivated by the results in Table~\ref{tab:ch5.multigrid.convergence}, we use finite element distributive relaxation in the interior. As shown in Figures~\ref{fig:ch5.multigrid.convergence.flower.a} and \ref{fig:ch5.multigrid.convergence.flower.b}, we observe a consistent convergence rate over a spectrum of resolutions from $32 \times 32$ to $1024 \times 1024$.
 
-	\begin{figure}[ht]\centering
-	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_bw42_pr0_49_br10.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10.png}
-	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_bw42_pr0_49_br10.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10.png}
-	\vspace*{-.05in}
-	\caption{Multigrid V-(1,1) cycle convergence rate at resolutions from 32 to 1024 (Poisson's ratio = 0.49). Left: Dirichlet boundary condition; right: Neumann boundary condition. }
-	\vspace*{-.07in}
-	\label{fig_flower_mgrates_0}
-	\end{figure}
+\setlength{\figurewidth}{0.45\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Dirichlet BCs]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10.png}}
+\subfigure[Neumann BCs]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10.png}}
+\caption{Multigrid V-$(1,1)$ cycle convergence rates at various resolutions from $32 \times 32$ to $1024 \times 1024$ ($\nu = 0.49$).}
+\label{fig:ch5.multigrid.convergence.flower.a}
+\end{center}
+\end{figure}
 
-	\begin{figure}[ht]\centering
-	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PHi_bw42_pr0_49_br10_residual.png}
-	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
-	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PHi_bw42_pr0_49_br10_residual.png}
-	%\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
-	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}
-	\vspace*{-.05in}
-	\caption{Multigrid V-(1,1) cycle convergence under refinement (Poisson's ratio = 0.49). Left: Dirichlet boundary condition; right: Neumann boundary condition. }
-	\vspace*{-.07in}
-	\label{fig_flower_mgrates_1}
-	\end{figure}
+\setlength{\figurewidth}{0.45\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\subfigure[Dirichlet BCs]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}}
+\subfigure[Neumann BCs]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}}
+\caption{Residual norm reduction as a function of iteration number for a multigrid V-$(1,1)$ cycle at various resolutions from $32 \times 32$ to $1024 \times 1024$ ($\nu = 0.49$).}
+\label{fig:ch5.multigrid.convergence.flower.b}
+\end{center}
+\end{figure}
 
-%
-%	\begin{figure}[ht]\centering
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr3_neu_hiprol.png}
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr49_neu.png}
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr3_noth_hiprol.png}
-%	\includegraphics[width=.45\columnwidth]{part2/chapter5/figures/bw/egg_flower_convergence_rates_pr49_noth.png}
-%	\vspace*{-.05in}
-%	\caption{Convergence rates of flower domain problem; top: Neumann boundary condition, bottom: Dirichlet boundary condition; Poisson ratio=0.3(left) and 0.49(right); }
-%	\vspace*{-.07in}
-%	\label{fig_flower_mgrates}
-%	\end{figure}
+\section{Discussion, Conclusion, and Future Work}
 
-\section{Conclusion and future work}
-	We developed a second-order mixed finite element discretization for linear elasticity of all material parameters from compressible to highly incompressible. We developed a multigrid method for the linear system induced by the discretization. By applying approximated distributive relaxation, we can achieve a fast and parameter-independent convergence rate when no boundary conditions are present. With specified boundary conditions defined on a variety of domains, we also demonstrated that the multigrid method can maintain a good convergence rate with only a small number of boundary relaxations. However, the optimum convergence demonstrated in the periodic boundary condition case was not achieved. In the future, we are interested in investigating a more efficient boundary smoother that avoids unaugmentation as well as a continuous extension to Stokes equations.
+We developed a second order mixed finite element discretization for the equilibrium equations of linear elasticity practical over all material parameters from compressible to nearly incompressible. We additionally formulated a geometric multigrid framework to solve the linear system derived from the discretization. Utilizing an approximated distributive relaxation, we achieve a fast and parameter-independent multigrid cycle convergence rate in the absence of embedded boundary conditions. With the addition of embedded boundary conditions, we can still maintain good multigrid cycle convergence rates with only a small number of boundary relaxations. However, we were unable to reproduce the optimum convergence rates observed with periodic boundary conditions. Thus, future research may investigate a more efficient boundary smoother that avoids unaugmentation. We may also be interested in extending our methods to the Stokes equation.
+
+\begin{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\section{Mixed finite element}
 %	The term mixed finite element method was originally used in 1960's to describe systems where both stress and displacement are considered as primary variables. A synthetic system has been established since then, including the concepts of convergence, approximation and stability. Mixed finite element method has then developed to various forms in application.
