@@ -169,47 +169,62 @@ For ease of implementation, we perform the integrations involved in the discrete
 \int_{\Omega} N^m_{k_m} d\bfx & = \sum_{k_3 \in I_3} \int_{T^p_{k_3} \cap \Omega} N^m_{k_m} d\bfx \\
 \int_{\dOmega_n} N^m_{k_m} d\bfS(\bfx) & = \sum_{k_3 \in I_3} \int_{T^p_{k_3} \cap \dOmega_n} N^m_{k_m} d\bfS(\bfx).
 \end{align*}
-In the interior, this simply amounts to evaluating the same integrals over each uncut quadrilateral $T^p_{k_3}$. However, at the boundary, care must be taken to respect the material region when the intersection between a pressure cell and the domain is non-trivial. In both the boundary and interior cases there will be $13$ degrees of freedom involved in the integration over such a pressure cell. This is because the staggering of various grids leads to $13$ interpolating basis functions supported over a given pressure cell: $6$ $x$-basis functions, $6$ $y$-basis functions, and $1$ pressure basis function. In other words, we express the stiffness matrix $A_u$ of our discrete linear system as a sum of $13 \times 13$ element stiffness matrices $A_u^{k_3}$. We further break the integrals involved in a given pressure cell $T^p_{k_3}$ up into four subintegrals over the sub-cell quadrants $\set{\omega_1, \omega_2, \omega_3, \omega_4}$ of $T^p_{k_p}$ (see Figure~\ref{fig:ch5:stiffnessmatrix.element}). This is because the integrands are smooth over each quadrant; indeed, the integrands are quadratic, and we simply perform these integrations analytically. This observation effectively decomposes the element stiffness matrix $A_u^{k_3}$ over the sub-cell quadrants $\set{\omega_i}$ into the sub-element stiffness matrices $\set{(A_u^{k_3})_{\omega_i}}$. For example, referring to Figure~\ref{fig:ch5:stiffnessmatrix.element}(c), $(A_u^{k_3})_{\omega_1}$ involves $x_1$, $x_2$, $x_3$, $x_4$, $y_7$, $y_8$, $y_{10}$ and $y_{11}$, so it only has nonzero values on rows and columns involving these degrees of freedom. The resulting equations based on those degrees of freedom are shown in Figure~\ref{fig:ch5:stiffnessmatrix.omega1}. If we order the $13$ nodes with indices shown in Figure~\ref{fig:ch5:stiffnessmatrix.element}(a), then on the interior of the domain, where $T^p_{k_3} \subset \Omega$, the sum of these four subintegrals is always the same:
-
+In the interior, this simply amounts to evaluating the same integrals over each uncut quadrilateral $T^p_{k_3}$. However, at the boundary, care must be taken to respect the material region when the intersection between a pressure cell and the domain is non-trivial. In both the boundary and interior cases there will be $13$ degrees of freedom involved in the integration over such a pressure cell. This is because the staggering of various grids leads to $13$ interpolating basis functions supported over a given pressure cell: $6$ $x$-basis functions, $6$ $y$-basis functions, and $1$ pressure basis function. In other words, we express the stiffness matrix $A_u$ of our discrete linear system as a sum of $13 \times 13$ element stiffness matrices $A_u^{k_3}$. We further break the integrals involved in a given pressure cell $T^p_{k_3}$ up into four subintegrals over the sub-cell quadrants $\set{\omega_1, \omega_2, \omega_3, \omega_4}$ of $T^p_{k_p}$ (see Figure~\ref{fig:ch5:stiffnessmatrix.element}). This is because the integrands are smooth over each quadrant; indeed, the integrands are quadratic, and we simply perform these integrations analytically. This observation effectively decomposes the element stiffness matrix $A_u^{k_3}$ over the sub-cell quadrants $\set{\omega_i}$ into the sub-element stiffness matrices $\set{(A_u^{k_3})_{\omega_i}}$. For example, referring to Figure~\ref{fig:ch5:stiffnessmatrix.element}(c), $(A_u^{k_3})_{\omega_1}$ involves $X_1$, $X_2$, $X_3$, $X_4$, $Y_7$, $Y_8$, $Y_{10}$, $Y_{11}$, and $P_{13}$ so it only has nonzero values on rows and columns involving these $9$ degrees of freedom. The resulting equations based on those degrees of freedom are
+\begin{equation*}
+(A_u^{k_3})_{\omega_1} =
+\mu \left( \begin{array}{c@{}|*{3}{|c@{}}}
+{}_i\diagdown^j &
+\begin{array}{*{4}{c}} X_1 & X_2 & X_3 & X_4 \end{array} &
+\begin{array}{*{4}{c}} Y_7 & Y_8 & Y_{10} & Y_{11} \end{array} &
+P_{13} \\
+\hline\hline
+\begin{array}{c} X_1 \\ X_2 \\ X_3 \\ X_4 \end{array} &
+\int_{\omega_1} \!\!\! \nabla N^1_i \cdot \nabla N^1_j + N^1_{i,1} N^1_{j,1} &
+\int_{\omega_1} \!\! N^1_{i,2} N^2_{j,1} &
+-\int_{\omega_1} \!\! N^1_{i,1} \\
+\hline
+\begin{array}{c} Y_7 \\ Y_8 \\ Y_{10} \\ Y_{11} \end{array} &
+\int_{\omega_1} \!\! N^2_{i,1} N^1_{j,2} &
+\int_{\omega_1} \!\!\! \nabla N^2_i \cdot \nabla N^2_j + N^2_{i,2} N^2_{j,2} &
+-\int_{\omega_1} \!\! N^2_{i,2} \\
+\hline
+P_{13} &
+-\int_{\omega_1} \!\! N^1_{j,1} &
+-\int_{\omega_1} \!\! N^2_{j,2} &
+-\frac{\mu}{\lambda} \int_{\omega_1} \!\! 1
+\end{array} \right)
+\end{equation*}
+If we order the $13$ nodes with indices shown in Figure~\ref{fig:ch5:stiffnessmatrix.element}(a), then on the interior of the domain, where $T^p_{k_3} \subset \Omega$, the sum of these four subintegrals is always the same:
 \begin{equation} \label{eq:ch5.stiffnessmatrix.interior}
 A_u^{k_3} =
 \mu
 \begin{pmatrix}
-\frac{1}{64}
+{\displaystyle \frac{1}{64}}
 \lrp{\footnotesize \begin{array}{*{6}{r@{\,}}|*{6}{@{\,}r}}
-+16&  0&  0&-16&  0&  0& +9& -6& -6& +6& -2& -1\\
-  0&+16&-16&  0&  0&  0& +6& +6& -9& +1& +2& -3\\
++16&  0&  0&-16&  0&  0& +9& -6& -3& +3& -2& -1\\
+  0&+16&-16&  0&  0&  0& +3& +6& -9& +1& +2& -3\\
   0&-16&+96&-64&  0&-16& -6& +4& +2& +6& -4& -2\\
 -16&  0&-64&+96&-16&  0& -2& -4& +6& +2& +4& -6\\
-  0&  0&  0&-16&+16&  0& -6& +2& +1& -9& +6& +3\\
+  0&  0&  0&-16&+16&  0& -3& +2& +1& -9& +6& +3\\
   0&  0&-16&  0&  0&+16& -1& -2& +3& -3& -6& +9\\\hline
- +9& +3& -6& -2& -6& -1&+16&  0&  0&  0&-16&  0\\
+ +9& +3& -6& -2& -3& -1&+16&  0&  0&  0&-16&  0\\
  -6& +6& +4& -4& +2& -2&  0&+96&  0&-16&-64&-16\\
  -3& -9& +2& +6& +1& +3&  0&  0&+16&  0&-16&  0\\
  +3& +1& +6& +2& -9& -3&  0&-16&  0&+16&  0&  0\\
  -2& +2& -4& +4& +6& -6&-16&-64&-16&  0&+96&  0\\
  -1& -3& -2& -6& +3& +9&  0&-16&  0&  0&  0&+16
 \end{array}} &
--\frac{h}{8}
+-{\displaystyle \frac{h}{8}}
 \lrp{\begin{array}{c}
 -1\\+1\\-6\\+6\\-1\\+1\\\hline-1\\-6\\-1\\+1\\+6\\+1
 \end{array}} \\
--\frac{h}{8}
+-{\displaystyle \frac{h}{8}}
 \lrp{\begin{array}{*{6}{r@{\;}}|*{6}{@{\;}r}}
 -1&+1&-6&+6&-1&+1&-1&-6&-1&+1&+6&+1
 \end{array}} &
 -h^2 \mu / \lambda
 \end{pmatrix}.
 \end{equation}
-
-\setlength{\figurewidth}{0.60\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/A_omega}
-\caption{Equations used to build the sub-element stiffness matrix $(A_u^{k_3})_{\omega_1}$.}
-\label{fig:ch5:stiffnessmatrix.omega1}
-\end{center}
-\end{figure}
 
 \setlength{\figurewidth}{0.30\columnwidth}
 \begin{figure}[htbp]
@@ -854,160 +869,3 @@ This time with embedded boundary conditions, we again investigate the multigrid 
 \section{Discussion, Conclusion, and Future Work}
 
 We developed a second order mixed finite element discretization for the equilibrium equations of linear elasticity practical over all material parameters from compressible to nearly incompressible. We additionally formulated a geometric multigrid framework to solve the linear system derived from the discretization. Utilizing an approximated distributive relaxation, we achieve a fast and parameter-independent multigrid cycle convergence rate in the absence of embedded boundary conditions. With the addition of embedded boundary conditions, we can still maintain good multigrid cycle convergence rates with only a small number of boundary relaxations. However, we were unable to reproduce the optimum convergence rates observed with periodic boundary conditions. Thus, future research may investigate a more efficient boundary smoother that avoids unaugmentation. We may also be interested in extending our methods to the Stokes equation.
-
-\begin{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\section{Mixed finite element}
-%	The term mixed finite element method was originally used in 1960's to describe systems where both stress and displacement are considered as primary variables. A synthetic system has been established since then, including the concepts of convergence, approximation and stability. Mixed finite element method has then developed to various forms in application.
-%	We refer the audience to \cite{arnold:90:mfem} as an early review about different variational principles, and the concepts of convergence, approximability and stability and their relations.
-	% application
-%	Mixed finite element method has be broadly applied to of fluid simulation, elasticity simulation, physics and mechanics simulations, geophysics, semiconductor simulation, computational fluid dynamics and mechanics.
-
-	% what is mixed
-%	Traditional finite element method directly propose problem taking the displacement function as fundamental unknown to solve. However, under certain  circumstances,  it may be beneficial to simultaneously solve for dependent variables including displacement, stress \cite{arnold2002mixed} and pressure\cite{stenberg1996mixed}. Therefore, stress-displacement and pressure-displacement formulation has been developed respectively. In either approach, since a unique problem is proposed in equivalent ways, the derived systems are often mathematically equivalent in the interesting regime. However, the derived numerical problem may vary in accuracy, numerical condition, stability, and be applicable for different numerical methods with varying efficiency. In certain complications, we may benefit from the introduction of auxiliary unknowns.
-
-	%difficulty in requesting high accuracy on pressures
-%	First, for some physics problems, stress and pressure may be of more interesting. For example, in cracking problem, accurate approximation to stress is of substantial importance \cite{belhachmi}.
-	% difficulty in constructing fem spaces
-%	Also, some of the interesting problems require finite element space that is not easy to construct or requires higher order finite element spaces. For elasticity problems, the construction of incompressible deformation function space is not trivial. Some investigation of its approximation such as divergence free functions can be found in see \cite{ye1997discrete}, \cite{brenner2007locally}, \cite{AlexanderLinkeDissertation},\cite{wang2009robust}. Special treatment is required to construct such functional spaces. And more elaborate cases including nonlinear compressibility is even harder to construct.
-	% instability under extreme cases
-%	The complication may also be introduced due to the loss of robustness at certain extreme situations. For the elasticity problem, under incompressible limit, the stress will blow up. And for high incompressibility problems, it will be very large, leading to nearly singular problem. In fact, similar observations may be found in a broad applications, in which a system is dominated by singular terms under limiting situation. Moreover, a locking phenomena is observed, and there can be a significant decrease in accuracy in pressure\cite{babu?ka1992locking}.
-	% broad applications
-%	Similar issue is also observed in the simulation of flow in porous media \cite{arbogast1996nonlinear}, cartilaginous tissues \cite{kaasschieter2003mixed} and semiconductor device modelling\cite{chen1995mixed,brezzi2005discretization} and geophysics \cite{cai1997control}, in which mixed formulations have demonstrated to be advantageous. %From linear algebra point of view, introducing certain auxiliary variables may alleviate this numerical difficulty.
-
-	% challange using mixed	:  numerical solver for saddle point problems
-%	There are also several complexity introduced by using mixed finite element method. First of all, additional degrees of freedom are introduced requiring solution to larger linear algebra systems. Also, while energy minimization often derives positive definite algebra equations, a mixed finite element problem is often equivalent to a saddle point problem, which leads to indefinite system. As a consequence, traditional methods like Conjugate gradient method and Gauss-Seidel method may fail to converge. Some investigation on eliminating additional degrees of freedom while keeping some property of mixed formulation has been discussed \cite{kui1985generalized}. Others have discussed preconditioned Krylov subspace methods\cite{vassilevski1996preconditioning,benzi2005preconditioner} and fast Uzawa algorithm\cite{cao2003fast, brenner2009fast}. %In addition, distributive relaxation was first introduced for Stokes equation by Brandt et. al., and
-%		transforming smoothers is applied for PDE constrained optimization problems including Navier-Stokes equations.
-
-	% stability issue and staggered mesh fem
-%	When applying mixed finite element method to Stokes and Navier-Stokes equations, an inf-sup condition or Ladyzhenskaya-Babuska-Brezzi condition need to be satisfied in order to keep the equation stable \cite{arnold1984stable}. When applying a low-order mixed finite element method, special treatment is required in order to keep the system stable. A number of authors have addressed this issue in \cite{MR753954,MR548867,MR1320897,bochev2007stabilization}. Han et. al. introduced a new mixed finite element formulation for Stokes equation \cite{Han.Houde98}, in which the velocity components and pressure are defined on a staggered grid. The marker and cell method (MAC) can be derived from the resulting finite element method. This method is then used in Navier-Stokes equation in \cite{han2008mixed}.
-	%mixed finite element for elasticity
-%	For nonlinear hyperelasticity model, a stable mixed finite element method is also proposed in \cite{klaas1999stabilized}.
-
-%Multigrid method as a linear solver for mixed system has also be disussed.
-%Distributive relaxation was first introduced for fluid simulations in \cite{brandt1978multi}, and theoretical analysis about convergence is established in \cite{wittum1989multi, wittum1990convergence}. A stable multigrid method for near-incompressible elasticity is developed in \cite{wieners2000robust}
-%The stability of a mixed finite element method for near-incompressible elasticity is investigated in \cite{braess2005finite} .
-
-%
-%\begin{eqnarray*}
-%&&\nabla\cdot P^{\mbox{\tiny aug}}(F(\phi^k),p^k,R(\phi^{k-1}))=f\\
-%&&p^k=-\frac\lambda\mu R(\phi^{k-1}):F(\phi^k)
-%\end{eqnarray*}
-%
-%\begin{eqnarray*}
-%&&\nabla\cdot 2\mu (\nabla\phi)^T-\mu pR(\phi)-(2\mu+d\lambda)R(\phi))=f\\
-%&&p=-\frac\lambda\mu R(\phi):(\nabla\phi)^T
-%\end{eqnarray*}
-%\begin{eqnarray*}
-%&&\nabla\cdot 2\mu (\nabla\phi^{k})^T-\mu p^kR(\phi^{k-1})-(2\mu+d\lambda)R(\phi^{k-1}))=f\\
-%&&p^k=-\frac\lambda\mu R(\phi^{k-1}):(\nabla\phi^k)^T
-%\end{eqnarray*}
-%
-%$R=R^{\mbox{\tiny approximate}}$
-%$F=\nabla\phi^T=RS$
-%
-%$P_{12}=\tau_1,\ P_{22}=\tau_2$
-%
-%$e\!=\!u_{\mbox{\tiny current}}\!\!-\!\!u$
-%
-%$(\mu\Delta I+(\lambda+\mu)\nabla\nabla^T)\phi=f$
-%
-%$\mu(\Delta I+\nabla\nabla^T)\phi+\lambda\nabla\nabla^T\phi=f$
-%
-%$\mu(\Delta I+\nabla\nabla^T)\phi-\mu\nabla(-\frac\lambda\mu\nabla^T\phi)=f$
-%$\lambda\nabla^T\phi=-\mu p$
-%$\mu(\Delta I+\nabla\nabla^T)\phi-\mu\nabla p=f$
-%$p=-\frac\lambda\mu\nabla^T\phi$
-%
-%$\mu(\Delta I+\nabla\nabla^T)\phi-\mu\nabla(-\frac\lambda\mu\nabla^T\phi)=f$
-%
-%$u_k\leftarrow u_k+M\delta$
-%
-%$P=\mu(\nabla\phi+\nabla\phi^T)+\lambda\mbox{tr}(\nabla\phi)-(2\mu+d\lambda)I$
-%
-%
-%$P^{\mbox{\tiny aug}}=\mu(\nabla\phi+\nabla\phi^T)-\mu p I-(2\mu+d\lambda)I$
-%$\nabla\cdot P^{\mbox{\tiny aug}}=f$
-%$P^{\mbox{\tiny aug}}\cdot N=\tau$
-%
-%%f=Laug u
-%\begin{eqnarray*}
-%\left(\begin{array}{c}f \\ 0 \end{array}\right)=\left(\begin{array}{cc}\mu(\Delta I+\nabla\nabla^T) & -\mu\nabla\\ \mu\nabla^T & \frac{\mu^2}{\lambda} \end{array}\right)
-%\left(\begin{array}{c}\phi \\ p \end{array}\right)
-%\end{eqnarray*}
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{cc}\mu(\Delta I+\nabla\nabla^T) & -\mu\nabla\\ \mu\nabla^T & \frac{\mu^2}{\lambda} \end{array}\right)
-%\left(\begin{array}{c}\phi \\ p \end{array}\right)
-%\hspace*{1in}=
-%\left(\begin{array}{c}f \\ 0 \end{array}\right)
-%\end{eqnarray*}
-%
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{c}r \\ r_p \end{array}\right)=\left(\begin{array}{cc}\mu(\Delta I+\nabla\nabla^T) & -\mu\nabla\\ \mu\nabla^T & \frac{\mu^2}{\lambda} \end{array}\right)
-%\left(\begin{array}{c}\delta\phi \\ \delta p \end{array}\right)
-%\end{eqnarray*}
-%
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{c}f \\ 0 \end{array}\right)=\left(\begin{array}{cc}\mu(\Delta I+\nabla\nabla^T) & -\mu\nabla\\ \mu\nabla^T & \frac{\mu^2}{\lambda} \end{array}\right)
-%\left(\begin{array}{cc}I &-\nabla\\ \nabla^T & -2\Delta \end{array}\right)
-%\left(\begin{array}{c}\psi \\ q \end{array}\right)\end{eqnarray*}
-%
-%%Mq
-%\begin{eqnarray*}
-%\left(\begin{array}{c}\phi \\ p \end{array}\right)=
-%\left(\begin{array}{cc}I &-\nabla\\ \nabla^T & -2\Delta \end{array}\right)
-%\left(\begin{array}{c}\psi \\ q \end{array}\right)\end{eqnarray*}
-%
-%
-%$P=\mu(\nabla\phi+\nabla\phi^T)-\mu p I-(2\mu+d\lambda)I$
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{c}f \\ 0 \end{array}\right)=\left(\begin{array}{cc}\mu\Delta I & 0\\ \mu(1+\frac\mu\lambda)\nabla^T & -\mu(1+\frac{2\mu}{\lambda})\Delta \end{array}\right)
-%\left(\begin{array}{c}\psi \\ q \end{array}\right)\end{eqnarray*}
-%
-%$\vec u\leftarrow \vec u+\delta \vec e_k $
-%$\vec u\leftarrow \vec u+\delta \vec m_k $
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{cc}I &-\nabla\\ \nabla^T & -2\Delta \end{array}\right)
-%\left(\begin{array}{c}\psi \\ q \end{array}\right)\end{eqnarray*}
-%
-%%delta u=M delta v
-%\begin{eqnarray*}
-%\left(\begin{array}{c}\delta\phi \\ \delta p \end{array}\right)=
-%\left(\begin{array}{cc}I &-\nabla\\ \nabla^T & -2\Delta \end{array}\right)
-%\left(\begin{array}{c}\delta \psi \\ \delta q \end{array}\right)\end{eqnarray*}
-%
-%\definecolor{Green}{rgb}{0,.5,0}
-%\begin{eqnarray*}
-%\left(\begin{array}{c}
-%\color{red}\delta\phi_1 \\
-%\color{Green}\delta\phi_2 \\
-%\color{black}
-%\delta p \end{array}\right)\end{eqnarray*}
-%
-%
-%$P=\mu(\nabla\phi+\nabla\phi^T)+\lambda \nabla\cdot\phi3I-(2\mu+d\lambda)I$
-%
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{c}\phi \\ p \end{array}\right)=
-%\left(\begin{array}{cc}I &-(\nabla^TR^T)^T\\ 0 & -2\Delta \end{array}\right)
-%\left(\begin{array}{c}\psi \\ q \end{array}\right)\end{eqnarray*}
-%$p=-\frac \lambda\mu R:F$
-%
-%
-%\begin{eqnarray*}
-%\left(\begin{array}{cc}2\mu\Delta I &-\mu(\nabla^TR^T)^T\\ \mu(R\nabla)^T & \frac{\mu^2}\lambda \end{array}\right)
-%\left(\begin{array}{c}\phi \\ p \end{array}\right)=
-%\left(\begin{array}{c}f-(2\mu+d\lambda)\nabla\cdot R \\ 0 \end{array}\right)\end{eqnarray*}
-
-%\bibliographystyle{amsplain}
-%\bibliography{thesisdraft}
-%\bibliography{multigrid}
-
-\end{comment}
