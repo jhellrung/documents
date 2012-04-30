@@ -225,14 +225,14 @@ A_u^{k_3} =
 \end{center}
 \end{figure}
 
-The global stiffness matrix $A_u$ generated from the sum of all the element stiffness matrices $\set{A_u^{k_3}}$ at an interior degree of freedom ($x$, $y$, or $p$) has a stencil shown in Figure~\ref{fig:ch5:stiffnessmatrix.global}.
+The global stiffness matrix $A_u$ generated from the sum of all the element stiffness matrices $\set{A_u^{k_3}}$ at an interior degree of freedom ($x$, $y$, or $p$) has a stencil shown in Figure~\ref{fig:ch5.stiffnessmatrix.global}.
 
 \setlength{\figurewidth}{0.80\columnwidth}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/A_stencil_latex.png}
 \caption{Global stiffness matrix stencils centered at an interior $x$ degree of freedom (left), $y$ degree of freedom (middle), and $p$ degree of freedom (right).}
-\label{fig:ch5:stiffnessmatrix.global}
+\label{fig:ch5.stiffnessmatrix.global}
 \end{center}
 \end{figure}
 
@@ -254,7 +254,7 @@ For boundary cells where $T^p_{k_3} \not\subset \Omega$, we must perform the int
         \STATE $i := \operatorname{mesh}(k_3,i')$ \COMMENT{$i$ is the global index corresponding to the local element index $i'$}
         \FOR{$j' = 1, \dotsc, 13$}
             \STATE $j := \operatorname{mesh}(k_3,j')$
-            \STATE $(A_u)_{ij} +\!= (A_u)^{k_3}_{i'j'}$
+            \STATE $(A_u)_{ij} \plusequal (A_u)^{k_3}_{i'j'}$
         \ENDFOR
     \ENDFOR
 \ENDFOR
@@ -385,7 +385,7 @@ We consider a hierarchy of grids, each corresponding to a discretization of \eqr
 
 \item We sample the level set function implicitly defining $\Omega$ over the respective doubly refined subgrids $\calG^\phi_h, \calG^\phi_{2h}, \calG^\phi_{4h}, \dotsc$ at each level. Clearly, coarser grids may fail to resolve some high frequency features of the domain geometry, leading to possible incoherency between the discrete systems at neighboring levels. We will addressed such issues in our discussion of the smoothing and transfer operators.
 
-\item Using the level set function values associated with a given grid, we generate the discretized domains $\calT^x_{2^{\ell}h}, \calT^y_{2^{\ell}h}, \calT^p_{2^{\ell}h}$ and allocate the arrays of unknowns $\vec{u}^{2^{\ell}h}, \vec{p}^{2^{\ell}h}$ and right-hand sides $\vec{f}^{2^{\ell}h}, \vec{f}_p^{2^{\ell}h}$ of the respective equations. The discrete operators $A_u^{2^{\ell}h}, \linebreak[0] G^{2^{\ell}h}, \linebreak[0] D_p^{2^{\ell}h}$ of the system \eqref{eq:ch5.LEsystem.augmented.discrete} are likewise defined on the discretized domain associated with hierarchy level $\ell$, following the same process detailed in section \ref{subsec:ch5.discretization}. Note that although $\vec{f}_p^h \equiv \vec{0}$ at the finest level of our hierarchy (at least initially), the right hand side $\vec{f}_p^{2^{\ell}h}$ at coarser levels ($\ell \geq 1$) will generally be nonzero in the Multigrid Correction Scheme (see Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.multigrid}).
+\item Using the level set function values associated with a given grid, we generate the discretized domains $\calT^x_{2^{\ell}h}, \calT^y_{2^{\ell}h}, \calT^p_{2^{\ell}h}$ and allocate the arrays of unknowns $\vec{u}^{2^{\ell}h}, \vec{p}^{2^{\ell}h}$ and right-hand sides $\vec{f}^{2^{\ell}h}, \vec{f}_p^{2^{\ell}h}$ of the respective equations. The discrete operators $A_u^{2^{\ell}h}, \linebreak[0] G^{2^{\ell}h}, \linebreak[0] D_p^{2^{\ell}h}$ of the system \eqref{eq:ch5.LEsystem.augmented.discrete} are likewise defined on the discretized domain associated with hierarchy level $\ell$, following the same process detailed in \S\ref{subsec:ch5.discretization}. Note that although $\vec{f}_p^h \equiv \vec{0}$ at the finest level of our hierarchy (at least initially), the right hand side $\vec{f}_p^{2^{\ell}h}$ at coarser levels ($\ell \geq 1$) will generally be nonzero in the Multigrid Correction Scheme (see Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.multigrid}).
 
 \end{itemize}
 
@@ -431,197 +431,148 @@ substituting into \eqref{eq:ch5.augmented.strong} yields the auxiliary system
 \end{equation}
 for some auxiliary variable $\tilde{\bfv} := (\bfv \; q)$. This auxiliary system is a block lower triangular system and can be solved via forward substitution: first solve the $\bfv$ equations (which don't involve $q$), then solve for $q$ given the previously solved $\bfv$. Moreover, with an intelligent discretization, the same triangulation can be realized on the discretized system, i.e., $\tilde{A} \tilde{M}$ is also a block lower triangular linear system \cite{Zhu.Yongning10}.
 
-Since each of the diagonal blocks of the discrete auxiliary system is a discretization of the Laplacian operator, we can relax the whole system using a Gauss-Seidel relaxation on each component of the $\vec{v}$ degrees of freedom followed by a $3^{rd}$ Gauss-Seidel relaxation on the $\vec{q}$ degrees of freedom and achieve the same smoothing efficiency as Gauss-Seidel relaxation simply applied to Poisson's equation. Note that given any $\vec{v}$ and $\vec{q}$, one can reconstruct $\vec{u}$ and $\vec{p}$ via \eqref{eq:ch5.distributive.transform}.
+Since each of the diagonal blocks of the discrete auxiliary system is a discretization of the Laplacian operator, we can relax the whole system using a Gauss-Seidel relaxation on each component of the $\vec{v}$ degrees of freedom followed by a ($3^{rd}$) Gauss-Seidel relaxation on the $\vec{q}$ degrees of freedom and achieve the same smoothing efficiency as Gauss-Seidel relaxation simply applied to Poisson's equation. Note that given any $\vec{v}$ and $\vec{q}$, one can reconstruct $\vec{u}$ and $\vec{p}$ via the discrete form of \eqref{eq:ch5.distributive.transform}.
 
-\begin{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In practice, we never explicitly construct $\tilde{v} := (\vec{v} \; \vec{q})$. In a Gauss-Seidel relaxation applied to $\tilde{v}$, we iteratively solve for local corrections $\tilde{v}_i \leftarrow \tilde{v}_i + \delta \tilde{e}_i$, such that the local residual $\tilde{r}_i := (\tilde{f} - \tilde{A} \tilde{M} \tilde{v})_i$ is zeroed out. From this, we see that $\delta = \tilde{r}_i / (\tilde{A} \tilde{M})_{ii}$. Such local corrections to $\tilde{v}$ induce local, \emph{distributive} corrections to $\tilde{u}$ as well via the discrete form of \eqref{eq:ch5.distributive.transform}: $\tilde{u}_i \leftarrow \tilde{u}_i + \delta \tilde{M} \tilde{e}_i$. This analysis is encapsulated in Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.distributive}.
 
-In practice, we do not need to explicitly construct $\hat{\vec v}$.
-In a Gauss-Seidel relaxation applied on $\hat{\vec v}$, we iteratively solve for local corrections $\hat v_i\gets \hat v_i+\delta e_i$, such that the local residual $(\hat{\vec{f}}-\hat{\mathbf L}\hat{\mathbf M} \hat{\vec{v}})_i$ is zeroed out. Therefore, $\delta=(\hat{\mathbf L}\hat{\mathbf M})_{ii}^{-1}\hat r_i$.
-Such corrections invoke local corrections to $\hat{\vec u}$ in a distributive pattern, i.e. $\hat u_i\gets\hat u_i+\delta \hat{\mathbf M}e_i$, thus defines the distributive relaxation scheme in Algorithm \ref{alg_distributive_smoothing}.
-
-\begin{algorithm}[ht]
-	\caption{Distributive Smoothing}\label{alg_distributive_smoothing}
-	\begin{algorithmic}[1]
-	\Procedure{DistributiveSmoothing}{$\mathbf{\hat L}^{h}$,$\mathbf{\hat M}^{h}$,$\hat{\vec u^h}$,$\hat{\vec f}^{h}$}
-	\For{$v \textbf{\ in\ } \{u_1,u_2,p\}$}\Comment{Must iterate on $u_1$ and $u_2$ before $p$}
-	  \For{$i \textbf{\ in\ } $Lattice[$v$]}\Comment{$i$ is an equation index}
-	    %\State $r\gets b_i-\mathbf{L}_i\cdot \vec{u}$\Comment{$\mathbf{L}_i$ is the $i$-th row of $\mathbf{L}$}
-	    \State $r\gets \hat{\vec f}^{h}_i-\mathbf{\hat L}^{h}_i \cdot \hat{\vec{u}}^h$\Comment{$\mathbf{\hat L}^{h}_i$ is the $i$-th row of $\mathbf{\hat L}^{h}$}
-	    \State $\delta\gets r/(\mathbf{\hat L}^{h}\mathbf{\hat M}^{h})_{ii}$ \Comment{$(\mathbf{\hat L}^{h}\mathbf{\hat M}^{h})_{ii}$ is a precomputed constant for each component}
-	    \State $\vec{\hat u^h}\plusequals \delta\hspace{.1em}m_i^T$\Comment{$m_i$ is the $i$-th row of $\mathbf{\hat M}^{h}$}
-	  \EndFor
-	\EndFor
-	\EndProcedure
-	\end{algorithmic}
+\begin{algorithm}[htbp]
+\caption{Distributive relaxation.}
+\label{alg:ch5.distributive}
+\begin{algorithmic}[1]
+\STATE \textbf{function} $\operatorname{DistributiveSmooth} \lrp{\tilde{A}, \tilde{M}, \tilde{u}, \tilde{f}}$ \textbf{:}
+\FOR{$\vec{w} \in \set{\vec{u}^1, \vec{u}^2, \vec{p}}$}
+    \FOR{$i \in \operatorname{Lattice}(\vec{w})$}
+        \STATE $r \leftarrow \tilde{f}_i - \tilde{A} \tilde{u}$
+        \STATE $\delta \leftarrow r / (\tilde{A} \tilde{M})_{ii}$
+        \STATE $\tilde{u} \plusequal \delta \tilde{M} \tilde{e}_i$
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
 \end{algorithm}
 
-For a staggered finite difference discretization, the triangularization of the discretized system can be achieved by discretizing the change of variable operator using centered
-differences for the gradient and divergence operators and a five point stencil for the Laplacian operator as shown in \cite{Zhu.Yongning10}. However, when we use a finite element
-discretization, there is no discrete change of variables with same sparsity that leads to an exact triangularization. Instead, we discretize the gradient operator in
-\eqref{eq:ch5.distributive.transform} using the stencils derived in a finite element method, i.e. $\nabla^h=\frac 1 {\mu h^2} {\mathbf
-  G^h}^T=\left(\begin{array}{c}D_x^h\\D_y^h\end{array}\right)$ mapping from $p$ variables to $x$ and $y$ variables with the locations illustrated in Figure \ref{fig:ch5:stiffnessmatrix.global}-right and the
-  stencils being:
-\begin{eqnarray}
-D_x^h=\frac 1{h}\left]\begin{array}{cc}
--1/8&1/8\\
--3/4&3/4\\
--1/8&1/8
-\end{array}\right[\quad
-D_y^h=\frac 1{h}\left]\begin{array}{ccc}
-1/8&3/4&1/8\\
--1/8&-3/4&-1/8
-\end{array}\right[.
-\end{eqnarray}
-Similarly, the Laplacian operator in \eqref{eq:ch5.distributive.transform} is discretized from a standard piecewise bi-linear finite element discretization.
-\begin{eqnarray}
-M_p^h=\frac 1{h^2}\left]\begin{array}{ccc}
-1/3&1/3&1/3\\
-1/3&-8/3&1/3\\
-1/3&1/3&1/3
-\end{array}\right[
-\end{eqnarray}
+For a staggered finite difference discretization, the triangularization of the discretized system can be effected by discretizing the transformation operator $\tilde{\bfM}$ in \eqref{eq:ch5.distributive.transform} using centered
+differences for the gradient and divergence operators and the standard $5$-point stencil for the Laplacian operator \cite{Zhu.Yongning10}. Unfortunately, when one uses a finite element discretization, there exists no discrete change of variables with the same sparsity that leads to an exact triangularization. Instead, we discretize the gradient operator in
+\eqref{eq:ch5.distributive.transform} using the stencils derived from a finite element method, i.e.,
+\begin{equation*}
+\nabla \approx \frac{1}{\mu h^2} G^t = \begin{pmatrix} D_x \\ D_y \end{pmatrix},
+\end{equation*}
+which maps $p$ degrees of freedom onto $x$ and $y$ degrees of freedom with the locations illustrated in Figure~\ref{fig:ch5.stiffnessmatrix.global}(right) and stencils as
+\begin{equation*}
+D_x := \frac{1}{h}
+\left] \begin{matrix} -1/8 & +1/8 \\ -3/4 & +3/4 \\ -1/8 & +1/8 \end{matrix} \right[, \quad
+D_y := \frac{1}{h}
+\left] \begin{matrix} +1/8 & +3/4 & +1/8 \\ -1/8 & -3/4 & -1/8 \end{matrix} \right[.
+\end{equation*}
+Similarly, the Laplacian operator in \eqref{eq:ch5.distributive.transform} is discretized from a standard piecewise bilinear finite element discretization:
+\begin{equation*}
+M_p := \frac{1}{h^2} \left] \begin{matrix} +1/3 & +1/3 & +1/3 \\ +1/3 & -8/3 & +1/3 \\ +1/3 & +1/3 & +1/3 \end{matrix} \right[.
+\end{equation*}
 
-Although, the linear system $\hat{\mathbf L}^h\hat{\mathbf M}^h$ is not block triangular, our numerical results show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently. Results of using this relaxation scheme will be shown in section \ref{sec:results}.
+Although the linear system $\tilde{A} \tilde{M}$ is not strictly block triangular, our numerical results (\S\ref{sec:ch5.examples}) show that the derived distributive relaxation is able to reduce the high-frequency error components efficiently.
 
-\subsubsection{Higher order defect correction}
-We also adopt the idea of higher order defect correction, which will allow us to develop a less expensive distributive relaxation.
-In a defect correction scheme for an arbitrary linear system $\mathbf  L \vec u=\vec f$, we solve for the correction $\delta \vec u=\vec u^{\mbox{\tiny{exact}}}-\vec u$, which satisfies an equation $\mathbf  L\delta\vec u=\vec f-\mathbf L\vec u$. In practice, we approximate the equation with another system $\mathbf  L^{\mbox{\tiny{approx}}}\delta\vec u=\vec f-\mathbf L\vec u$ that is easier to solve. For example, in a multigrid correction scheme, a coarse grid system is used as the approximated equation for solving the correction at the fine grid resolution, i.e. $\mathbf L=\mathbf L^{\mbox{\tiny{fine}}},\; \mathbf L^{\mbox{\tiny{approx}}}=\mathbf L^{\mbox{\tiny{coarse}}}$.
-In the high order defect correction scheme, a lower order discretization is employed as the approximated system for solving a higher order discretization correction.
-In our case, the finite difference discretization is a lower order system, and the finite element discretization is a high order system, i.e.
-$\mathbf L=\mathbf L^{\mbox{\tiny{fem}}},\; \mathbf L^{\mbox{\tiny{approx}}}=\mathbf L^{\mbox{\tiny{fdm}}}$.
-In other words, we consider solving the following correction equation:
-$$\mathbf {\hat L}^{fd,h}\delta\hat{\vec u}=\hat{\vec f}-\mathbf {\hat L}^{fe,h}\hat{\vec u}.$$
+\subsubsection{High order defect correction}
 
-\noindent In our case, the lower order operator $\mathbf {\hat L}^{fd,h}$ is the staggered finite difference scheme detailed in \cite{Zhu.Yongning10}. Note that this operator is only lower
- order near the boundary, yet second order in the interior; however, we still use this finite difference scheme as the lower order operator in the defect correction process, even when we
- only focus on the domain interior.
- One of the benefits we obtain from such an approximation is that we can use the existing distributive relaxation with the exact triangulation of the
- discretized system \eqref{eq:ch5.distributive.triangularized}. To be specific, let us rewrite the finite difference system as
-\begin{eqnarray}
-	\mathbf {\hat L}^{fd,h}\hat{\vec u}=
-	\left(\begin{array}{cc}
-	\mathbf L_u^{fd,h} & {\mathbf G^{fd,h}}^{T}\\
-	\mathbf G^{fd,h} & \mathbf D_p^{fd,h}\end{array}\right)\left(\begin{array}{c}
-	\vec u^{fd,h}\\
-	\vec p^{fd,h}\end{array}\right)=\left(\begin{array}{c}
-	\vec f^{fd,h}\\
-	\vec 0\end{array}\right)
-\end{eqnarray}
-and rewrite the finite element system scaled by $1/h^2$ to match the scaling of the differential equation
-\begin{eqnarray}
-	\frac1{h^2}\mathbf {\hat L}^{fe,h}\hat{\vec u}=
-	\frac1{h^2}\left(\begin{array}{cc}
-	\mathbf L_u^{fe,h} & {\mathbf G^{fe,h}}^{T}\\
-	\mathbf G^{fe,h} & \mathbf D_p^{fe,h}\end{array}\right)\left(\begin{array}{c}
-	\vec u^{fe,h}\\
-	\vec p^{fe,h}\end{array}\right)=\frac1{h^2}\left(\begin{array}{c}
-	\vec f^{fe,h}\\
-	\vec 0\end{array}\right)
-\end{eqnarray}
+We can decrease the cost of our distributive relaxation via \emph{high order defect correction}. To introduce the idea, suppose we wish to solve the linear system $L \vec{u} = \vec{f}$ for the unknown $\vec{u}$. In a \emph{defect correction} scheme, we solve for a correction $\delta\vec{u}$ to a current approximation $\vec{u}$ via some alternate, typically easier system $L' \delta\vec{u} = \vec{f} - L \vec{u}$. For example, in a multigrid correction scheme with $L$ a fine grid operator, $L'$ (roughly) corresponds to the coarse grid operator. In a \emph{high order} defect correction scheme, a lower order discretization alternate system is used to to solve for a higher order discretization correction. In our case, the lower order operator is based on a finite difference approximation while the high order operators corresponds to our finite element discretization described in \S\ref{subsec:ch5.discretization}. In other words, we solve the following correction equation:
+\begin{equation*}
+\tilde{A}^{\text{FD}} \delta\tilde{u} = \tilde{f} - \tilde{A}^{\text{FEM}} \tilde{u}.
+\end{equation*}
+We use the staggered finite difference operator $\tilde{A}^{\text{FD}}$ detailed in \cite{Zhu.Yongning10}. Note that this operator is only lower order near the boundary; indeed, it is still second order in the interior. However, we still use this finite difference operator as the lower order operator in the defect correction scheme, even when focused on the domain interior.
 
-\noindent In a high order defect correction scheme employing a finite difference discretization, we solve for a correction $\delta \hat{\vec u}=\mathbf {\hat M}^{fd,h}{\delta\hat{\vec v}}$ to locally satisfy
-	$$\mathbf{\hat L}^{fd,h}\mathbf {\hat M}^{fd,h}{\delta\hat {\vec v}}= \frac1{h^2}(\hat{\vec f}^{fe,h}-\mathbf {\hat L}^{fe,h}{\hat {\vec u}}^{\mbox{\tiny{current}}})$$
-This derives a sparser distributive relaxation, shown in Algorithm \ref{alg_fdfe_distribution}.
+One of the benefits we obtain from such an approximation is that we can use the distributive relaxation described above with an exact triangulation of the discretized system \eqref{eq:ch5.distributive.triangularized}. To be specific, let us write the finite difference system as
+\begin{equation*}
+\tilde{A}^{\text{FD}} \tilde{u} =
+\begin{pmatrix} A_u^{\text{FD}} & (G^{\text{FD}})^t \\ G^{\text{FD}} & D_p^{\text{FD}} \end{pmatrix}
+\begin{pmatrix} \vec{u}^{\text{FD}} \\ \vec{p}^{\text{FD}} \end{pmatrix}, \quad
+\tilde{f}^{\text{FD}} = \begin{pmatrix} \vec{f}^{\text{FD}} \\ \vec{0} \end{pmatrix},
+\end{equation*}
+and scale finite element system by $1/h^2$ to match the scaling of the both the finite difference equation and the differential equation:
+\begin{equation*}
+\frac{1}{h^2} \tilde{A}^{\text{FEM}} \tilde{u} =
+\frac{1}{h^2} \begin{pmatrix} A_u^{\text{FEM}} & (G^{\text{FEM}})^t \\ G^{\text{FEM}} & D_p^{\text{FEM}} \end{pmatrix}
+\begin{pmatrix} \vec{u}^{\text{FEM}} \\ \vec{p}^{\text{FEM}} \end{pmatrix}, \quad
+\frac{1}{h^2} \tilde{f}^{\text{FEM}} = \frac{1}{h^2} \begin{pmatrix} \vec{f}^{\text{FEM}} \\ \vec{0} \end{pmatrix}.
+\end{equation*}
+(Note that $\tilde{A}^{\text{FEM}}$ is precisely the operator $\tilde{A}$ defined in \eqref{eq:ch5.LEsystem.augmented.discrete}, and similarly for the other variables marked with $\cdot^{\text{FEM}}$; we only add the subscript to emphasize the difference with the $\cdot^{\text{FD}}$ variables.) We thus solve for a correction $\delta\tilde{u} = \tilde{M}^{\text{FD}} \delta\tilde{v}$ via
+\begin{equation*}
+\tilde{A}^{\text{FD}} \tilde{M}^{\text{FD}} \delta\tilde{v} = \frac{1}{h^2} \lrp{\tilde{f}^{\text{FEM}} - \tilde{A}^{\text{FEM}} \tilde{u}^{\text{current}}}.
+\end{equation*}
+This induces a sparser distributive relaxation scheme; the details are given in Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.distributive.defectcorrection}.
 
-\begin{algorithm}[h!]
-	\caption{High Order Defect Correction Distributive Smoothing}\label{alg_fdfe_distribution}
-	\begin{algorithmic}[1]
-	\Procedure{HighOrderDefectCorrectionDistributiveSmoothing}{$\mathbf{\hat L}^{fd}$,$\mathbf{\hat M}^{fd}$,$\mathbf{\hat L}^{fe}$,$\mathbf{\hat M}^{fe}$,$\hat{\vec u}$,$\hat{\vec f}^{fe,h}$}
-	\For{$v \textbf{\ in\ } \{u_1,u_2,p\}$}\Comment{Must iterate on $u_1$ and $u_2$ before $p$}
-	  \For{$i \textbf{\ in\ } $Lattice[$v$]}\Comment{$i$ is an equation index}
-	    %\State $r\gets b_i-\mathbf{L}_i\cdot \vec{u}$\Comment{$\mathbf{L}_i$ is the $i$-th row of $\mathbf{L}$}
-	    \State $r\gets \hat{\vec f}^{fe,h}_i-\mathbf{\hat L}^{fe}_i\cdot \hat{\vec{u}}$\Comment{$\mathbf{\hat L}^{fe}_i$ is the $i$-th row of $\mathbf{\hat L}^{fe}$}
-	    \State $\delta\gets r/(\mathbf{\hat L}^{fd}\mathbf{\hat M}^{fd})_{ii}$\Comment{$(\mathbf{\hat L}^{fd}\mathbf{\hat M}^{fd})_{ii}$ is a precomputed constant for each component}
-	    \State $\vec{\hat u}\plusequals \delta\hspace{.1em}m_i^T$\Comment{$m_i$ is the $i$-th row of $\mathbf{\hat M}^{fd}$}
-	  \EndFor
-	\EndFor
-	\EndProcedure
-	\end{algorithmic}
+\begin{algorithm}[htbp]
+\caption{Distributive relaxation with high order defect correction (WHODC).}
+\label{alg:ch5.distributive.defectcorrection}
+\begin{algorithmic}[1]
+\STATE \textbf{function} $\operatorname{DistributiveSmoothWHODC} \lrp{\tilde{A}^{\text{FD}}, \tilde{M}^{\text{FD}}, \tilde{A}^{\text{FEM}}, \tilde{M}^{\text{FEM}}, \tilde{u}, \tilde{f}^{\text{FEM}}}$ \textbf{:}
+\FOR{$\vec{w} \in \set{\vec{u}^1, \vec{u}^2, \vec{p}}$}
+    \FOR{$i \in \operatorname{Lattice}(\vec{w})$}
+        \STATE $r \leftarrow \tilde{f}^{\text{FEM}}_i - \tilde{A}^{\text{FEM}} \tilde{u}$
+        \STATE $\delta \leftarrow r / (\tilde{A}^{\text{FD}} \tilde{M}^{\text{FD}})_{ii}$
+        \STATE $\tilde{u} \plusequal \delta \tilde{M}^{\text{FD}} \tilde{e}_i$
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
 \end{algorithm}
 
-The previous two types of distributive relaxation are not applicable for variables near the domain boundary. In fact, near the boundary, some of the variables in the distribution stencil may not exist. We follow the idea in \cite{Zhu.Yongning10}, and temporarily build an unaugmented system in the boundary band (see Figure \ref{fig:ch5.boundaryband}, left).
+\subsubsection{Boundary relaxation}
 
-\subsection{Boundary relaxation}
-Near the domain boundary, the previous distributive relaxation is not well defined; a special relaxation is required. In the Neumann boundary condition case, we eliminate $p$ from the augmented system \eqref{eq:ch5.LEsystem.augmented.discrete} by left multiplying the equation with
-	$$
-	\mathbf{\hat U}=
-	\left(\begin{array}{cc}
-	\mathbf{I} & -\mathbf{G}^T \mathbf{D}_p^{-1} \\ \mathbf{0} & \mathbf{I}
-	\end{array}\right).
-	$$
-Therefore,
-	\begin{equation}\label{eqn_unaugmentation}
-	\mathbf{\hat U\hat L}\vec{\hat u}=
-	\left(\begin{array}{cc}\mathbf{L}_{u}-\mathbf{G}^T\mathbf{D}_p^{-1}\mathbf{G} & \mathbf{0} \\\mathbf{G} & \mathbf{D}_p\end{array}\right)
-	\left(\begin{array}{c}\vec u\\p\end{array}\right)
-	=\mathbf{\hat U}\vec{\hat f}.
+Neither of the distributive relaxation algorithms discussed in the previous subsubsections may be applied near the domain boundary as some variables in the distribution stencil may not even exist. Instead, we follow \cite{Zhu.Yongning10} and temporarily build an unaugmented system in the boundary band (e.g., see Figure~\ref{fig:ch5.boundaryband}(a)). In the case of Neumann boundary condition, we eliminate $\vec{p}$ from the augmented system \eqref{eq:ch5.LEsystem.augmented.discrete} by left multiplying by
+\begin{equation*}
+\tilde{U} := \begin{pmatrix} I & -G^t D_p^{-1} \\ 0 & I \end{pmatrix}
+\end{equation*}
+yielding
+\begin{equation} \label{eq:ch5.LEsystem.unaugmented.discrete}
+\tilde{U} \tilde{f} = \tilde{U} \tilde{A} \tilde{u} =
+\begin{pmatrix} A_u - G^t D_p^{-1} G & 0 \\ G & D_p \end{pmatrix}
+\begin{pmatrix} \vec{u} \\ \vec{p} \end{pmatrix}.
 \end{equation}
-In the first equation for $\vec u$, the equation is symmetric and positive definite, and hence can be solved again using Gauss-Seidel relaxation.
-This unaugmented system is a consistent discretization to the original PDE \eqref{eq:ch5.augmented.strong}. Although Gauss-Seidel relaxation is not an efficient smoother for the unaugmented system if defined everywhere, for the purpose of boundary relaxation, we only build the temporary unaugmented system and relax it within a very narrow boundary band as demonstrated in Figure \ref{fig:ch5.boundaryband}, and temporarily freeze the interior variables. The solution is strongly restricted by nearby interior values, therefore the Gauss-Seidel relaxation is still efficient and stable. Typically, with about 5 to 10 sweeps of boundary relaxation before and after each interior relaxation sweep, the boundary residual is reduced to as small as the interior residual.
-Once we relaxed $\vec u$ well enough, we freeze $\vec u$ and substitute into the second equation in \eqref{eqn_unaugmentation} to resolve pressure variables.
-%Therefore, the boundary residual does not dominate and does not affect the multigrid efficiency.
+In the first equation for $\vec{u}$, the equation is symmetric and positive definite, and hence can be solved by using, e.g., Gauss-Seidel relaxation. This unaugmented system is a consistent discretization to the original PDE \eqref{eq:ch5.augmented.strong}. Although Gauss-Seidel relaxation is not an efficient smoother for the unaugmented system if defined everywhere, for the purposes of boundary relaxation, we only build the unaugmented system temporarily, relax it within a very narrow boundary band, as in Figure~\ref{fig:ch5.boundaryband}, and temporarily freeze the interior degrees of freedom. The solution is strongly restricted by nearby interior values, so Gauss-Seidel relaxation is still efficient and stable. Typically, with about $5$ to $10$ boundary relaxation sweeps before and after each interior relaxation sweep, the boundary residual is reduced to as small as the interior residual. Once we have relaxed $\vec{u}$ sufficiently, we freeze $\vec{u}$ and substitute into the second equation of \eqref{eq:ch5.LEsystem.unaugmented.discrete} to relax the pressure degrees of freedom.
 
-%
-%\begin{figure}[ht]
-%	\centering
-%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{part2/chapter5/figures/bw/embedding_2_3.jpg}
-%	\hspace{1em}\includegraphics[trim=60mm 30mm 60mm 30mm, clip,width=0.4 \columnwidth]{part2/chapter5/figures/bw/embedding_3_3.jpg}
-%	\caption{Approximated boundary segment curves and embedding grids. Red: active boundary nodes and cells for $x$ grid; blue: active boundary nodes and cells for $y$ grid.}
-%	\label{fig:segcurve}
-%\end{figure}
+\subsubsection{Boundary relaxation with Dirichlet boundary conditions}
 
-\subsection{Boundary relaxation for the reduced system in Dirichlet boundary condition case}
-	In the Dirichlet boundary condition case, the boundary system \eqref{eq:ch5.kkt.unaugmented} is a KKT system, which is indefinite, and cannot be resolved using Gauss-Seidel relaxations. Alternative approaches such as Kaczmarz relaxation or box relaxation may be efficient smoothers, however, their computational cost is much more expensive. Instead, we follow the fundamental basis method, to solve $\vec v^h$ from the reduced system \eqref{eq:ch5.ztaz}, and reconstruct the solution of the KKT system \eqref{eq:ch5.kkt.unaugmented}  using $\vec u^h=\vec c^h+\mathbf Z^h\vec v^h$.
-	Since $\mathbf L^h$ is symmetric positive definite, ${\mathbf Z^h}^T\mathbf L^h\mathbf Z^h$ is also symmetric positive definite, and hence can be solved using Gauss-Seidel relaxation (see Algorithm \ref{alg:bdry_kernel_relaxation_v}).
+In the case of Dirichlet boundary conditions, the system \eqref{eq:ch5.kkt.unaugmented} is strongly indefinite and cannot be relaxed using, e.g., Gauss-Seidel. Alternative approaches such as Kaczmarz relaxation or box relaxation may be efficient smoothers; however, they have a high computational cost. Instead, we utilize the fundamental basis of the constraint matrix to solve $\vec{v}$ in the $Z^tAZ$ system \eqref{eq:ch5.ztaz} and then reconstruct $\vec{u}$ in \eqref{eq:ch5.kkt.unaugmented} via $\vec{u} := \vec{c} + Z \vec{v}$. Since $Z^tAZ$ is symmetric positive definite (see Chapter~\ref{ch:pt2.poisson}, \S\ref{subsubsec:ch4.nullspacemethod}), one may confidently apply Gauss-Seidel relaxation; see Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.relaxation.boundary.dirichlet.v} and compare Chapter~\ref{ch:pt2.poisson}, \S\ref{subsec:ch4.multigrid.smoothing}.
 
-	In practice, a Gauss-Seidel iteration on \eqref{eq:ch5.ztaz} iteratively solves for a correction on each single degree of freedom by solving the following scalar equation
-	\begin{eqnarray}
-	\vec e_i^T \mathbf L_r^h(\vec v^{h}+\delta \vec e_i) =\vec e_i^T{\mathbf Z^h}^T(\vec f^{h}-\mathbf L^h\vec c^h),
-	\end{eqnarray}
-	where $\mathbf L_r^h={\mathbf Z^h}^T\mathbf L^h\mathbf Z^h$ i.e.
-	\begin{eqnarray}
-	(\mathbf L_r^h)_{ii}\delta=\vec e_i^T{\mathbf Z^h}^T(\vec f^{h}-\mathbf L^h\vec c^h-\mathbf L^h \mathbf Z^h\vec v^h)=\vec e_i^T{\mathbf Z^h}^T(\vec f^{h}- \mathbf L^h\vec u^h)
-	\end{eqnarray}
-	and then applies the correction: $\vec v^h\leftarrow \vec v^h +\delta \vec e_i$. Equivalently, $\vec u^h$ is updated as $\vec u^h\leftarrow \vec u^h+\delta \mathbf Z^h\vec e_i$.
-	Therefore we can equivalently solve for a correction on $\vec u$ to emulate the Gauss-Seidel iteration on $\vec v^h$ (see Algorithm \ref{alg:bdry_kernel_relaxation_u}).
+\begin{algorithm}[htbp]
+\caption{Boundary relaxation with Dirichlet boundary conditions - $\vec{v}$.}
+\label{alg:ch5.relaxation.boundary.dirichlet.v}
+\begin{algorithmic}[1]
+\STATE $\vec{v} \leftarrow \vec{0}$
+\FOR{$i = 1, \dotsc, m$}
+    \STATE $\delta \leftarrow \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{c} - AZ \vec{v}} / A_{ii}$
+    \STATE $\vec{v} \plusequal \delta \vec{e}_i$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
+In practice, a Gauss-Seidel iteration on \eqref{eq:ch5.ztaz} iteratively solves for a correction on each single degree of freedom by solving the scalar equation
+\begin{equation*}
+\vec{e}_i^t Z^tAZ \lrp{\vec{v} + \delta \vec{e}_i} = \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{c}},
+\end{equation*}
+i.e.,
+\begin{align*}
+A_{ii} \delta & = \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{c} - A Z \vec{v}} \\
+              & = \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{u}},
+\end{align*}
+and then applying the correction $\vec{v} \leftarrow \vec{v} + \delta \vec{e}_i$. Equivalently, one may update the $\vec{u}$ degrees of freedom directly: $\vec{u} \leftarrow \vec{u} + \delta Z \vec{e}_i$; see Algorithm~\ref{ch:pt2.LE}.\ref{alg:ch5.relaxation.boundary.dirichlet.v}.
 
-	%\algsetup{indent=2em}% \newcommand{\factorial}{\ensuremath{\mbox{\sc Factorial}}}
-	\begin{algorithm}[ht] \caption{Dirichlet boundary relaxation - $\vec v^h$}\label{alg:bdry_kernel_relaxation_v} \begin{algorithmic}[1]
-	\State $\vec v^h \leftarrow \vec 0$
-	\For{$i=1$ to $m$}
-	\State $\delta\leftarrow \vec e_i^T{\mathbf Z^h}^T(\vec f^{h}-\mathbf L^h\vec c^h-\mathbf L^h\mathbf Z^h\vec v^h)/(\mathbf L^h)_{ii}$
-	\State $\vec v^h \plusequals \delta \vec e_i$
-	\EndFor
-	\end{algorithmic}
-	\end{algorithm}
-
-	%\algsetup{indent=2em}% \newcommand{\factorial}{\ensuremath{\mbox{\sc Factorial}}}
-	\begin{algorithm}[ht] \caption{Dirichlet boundary relaxation - $\vec u^h$}\label{alg:bdry_kernel_relaxation_u} \begin{algorithmic}[1]
-	\State $\vec u^h \leftarrow \vec c^h$
-	\For{$i=1$ to $m$}
-	\State $\delta\leftarrow \vec e_i^T{\mathbf Z^h}^T(\vec f^{h}-\mathbf L^h\vec u^h)/(\mathbf L^h)_{ii}$
-	\State $\vec u^h \plusequals \delta \mathbf Z^he_i$
-	\EndFor
-	\end{algorithmic}
-	\end{algorithm}
-
+\begin{algorithm}[htbp]
+\caption{Boundary relaxation with Dirichlet boundary conditions - $\vec{u}$.}
+\label{alg:ch5.relaxation.boundary.dirichlet.v}
+\begin{algorithmic}[1]
+\STATE $\vec{u} \leftarrow \vec{c}$
+\FOR{$i = 1, \dotsc, m$}
+    \STATE $\delta \leftarrow \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{u}} / A_{ii}$
+    \STATE $\vec{u} \plusequal \delta Z \vec{e}_i$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Coarsening}
-In a geometric multigrid method, we define a discretization on each level. On the interior of the region, we restrict residuals from the fine grid to coarse grid by applying a restriction operator $\mathbf R$ for each component defined on the staggered grids with stencils illustrated in Figure \ref{fig_restriction} . We consider two types of prolongation stencils. First, we consider prolongation $\mathbf P_{lo}=4\mathbf R^T$. Second, we consider piecewise bi-linear interpolation for $\vec u$ in combination with the same pressure prolongation as in $\mathbf P_{lo}$, which we donate as $\mathbf P_{hi}$.
 
-
-\begin{figure}[h!]
-	\centering
-	\subfigure[Fine grid active cells]{\hspace{-1.6cm}\includegraphics[width=0.4 \columnwidth]{part2/chapter5/figures/bw/grid_fine.png}}
-	\subfigure[Coarse grid active cells, overlaid with the fine active cells demonstrated using dashed lines]{\includegraphics[width=0.4 \columnwidth]{part2/chapter5/figures/bw/grid_coarse.png}}\\
-	\caption{Coarsening of grid variables}
-	\label{fig:coarsening}
-\end{figure}
+In contrast to our smoothing operator discussed in the preceding subsections, our grid transfer operators are relatively straightforward. On the interior of the domain, we restrict fine grid residuals to the coarse grid by applying a restriction operator $R$ with the stencils illustrated in Figure~\ref{fig:ch5.restriction}. We consider two kinds of prolongation operators for our numerical examples in \S\ref{sec:ch5.examples}. First, we consider simply the transpose of the restriction operator: $P_{\text{lo}} := 4 R^t$. Second, we also consider piecewise bilinear interpolation for $\vec{u}$ in combination with the same pressure prolongation given by $P_{\text{lo}}$, which we denote as $P_{\text{hi}}$.
 
 \setlength{\unitlength}{1.2cm}
-\begin{figure}[ht]\centering
+\begin{figure}[htbp]
+\begin{center}
 \footnotesize\begin{picture}(4,4)
   \linethickness{1.5pt}
   \multiput(0,0)(0, 2){3}{\line(1, 0){4}}
@@ -675,20 +626,19 @@ In a geometric multigrid method, we define a discretization on each level. On th
   \put(2.3,2.43){\colorbox{white}{$1/4$}}
 }
 \end{picture}
-\caption{Restriction operator stencils. }\label{fig_restriction}
+\caption{Stencils for the restriction operator $R$.}
+\label{fig:ch5.restriction}
+\end{center}
 \end{figure}
 
-However, on the boundary, there is no guarantee that all dependencies of the coarse grid variable restriction stencils are active fine grid degrees of freedom. Therefore, we truncate our restriction stencils to the active degrees of freedom, which is equivalent to restricting zero residuals from inactive regions. Also, when a Dirichlet boundary condition presents, we cannot compute the residuals $\vec r^h=\vec f^h-\mathbf L^h\vec u^h-\mathbf {B^h}^T\vec \lambda^h$ when a $\vec \lambda$ value is involved. In this case, we apply a boundary relaxation strong enough such that the boundary residual is smaller than interior relaxations, and restrict zero boundary residual for these equations.
+However, near the boundary, there is no guarantee that all dependencies of the coarse grid restriction stencils are legitimate fine grid degrees of freedom. Therefore, we truncate our restriction stencils to the actual degrees of freedom, which is equivalent to restricting zero residuals from fine grid vertices which are not degrees of freedom. Also, in the presence of Dirichlet boundary conditions, we cannot compute the components of the residual $\vec{r} = \vec{f} - A \vec{u} - B^t \vec{\lambda}$ when $\vec{\lambda}$ components are nontrivially involved. In this case, we apply enough boundary relaxation sweeps to ensure these boundary residuals are smaller than interior residuals, then simply restrict zero boundary residual values for these equations. Now, normally, the right hand side to the coarse grid constraint system has been computed from the restriction of the residual of the fine grid constraint system. However, due to the fact that our solutions $\vec{u} = \vec{c} + Z \vec{v}$ always satisfy the Dirichlet boundary constraints exactly, the Dirichlet boundary condition on all coarse grids should be zero.
 
-The coarse grid constraint system right hand side should have been computed from the restriction of the fine grid constraint system residual. However, due to the fact that our solutions $\vec u_p^h=\vec c^h+\mathbf Z^h\vec v^h$ always satisfy the boundary constraints exactly, the coarse grid Dirichlet boundary condition is always zero.
+We implement prolongation distributively, i.e., we iterate over the coarse grid degrees of freedom and distribute a coarse grid scalar correction to all appropriate fine level degrees of freedom. Near the domain boundary this is equivalent to prolongating a zero correction from exterior coarse grid vertices, which we believe is reasonable. Notice that such a prolongation may shift the fine grid solution away from a fundamental basis solution. Hence we apply a projection onto the solution space after prolongation. We use the projection $\vec{u}' := \vec{c} + Z Q \vec{u}$ where $\vec{u}$ is the (possibly) shifted fine grid solution and $Q$ is a projection which simply removes those components corresponding to independent degrees of freedom with respect to the aggregate constraint system.
 
-Also, prolongation is implemented in a distributive way, i.e. we iterate over the active coarse grid corrections, and distribute their values to all active fine level degrees of freedom. Near the domain boundary this is equivalent to prolongating a zero correction from exterior coarse grid locations, which is reasonable. We notice that this prolongation may lead to a solution away from the fundamental basis solution. Therefore, a projection onto the solution space needs to be applied after the prolongation step. The projected solution is $\vec u_p^h=\vec c^h+\mathbf Z^h\vec v^h$, for some $\vec v^h$, and according to the definition of $\mathbf Z^h$ and $\vec c^h$ in \eqref{eq:ch5.Zc} and \eqref{eq_c}, we have $\vec v^h=\mathcal Q\vec{u}^h$, where $\mathcal Q$ projects a solution vector to a sub-vector by eliminating the degrees of freedom that correspond to aggregation representative nodes. Therefore, the projected solution is $\vec{u}_p^h=\vec c^h+\mathbf Z^h\mathcal Q\vec u^h$.
+\begin{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%So far, we discussed the components of a multigrid method, and we continue by discussing the numerical results.
-Now that we have covered all the components of a multigrid method, we will next look at the results we are able to obtain using these methods.
-
-\section{Numerical examples}\label{sec:results}
+\section{Numerical Examples} \label{sec:ch5.examples}
 	We investigate two aspects of our algorithm: discretization error and multigrid efficiency. In this section, we apply our method on various domains with Neumann or Dirichlet boundary conditions and with a wide range of Poisson's ratios.
 	We considered three deformations defined on three geometric domains:
 %\subsection{Disk domain}
