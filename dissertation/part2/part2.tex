@@ -10,7 +10,7 @@
 
 \section*{Introduction}
 
-We now turn toward the solution of elliptic partial differential equations on arbitrary, irregular domains with a discretization based on a regular Cartesian grid. We will specifically consider the following problems in the subsequent chapters.
+We now turn toward the solution of elliptic partial differential equations on arbitrary, irregular domains with a discretization based on a regular Cartesian grid. We will specifically consider the following problems in Chapters~\ref{ch:pt2.poisson} and \ref{ch:pt2.LE}, respectively.
 
 \begin{itemize}
 
@@ -27,7 +27,7 @@ u & = p, \quad \in \dOmega_d; \label{eq:pt2.poisson.D} \\
 where
 \begin{itemize}
 \item the domain $\Omega \subset \bbR^d$ is open ($d = 2 \text{ or } 3$, typically);
-\item the interface $\Gamma$ is a co-dimension one closed curve ($d = 2$) or surface ($d = 3$) that divides $\Omega$ into the interior domain $\Omega^-$ and the exterior domain $\Omega^+$, such that $\Omega = \Omega^- \sqcup \Omega^+ \sqcup \Gamma$;
+\item the interface $\Gamma$ is a co-dimension one closed curve ($d = 2$) or surface ($d = 3$) that divides $\Omega$ into an interior domain $\Omega^-$ and an exterior domain $\Omega^+$, such that $\Omega = \Omega^- \sqcup \Omega^+ \sqcup \Gamma$;
 \item $u$ (unknown), $\beta$ (known), and $f$ (known) are scalar functions which can exhibit discontinuities across $\Gamma$ but otherwise are assumed to have smooth restrictions $u^{\sigma}$, $\beta^{\sigma}, f^{\sigma}$ to $\Omega^{\sigma}$, $\sigma \in \set{+,-}$;
 \item $\hatn = \hatn(\bfx)$ denotes the outward unit normal, both to $\Omega^-$ for $\bfx \in \Gamma$ and to $\Omega$ for $\bfx \in \dOmega$; and
 \item $\jump{v}(\bfx) := v^+(\bfx) - v^-(\bfx) := \lim_{\epsilon \to 0^+} v\lrp{\bfx + \epsilon \hatn(\bfx)} - \lim_{\epsilon \to 0^+} v\lrp{\bfx - \epsilon \hatn(\bfx)}$ denotes the \emph{jump} of the quantity $v$ across the interface $\Gamma$.
@@ -82,7 +82,7 @@ In all the above, $\dOmega = \dOmega_d \sqcup \dOmega_n$, and we assume $\Gamma$
 \end{center}
 \end{figure}
 
-Although the use of embedded methods avoids the complexities inherent to unstructured mesh generation, as discussed in Part I, it does introduce (typically less computationally intensive) difficulties of their own. One prominent such difficulty is the enforcement of algebraic surface conditions (such as boundary conditions or interfacial jump conditions) on embedded features such as $\dOmega$ and $\Gamma$, since the degrees of freedom now do not lie on said embedded features. Our methods employ a Lagrange multiplier space in a relatively straightforward way to weakly enforce Dirichlet boundary conditions and interfacial jump conditions. We mention some alternative techniques in the background sections in the subsequent chapters, and for a good review, see Lew et al. \cite{Lew.Adrian08}.
+Although the use of embedded methods avoids the complexities inherent to unstructured mesh generation, as discussed in Part I, it does introduce difficulties of their own, though typically of a different and less computationally intensive variety. One prominent such difficulty is the enforcement of algebraic surface conditions (such as boundary conditions or interfacial jump conditions) on embedded features such as $\dOmega$ and $\Gamma$, since the degrees of freedom now do not lie on said embedded features. Our methods employ a Lagrange multiplier space in a relatively straightforward way to weakly enforce Dirichlet boundary conditions and interfacial jump conditions. We mention some alternative techniques in the background sections in the subsequent chapters, and for a good review, see Lew et al. \cite{Lew.Adrian08}.
 
 A further challenge is the retention of higher order accuracy in $L^{\infty}$. The difficulty typically lies in determining the numerical stencils near embedded features that retain the accuracy achieved in the regions of the domain sufficiently distanced from said embedded features. Many present methods address these problems at the cost of implementation complexity and sometimes require significant effort to adapt to general applications. But while achieving higher order accuracy in the discretization may be nontrivial, to reiterate from Part I, the ability to use a regular Cartesian grid greatly facilitates the implementation of efficient solution methods. Specifically for high resolution discretizations, direct methods to solve the discrete linear systems become too slow and memory intensive. Geometric multigrid methods and domain decomposition approaches have been shown to provide very favorable performance in this setting. However, their application to embedded discretizations is not entirely straightforward. Ultimately, special attention must be paid near embedded features for both discretization accuracy and efficient numerical linear algebra, as we describe in the subsequent chapters.
 
