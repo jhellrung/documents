@@ -43,16 +43,15 @@ Our numerical discretizations for domain and interface problems make use of an e
 
 Let us first consider the treatment of $\Omega$ for domain problems. We embed the domain $\Omega$ into a non-conforming, uniform Cartesian grid $\calG^h$ with grid-spacing $(\Delta x, \Delta y, \Delta z)$. (Note that to simplify the convergence analysis, our numerical examples assume $\Delta x = \Delta y = \Delta z =: h$.) We include all Cartesian grid cells $c_i$ that intersect $\Omega$ in the discretization, and refer to this set $\calC^h = \set{ c_i \in \calG^h : c_i \cap \Omega \neq \emptyset }$ as the \emph{computational domain} (see Figure~\ref{fig:ch4.embedding.domain}). Also, we define the set of all cells that intersect the boundary as $\calC_{\dOmega}^h = \set{ c_i \in \calC^h : c_i \cap \dOmega \neq \emptyset }$ and refer to these as \emph{boundary (grid) cells}. Note that a boundary cell may be regarded as partially empty, since only a portion of the cell lies within $\Omega$. We refer to this region of a boundary cell $c_i$ that lies in the domain $\Omega$, $c_i \cap \Omega$, as the \emph{material region} of the cell, and use the terms \emph{material node} and \emph{virtual node} to describe the Cartesian grid vertices lying inside and outside $\Omega$, respectively. We refer to the set of grid vertices spanned by the computation domain as $\calN^h$, and specifically the material nodes as $\calN^h_m$ and the virtual nodes as $\calN^h_v$. See Figure~\ref{fig:ch4.embedding.domain} for a diagram labeling the grid vertices along a typical boundary. For domain problems, we identify each grid vertex in the computational domain, material or virtual, as a degree of freedom.
 
-\setlength{\figureheight}{0.40\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedding in $2$ dimensions]
+\setlength{\figureheight}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[Embedding in $2$ dimensions]
 {\includegraphics[height=\figureheight]{part2/figures/embedding_2d}}
-\subfigure[Embedding in $3$ dimensions]
+\subfloat[Embedding in $3$ dimensions]
 {\includegraphics[height=\figureheight]{part2/figures/embedding_3d}}
 \caption{Example embeddings for domain problems. Subfigure (a) shows an example in $2$ dimensions to clearly depict the various classes of grid cells and vertices: shaded grid cells comprise the computational domain ($\calC^h$), with lighter-shaded grid cells on the boundary ($\calC_{\dOmega}^h$); grid vertices surrounded by gray circles represent virtual degrees of freedom ($\calN^h_v$); grid vertices surrounded by black circles represent material degrees of freedom ($\calN^h_m$) incident to a boundary grid cell; and grid vertices surrounded by squares represent material degrees of freedom ($\calN^h_m$) incident only to non-boundary grid cells. Subfigure (b) shows an example in $3$ dimensions.}
 \label{fig:ch4.embedding.domain}
-\end{center}
 \end{figure}
 
 In the course of the discretization, for each boundary cell $c_i \in \calC_{\dOmega}^h$, we will need to evaluate integrals over the following domains:
@@ -63,16 +62,15 @@ In the course of the discretization, for each boundary cell $c_i \in \calC_{\dOm
 \end{itemize}
 In all cases, the integrand is polynomial (or locally approximated by a polynomial). We evaluate these integrals using polyhedral representations $\calP^{c_i}$ and $\calP_{\dOmega}^{c_i}$ approximating $\partial(c_i \cap \Omega)$ and $c_i \cap \dOmega$, respectively. We use the term \emph{polyhedral representation} to convey an analogous meaning as polygonalizing a curve in $2$ dimensions, but we essentially regard $\calP^{c_i}$ and $\calP_{\dOmega}^{c_i}$ simply as collections of polygons. For implementation purposes, to maximize data structure reuse, it is convenient for $\calP_{\dOmega}^{c_i} \subset \calP^{c_i}$, i.e., all polygons in $\calP_{\dOmega}^{c_i}$ are also members of $\calP^{c_i}$. See Figure~\ref{fig:ch4.boundarypolyhedralization}.
 
-\setlength{\figureheight}{0.32\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\subfigure[Boundary grid cell with a polyhedralization of a portion of $\dOmega$ embedded inside]
+\setlength{\figureheight}{0.33\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[Boundary grid cell with a polyhedralization of a portion of $\dOmega$ embedded inside]
 {\includegraphics[height=\figureheight]{part2/chapter4/figures/boundary_cell_a}}
-\subfigure[The two halves of the boundary grid cell after division along $\dOmega$]
+\subfloat[The two halves of the boundary grid cell after division along $\dOmega$]
 {\includegraphics[height=\figureheight]{part2/chapter4/figures/boundary_cell_b}}
 \caption{A grid cell $c_i$ with an example boundary dividing it. The left half of the cell in (b) corresponds to $c_i \cap \Omega$, the material region of the cell. (b) shows the polyhedralization $\calP^{c_i}$ of the material region of the cell, where the shaded triangles highlight $\calP_{\dOmega}^{c_i} \subset \calP^{c_i}$, the polyhedralization just of the portion of $\dOmega$ passing through $c_i$.}
 \label{fig:ch4.boundarypolyhedralization}
-\end{center}
 \end{figure}
 
 We employ the divergence theorem to transform volume integrals over $c_i \cap \Omega$ into surface integrals over $\partial(c_i \cap \Omega)$ (cf. \cite{Min.Chohong07}). Such transformations are non-unique, but constructing a simple one is straightforward given the polynomial nature of the integrand. For example,
@@ -89,16 +87,15 @@ Note that over each polygon $g \in \calP^{c_i}$, the unit normal $\hatn_g$ is co
 
 For interface problems, we embed the interface $\Gamma$ into $\calG^h$ in a completely analogous way as for $\dOmega$ in domain problems. We likewise use the notation $\calC_{\Gamma}^h = \set{ c_i \in \calG^h : c_i \cap \Gamma \neq \emptyset }$ and the term \emph{interfacial (grid) cells} to refer to the set of cells through which the interface passes. As we will see in \S\ref{subsec:ch4.discretization.interface}, our interface discretization is based on a domain discretization, as described above, in each of $\Omega^-$ and $\Omega^+$. This naturally introduces an \emph{interior computational domain} $\calC^{h,-}$ and \emph{exterior computational domain} $\calC^{h,+}$, where $\calC^{h,\sigma} = \set{ c_i \in \calG^h : c_i \cap \Omega^{\sigma} \neq \emptyset }$. Note that $\calC^{h,-}$ and $\calC^{h,+}$ are disjoint save for $\calC_{\Gamma}^h$, where each Cartesian grid cell and the associated degrees of freedom, material and virtual, are duplicated. See Figure~\ref{fig:ch4.embedding.interface}.
 
-\setlength{\figureheight}{0.40\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedding for $\Omega^-$]
+\setlength{\figureheight}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[Embedding for $\Omega^-$]
 {\includegraphics[height=\figureheight]{part2/chapter4/figures/embedding_2d}}
-\subfigure[Embedding for $\Omega^+$]
+\subfloat[Embedding for $\Omega^+$]
 {\includegraphics[height=\figureheight]{part2/chapter4/figures/embedding_c_2d}}
 \caption{An example interface embedding in $2$ dimensions, showing the separate domain embeddings for $\Omega^-$ and $\Omega^+$. Grid cells and grid vertices are labelled as in Figure~\ref{fig:ch4.embedding.domain}: shaded grid cells comprise the interior ($\Omega^-$, (a)) and exterior ($\Omega^+$, (b)) computational domains, with the lighter-shaded grid cells on the interface; grid vertices surrounded by gray circles represent virtual degrees of freedom; grid vertices surrounded by black circles represent material degrees of freedom incident to an interfacial grid cell; and grid vertices surrounded by squares represent material degrees of freedom incident only to non-interfacial grid cells. Notice how all interfacial grid cells and circled grid vertices are effectively duplicated between the grids embedding the interior and exterior domains. Also note that each grid vertex on an interfacial grid cell is duplicated into precisely one material degree of freedom and one virtual degree of freedom.}
 \label{fig:ch4.embedding.interface}
-\end{center}
 \end{figure}
 
 We will often speak generically about both our interface discretization and our domain (with Neumann and/or Dirichlet boundary conditions) discretizations. Due to the similarities in the embedding of $\dOmega$ (for domain problems) and of $\Gamma$ (for interface problems) into the background grid $\calG^h$, and to avoid cluttering the exposition with too many ``boundary/interface'' terms, we will occasionally simply use the term \emph{embedded feature} or \emph{embedded geometry} to refer both to the embedded boundary $\dOmega$ in domain problems and to the embedded interface $\Gamma$ in interface problems.
@@ -107,25 +104,24 @@ We will often speak generically about both our interface discretization and our 
 
 We define all of the domains $\Omega$ and interfaces $\Gamma$ in the numerical examples in \S\ref{sec:ch4.examples} analytically and implicitly as the zero isocontour of a level set function. This Eulerian representation ensures that we can always resolve embedded features to a resolution comparable to the background grid $\calG^h$. Note that the embedding procedure and integration techniques described above require a Lagrangian-like polyhedral representation of the embedding within each boundary or interfacial grid cell. Thus, one must create some polyhedral approximation, per such grid cell, of the implicitly defined embedded geometry. Since it is relatively easy to divide a tetrahedron along a plane approximating the level set surface given the level set function values at the tetrahedron's vertices, we symmetrically partition each boundary or interfacial grid cell into $24$ congruent tetrahedra and accordingly divide each tetrahedron. The union of these dividing surfaces (triangles and quadrilaterals) within each tetrahedron compose the polyhedral representation of the embedded geometry. In $2$ dimensions, the analogous procedure would be to partition each square grid cell into $4$ triangles and divide each triangle by a line according to the level set function values at the triangle's vertices. This polyhedralization procedure is similar to that described in \cite{Min.Chohong07}. See Figure~\ref{fig:ch4.polyhedralization}.
 
-\setlength{\figureheighti}{0.34\columnwidth}
-\setlength{\figureheightii}{0.32\columnwidth}
+\setlength{\figureheighti}{0.35\textwidth}
+\setlength{\figurewidthii}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Grid cell partitioned into $24$ congruent tetrahedrons (wireframe)]
+\centering
+\subfloat[Grid cell partitioned into $24$ congruent tetrahedrons (wireframe)]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/24tet_cube_a}}
-\subfigure[Grid cell partitioned into $24$ congruent tetrahedrons (separated)]
+\subfloat[Grid cell partitioned into $24$ congruent tetrahedrons (separated)]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/24tet_cube_b}}
-\subfigure[Typical divisions of a tetrahedron given the level set function values at its vertices]
+\subfloat[Typical divisions of a tetrahedron given the level set function values at its vertices]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/tet_division}} \\
-\subfigure[Grid cell (dimension $2$) partitioned into $4$ congruent triangles, with a typical level set curve (light gray; $\dOmega$ or $\Gamma$) and level set function values at the vertices of the triangles.]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/4tri_square_a}}
-\subfigure[The division of each triangle according to the level set function values at its vertices.]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/4tri_square_b}}
-\subfigure[The polygonal representation (gray) of the level set curve is the union of the dividing segments within each triangle.]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/4tri_square_c}}
+\subfloat[Grid cell (dimension $2$) partitioned into $4$ congruent triangles, with a typical level set curve (light gray; $\dOmega$ or $\Gamma$) and level set function values at the vertices of the triangles.]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/4tri_square_a}}
+\subfloat[The division of each triangle according to the level set function values at its vertices.]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/4tri_square_b}}
+\subfloat[The polygonal representation (gray) of the level set curve is the union of the dividing segments within each triangle.]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/4tri_square_c}}
 \caption{We approximate an embedded domain boundary or embedded interface implicitly defined by a level set function with a polyhedral representation computed by partitioning each boundary or interfacial grid cell into $24$ congruent tetrahedra, as in (a) and (b); and subsequently dividing each tetrahedron according to the level set function values at its vertices, e.g., as in (c). The union of the dividing triangles and quadrilaterals within each divided tetrahedron compose the polyhedral representation of the embedded boundary or embedded interface. In $2$ dimensions, the analogous procedure would be to partition each square grid cell into $4$ triangles, as in (d), and divide each triangle according to the level set values at its vertices, as in (e). The union of the dividing segments within each triangle compose the polygonal representation of the embedded boundary or interface, as in (f).}
 \label{fig:ch4.polyhedralization}
-\end{center}
 \end{figure}
 
 The procedure described above may produce a \emph{sliver} polyhedron (a polyhedron with large aspect ratio) when dividing a given tetrahedron; likewise, the polygonal representation of the embedded surface may contain some sliver polygons. We note that the aspect ratio of such primitives has no \emph{direct} bearing on the conditioning of the discretization. The quantities of actual relevance to conditioning are the measures of the material volume and the embedded surface within a boundary or interfacial grid cell. Unlike the conditioning issues associated with sliver elements in a conforming mesh, however, our method allows conditioning issues caused by vanishing material volume measures within a grid cell to be addressed via Jacobi preconditioning, as we discuss at the end of \S\ref{subsec:ch4.discretization.neumann}. Further, our constraint aggregation method described in \S\ref{subsubsec:ch4.constraintaggregation} fully alleviates any conditioning issues caused by vanishing embedded surface measures within a grid cell (which are only relevant within the context of discretizing the Dirichlet boundary conditions \eqref{eq:ch4.poisson.D} and the value jump interface conditions \eqref{eq:ch4.poisson.DJ}). See also \cite{Lew.Adrian08} for a more detailed discussion on the advantages, with respect to conditioning, of using embedded domain methods over conforming mesh methods such as locally boundary-fitting remeshing schemes.
@@ -185,13 +181,12 @@ for the vector $\vec{u}$. We use the standard FEM term \emph{stiffness matrix} t
 
 With this approach, our definition of the energy \eqref{eq:ch4.neumann.energy.boundary} results in a slightly denser stencil near the boundary, as all $8$ degrees of freedom in a cell couple together if $\dOmega$ passes through that cell. See Figure~\ref{fig:ch4.poisson.stencil} for a graphical depiction of the stencil definitions and the sparsity pattern of the stiffness matrix.
 
-\setlength{\figureheight}{0.50\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[height=\figureheight]{part2/chapter4/figures/poisson_stencil_2d}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\figurewidth]{part2/chapter4/figures/poisson_stencil_2d}
 \caption{Illustration in $2$ dimensions of the stiffness matrix ($A$) stencils for various grid vertices. The stencil for a degree of freedom indicates where the nonzero (NZ) entries are of the row (or column) in $A$ corresponding to the degree of freedom. Squared grid vertices have the standard finite difference Poisson stencil (a $5$-point stencil in $2$ dimensions; a $7$-point stencil in $3$ dimensions), which naturally arises through the use of $e^{c_k}$ to discretize the energy \eqref{eq:ch4.neumann.energy.continuous}. Circled grid vertices (both black and gray) will generally have a denser stencil (up to a $9$-point stencil in $2$ dimensions; up to a $27$-point stencil in $3$ dimensions), due to the use of $\tilde{e}^{c_k}$.}
 \label{fig:ch4.poisson.stencil}
-\end{center}
 \end{figure}
 
 The symmetric system \eqref{eq:ch4.neumann.linear.system} readily lends itself to black-box solvers such as (preconditioned) conjugate gradient. However, conditioning of the stiffness matrix may deteriorate when a cell has a very small material volume measure, as we first mentioned in \S\ref{subsubsec:ch4.polyhedralization}. This arises from the increasing irrelevance of virtual nodes far from the boundary (see, for example, the $(4,12)$ grid vertex in Figure~\ref{fig:ch4.poisson.stencil}). The respective row and column in $A$ and the corresponding entry in $\vec{f}$ all approach zero simultaneously. We found that simple Jacobi preconditioning (and, in extreme cases, outright elimination of degrees of freedom; see \S\ref{sec:ch4.examples} for explanation) mitigates these conditioning issues as in \cite{Bedrossian10}. Note however that our multigrid solver described in \S\ref{sec:ch4.multigrid} naturally suffers no such adverse effects from $A$'s conditioning.
@@ -226,16 +221,15 @@ where the characteristic functions $\chi_{c_i \cap \dOmega}$ are given by
 \chi_{c_i \cap \dOmega}(\bfx) := \begin{cases} 1, & \bfx \in c_i \cap \dOmega \\ 0, & \bfx \notin c_i \cap \dOmega \end{cases}.
 \end{equation}
 
-\setlength{\figureheight}{0.40\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\subfigure[Schematic of functions in $\Lambda^h_1$, with single-wide constraints $C_1$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/lambda_h_1}}
-\subfigure[Schematic of functions in $\Lambda^h_2$, with double-wide constraints $C_2$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/lambda_h_2}}
+\setlength{\figurewidth}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[Schematic of functions in $\Lambda^h_1$, with single-wide constraints $C_1$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/lambda_h_1}}
+\subfloat[Schematic of functions in $\Lambda^h_2$, with double-wide constraints $C_2$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/lambda_h_2}}
 \caption{Schematics of two discretizations $\Lambda^h$ of the Lagrange multiplier space $H^{-1/2}(\dOmega)$ in $2$ dimensions used in \eqref{eq:ch4.dirichlet.constraint.continuous}. (a) shows a schematic of functions in $\Lambda^h_1$, which are piecewise constant over $\calC^h_{\dOmega} \cap \dOmega$. (b) shows a schematic of functions in $\Lambda^h_2$, which are piecewise constant over $\calC^{2h}_{\dOmega} \cap \dOmega$ (using the doubly-coarse grid $\calG^{2h}$). Note that the center grid vertex (highlighted) in each doubly-coarse boundary grid cell is an independent degree of freedom with respect to $C_2$, the constraints induced by $\Lambda^h_2$. That is, the center grid vertex in a doubly-coarse boundary grid cell participates only in the constraint corresponding to that cell.}
 \label{fig:ch4.lambdah}
-\end{center}
 \end{figure}
 
 With this choice of discrete Langrange multiplier space, satisfying \eqref{eq:ch4.dirichlet.constraint.continuous} for all $\mu^h \in \Lambda^h = \Lambda^h_1$ yields a system of sparse linear constraints $B \vec{u} = \vec{p}$ on the coefficient vector $\vec{u}$ of the approximate solution $u^h$. Each row of the matrix $B$ corresponds to a cell $c_i \in \calC^{h}_{\dOmega}$ and enforces the condition
@@ -289,20 +283,19 @@ As in \cite{Bedrossian10}, we remedy this by using an alternative approximation 
 
 The key idea is that rather than first defining the set of constraints and then selecting an independent degree of freedom from each constraint, we will first select the set of independent degrees of freedom and then subsequently build a single constraint equation around each independent degree of freedom. To this end, let $C_1$ denote the set of \emph{single-wide constraints} \eqref{eq:ch4.dirichlet.constraint.discrete} induced by $\Lambda^h_1$, as described above; and let $G$ denote the adjacency graph induced by $C_1$, as depicted in Figure~\ref{fig:ch4.constraintaggregation}(a). That is, two degrees of freedom are \emph{adjacent} in $G$ if they simultaneously participate in some single-wide constraint; or, in more geometric terms, two grid vertices are adjacent in $G$ if they share a common incident boundary grid cell. Choose $m_a < m$ degrees of freedom which constitute an \emph{independent set} $\calI$ with respect to $G$. In other words, no two degrees of freedom in $\calI$ will simultaneously participate in the same single-wide constraint. An example of such an independent set is given in \ref{fig:ch4.constraintaggregation}(b). Now associate each of the $m$ single-wide constraints in $C_1$ to one of these independent degrees of freedom in $\calI$, with the provision that, if a constraint contains an independent degree of freedom, it must be associated with said independent degree of freedom. (This latter requirement is conflict-free, as any single-wide constraint in $C_1$ will contain at most one independent degree of freedom, by construction.) Thus, for those single-wide constraints containing an independent degree of freedom, this association is precisely determined. However, some single-wide constraints may contain no independent degree of freedom, so some additional heuristic must be used to determine this association. See figures \ref{fig:ch4.constraintaggregation}(c) and \ref{fig:ch4.constraintaggregation}(d) for an example association of each single-wide constraint to an independent degree of freedom.
 
-\setlength{\figureheight}{0.40\columnwidth}
+\setlength{\figurewidth}{0.46\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Adjacency graph $G$ induced by the set of single-wide constraints $C_1$. Boundary grid vertices are adjacent with respect to $G$ if they share a common incident boundary grid cell.]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/aggregation_graph}}
-\subfigure[Example selection of an independent set $\calI$ of degrees of freedom. No two independent boundary grid vertices share a common incident boundary grid cell; equivalently, no two independent degrees of freedom simultaneously participate in the same single-wide constraint.]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/aggregation_independent}} \\
-\subfigure[Associating single-wide constraints to a participating independent degree of freedom. Some constraints (identified by cross-hatching) contain no independent degree of freedom; one must resort to some additional heuristic to associate these constraints.]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/aggregation_constraints_a}}
-\subfigure[Associating the remaining single-wide constraints to a nearby independent degree of freedom (using some implementation-defined heuristic) and the final set of aggregate constraints.]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/aggregation_constraints_b}}
+\centering
+\subfloat[Adjacency graph $G$ induced by the set of single-wide constraints $C_1$. Boundary grid vertices are adjacent with respect to $G$ if they share a common incident boundary grid cell.]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/aggregation_graph}}
+\subfloat[Example selection of an independent set $\calI$ of degrees of freedom. No two independent boundary grid vertices share a common incident boundary grid cell; equivalently, no two independent degrees of freedom simultaneously participate in the same single-wide constraint.]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/aggregation_independent}} \\
+\subfloat[Associating single-wide constraints to a participating independent degree of freedom. Some constraints (identified by cross-hatching) contain no independent degree of freedom; one must resort to some additional heuristic to associate these constraints.]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/aggregation_constraints_a}}
+\subfloat[Associating the remaining single-wide constraints to a nearby independent degree of freedom (using some implementation-defined heuristic) and the final set of aggregate constraints.]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/aggregation_constraints_b}}
 \caption{Illustrated progression of the constraint aggregation described in \S\ref{subsubsec:ch4.constraintaggregation}.}
 \label{fig:ch4.constraintaggregation}
-\end{center}
 \end{figure}
 
 Let $\calI = \set{ d_1, \dotsc, d_{m_a} }$ denote the independent set of degrees of freedom; and let $C_{d_i} \subset C_1$ denote the set of single-wide constraints associated with independent degree of freedom $d_i$, such that $\bigsqcup_{i} C_{d_i} = C_1$. We then form the following $m_a$ \emph{aggregate constraint} equations:
@@ -360,12 +353,12 @@ Algorithm~\ref{alg:ch4.dirichlet.constraintaggregation} outlines an example impl
 \end{algorithmic}
 \end{algorithm}
 
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[height=0.40\columnwidth]{part2/chapter4/figures/independent_dof_selection_termination}
+\setlength{\figurewidth}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\figurewidth]{part2/chapter4/figures/independent_dof_selection_termination}
 \caption{A graphical representation (in $2$ dimensions) of a plausible state of Algorithm~\ref{alg:ch4.dirichlet.constraintaggregation} after the selection of $6$ independent degrees of freedom (highlighted). Some degrees of freedom have been removed to indicate their ineligibility as subsequently selected independent degrees of freedom: material degrees of freedom, by definition of Algorithm~\ref{alg:ch4.dirichlet.constraintaggregation}, are never selected as independent degrees of freedom (this vastly improved the performance of our boundary smoother in our multigrid algorithm; see \S\ref{sec:ch4.multigrid}); and those virtual degrees of freedom adjacent to one of the $6$ previously selected independent degrees can not now be selected as independent degrees of freedom, simply by the definition of independence. Further, we distinguish between \emph{covered} boundary grid cells, which lie within some $4 \times 4$ block of cells (shown as the dark gray outlined squares) around an independent degree of freedom; and the remaining \emph{uncovered} boundary grid cells (denoted by cross-hatching). Once all boundary grid cells are covered, Algorithm~\ref{alg:ch4.dirichlet.constraintaggregation} terminates further selection of independent degrees of freedom.}
 \label{fig:ch4.indydoftermination}
-\end{center}
 \end{figure}
 
 We conclude this section with some remarks regarding the discrete Lagrange multiplier space $\Lambda^h$. Generally speaking, using a richer discrete Lagrange multiplier space (one that better approximates $H^{-1/2}(\dOmega)$) results in a smaller error in the approximate solution $u^h$. Within the context of single-wide constraint aggregation, roughly speaking, one can increase the richness of $\Lambda^h_a$ (the discrete Lagrange multiplier space associated with the aggregate constraints) by choosing more independent degrees of freedom. In some sense, then, the discrete Lagrange multiplier space $\Lambda^h_2$ associated with the double-wide constraints represents the richest possible discrete Lagrange multiplier space one may obtain within this constraint aggregation framework, as its set of independent degrees of freedom is maximal. However, as shown in Appendix~\ref{ch:pt2.appendix.constraintconditioning}, use of double-wide constraints leads to a relatively poorly conditioned $Z^tAZ$ system in $3$ dimensions, and this behavior is characteristic of selecting too many independent degrees of freedom, some of which may be poorly supported and lead to poor conditioning. We feel that our criterion in Algorithm~\ref{alg:ch4.dirichlet.constraintaggregation} to terminate further selection of independent degrees of freedom strikes a balance between maintaining second order accuracy and ensuring reasonable conditioning in the $Z^tAZ$ system.
@@ -439,16 +432,15 @@ Here, $\{u_k\}_{k=1}^s$ represent the $s := n - r$ coefficients of the virtual d
 T = \begin{pmatrix} I_s & 0 \\ I_s & 0  \\ 0 & I_{n-2s} \end{pmatrix}.
 \end{equation}
 
-\setlength{\figureheight}{0.40\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Interior discretization]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/dof_enumeration_for_T_a}}
-\subfigure[Exterior discretization]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/dof_enumeration_for_T_b}}
+\centering
+\subfloat[Interior discretization]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/dof_enumeration_for_T_a}}
+\subfloat[Exterior discretization]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/dof_enumeration_for_T_b}}
 \caption{Example enumeration of the interfacial degrees of freedom (circled) such that $T$ has the representation \eqref{eq:ch4.interface.T}. Only the indices of a few select interfacial degrees of freedom are shown. Here, we enumerate the $s = 112$ virtual degrees of freedom lexicographically, beginning with the interior discretization. The interior discretization has $60$ virtual degrees of freedom (indexed $1$ to $60$) and $52$ interfacial material degrees of freedom (indexed $173$ to $224$); likewise, the exterior discretization has $52$ virtual degrees of freedom (indexed $61$ to $112$) and $60$ interfacial material degrees of freedom (indexed $113$ to $172$). Notice how the the index to an interfacial material degree of freedom is offset from the index of its co-located virtual degree of freedom by exactly $s = 112$. The remaining non-interfacial degrees of freedom (squared) are enumerated starting with index $2s + 1 = 225$.}
 \label{fig:ch4.dofenumerationforT}
-\end{center}
 \end{figure}
 
 Regardless of the ordering of the degrees of freedom, each column of $T$ corresponds to a material node in the grid and each row of $T$ corresponds to either a material node or a virtual node. The column of $T$ corresponding to material node $j$ has a $1$ in the row corresponding to material node $j$; a $1$ in the row corresponding to $j$'s geometrically co-located virtual node, if it exists (as in one of the first $s$ columns in \eqref{eq:ch4.interface.T} above); and zeros everywhere else.
@@ -489,7 +481,7 @@ We alert the reader to two subtle but important details of Algorithm~\ref{alg:ch
 
 Second, as mentioned above, multiple neighboring local construction may yield a value for $\vec{d}$ at a given interfacial degree of freedom; indeed, the number of such local constructions around a degree of freedom equals the number of incident interfacial grid cells. We compute a final value for $\vec{d}$ at this degree of freedom by taking a \emph{weighted} average of the values yielded by the various local constructions, with weights equal to the surface area of $\Gamma$ within the interface grid cell around which the local construction is based. Other weightings of the various local construction contributions could very well give equal or better results.
 
-\begin{algorithm}[htbp]
+\begin{algorithm}[htb]
 \caption{Construct an approximate $d$ satisfying (\ref{eq:ch4.poisson.DJ}, \ref{eq:ch4.poisson.NJ}).}
 \label{alg:ch4.interface.discontinuityremoval.particularsolution}
 \begin{algorithmic}[1]
@@ -537,7 +529,7 @@ We emphasize that, in spirit, for Dirichlet and interface problems, we are apply
 
 \subsection{Smoothing Operator} \label{subsec:ch4.multigrid.smoothing}
 
-In describing our smoothing operator, it will be useful to distinguish between non-boundary/non-interfacial and boundary/intefacial degrees of freedom. The former are squared and the latter are circled in Figures \ref{fig:ch4.embedding.domain} and \ref{fig:ch4.embedding.interface}. Non-boundary/Non-interfacial degrees of freedom possess the standard $7$-point stencil, as depicted in Figure~\ref{fig:ch4.poisson.stencil}, even within the $Z^tAZ$ systems arising from Dirichlet and interface problems. Thus, on these degrees of freedom, one may apply standard smoothers appropriate for symmetric positive definite systems, such as weighted Jacobi, Gauss-Seidel, Red-Black Gauss-Seidel, etc.
+In describing our smoothing operator, it will be useful to distinguish between non-boundary/\linebreak[0]non-interfacial and boundary/intefacial degrees of freedom. The former are squared and the latter are circled in Figures \ref{fig:ch4.embedding.domain} and \ref{fig:ch4.embedding.interface}. Non-boundary/Non-interfacial degrees of freedom possess the standard $7$-point stencil, as depicted in Figure~\ref{fig:ch4.poisson.stencil}, even within the $Z^tAZ$ systems arising from Dirichlet and interface problems. Thus, on these degrees of freedom, one may apply standard smoothers appropriate for symmetric positive definite systems, such as weighted Jacobi, Gauss-Seidel, Red-Black Gauss-Seidel, etc.
 
 Although the boundary discretization for Neumann problems produces a denser stencil than the standard $7$-point stencil, it is still locally semidefinite, hence one may still apply standard smoothers to these degrees of freedom as well. However, the discretization for Dirichlet problems near the domain boundary and for interface problems near the interface is indefinite (recall that we are, in spirit, operating on the saddle point system \eqref{eq:ch4.dirichlet.kkt} or \eqref{eq:ch4.interface.kkt}), so the standard smoothers mentioned above are not options. Alternative smoothers \emph{might} work, such as Kaczmarz or box smoothers, but they will generally be slower, and they require the use of the Lagrange multiplier $\vec{\lambda}$, which we would like to avoid. We choose instead to apply a standard smoother, such as Gauss-Seidel, on the symmetric positive definite $Z^tAZ$ system (which coincides with the Poisson operator away from embedded features). Note that the $Z^tAZ$ system operates on all the degrees of freedom \emph{except} the independent degrees of freedom. In effect, we have \emph{eliminated} the independent degrees of freedom from the system, such that each update of a boundary/interfacial non-independent degree of freedom in the $Z^tAZ$ system during, say, a Gauss-Seidel step induces an update of one or more (eliminated) independent degrees of freedom to ensure the solution remains in the null space of the constraint system. Thus, if our initial guess at the finest level satisfies the constraints (e.g., $\vec{c} = \begin{pmatrix} (B_{m_a}^{-1} \vec{p})^t & 0 \end{pmatrix}^t$), then future corrections via smoothing will keep the approximation in the solution space of the constraint system associated with that level of the hierarchy.
 
@@ -561,16 +553,15 @@ For the boundary/interface-local Gauss-Seidel sweeps, we iterate over all degree
 
 Within an interface-local Gauss-Seidel sweep, we found it necessary to relax co-located interior and exterior degrees of freedom consecutively. In other words, co-located pairs of degrees of freedom resulting from a single grid vertex duplication should be relaxed one after the other. To be clear, an interface-local Gauss-Seidel sweep which iterates over \emph{all} interior degrees of freedom followed by \emph{all} exterior degrees of freedom (or vice versa) \emph{fails} to reduce the residuals around the interface within a reasonable number of iterations.
 
-\setlength{\figureheight}{0.40\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[$\Omega$ (Neumann, Dirichlet) or $\Omega^-$ (interface) discretization]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/boundary_interface_distance_a}}
-\subfigure[$\Omega^+$ discretization]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/boundary_interface_distance_b}}
+\centering
+\subfloat[$\Omega$ (Neumann, Dirichlet) or $\Omega^-$ (interface) discretization]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/boundary_interface_distance_a}}
+\subfloat[$\Omega^+$ discretization]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/boundary_interface_distance_b}}
 \caption{Partitioning the degrees of freedom according to their grid-distance from the embedded boundary or embedded interface.}
 \label{fig:ch4.multigrid.boundaryinterfacedistance}
-\end{center}
 \end{figure}
 
 For completeness, we provide pseudocode for a multigrid v-cycle for Neumann problems (Algorithm~\ref{alg:ch4.multigrid.neumann.vcycle}) and Dirichlet problems (Algorithm~\ref{alg:ch4.multigrid.dirichlet.vcycle}) (the pseudocode for interface problems would be nearly identical to that for Dirichlet problems, so we omit it). In these algorithm listings, $L$ denotes the number of levels, with the finest level indexed as $1$; and we index all variables associated with a given level with the level index (as opposed to $h, 2h, \dotsc$, as we had been doing above).
@@ -635,27 +626,26 @@ Our first two examples apply our method to the embedded Neumann problem:
 \beta \nabla u \cdot \hatn & = q(\bfx), \quad \bfx \in \dOmega_n.
 \end{align*}
 
-This first example uses $\beta(x,y,z) = 2 + y^2 + xz$ and sets $f$ and $q$ according to the exact solution $u(x,y,z) = x \cos y + y^2 \sin z$. The domain is given by $\Omega = \set{ \bfx : 0.4 < \norm{\bfx}_2 \, \text{and} \, \norm{\bfx}_{\infty} < 1 }$, with Neumann conditions applied to the embedded portion of the boundary $\dOmega_n = \linebreak[4] \set{ \bfx : \norm{\bfx}_2 = 0.4 }$ and Dirichlet conditions applied to the grid-aligned portion of the boundary $\dOmega_d = \set{ \bfx : \norm{\bfx}_{\infty} = 1 }$. Figure~\ref{fig:ch4.examples.neumann.1} depicts the geometry at resolution $N = 32$, a convergence plot of the errors, and several $z$-slices of $u^h$ at $N = 32$. A least-squares linear regression on the error data yields a convergence order of $1.893$ for $u$ and $1.002$ for $\nabla u$.
+This first example uses $\beta(x,y,z) = 2 + y^2 + xz$ and sets $f$ and $q$ according to the exact solution $u(x,y,z) = x \cos y + y^2 \sin z$. The domain is given by $\Omega = \set{ \bfx : 0.4 < \norm{\bfx}_2 \, \text{and} \, \norm{\bfx}_{\infty} \!\!\! < 1 }$, with Neumann conditions applied to the embedded portion of the boundary $\dOmega_n = \linebreak[4] \set{ \bfx : \norm{\bfx}_2 = 0.4 }$ and Dirichlet conditions applied to the grid-aligned portion of the boundary $\dOmega_d = \set{ \bfx : \norm{\bfx}_{\infty} = 1 }$. Figure~\ref{fig:ch4.examples.neumann.1} depicts the geometry at resolution $N = 32$, a convergence plot of the errors, and several $z$-slices of $u^h$ at $N = 32$. A least-squares linear regression on the error data yields a convergence order of $1.893$ for $u$ and $1.002$ for $\nabla u$.
 
-\setlength{\figureheighti}{0.26\columnwidth}
-\setlength{\figurewidthii}{0.32\columnwidth}
+\setlength{\figureheighti}{0.30\textwidth}
+\setlength{\figurewidthii}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Geometry of $\dOmega = \dOmega_n \sqcup \dOmega_d$]
+\centering
+\subfloat[Geometry of $\dOmega = \dOmega_n \sqcup \dOmega_d$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example1_geometry_1}}
-\subfigure[Close-up embedded geometry of $\dOmega_n \subset \dOmega$]
+\subfloat[Close-up embedded geometry of $\dOmega_n \subset \dOmega$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example1_geometry_2}}
-\subfigure[Estimated orders of $1.893$ for $u$, $1.002$ for $\nabla u$]
+\subfloat[Estimated orders of $1.893$ for $u$, $1.002$ for $\nabla u$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example1_convergence}} \\
-\subfigure[$z = -5/8$ slice of $u^h$]
+\subfloat[$z = -5/8$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example1_soln_06}}
-\subfigure[$z = 0$ slice of $u^h$]
+\subfloat[$z = 0$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example1_soln_16}}
-\subfigure[$z = +5/8$ slice of $u^h$]
+\subfloat[$z = +5/8$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example1_soln_26}}
 \caption{Figures for Example~\ref{subsec:ch4.examples.neumann.1}: geometry of $\dOmega$ at $N = 32$, convergence plot of the errors, and $z$-slices of $u^h$ at $N = 32$. The black wireframe box in (c) - (e) is $\set{ (x,y) \in [-1,+1]^2 } \times [-1,+1]$.}
 \label{fig:ch4.examples.neumann.1}
-\end{center}
 \end{figure}
 
 \subsection{Embedded Neumann Example 2} \label{subsec:ch4.examples.neumann.2}
@@ -684,25 +674,24 @@ Our second example is also an embedded Neumann problem, with $\beta(x,y,z) = 3 +
 
 We apply Neumann boundary conditions over the entire star surface ($\dOmega_n = \dOmega$), hence the solution $u$ is only determined up to a constant shift. We accounted for this both during during the linear solves (the stiffness matrix is indefinite) and in the evaluation of the error. Figure~\ref{fig:ch4.examples.neumann.2} shows the convergence plot of the errors and some typical $z$-slices of $u^h$ at $N = 64$. We obtain convergence orders of $1.775$ and $0.875$ for $u$ and $\nabla u$, respectively.
 
-\setlength{\figureheighti}{0.40\columnwidth}
-\setlength{\figurewidthii}{0.24\columnwidth}
+\setlength{\figureheighti}{0.43\textwidth}
+\setlength{\figurewidthii}{0.25\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedded geometry of $\dOmega_n = \dOmega$]
+\centering
+\subfloat[Embedded geometry of $\dOmega_n = \dOmega$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example2_geometry}}
-\subfigure[Estimated orders of $1.775$ for $u$, $0.875$ for $\nabla u$]
+\subfloat[Estimated orders of $1.775$ for $u$, $0.875$ for $\nabla u$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example2_convergence}} \\
-\subfigure[$z = -1/2$ slice of $u^h$]
+\subfloat[$z = -1/2$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example2_soln_16}}
-\subfigure[$z = -5/32$ slice of $u^h$]
+\subfloat[$z = -5/32$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example2_soln_27}}
-\subfigure[$z = +5/32$ slice of $u^h$]
+\subfloat[$z = +5/32$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example2_soln_37}}
-\subfigure[$z = +1/2$ slice of $u^h$]
+\subfloat[$z = +1/2$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example2_soln_48}}
 \caption{Figures for Example~\ref{subsec:ch4.examples.neumann.2}: geometry of $\dOmega_n$ at $N = 64$, convergence plot of the errors, and $z$-slices of $u^h$ at $N = 64$. The black wireframe box in (c) - (f) is $\{(x,y) \in [-1/2,+1/2]^2\} \times [-1/2,+1/2]$.}
 \label{fig:ch4.examples.neumann.2}
-\end{center}
 \end{figure}
 
 \subsection{Embedded Dirichlet Example} \label{subsec:ch4.example.dirichlet}
@@ -716,23 +705,22 @@ u & = p(\bfx), \quad \bfx \in \dOmega_d.
 
 This example uses $\beta(x,y,z) = 7 + x + 2y + 3z$ and sets $f$ and $p$ according to the exact solution $u(x,y,z) = x e^y + \sqrt{1 + y^2} e^z$. The domain $\Omega$ is bounded by a torus centered at $\bfzero$ with major radius $0.6$, minor radius $0.3$, and axis along $(0, -\sin 0.75, \cos 0.75)$ (the $\hatk$ vector rotated $-0.75$ radians with respect to the $+x$-axis; again, to introduce some asymmetry). We apply Dirichlet boundary conditions over all of $\dOmega$, i.e., $\dOmega_d = \dOmega$. Figure~\ref{fig:ch4.examples.dirichlet} depicts a graphic of the torus surface at resolution $N = 64$, a convergence plot of the errors, and a few $x$-slices of $u^h$ at $N = 64$ (that is, we plot $u^h(x_0,y,z)$ against $(y,z)$ for fixed $x = x_0$). We calculated convergence orders of $1.864$ and $0.977$ for $u$ and $\nabla u$, respectively.
 
-\setlength{\figureheighti}{0.40\columnwidth}
-\setlength{\figurewidthii}{0.32\columnwidth}
+\setlength{\figureheighti}{0.43\textwidth}
+\setlength{\figurewidthii}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedded geometry of $\dOmega_d = \dOmega$]
+\centering
+\subfloat[Embedded geometry of $\dOmega_d = \dOmega$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example3_geometry}}
-\subfigure[Estimated orders of $1.864$ for $u$, $0.977$ for $\nabla u$]
+\subfloat[Estimated orders of $1.864$ for $u$, $0.977$ for $\nabla u$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example3_convergence}} \\
-\subfigure[$x = -1/2$ slice of $u^h$]
+\subfloat[$x = -1/2$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example3_soln_16}}
-\subfigure[$x = 0$ slice of $u^h$]
+\subfloat[$x = 0$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example3_soln_32}}
-\subfigure[$x = +1/2$ slice of $u^h$]
+\subfloat[$x = +1/2$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example3_soln_48}}
 \caption{Figures for Example~\ref{subsec:ch4.example.dirichlet}: geometry of $\dOmega_d$ at $N = 64$, convergence plot of the errors, and $x$-slices of $u^h$ at $N = 64$. The black wireframe box in (c) - (e) is $\{(y,z) \in [-1,+1]^2\} \times [1,3]$.}
 \label{fig:ch4.examples.dirichlet}
-\end{center}
 \end{figure}
 
 \subsection{Embedded Interface Examples} \label{subsec:ch4.examples.interface}
@@ -755,39 +743,38 @@ We then take
 \end{equation*}
 with $\Gamma = \dOmega^-$ and $\Omega^+ = (-1,+1)^3 \setminus (\Omega^- \sqcup \Gamma)$. See Figure~\ref{fig:ch4.examples.interface} for a graphic of the trefoil knot surface at resolution $N = 64$, a few $z$-slices of $u^h$ with $(\alpha^-, \alpha^+) = (2,1)$ at $N = 64$, and convergence plots of the errors for various combinations of $\alpha^-$ and $\alpha^+$. For all tested combinations of $\alpha^-$ and $\alpha^+$ we obtained an estimated convergence order of $\geq 1.794$ and $\geq 0.923$ for $u$ and $\nabla u$, respectively.
 
-\setlength{\figurewidthi}{0.24\columnwidth}
-\setlength{\figureheightii}{0.24\columnwidth}
+\setlength{\figurewidthi}{0.25\textwidth}
+\setlength{\figurewidthii}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedded geometry of $\Gamma$]
+\centering
+\subfloat[Embedded geometry of $\Gamma$]
 {\includegraphics[width=\figurewidthi]{part2/chapter4/figures/examples/example4_geometry}}
-\subfigure[$z = -1/8$ slice of $u^h$]
+\subfloat[$z = -1/8$ slice of $u^h$]
 {\includegraphics[width=\figurewidthi]{part2/chapter4/figures/examples/example4a_soln_28}}
-\subfigure[$z = 0$ slice of $u^h$]
+\subfloat[$z = 0$ slice of $u^h$]
 {\includegraphics[width=\figurewidthi]{part2/chapter4/figures/examples/example4a_soln_32}}
-\subfigure[$z = +1/8$ slice of $u^h$]
+\subfloat[$z = +1/8$ slice of $u^h$]
 {\includegraphics[width=\figurewidthi]{part2/chapter4/figures/examples/example4a_soln_36}} \\
-\subfigure[$(\alpha^-, \alpha^+) = (2,1)$; estimated orders of $1.794$ for $u$, $0.966$ for $\nabla u$]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/examples/example4a_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (10,1)$; estimated orders of $1.798$ for $u$, $0.926$ for $\nabla u$]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/examples/example4b_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (100,1)$; estimated orders of $1.824$ for $u$, $0.923$ for $\nabla u$]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/examples/example4c_convergence}} \\
-\subfigure[$(\alpha^-, \alpha^+) = (1,2)$; estimated orders of $1.919$ for $u$, $1.014$ for $\nabla u$]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/examples/example4d_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (1,10)$; estimated orders of $1.932$ for $u$, $1.012$ for $\nabla u$]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/examples/example4e_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (1,100)$; estimated orders of $1.938$ for $u$, $1.023$ for $\nabla u$]
-{\includegraphics[height=\figureheightii]{part2/chapter4/figures/examples/example4f_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (2,1)$; estimated orders of $1.794$ for $u$, $0.966$ for $\nabla u$]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example4a_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (10,1)$; estimated orders of $1.798$ for $u$, $0.926$ for $\nabla u$]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example4b_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (100,1)$; estimated orders of $1.824$ for $u$, $0.923$ for $\nabla u$]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example4c_convergence}} \\
+\subfloat[$(\alpha^-, \alpha^+) = (1,2)$; estimated orders of $1.919$ for $u$, $1.014$ for $\nabla u$]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example4d_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (1,10)$; estimated orders of $1.932$ for $u$, $1.012$ for $\nabla u$]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example4e_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (1,100)$; estimated orders of $1.938$ for $u$, $1.023$ for $\nabla u$]
+{\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example4f_convergence}}
 \caption{Figures for Example~\ref{subsec:ch4.examples.interface}: geometry of $\Gamma$, $z$-slices of $u^h$ with $(\alpha^-, \alpha^+) = (2,1)$ at $N = 64$, and convergence plots of the errors at various combinations of $\alpha^-$ and $\alpha^+$. The black wireframe box in (b) - (d) is $\{(x,y) \in [-1,+1]^2\} \times [0,2]$.}
 \label{fig:ch4.examples.interface}
-\end{center}
 \end{figure}
 
 Table~\ref{tab:ch4.examples.interface} shows the effect of the $\beta$ contrast on the conditioning of the linear systems and the number of (preconditioned) conjugate gradient iterations. We compare the various combinations of $\alpha^-$ and $\alpha^+$ together with, for reference, the standard $7$-pt variable coefficient Laplacian with no interface. For the $7$-pt Laplacian system, we show the results from using each of $\beta^- := 10 + \sin(xy + z)$ and $\beta^+ := 10 + \cos(x + yz)$ as the Laplacian coefficient throughout the whole domain. All tests are at a resolution of $N = 256$. We normalized the linear systems to have constant diagonal (Jacobi preconditioning) and solved them via PETSc's \cite{petsc-web-page,petsc-user-ref,petsc-efficient} conjugate gradient function to a relative residual norm of $2.3 \times 10^{-13}$ of the Jacobi preconditioned system. We configured PETSc to estimate the extreme singular values of the system upon completion of a solve and computed the condition number as the ratio of these extreme singular values. In each test case, we also demonstrate the effects of preconditioning (using PETSc's incomplete Cholesky (ICC) preconditioner, applicable since the $Z^tAZ$ system is symmetric positive definite) on the conditioning of the system and the number of conjugate gradient iterations. We observe that high $\beta$ constrasts could moderately increase solve times over low $\beta$ constrasts and the standard $7$-pt Laplacian matrix.
 
 \begin{table}[htbp]
-\begin{center}
+\centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 Test case & cond. \# (no ICC) & cond. \# (w/ICC) & \# CG iter. & \# PCG iter. \\
@@ -809,7 +796,6 @@ $7$-pt Laplacian, $\beta_-$ & $2.7 \times 10^4$ & $2.7 \times 10^3$ & $1190$ & $
 $7$-pt Laplacian, $\beta_+$ & $2.7 \times 10^4$ & $2.7 \times 10^3$ & $1194$ & $427$ \\
 \hline
 \end{tabular}
-\end{center}
 \caption{Condition numbers (as estimated by PETSc) and number of (preconditioned) conjugate gradient ((P)CG) iterations for the linear systems resulting from discretizing Example~\ref{subsec:ch4.examples.interface} at resolution $N = 256$ for various combinations of $(\alpha^-, \alpha^+)$. For the preconditioning, we used PETSc's incomplete Cholesky (ICC) preconditioner. We also include statistics for the standard $7$-pt Laplacian matrix for reference.}
 \label{tab:ch4.examples.interface}
 \end{table} 
@@ -839,23 +825,22 @@ Recall from \S\ref{subsubsec:ch4.discretization.interface.discontinuityremoval} 
 \end{algorithmic}
 \end{algorithm}
 
-\setlength{\figureheighti}{0.40\columnwidth}
-\setlength{\figurewidthii}{0.32\columnwidth}
+\setlength{\figureheighti}{0.43\textwidth}
+\setlength{\figurewidthii}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedded geometry of $\Gamma$]
+\centering
+\subfloat[Embedded geometry of $\Gamma$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example5_geometry}}
-\subfigure[Estimated orders of $1.969$ for $u$, $0.984$ for $\nabla u$]
+\subfloat[Estimated orders of $1.969$ for $u$, $0.984$ for $\nabla u$]
 {\includegraphics[height=\figureheighti]{part2/chapter4/figures/examples/example5_convergence}} \\
-\subfigure[$z = -3/8$ slice of $u^h$]
+\subfloat[$z = -3/8$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example5_soln_20}}
-\subfigure[$z = 0$ slice of $u^h$]
+\subfloat[$z = 0$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example5_soln_32}}
-\subfigure[$z = +3/8$ slice of $u^h$]
+\subfloat[$z = +3/8$ slice of $u^h$]
 {\includegraphics[width=\figurewidthii]{part2/chapter4/figures/examples/example5_soln_44}}
 \caption{Figures for Example~\ref{subsubsec:ch4.example.interface.discontinuityremoval}: geometry of $\Gamma$, convergence plot of the errors, and $z$-slices of $u^h$ at $N = 64$. The black wireframe box in (c) - (e) is $\{(x,y) \in [-1,+1]^2\} \times [-4,4]$.}
 \label{fig:ch4.example.interface.discontinuityremoval}
-\end{center}
 \end{figure}
 
 \subsection{Multigrid} \label{subsec:ch4.examples.multigrid}
@@ -864,56 +849,53 @@ We described a collection of multigrid algorithms in \S\ref{sec:ch4.multigrid} t
 
 We first present the results of applying our multigrid algorithm to the embedded Neumann examples in \S\ref{subsec:ch4.examples.neumann.1} and \S\ref{subsec:ch4.examples.neumann.2}, but with $\beta \equiv 1$. Figure~\ref{fig:ch4.examples.multigrid.neumann} shows plots of the residual norm $\norm{ \vec{f} - A\vec{u} }_{\infty}$ and the ratio of successive residual norms versus the v-cycle iteration number at resolution $N = 384 = 3 \cdot 2^7$. For both examples, we were able to obtain a v-cycle convergence rate of about $0.25$ with a boundary smoothing region width of only $1$ (i.e., only expending extra smoothing effort on boundary degrees of freedom) and relatively few additional boundary smoothing sweeps.
 
-\setlength{\figureheight}{0.37\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Example~\ref{subsec:ch4.examples.neumann.1}]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example1_1_convergence}}
-\subfigure[Example~\ref{subsec:ch4.examples.neumann.2}]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example2_1_convergence}}
+\centering
+\subfloat[Example~\ref{subsec:ch4.examples.neumann.1}]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example1_1_convergence}}
+\subfloat[Example~\ref{subsec:ch4.examples.neumann.2}]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example2_1_convergence}}
 \caption{Multigrid v-cycle convergence plots for embedded Neumann Examples~\ref{subsec:ch4.examples.neumann.1} and \ref{subsec:ch4.examples.neumann.2} with $\beta \equiv 1$. The grid resolution is $N = 384$ and the boundary smoothing region width is $1$. The top plot in each subfigure shows the residual norm $\norm{ \vec{f} - A\vec{u} }_{\infty}$ after each v-cycle iteration for various numbers of boundary smoothing sweeps (NBSS). The bottom plots shows the ratio of successive residual norms. The estimated rate given in each bottom plot is the average ratio of successive residual norms over the final $10$ iterations.}
 \label{fig:ch4.examples.multigrid.neumann}
-\end{center}
 \end{figure}
 
 Figure~\ref{fig:ch4.examples.multigrid.dirichlet} shows the results of applying our multigrid algorithm to the embedded Dirichlet example in \S\ref{subsec:ch4.example.dirichlet} (except, again, with $\beta \equiv 1$). For this example, we found it necessary to extend the boundary smoothing region out to a width of $2$ or $3$ to obtain good v-cycle convergence, encompassing all degrees of freedom incident to a grid cell with an $L^{\infty}$-distance from a boundary grid cell of at most $1$ or $2$, respectively. In each case, we needed only $3$ or $4$ additional boundary smoothing sweeps to achieve a stable v-cycle convergence rate. Additional boundary smoothing sweeps above $3$ or $4$ did not significantly improve the convergence rate. Unsurprisingly, a boundary smoothing region width of $3$ gives a better convergence rate (again, about $0.25$) than a boundary smoothing region width of $2$ (where the convergence rate is, at best, about $0.39$). The former, however, requires non-negligibly more effort for smaller resolutions.
 
-\setlength{\figureheight}{0.37\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[$\text{BSRW} = 2$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example3_2_convergence}}
-\subfigure[$\text{BSRW} = 3$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example3_3_convergence}}
+\centering
+\subfloat[$\text{BSRW} = 2$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example3_2_convergence}}
+\subfloat[$\text{BSRW} = 3$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example3_3_convergence}}
 \caption{Multigrid v-cycle convergence plots for embedded Dirichlet Example~\ref{subsec:ch4.example.dirichlet} with $\beta \equiv 1$ for a boundary smoothing region width (BSRW) of $2$ and $3$. The grid resolution is $N = 384$. The top plot in each subfigure shows the residual norm $\norm{ \vec{f} - A\vec{u} }_{\infty}$ after each v-cycle iteration for various numbers of boundary smoothing sweeps (NBSS). The bottom plots shows the ratio of successive residual norms. The estimated rate given in each bottom plot is the average ratio of successive residual norms over the final $10$ iterations.}
 \label{fig:ch4.examples.multigrid.dirichlet}
-\end{center}
 \end{figure}
 
 Lastly, we demonstrate our multigrid algorithm on the embedded interface example in \S\ref{subsec:ch4.examples.interface} with $\beta^- \equiv \alpha^-$ and $\beta^+ \equiv \alpha^+$. See Figure~\ref{fig:ch4.examples.multigrid.interface} for the results. Here, we vary $\alpha^- / \alpha^+$ only between $1/10$ and $10$. As for the embedded Dirichlet case, an interface smoothing region width of $2$ or $3$ is sufficient to obtain a v-cycle convergence rate of about $0.40$ or $0.25$, respectively. We found that we also needed significantly more additional interface smoothing sweeps than for the embedded Neumann and embedded Dirichlet cases, especially at more extreme $\beta$ contrasts (e.g., $1/100$ or $100$).
 
-\setlength{\figureheight}{0.24\columnwidth}
+\setlength{\figurewidth}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[$(\alpha^-, \alpha^+) = (2,1)$, $\text{ISRW} = 2$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4a_2_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (2,1)$, $\text{ISRW} = 3$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4a_3_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (10,1)$, $\text{ISRW} = 2$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4b_2_convergence}} \\
-\subfigure[$(\alpha^-, \alpha^+) = (10,1)$, $\text{ISRW} = 3$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4b_3_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (1,2)$, $\text{ISRW} = 2$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4d_2_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (1,2)$, $\text{ISRW} = 3$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4d_3_convergence}} \\
-\subfigure[$(\alpha^-, \alpha^+) = (1,10)$, $\text{ISRW} = 2$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4e_2_convergence}}
-\subfigure[$(\alpha^-, \alpha^+) = (1,10)$, $\text{ISRW} = 3$]
-{\includegraphics[height=\figureheight]{part2/chapter4/figures/examples/multigrid/example4e_3_convergence}}
+\centering
+\subfloat[$(\alpha^-, \alpha^+) = (2,1)$, $\text{ISRW} = 2$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4a_2_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (2,1)$, $\text{ISRW} = 3$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4a_3_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (10,1)$, $\text{ISRW} = 2$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4b_2_convergence}} \\
+\subfloat[$(\alpha^-, \alpha^+) = (10,1)$, $\text{ISRW} = 3$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4b_3_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (1,2)$, $\text{ISRW} = 2$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4d_2_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (1,2)$, $\text{ISRW} = 3$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4d_3_convergence}} \\
+\subfloat[$(\alpha^-, \alpha^+) = (1,10)$, $\text{ISRW} = 2$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4e_2_convergence}}
+\subfloat[$(\alpha^-, \alpha^+) = (1,10)$, $\text{ISRW} = 3$]
+{\includegraphics[width=\figurewidth]{part2/chapter4/figures/examples/multigrid/example4e_3_convergence}}
 \caption{Multigrid v-cycle convergence plots for embedded interface Examples~\ref{subsec:ch4.examples.interface} with $\beta^- \equiv \alpha^-$, $\beta^+ \equiv \alpha^+$ for a interface smoothing region width (ISRW) of $2$ and $3$ and various combinations of $\alpha^-, \alpha^+$. The grid resolution is $N = 256$. The top plot in each subfigure shows the residual norm $\norm{ \vec{f} - A\vec{u} }_{\infty}$ after each v-cycle iteration for various numbers of interface smoothing sweeps (NISS). The bottom plots shows the ratio of successive residual norms. The estimated rate given in each bottom plot is the average ratio of successive residual norms over the final $10$ iterations.}
 \label{fig:ch4.examples.multigrid.interface}
-\end{center}
 \end{figure}
 
 \section{Discussion, Conclusion, and Future Work}

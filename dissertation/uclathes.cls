@@ -661,7 +661,8 @@
 \def\figure{%
     \write\@mainaux{\string\global\string\@figurestrue}%
     \@float{figure}}
-\let\endfigure\end@float
+%\let\endfigure\end@float
+\def\endfigure{\end@float}
 \@namedef{figure*}{%
     \write\@mainaux{\string\global\string\@figurestrue}%
     \@dblfloat{figure}}
@@ -679,7 +680,8 @@
 \def\table{%
     \write\@mainaux{\string\global\string\@tablestrue}%
     \@float{table}}
-\let\endtable\end@float
+%\let\endtable\end@float
+\def\endtable{\end@float}
 \@namedef{table*}{%
     \write\@mainaux{\string\global\string\@tablestrue}%
     \@dblfloat{table}}

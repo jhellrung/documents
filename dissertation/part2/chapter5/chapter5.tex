@@ -72,18 +72,17 @@ The sets $\calI_x$ and $\calI_y$ used in the definition of grids $\calG^x_h$ and
 \end{align*}
 to denote the collection of $x$ and $y$ grid quadrilaterals that intersect (or embed) the domain $\Omega$.
 
-\setlength{\figurewidth}{0.32\columnwidth}
+\setlength{\figurewidth}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[$\calT^p_h$]
+\centering
+\subfloat[$\calT^p_h$]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_p8}}
-\subfigure[$\calT^x_h$]
+\subfloat[$\calT^x_h$]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_x8}}
-\subfigure[$\calT^y_h$]
+\subfloat[$\calT^y_h$]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_y8}}
 \caption{Staggered grid finite element quadrangulation and embedded domain boundary.}
 \label{fig:ch5.embedding}
-\end{center}
 \end{figure}
 
 We construct two subspaces of $H^1(\Omega)$ based on these respective quadrangulations:
@@ -226,29 +225,27 @@ A_u^{k_3} =
 \end{pmatrix}.
 \end{equation}
 
-\setlength{\figurewidth}{0.30\columnwidth}
+\setlength{\figurewidth}{0.33\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[]
+\centering
+\subfloat[]
 {\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_esm2.png}}
-\subfigure[]
+\subfloat[]
 {\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_esm1.png}}
-\subfigure[]
+\subfloat[]
 {\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_esm3.png}}
 \caption{(a) A interior pressure cell and the $13$ degrees of freedom involved in the corresponding element stiffness matrix. (b) A typical boundary pressure cell. (c) The degrees of freedom involved in the sub-elemental stiffness matrix corresponding to quadrant $\omega_1$. }
 \label{fig:ch5:stiffnessmatrix.element}
-\end{center}
 \end{figure}
 
 The global stiffness matrix $A_u$ generated from the sum of all the element stiffness matrices $\set{A_u^{k_3}}$ at an interior degree of freedom ($x$, $y$, or $p$) has a stencil shown in Figure~\ref{fig:ch5.stiffnessmatrix.global}.
 
-\setlength{\figurewidth}{0.80\columnwidth}
+\setlength{\figurewidth}{\textwidth}
 \begin{figure}[htbp]
-\begin{center}
+\centering
 \includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/A_stencil_latex.png}
 \caption{Global stiffness matrix stencils centered at an interior $x$ degree of freedom (left), $y$ degree of freedom (middle), and $p$ degree of freedom (right).}
 \label{fig:ch5.stiffnessmatrix.global}
-\end{center}
 \end{figure}
 
 For boundary cells where $T^p_{k_3} \not\subset \Omega$, we must perform the integrations involved in each of the entries of $(A_u^{k_3})_{\omega_i}$ more carefully, taking into account the boundary geometry. The technique is similar to that presented in Chapter~\ref{ch:pt2.poisson}, specifically \S\ref{subsec:ch4.discretization.embedding}, and will be discussed in more detail in the following subsection. The process of constructing the global stiffness matrix $A_u$ from each of the $13 \times 13$ element stiffness matrices $A_u^{k_3}$ is explained in Algorithm~\ref{alg:ch5.stiffnessmatrix.construction}.
@@ -284,16 +281,15 @@ We discretize the domain $\Omega$ by embedding it in a regular Cartesian grid. S
 \end{equation*}
 This doubly refined subgrid is thus a superset of the grids $\calG^x_h, \calG^y_h, \calG^p_h$. The level set function values at the vertices of the doubly refined subgrid $\calG^{\phi}$ are used to determine the points of intersection between the zero isocontour and the coordinate axes-aligned edges of $\calG^{\phi}$. The boundary of $\Omega$ is then approximated by a segmented curve $\dOmega^h$ connecting these intersection points. The geometric domain is approximated within the region enclosed by $\dOmega^h$ (see Figure~\ref{fig:ch5.boundary}). Near the boundary, the domain within each subgrid cell is approximated by a polygon determined from the boundary edges of the subgrid cell and by straight lines that connect boundary intersection points as demonstrated in Figure~\ref{fig:ch5.boundary}. Thus we can think of our discrete domain as a union of doubly refined uncut quadrilaterals on the interior and polygonal regions contained within doubly refined cut quadrilaterals on the boundary.
 
-\setlength{\figurewidth}{0.40\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[]
+\centering
+\subfloat[]
 {\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_zoomin8.png}}
-\subfigure[]
+\subfloat[]
 {\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{part2/chapter5/figures/bw/grid_bdrycurve8.png}}
 \caption{A zoomed-in view of Figure~\ref{fig:ch5.embedding}(a). We sample a the level set function implicitly defining $\Omega$ on the doubly refined subgrid depicted in (a), and use this to generate a segmend curve approximation $\dOmega_h$ to $\dOmega$, as in (b).}
 \label{fig:ch5.boundary}
-\end{center}
 \end{figure}
 
 This partitioning of the domain into doubly refined quadrilaterals naturally supports our integration conventions needed for the sub-element stiffness matrices $(A_u^{k_3})_{\omega_i}$ discussed in the previous section. The integrals needed for these matrices are trivially precomputed analytically when $\omega_i$ is uncut. On the other hand, when $\omega_i$ \emph{is} cut by the boundary, we can still perform the integrations analytically in the same fashion as in \cite{Bedrossian10} and analogous to \S\ref{subsec:ch4.discretization.embedding}. To summarize, the integrands of the requisite integrals necessary to compute the entries of $(A_u^{k_3})_{\omega_i}$ are (at most) degree $2$ polynomials, hence one may easily apply the divergence theorem to explicitly transform the area integrals over $\omega_i \cap \Omega$ into line integrals over $\partial(\omega_i \cap \Omega)$. One may then analytically evaluate these latter integrals via an explicit parameterization of the individual line segments; or via an appropriate $1$-dimensional Gaussian quadrature rule (which is, of course, more similar to the approach taken in \S\ref{subsec:ch4.discretization.embedding}). As with the discretization described in Chapter~\ref{ch:pt2.poisson}, this careful treatment of the integrals near the boundary is key to obtaining second order accuracy in $L^\infty$.
@@ -412,16 +408,15 @@ The interior equations are uniform and have the same properties, while near the 
 
 We then define the boundary band to be the union of all $7 \times 7$ blocks of cells centered at any cell that intersects the Dirichlet boundary (excluding any cells completely exterior to the domain). This defines the set of equations to which we will apply our boundary relaxation scheme. In each single level relaxation, we first sweep over the boundary band, apply a few iterations of boundary relaxations, then apply one iteration of interior relaxation, and finally follow this by another few iterations of boundary relaxations. In Figure~\ref{fig:ch5.boundaryband}(a), we show an example of the cells and equations that end up in a boundary region calculated with the method described above. Soely for the sake of example, due to the coarseness of the illustrated grid, Figure~\ref{fig:ch5.boundaryband} uses $3 \times 3$ cell blocks rather than the $7 \times 7$ cell blocks used in our examples.
 
-\setlength{\figureheight}{0.40\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\subfigure[An example boundary band of pressure cells and boundary variables using $3 \times 3$ blocks of cells centered at each cell that intersects the boundary.]
-{\includegraphics[height=\figureheight]{part2/chapter5/figures/bw/grid_bdryband_new.png}}
-\subfigure[An example of distributive pressure cells and variables relaxed using distributive relaxation. This example region is defined by excluding $1 \times 1$ blocks of cells (i.e., a single cell) centered at each cell intersecting the boundary.]
-{\includegraphics[height=\figureheight]{part2/chapter5/figures/bw/grid_dist_final.png}}
+\setlength{\figurewidth}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[An example boundary band of pressure cells and boundary variables using $3 \times 3$ blocks of cells centered at each cell that intersects the boundary.]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_bdryband_new.png}}
+\subfloat[An example of distributive pressure cells and variables relaxed using distributive relaxation. This example region is defined by excluding $1 \times 1$ blocks of cells (i.e., a single cell) centered at each cell intersecting the boundary.]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/grid_dist_final.png}}
 \caption{Boundary band and distributive region.}
 \label{fig:ch5.boundaryband}
-\end{center}
 \end{figure}
 
 The efficiency of a multigrid algorithm is closely related to the smoothing efficiency of a single level relaxation. With Poisson's equation, simple Jacobi or Gauss-Seidel will typically suffice as an efficient smoother. These techniques effectively reduce the high-frequency components of the error and make it possible for a coarse grid to provide a meaningful correction to a fine grid. This property is fundamentally important for the efficiency of the geometrically hierarchical approach. Unfortunately, the equations of nearly incompressible linear elasticity with augmented pressure require more care than the comparably simplistic discrete Poisson equation (cf. Chapter~\ref{ch:pt2.poisson}). Although our system is not symmetric positive definite, we can reformulate the equations in a more convenient form as in \cite{Zhu.Yongning10} to design an effective geometric multigrid smoother. Indeed, our change of variables leads to an approximate block triangularization of the discrete system with each diagonal block being a symmetric semi-definite discretization of the Laplacian. Our smoother is then constructed to be an application of the Gauss-Seidel relaxation on each block.
@@ -567,11 +562,11 @@ i.e.,
 A_{ii} \delta & = \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{c} - A Z \vec{v}} \\
               & = \vec{e}_i^t Z^t \lrp{\vec{f} - A \vec{u}},
 \end{align*}
-and then applying the correction $\vec{v} \leftarrow \vec{v} + \delta \vec{e}_i$. Equivalently, one may update the $\vec{u}$ degrees of freedom directly: $\vec{u} \leftarrow \vec{u} + \delta Z \vec{e}_i$; see Algorithm~\ref{alg:ch5.relaxation.boundary.dirichlet.v}.
+and then applying the correction $\vec{v} \leftarrow \vec{v} + \delta \vec{e}_i$. Equivalently, one may update the $\vec{u}$ degrees of freedom directly: $\vec{u} \leftarrow \vec{u} + \delta Z \vec{e}_i$; see Algorithm~\ref{alg:ch5.relaxation.boundary.dirichlet.u}.
 
 \begin{algorithm}[htbp]
 \caption{Boundary relaxation with Dirichlet boundary conditions - $\vec{u}$.}
-\label{alg:ch5.relaxation.boundary.dirichlet.v}
+\label{alg:ch5.relaxation.boundary.dirichlet.u}
 \begin{algorithmic}[1]
 \STATE $\vec{u} \leftarrow \vec{c}$
 \FOR{$i = 1, \dotsc, m$}
@@ -587,7 +582,7 @@ In contrast to our smoothing operator discussed in the preceding subsections, ou
 
 \setlength{\unitlength}{1.2cm}
 \begin{figure}[htbp]
-\begin{center}
+\centering
 \footnotesize\begin{picture}(4,4)
   \linethickness{1.5pt}
   \multiput(0,0)(0, 2){3}{\line(1, 0){4}}
@@ -643,7 +638,6 @@ In contrast to our smoothing operator discussed in the preceding subsections, ou
 \end{picture}
 \caption{Stencils for the restriction operator $R$.}
 \label{fig:ch5.restriction}
-\end{center}
 \end{figure}
 
 However, near the boundary, there is no guarantee that all dependencies of the coarse grid restriction stencils are legitimate fine grid degrees of freedom. Therefore, we truncate our restriction stencils to the actual degrees of freedom, which is equivalent to restricting zero residuals from fine grid vertices which are not degrees of freedom. Also, in the presence of Dirichlet boundary conditions, we cannot compute the components of the residual $\vec{r} = \vec{f} - A \vec{u} - B^t \vec{\lambda}$ when $\vec{\lambda}$ components are nontrivially involved. In this case, we apply enough boundary relaxation sweeps to ensure these boundary residuals are smaller than interior residuals, then simply restrict zero boundary residual values for these equations. Now, normally, the right hand side to the coarse grid constraint system has been computed from the restriction of the residual of the fine grid constraint system. However, due to the fact that our solutions $\vec{u} = \vec{c} + Z \vec{v}$ always satisfy the Dirichlet boundary constraints exactly, the Dirichlet boundary condition on all coarse grids should be zero.
@@ -679,15 +673,14 @@ A constant divergence deformation is considered, giving the exact boundary condi
 \phi_2(x,y) & = 2y - \frac{1}{2} \sin \pi x \cos \pi y.
 \end{align*}
 
-\setlength{\figureheight}{0.40\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Undeformed.]
-{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/ginkgo}}
-\subfigure[Deformed.]
-{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/ginkgo_deformed}}
+\centering
+\subfloat[Undeformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/ginkgo}}
+\subfloat[Deformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_deformed}}
 \caption{Keyhole domain.}
-\end{center}
 \end{figure}
 
 \item \textbf{Flower domain.} A flower-shaped domain with inner radius $0.2$ and outer radius $0.4$. We represent the boundary of this domain by the zero isocontour of the level set function
@@ -700,15 +693,14 @@ where $\mathbf{0.5} := (0.5,0.5)$ and $\theta$ is the argument of $\bfx$. We use
 \phi_2(x,y) := \frac{2x}{\sqrt{\pi}} \sin \frac{\pi}{2} y.
 \end{align*}
 
-\setlength{\figureheight}{0.40\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Undeformed.]
-{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/flower}}
-\subfigure[Deformed.]
-{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/flower_deformed}}
+\centering
+\subfloat[Undeformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/flower}}
+\subfloat[Deformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/flower_deformed}}
 \caption{Flower domain.}
-\end{center}
 \end{figure}
 
 \item \textbf{Spiral domain} We represent the boundary of the spiral domain as the zero isocontour of the level set function
@@ -721,15 +713,14 @@ where $\bfy = \bfy(\bfx)$ is $\bfx - (0.5,0.5)$ rotated around (0.5,0.5) by $\th
 \phi_2(x,y) & = \lrp{\frac{1}{2} x + \frac{1}{2}} \sin \lrp{\frac{\pi}{6} + \frac{2}{3} \pi y}.
 \end{align*}
 
-\setlength{\figureheight}{0.40\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Undeformed.]
-{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/spiral}}
-\subfigure[Deformed.]
-{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,height=\figureheight]{part2/chapter5/figures/bw/spiral_deformed}}
+\centering
+\subfloat[Undeformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/spiral}}
+\subfloat[Deformed.]
+{\includegraphics[trim=4cm 1cm 4cm 1cm,clip,width=\figurewidth]{part2/chapter5/figures/bw/spiral_deformed}}
 \caption{Spiral domain.}
-\end{center}
 \end{figure}
 
 \end{enumerate}
@@ -739,52 +730,49 @@ where $\bfy = \bfy(\bfx)$ is $\bfx - (0.5,0.5)$ rotated around (0.5,0.5) by $\th
 We embed all our testing domains in a regular square Cartesian grid over $[0,1] 
 \times [0,1]$ with resolutions ranging from $32 \times 32$ to $1024 \times 1024$. We use a log-log plot of the error ($\log_2 \norm{\vec{u}^{\text{exact}} - \vec{u}^{\text{approx}}}_{\infty}$) versus the resolution ($\log_2 \text{resolution}$) to estimate the order of convergence via a least squares linear regression. We remove any solution null space in an example with entirely Neumann boundary conditions by enforcing a non-embedded Dirichlet condition on all degrees of freedom within the domain $[7/16,9/16] \times [7/16,9/16]$. We observe second order convergence over all three example domains for both Neumann and Dirichlet boundary conditions and for a wide range of material parameters, including in the nearly incompressible regime (see Figures~\ref{fig:ch5.examples.convergence.ginkgo}, \ref{fig:ch5.examples.convergence.flower}, and \ref{fig:ch5.examples.convergence.spiral}).
 
-\setlength{\figurewidth}{0.45\columnwidth}
+\setlength{\figurewidth}{0.49\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Neumann BCs; $\nu = 0.3$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu.png}}
-\subfigure[Neumann BCs; $\nu = 0.49$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu.png}} \\
-\subfigure[Dirichlet BCs; $\nu = 0.3$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth.png}}
-\subfigure[Dirichlet BCs; $\nu = 0.49$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol.png}}
+\centering
+\subfloat[Neumann BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_neu}}
+\subfloat[Neumann BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_neu}} \\
+\subfloat[Dirichlet BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr3_noth}}
+\subfloat[Dirichlet BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/ginkgo_squeeze_pr49_noth_hiprol}}
 \caption{Log-log plots of the $L^{\infty}$-error of the approximate solution versus the grid resolution, and the corresponding computed orders of convergence, $\rho$, for the keyhole domain. We stipulate an embedded Neumann boundary condition for the top ((a), (b)) examples and an embedded Dirichlet boundary condition for the bottom ((c), (d)) examples. The left ((a), (c)) examples have a Poisson's ratio of $\nu = 0.3$, while the right ((b), (d)) use a Poisson's ratio of $\nu = 0.49$, very close to the incompressible limit. Square (circle) markers in the above error plots correspond to errors in the $x$ ($y$) component.}
 \label{fig:ch5.examples.convergence.ginkgo}
-\end{center}
 \end{figure}
 
-\setlength{\figurewidth}{0.45\columnwidth}
+\setlength{\figurewidth}{0.49\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Neumann BCs; $\nu = 0.3$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu.png}}
-\subfigure[Neumann BCs; $\nu = 0.49$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu.png}}
-\subfigure[Dirichlet BCs; $\nu = 0.3$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth.png}}
-\subfigure[Dirichlet BCs; $\nu = 0.49$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol.png}}
+\centering
+\subfloat[Neumann BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr3_neu}}
+\subfloat[Neumann BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr49_neu}} \\
+\subfloat[Dirichlet BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr3_noth}}
+\subfloat[Dirichlet BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/egg_flower_pr49_noth_hiprol}}
 \caption{Log-log plots of the $L^{\infty}$-error of the approximate solution versus the grid resolution, and the corresponding computed orders of convergence, $\rho$, for the flower domain. We stipulate an embedded Neumann boundary condition for the top ((a), (b)) examples and an embedded Dirichlet boundary condition for the bottom ((c), (d)) examples. The left ((a), (c)) examples have a Poisson's ratio of $\nu = 0.3$, while the right ((b), (d)) use a Poisson's ratio of $\nu = 0.49$, very close to the incompressible limit. Square (circle) markers in the above error plots correspond to errors in the $x$ ($y$) component.}
 \label{fig:ch5.examples.convergence.flower}
-\end{center}
 \end{figure}
 
-\setlength{\figurewidth}{0.45\columnwidth}
+\setlength{\figurewidth}{0.49\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Neumann BCs; $\nu = 0.3$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu.png}}
-\subfigure[Neumann BCs; $\nu = 0.49$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu.png}}
-\subfigure[Dirichlet BCs; $\nu = 0.3$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth.png}}
-\subfigure[Dirichlet BCs; $\nu = 0.49$]
-{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol.png}}
+\centering
+\subfloat[Neumann BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr3_neu}}
+\subfloat[Neumann BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr49_neu}} \\
+\subfloat[Dirichlet BCs; $\nu = 0.3$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr3_noth}}
+\subfloat[Dirichlet BCs; $\nu = 0.49$]
+{\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/fan_spiral_pr49_noth_hiprol}}
 \caption{Log-log plots of the $L^{\infty}$-error of the approximate solution versus the grid resolution, and the corresponding computed orders of convergence, $\rho$, for the spiral domain. We stipulate an embedded Neumann boundary condition for the top ((a), (b)) examples and an embedded Dirichlet boundary condition for the bottom ((c), (d)) examples. The left ((a), (c)) examples have a Poisson's ratio of $\nu = 0.3$, while the right ((b), (d)) use a Poisson's ratio of $\nu = 0.49$, very close to the incompressible limit. Square (circle) markers in the above error plots correspond to errors in the $x$ ($y$) component.}
 \label{fig:ch5.examples.convergence.spiral}
-\end{center}
 \end{figure}
 
 \subsection{Multigrid} \label{subsec:ch5.examples.multigrid}
@@ -801,7 +789,7 @@ We first consider a fixed resolution of $128 \times 128$ and compare finite elem
 While relatively compressible problems exhibit stablized convergence rates no larger than $0.3$ for a multigrid V-$(1,1)$ cycle with all discussed combinations of prolongation and distributive relaxation, we focus on the harder nearly incompressible case with Poisson's ratio $\nu = 0.49$ and investigate both V-$(1,1)$ cycle and W-$(1,1)$ cycle convergence. As shown in Table~\ref{tab:ch5.multigrid.convergence}, both finite element distributive relaxation and FDDC distributive relaxation give convergence rates less than $0.5$ with a multigrid V-$(1,1)$ cycle. Although the FDDC distributive relaxation generally gives a slower convergence than the finite element distributive relaxation for the V-$(1,1)$ cycle, combining it with bilinear interpolation prolongation or using a W-$(1,1)$ cycle brings the convergence rate down to $0.23$.
 
 \begin{table}[htbp]
-\begin{center}
+\centering
 \begin{tabular}{*{5}{r}}
 \hline
 BC & relaxation & MG cycle & $P_{\text{hi}}$ & $P_{\text{lo}}$ \\
@@ -824,46 +812,42 @@ Neumann & FD  & V-$(1,1)$ & 0.70 & 0.70 \\
 \end{tabular}
 \caption{Asymptotic multigrid cycle convergence rates for different combinations of boundary conditions, distributive relaxation (``FEM'' refers to the finite element distributive relaxation described in \S\ref{subsubsec:ch5.multigrid.relaxation.distributive}; ``FD'' refers to the distributive relaxation based on the finite difference defect correction described in \S\ref{subsubsec:ch5.multigrid.relaxation.defectcorrection}), and prolongation ($P_{\text{lo}}$ and $P_{\text{hi}}$; see \S\ref{subsec:ch5.multigrid.coarsening}). For these results, we used the flower domain at resolution $128 \times 128$ with Poisson's ratioa $\nu = 0.49$.}
 \label{tab:ch5.multigrid.convergence}
-\end{center}
 \end{table}
 
 We now investigate the multigrid cycle convergence rates at various resolutions by fixing the multigrid cycle to a V-$(1,1)$ cycle with finite element distributive relaxation and low order prolongation $P_{\text{lo}}$. We observe a consistent convergence rate across a spectrum of resolutions from $32 \times 32$ to $1024 \times 1024$; see Figure~\ref{fig:ch5.multigrid.convergence.resolution}.
 
-\setlength{\figurewidth}{0.45\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
+\centering
 \includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
 \caption{Multigrid V-$(1,1)$ cycle convergence for a variety of resolutions between $32 \times 32$ and $1024 \times 1024$ ($\nu = 0.49$, periodic boundary conditions, finite element distributive relaxation, and low order prolongation $P_{\text{lo}}$).}
 \label{fig:ch5.multigrid.convergence.resolution}
-\end{center}
 \end{figure}
 
 While all combinations of parameters discussed thus far give nice convergence rates for periodic boundary conditions, convergence rates in the presence of embedded Neumann and Dirichlet boundary conditions varies; the main bottleneck is the efficacy of the boundary relaxation. Therefore, a W-$(1,1)$ cycle provides little if any advantage over a V-$(1,1)$ cycle; similarly, our two prolongation operators under consideration, $P_{\text{lo}}$ and $P_{\text{hi}}$, yield very similar convergence rates, everything else equal. The choice of interior relaxation seems to be the most differentiating characteristic when embedded boundary conditions are present; see Table~\ref{tab:ch5.multigrid.convergence}.
 
 This time with embedded boundary conditions, we again investigate the multigrid cycle convergence rate over a variety of resolutions. Since, in the presence of embedded boundary conditions, the multigrid cycles and prolongation operators discussed previously yield largely similar convergence rates, we only give results for a V-$(1,1)$ cycle with prolongation operator $P_{\text{lo}}$. Further, motivated by the results in Table~\ref{tab:ch5.multigrid.convergence}, we use finite element distributive relaxation in the interior. As shown in Figures~\ref{fig:ch5.multigrid.convergence.flower.a} and \ref{fig:ch5.multigrid.convergence.flower.b}, we observe a consistent convergence rate over a spectrum of resolutions from $32 \times 32$ to $1024 \times 1024$.
 
-\setlength{\figurewidth}{0.45\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Dirichlet BCs]
+\centering
+\subfloat[Dirichlet BCs]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10.png}}
-\subfigure[Neumann BCs]
+\subfloat[Neumann BCs]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10.png}}
 \caption{Multigrid V-$(1,1)$ cycle convergence rates at various resolutions from $32 \times 32$ to $1024 \times 1024$ ($\nu = 0.49$).}
 \label{fig:ch5.multigrid.convergence.flower.a}
-\end{center}
 \end{figure}
 
-\setlength{\figurewidth}{0.45\columnwidth}
+\setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
-\begin{center}
-\subfigure[Dirichlet BCs]
+\centering
+\subfloat[Dirichlet BCs]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}}
-\subfigure[Neumann BCs]
+\subfloat[Neumann BCs]
 {\includegraphics[width=\figurewidth]{part2/chapter5/figures/bw/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}}
 \caption{Residual norm reduction as a function of iteration number for a multigrid V-$(1,1)$ cycle at various resolutions from $32 \times 32$ to $1024 \times 1024$ ($\nu = 0.49$).}
 \label{fig:ch5.multigrid.convergence.flower.b}
-\end{center}
 \end{figure}
 
 \section{Discussion, Conclusion, and Future Work}

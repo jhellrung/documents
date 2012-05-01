@@ -70,16 +70,15 @@ Therefore, the equations \eqref{eq:pt2.elasticity} are equivalently formulated a
 
 In all the above, $\dOmega = \dOmega_d \sqcup \dOmega_n$, and we assume $\Gamma$ (if applicable) and $\dOmega$ to be sufficiently smooth. See Figure~\ref{fig:pt2.embedding} for an example of an embedding of a domain $\Omega$ within a background Cartesian grid in $2$ and $3$ dimensions.
 
-\setlength{\figureheight}{0.40\columnwidth}
-\begin{figure}[htbp]
-\begin{center}
-\subfigure[Embedding in $2$ dimensions]
+\setlength{\figureheight}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[Embedding in $2$ dimensions]
 {\includegraphics[height=\figureheight]{part2/figures/embedding_2d}}
-\subfigure[Embedding in $3$ dimensions]
+\subfloat[Embedding in $3$ dimensions]
 {\includegraphics[height=\figureheight]{part2/figures/embedding_3d}}
 \caption{Example domain embeddings in (a) $2$ dimensions and (b) $3$ dimensions. In a typical domain embedding, only grid vertices on grid cells which intersect the domain (in (a), shaded) are considered degrees of freedom.}
 \label{fig:pt2.embedding}
-\end{center}
 \end{figure}
 
 Although the use of embedded methods avoids the complexities inherent to unstructured mesh generation, as discussed in Part I: Introduction, it does introduce difficulties of their own, though typically of a different and less computationally intensive variety. One prominent such difficulty is the enforcement of algebraic surface conditions (such as boundary conditions or interfacial jump conditions) on embedded features such as $\dOmega$ and $\Gamma$, since the degrees of freedom now do not lie on said embedded features. Our methods employ a Lagrange multiplier space in a relatively straightforward way to weakly enforce Dirichlet boundary conditions and interfacial jump conditions. We mention some alternative techniques in the background sections in the subsequent chapters, and for a good review, see Lew et al. \cite{Lew.Adrian08}.
