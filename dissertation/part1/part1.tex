@@ -6,14 +6,45 @@
 
 \part{Applications of Arbitrary Lagrangian Mesh Cutting}
 
+\renewcommand{\thechapter}{\thepart}
+
 \section*{Introduction}
 
-Many physical simulations necessitate the modeling of fracture or crack surfaces, and in the most demanding of these simulations, these surfaces may have a highly complex non-manifold topology, i.e., with many branches and open ``fronts''. In a dynamics scenario, this may be further complicated by the frequent extension of existing crack fronts and the introduction of new failure surfaces. Applying a traditional finite element method in this context is challenging: one must either constantly regenerate the simulation mesh, which is time-consuming; or artificially and often severely limit the path and resolution of the failure surface to lie along element boundaries. Additionally, in either case, handling a high resolution fracture surface necessitates a correspondingly high resolution simulation volume, at least locally, which in turn increases the cost of solving the relevant continuum mechanics equations. Ideally, one should be able to decouple the resolution of the fracture surface (which may be highly detailed for visual effects purposes, for example; see Chapter~\ref{ch:pt1.fractureanimation}) from the resolution of the simulation mesh (which may be limited by available computational resources; see Chapter~\ref{ch:pt1.virtualsurgery}).
+Many physical simulations necessitate the modeling of fracture or crack surfaces, and in the most demanding of these simulations, these surfaces may have a highly complex non-manifold topology, e.g., with many branches and open ``fronts''. In a dynamics scenario, this may be further complicated by the frequent extension of existing crack fronts and the introduction of new failure surfaces. Applying a traditional finite element method in this context is challenging: one must either constantly regenerate the simulation mesh to account for the fracture geometry, which is computationally expensive and easily introduces ill-conditioned ``sliver'' elements; or artificially and often severely limit the path and resolution of the failure surface to lie along element boundaries. Additionally, in either case, handling a high resolution fracture surface necessitates a correspondingly high resolution simulation volume, at least locally, which in turn increases the computational cost of solving the relevant continuum mechanics equations. Ideally, one should be able to decouple the resolution of the fracture surface (which may be highly detailed for visual effects purposes, for example; see Chapter~\ref{ch:pt1.fractureanimation}) from the resolution of the simulation mesh (which may be limited by available computational resources; see Chapter~\ref{ch:pt1.virtualsurgery}).
 
-Given the above difficulties with traditional finite element methods, Belytschko, Black, Moes99, and Dolbow \cite{Belytschko99, Moes99} developed the \emph{eXtended Finite Element Method} \linebreak[4] (XFEM). The basic idea of the XFEM is to enrich the usual finite element spaces with additional degrees of freedom which incorporate the near tip asymptotic solutions and allow the displacements around the crack surface to be discontinuous. We hold off a complete introduction to and history of the XFEM until Chapter~\ref{ch:pt1.crackpropagation}, but do mention one of the main challenges with utilizing the XFEM: automating the determination of material connectivity and subsequent enrichment of the finite element spaces. In the following chapters, we apply the mesh cutting algorithm of Sifakis et al. \cite{Sifakis07} to resolve arbitrary Lagrangian cutting surfaces against the simulation volume mesh, determine material connectivity, and automatically duplicate mesh vertices to yield \emph{virtual nodes} which effect the requisite enrichment necessary for crack separation.
+Given the above difficulties with traditional finite element methods, Belytschko, Black, Moes99, Dolbow \cite{Belytschko99, Moes99} and others developed the \emph{eXtended Finite Element Method} (XFEM). The basic idea of the XFEM is to enrich the usual finite element spaces with additional degrees of freedom which incorporate the near tip asymptotic solutions and allow the displacements around the crack surface to be discontinuous. We hold off a complete introduction to and history of the XFEM until Chapter~\ref{ch:pt1.crackpropagation}, but do mention one of the main challenges with utilizing the XFEM: automating the determination of material connectivity and subsequent enrichment of the finite element spaces. In the following chapters, we apply the mesh cutting algorithm of Sifakis et al. \cite{Sifakis07} to resolve arbitrary Lagrangian cutting surfaces against the simulation volume mesh, determine material connectivity, and automatically duplicate mesh vertices to yield \emph{virtual nodes} which effect the requisite enrichment necessary for crack separation.
 
 \section*{Mesh Cutting Algorithm Overview}
 
-As the main subject of Part II is the various applications of the mesh cutting algorithm described in Sifakis et al. \cite{Sifakis07}, we provide a brief summary of this algorithm, and refer the reader to \cite{Sifakis07} for more details. The essence of the algorithm may be described by considering the resolution of a segmented curve cutting surface against a trianglulated area as the volumetric mesh, although the following overview applies equally well to higher dimensions (as seen in Chapters~\ref{ch:pt1.virtualsurgery} and \ref{ch:pt1.fractureanimation}, for example).
+As the main subject of Part II is the various applications of the mesh cutting algorithm described in Sifakis et al. \cite{Sifakis07}, we provide a brief summary of this algorithm, and refer the reader to \cite{Sifakis07} for more details. The essence of the algorithm may be described by considering the resolution of a segmented curve cutting surface against a triangulated area as the volumetric mesh, although the following overview applies equally well to higher dimensions (as seen in Chapters~\ref{ch:pt1.virtualsurgery} and \ref{ch:pt1.fractureanimation}, for example). Ultimately, the algorithm produces a geometrically coincident volumetric mesh with mesh elements along the cutting surface duplicated into materially disconnected counterparts; see Figure~\ref{fig:pt1.cutting.example} for an example overview of the entire procedure.
 
+\setlength{\figurewidth}{\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\figurewidth]{part1/figures/cutter_illustration}
+\caption{This mesh is cut by two curves, one of which contains a branch (left). (center) The cutting algorithm first treats each triangle separately, creating duplicates for each locally disjoint material region (center), and then uses the global mesh topology to join these duplicates on the proper degrees of freedom (right). }
+\label{fig:pt1.cutting.example}
+\end{center}
+\end{figure}
 
+In the first stage, the algorithm processes each mesh triangle individually, identifying the disjoint \emph{material components} the triangle is divided into by the cutting curve and describing each as a closed polygonal region (depicted blue in Figure~\ref{fig:pt1.cutting.triangle.2}). For each such material region, a duplicate copy of the triangle is created and assigned said material region. For example, in Figure~\ref{fig:pt1.cutting.triangle.2}, the cutting curve divides the triangle into two distinct material regions, inducing the creation of two duplicates of the original triangle with each duplicate possessing one of the material regions. In the duplicated triangles, we identify vertices within material regions (solid blue circles in Figure~\ref{fig:pt1.cutting.triangle.2}) with the original triangle vertices. We also furnish the duplicate triangles with \emph{virtual nodes} (hollow blue circles in Figure~\ref{fig:pt1.cutting.triangle.2}). A less trivial example is given in Figure~\ref{fig:pt1.cutting.triangle.3}.
+
+\setlength{\figureheight}{0.25\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[height=\figureheight]{part1/figures/cutting}
+\caption{Simple example of an original mesh triangle (left) duplicated with its disjoint \emph{material regions} (blue) being distributed among the duplicates (middle, right). Likewise, the vertices in each duplicate are either identified with the vertices of the original triangle (\emph{material nodes}, sold blue) or duplicate copies (\emph{virtual nodes}, hollow blue), depending on whether they fall within a material region.}
+\label{fig:pt1.cutting.triangle.2}
+\end{center}
+\end{figure}
+
+\setlength{\figureheight}{0.25\columnwidth}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[height=\figureheight]{part1/figures/complex_cutting}
+\caption{A more complex example of the initial division of triangle by a cutting curve. Since the original mesh triangle is divided into $3$ disjoint material regions (left), the algorithm generates $3$ duplicate triangles, each possessing a different material region. (Coloring is consistent with that used in Figure~\ref{fig:pt1.cutting.triangle2}.)}
+\label{fig.complex_cutting}
+\end{center}
+\end{figure}
+
+\renewcommand{\thechapter}{\arabic{chapter}}

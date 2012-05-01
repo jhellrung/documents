@@ -6,6 +6,8 @@
 
 \part{Virtual Node Methods for Elliptic Problems}
 
+\renewcommand{\thechapter}{\thepart}
+
 \section*{Introduction}
 
 We now turn toward the solution of elliptic partial differential equations on arbitrary, irregular domains with a discretization based on a regular Cartesian grid. We will specifically consider the following problems in the subsequent chapters.
@@ -100,3 +102,5 @@ In summary, our methods for solving elliptic problems such as Poisson's equation
 \item yields a discrete linear system which is symmetric and positive definite, facilitating the application of a wide variety of black-box solvers or, as we show, efficient geometric multigrid methods with nearly optimal convergence rates.
 \end{itemize}
 Furthermore, our method for solving \eqref{eq:pt2.LE} retains the above properties even in the face of nearly incompressible materials.
+
+\renewcommand{\thechapter}{\arabic{chapter}}
