@@ -4,9 +4,9 @@
 % Copyright 2012, Jeffrey Hellrung.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\part{Introduction}
-
-\renewcommand{\thechapter}{\thepart}
+\phantomsection
+\addcontentsline{toc}{part}{Introduction}
+\part*{\Huge Introduction}
 
 The simulation of a variety of physical phenomena often requires addressing frequent, and sometimes quite drastic, topological changes. Virtual surgery and fracture simulations require the dynamic introduction of one or more co-dimension one \emph{crack surfaces}, which may be completely new or may extend some crack surface introduced at a previous time step. Multiphase fluid flow and phase change problems naturally have dynamic interfaces which divide your original domain into multiple irregularly shaped subdomains. Further, any kind of shape optimization frequently changes the geometry -- and, occasionally, even the topology -- of the domain on which one must repeatedly solve some partial differential equation as a subproblem.
 
@@ -14,6 +14,4 @@ The common thread among all the above examples is the necessity to deal with com
 
 These concerns motivated the development of \emph{embedded} (or \emph{immersed}) methods, in which a structured mesh, such as a regular Cartesian grid, simply encompasses, rather than geometrically adheres or conforms to, the irregular geometry. The irregular geometry is embedded within mesh elements: its location is tracked relative to the surrounding mesh. This avoids the complexities inherent in unstructured mesh generation while opening the door to the use of efficient solution techniques such as multigrid methods. Early work on embedded methods include works of Harlow and Welch \cite{Harlow65}, Peskin \cite{Peskin72}, Hyman \cite{Hyman52}, and Saul'ev \cite{Saul'ev63}.
 
-The remainder of this text is divided into two parts. Part II involves the application of the sophisticated mesh cutting algorithm of Sifakis et al. \cite{Sifakis07} to crack propagation in $2$ dimensions, virtual surgery, and rigid fracture for use in computer animation. All of these applications involve the embedding of some open and/or non-manifold cut or crack surface within a regular background simplex mesh, with consequent topology change and duplication of degrees of freedom. Part III discusses the solution of elliptic partial differential equations in an innovative embedded framework. We will specifically consider Poisson's equation with interfacial jump conditions and the equilibrium equations of linear elasticity. The feature set possessed by the described numerical methods to solve these partial differential equations has several advantages over and compares quite favorably with existing alternative methods.
-
-\renewcommand{\thechapter}{\arabic{chapter}}
+The remainder of this text is divided into two parts. Part I involves the application of the sophisticated mesh cutting algorithm of Sifakis et al. \cite{Sifakis07} to crack propagation in $2$ dimensions, virtual surgery, and rigid fracture for use in computer animation. All of these applications involve the embedding of some open and/or non-manifold cut or crack surface within a regular background simplex mesh, with consequent topology change and duplication of degrees of freedom. Part II discusses the solution of elliptic partial differential equations in an innovative embedded framework. We will specifically consider Poisson's equation with interfacial jump conditions and the equilibrium equations of linear elasticity. The feature set possessed by the described numerical methods to solve these partial differential equations has several advantages over and compares quite favorably with existing alternative methods.

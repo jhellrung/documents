@@ -1,0 +1,105 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% partII/partII.tex
+%
+% Copyright 2012, Jeffrey Hellrung.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\part{Virtual Node Methods for Elliptic Problems}
+
+\renewcommand{\thechapter}{\thepart}
+
+\section*{Introduction}
+
+We now turn toward the solution of elliptic partial differential equations on arbitrary, irregular domains with a discretization based on a regular Cartesian grid. We will specifically consider the following problems in Chapters~\ref{chap:partII.poisson} and \ref{chap:partII.LE}, respectively.
+
+\begin{itemize}
+
+\item Poisson's equation with interfacial jump conditions:
+\begin{subequations} \label{eq:partII.poisson}
+\begin{align}
+-\nabla \cdot \lrp{\beta \nabla u} & = f, \quad \in \Omega \setminus \Gamma; \label{eq:partII.poisson.PDE} \\
+\jump{u} & = a, \quad \in \Gamma; \label{eq:partII.poisson.DJ} \\
+\jump{\beta \nabla u \cdot \hatn} & = b, \quad \in \Gamma; \label{eq:partII.poisson.NJ} \\
+u & = p, \quad \in \dOmega_d; \label{eq:partII.poisson.D} \\
+\beta \nabla u \cdot \hatn & = q, \quad \in \dOmega_n; \label{eq:partII.poisson.N}
+\end{align}
+\end{subequations}
+where
+\begin{itemize}
+\item the domain $\Omega \subset \bbR^d$ is open ($d = 2 \text{ or } 3$, typically);
+\item the interface $\Gamma$ is a co-dimension one closed curve ($d = 2$) or surface ($d = 3$) that divides $\Omega$ into an interior domain $\Omega^-$ and an exterior domain $\Omega^+$, such that $\Omega = \Omega^- \sqcup \Omega^+ \sqcup \Gamma$;
+\item $u$ (unknown), $\beta$ (known), and $f$ (known) are scalar functions which can exhibit discontinuities across $\Gamma$ but otherwise are assumed to have smooth restrictions $u^{\sigma}$, $\beta^{\sigma}, f^{\sigma}$ to $\Omega^{\sigma}$, $\sigma \in \set{+,-}$;
+\item $\hatn = \hatn(\bfx)$ denotes the outward unit normal, both to $\Omega^-$ for $\bfx \in \Gamma$ and to $\Omega$ for $\bfx \in \dOmega$; and
+\item $\jump{v}(\bfx) := v^+(\bfx) - v^-(\bfx) := \lim_{\epsilon \to 0^+} v\lrp{\bfx + \epsilon \hatn(\bfx)} - \lim_{\epsilon \to 0^+} v\lrp{\bfx - \epsilon \hatn(\bfx)}$ denotes the \emph{jump} of the quantity $v$ across the interface $\Gamma$.
+\end{itemize}
+We note that the relevant physics generally determine the jumps in the solution \eqref{eq:partII.poisson.DJ} and in the flux \eqref{eq:partII.poisson.NJ}, as well as the boundary conditions \eqref{eq:partII.poisson.D}, \eqref{eq:partII.poisson.N} on $\dOmega$.
+
+\item The equilibrium equations of linear elasticity:
+\begin{subequations} \label{eq:partII.elasticity}
+\begin{align}
+-\nabla \cdot \bssigma(\bfu) & = \bff, \quad \in \Omega; \\
+\bfu & = \bfu_0, \quad \in \dOmega_d; \\
+\bssigma(\bfu) \cdot \hatn & = \bfg, \quad \in \dOmega_n;
+\end{align}
+\end{subequations}
+where
+\begin{itemize}
+\item the domain $\Omega \subset \bbR^d$ is open (we consider $d = 2$ primarily);
+\item $\bfu$ is the (unknown) material displacement map;
+\item $\bssigma$ is the Cauchy stress tensor;
+\item $\bff$ is the external force per unit volume;
+\item $\bfu_0$ is the prescribed Dirichlet boundary displacements over $\dOmega_d \subset \dOmega$; and
+\item $\bfg$ is the prescribed external surface traction over $\dOmega_n \subset \dOmega$.
+\end{itemize}
+In linear elasticity, the stress $\bssigma(\bfu)$ is linearly dependent on the Cauchy strain $\bsepsilon(\bfu)$ via
+\begin{align*}
+\bsepsilon(\bfu) & = \frac{1}{2} \lrp{\nabla \bfu + \lrp{\nabla \bfu}^t}, \\
+\bssigma(\bfu)   & = 2 \mu \bsepsilon(\bfu) + \lambda \lrp{\tr \bsepsilon(\bfu)} \bfI \\
+                 & = \mu \lrp{\nabla \bfu + \lrp{\nabla \bfu}^t} + \lambda \lrp{\nabla \cdot \bfu} \bfI.
+\end{align*}
+Therefore, the equations \eqref{eq:partII.elasticity} are equivalently formulated as
+\begin{subequations} \label{eq:partII.LE}
+\begin{align}
+-\lrp{\Delta \bfI + (\lambda + \mu) \nabla \nabla^t} \bfu & = \bff \quad \in \Omega \label{eq:partII.LE.PDE} \\
+\bfu & = \bfu_0 \quad \in \dOmega_d \label{eq:partII.LE.D} \\
+\mu \lrp{\bfu \cdot \hatn + \nabla \lrp{\bfu \cdot \hatn}} + \lambda \lrp{\nabla \cdot \bfu} \hatn & = \bfg \quad \in \dOmega_n \label{eq:partII.LE.N}.
+\end{align}
+\end{subequations}
+
+\end{itemize}
+
+In all the above, $\dOmega = \dOmega_d \sqcup \dOmega_n$, and we assume $\Gamma$ (if applicable) and $\dOmega$ to be sufficiently smooth. See Figure~\ref{fig:partII.embedding} for an example of an embedding of a domain $\Omega$ within a background Cartesian grid in $2$ and $3$ dimensions.
+
+\setlength{\figureheight}{0.50\textwidth}
+\begin{figure}[htb]
+\centering
+\subfloat[Embedding in $2$ dimensions]
+{\includegraphics[height=\figureheight]{partII/figures/embedding_2d}}
+\subfloat[Embedding in $3$ dimensions]
+{\includegraphics[height=\figureheight]{partII/figures/embedding_3d}}
+\caption{Example domain embeddings in (a) $2$ dimensions and (b) $3$ dimensions. In a typical domain embedding, only grid vertices on grid cells which intersect the domain (in (a), shaded) are considered degrees of freedom.}
+\label{fig:partII.embedding}
+\end{figure}
+
+Although the use of embedded methods avoids the complexities inherent to unstructured mesh generation, as discussed in Part: Introduction, it does introduce difficulties of their own, though typically of a different and less computationally intensive variety. One prominent such difficulty is the enforcement of algebraic surface conditions (such as boundary conditions or interfacial jump conditions) on embedded features such as $\dOmega$ and $\Gamma$, since the degrees of freedom now do not lie on said embedded features. Our methods employ a Lagrange multiplier space in a relatively straightforward way to weakly enforce Dirichlet boundary conditions and interfacial jump conditions. We mention some alternative techniques in the background sections in the subsequent chapters, and for a good review, see Lew et al. \cite{Lew.Adrian08}.
+
+A further challenge is the retention of higher order accuracy in $L^{\infty}$. The difficulty typically lies in determining the numerical stencils near embedded features that retain the accuracy achieved in the regions of the domain sufficiently distanced from said embedded features. Many present methods address these problems at the cost of implementation complexity and sometimes require significant effort to adapt to general applications. But while achieving higher order accuracy in the discretization may be nontrivial, to reiterate from Part: Introduction, the ability to use a regular Cartesian grid greatly facilitates the implementation of efficient solution methods. Specifically for high resolution discretizations, direct methods to solve the discrete linear systems become too slow and memory intensive. Geometric multigrid methods and domain decomposition approaches have been shown to provide very favorable performance in this setting. However, their application to embedded discretizations is not entirely straightforward. Ultimately, special attention must be paid near embedded features for both discretization accuracy and efficient numerical linear algebra, as we describe in the subsequent chapters.
+
+The methods presented in the following chapters build on the work of Bedrossian et al. \cite{Bedrossian10}, which introduced a second order virtual node method for solving the interfacial Poisson problem \eqref{eq:partII.poisson} in $2$ dimensions. The discretization presented in \cite{Bedrossian10} is easy to implement and yields a symmetric positive definite sparse linear system for both interface problems and boundary value problems on irregular domains. In summary, this virtual node method employs a uniform Cartesian grid with duplicated Cartesian bilinear elements along the interface. These duplicated elements introduce additional \emph{virtual} nodes or degrees of freedom to accurately capture the lack of regularity in the solution. The method is variational to define stencils symmetrically, and a different discretization is used depending on proximity to embedded features, allowing for the retention of the standard $5$-point finite difference stencil away from embedded boundaries and interfaces. Langrange multipliers are used to weakly enforce embedded Dirichlet conditions \eqref{eq:partII.poisson.D} and embedded interfacial jump conditions \eqref{eq:partII.poisson.DJ}, and the choice of Lagrange multiplier space admits a symmetric positive definite discretization. In the special case when $\beta$ is smooth, a discontinuity removal technique allows the use of the standard $5$-point Poisson stencil even across the embedded interface.
+
+The feature set of this virtual node approach is very powerful. In Chapter \ref{chap:partII.poisson}, we improve many aspects of \cite{Bedrossian10} and provide key modifications necessary to extend the method to $3$ dimensions. Within the context of discretizing the Dirichlet conditions \eqref{eq:partII.poisson.D} and interfacial jump conditions \eqref{eq:partII.poisson.DJ}, we present a novel and flexible algorithm to define the discrete Lagrange multiplier space. This algorithm gives more control on the conditioning of the resulting linear system and specifically addresses the conditioning issues (see Appendix~\ref{chap:partII.appendix.constraintconditioning}) we found in the straightforward extension of \cite{Bedrossian10} to $3$ dimensions. We also give an expanded treatment of the discontinuity removal technique, detailing an algorithm for the construction of a scalar function satisfying the interfacial jump conditions (\ref{eq:partII.poisson.DJ}, \ref{eq:partII.poisson.NJ}).
+
+In Chapter \ref{chap:partII.LE}, we apply some of the same basic ideas from Chapter \ref{chap:partII.poisson} to numerically solve the equilibrium equations of linear elasticity in the nearly incompressible regime. We stabilize the method by introducing pressure as an additional unknown in a mixed variational formulation. Our discretization of this variational formulation is then based on a MAC-type staggering of $x$ and $y$-component displacements with pressure degrees of freedom at cell centers. Again, we achieve second order accuracy in $L^{\infty}$ while retaining a symmetric positive definite linear system.
+
+Further, within both chapters, we present a family of geometric multigrid algorithms to solve the resulting linear systems with near-optimal multigrid efficiency independent of grid resolution. The variational nature of the methods naturally enables symmetric numerical stencils along embedded features, and together with our choice of Lagrange multiplier space, this admits an efficient means for smoothing boundary and interface equations. Indeed, this shows the suitability of efficient parallel implementations, as indicated, e.g., by the similarities to the first order method to solve \eqref{eq:partII.LE} in \cite{Zhu.Yongning10}.
+
+In summary, our methods for solving elliptic problems such as Poisson's equation \eqref{eq:partII.poisson} and the equilibrium equations of linear elasticity \eqref{eq:partII.LE} have a distinguishing feature set rarely found simultaneously in the large class of embedded methods:
+\begin{itemize}
+\item second-order accuracy in $L^{\infty}$;
+\item addresses both Neumann \eqref{eq:partII.poisson.N} / \eqref{eq:partII.LE.N} and Dirichlet \eqref{eq:partII.poisson.D} / \eqref{eq:partII.LE.D} boundary conditions as well as the interfacial jump conditions (\ref{eq:partII.poisson.DJ}, \ref{eq:partII.poisson.NJ});
+\item relatively simple to implement with a nice progression of complexity from the discretization of Neumann boundary conditions to Dirichlet boundary conditions to interfacial jump conditions;
+\item yields a discrete linear system which is symmetric and positive definite, facilitating the application of a wide variety of black-box solvers or, as we show, efficient geometric multigrid methods with nearly optimal convergence rates.
+\end{itemize}
+Furthermore, our method for solving \eqref{eq:partII.LE} retains the above properties even in the face of nearly incompressible materials.
+
+\renewcommand{\thechapter}{\arabic{chapter}}
