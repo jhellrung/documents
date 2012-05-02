@@ -83,58 +83,53 @@ To simplify the exposition, we first focus on the discretization away from any c
 \begin{equation*}
 \bfu^h(\bfx) = \sum_i \bfu_i \phi_i(\bfx) + \sum_{j \in J} \bfb_j \phi_j(\bfx) H(\bfx),
 \end{equation*}
-where $J$ is the set of vertices whose one-ring intersects the crack. We begin by replacing these more traditional Heaviside-enriched degrees of freedom with more geometrically intuitive virtual nodes (see \cite{Molino05}), also known as ghost or phantom nodes (see, e.g., \cite{Song06}, \cite{Hansbo04}, \cite{Dolbow09}). As discussed in the prelude to Part I, these virtual nodes are automatically created by the mesh cutting algorithm of Sifakis et al. \cite{Sifakis07}. Figure~\ref{fig:chap1.cutting.unrefined}
+where $J$ is the set of vertices whose one-ring intersects the crack. We begin by replacing these more traditional Heaviside-enriched degrees of freedom with more geometrically intuitive virtual nodes (see \cite{Molino05}), also known as ghost or phantom nodes (see, e.g., \cite{Song06}, \cite{Hansbo04}, \cite{Dolbow09}). As discussed in the prelude to Part I, these virtual nodes are automatically created by the mesh cutting algorithm of Sifakis et al. \cite{Sifakis07}. Figures~\ref{fig:chap1.cutting.unrefined} and \ref{fig:chap1.cutting.refined} illustrate an example of the mesh cutting algorithm more closely related to our present application. In Figure~\ref{fig:chap1.cutting.unrefined}, we introduce a crack which completely cuts one triangle and only partially cuts another. In Figure~\ref{fig:chap1.cutting.refined}, we introduce the same crack into a mesh refined around the crack. In the present context, the unrefined mesh corresponds to the simulation mesh, while the refined mesh -- after being cut as in the example -- corresponds to the quadrature mesh (see \S\ref{sec:chap1.integration}).
 
- illustrates the result of the cutting algorithm where the cutting surface completely cuts one triangle and only partially cuts another. Figure \ref{fig.ch1.cutting.refined} illustrates the results of taking the mesh on the left of Figure \ref{fig:chap1.cutting.unrefined}, refining it near the crack, cutting this refined mesh, and then resolving the global connectivity (the circular inset shows how the resulting virtual nodes allow the crack to separate). In our context, the unrefined mesh corresponds to our simulation mesh, while the refined mesh -- after being cut as in the diagram -- is used for quadrature purposes (see Section \ref{sec:chap1.integration}).
-
-\begin{figure}[htb]
-\begin{center}
-	\includegraphics[scale=.7]{partI/chapter1/figures/cutting2}
-	\caption{\captionsize  Global cut topology, unrefined mesh. The mesh at \textit{left} is cut by the crack, resulting in the mesh at \textit{right}, with duplicated triangles and virtual nodes. }
-	\label{fig:chap1.cutting.unrefined}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/cutting2}
+\caption{A crack is introduced into the mesh on the left, yielding the enriched mesh on the right, with duplicated triangles and virtual nodes, which we use as our simulation mesh.}
+\label{fig:chap1.cutting.unrefined}
 \end{figure}
 
-\begin{figure}[htb]
-\begin{center}
-	\includegraphics[scale=.7]{partI/chapter1/figures/cutting3}
-	\caption{\captionsize  Global cut topology, refined mesh; the mesh at \textit{upper left} is cut, resulting in the geometry 
-		at \textit{bottom}; \textit{upper right} shows virtual nodes with a blow up of a region near the crack. }
-	\label{fig.ch1.cutting.refined}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/cutting3}
+\caption{For quadrature purposes, we refine the uncut mesh in Figure~\ref{fig:chap1.cutting.unrefined}(left) around the cut (upper left), then cut this refined mesh (bottom). A blow up of the region near the crack (upper right) shows the virtual nodes relative to the crack.}
+\label{fig.ch1.cutting.refined}
 \end{figure}
+
+Now, consider a mesh that has been cut, with the associated duplication of elements and introduction of virtual nodes. Corresponding to each virtual node, we create a nodal basis function that respects the crack geometry, i.e., we take into account that vertices and triangles may have been duplicated (see Figure~\ref{fig:chap1.truncatedbasis} for a one-dimensional illustration). Let $\{\tilde{\phi}_i\}$ be the usual piecewise affine nodal basis ``hat'' functions on the simulation mesh, and let $\bfx_i$ be the vertex (which may be a virtual node) corresponding to a given $\tilde{\phi}_i$. Denote by $\Omega_i$ the collection of triangles in the one-ring of vertex $\bfx_i$. Given the preceding notation, we define a new \emph{truncated} hat function $\phi_i$ via
+\begin{equation} \label{eq:chap1.truncatedbasis}
+\phi_i(\bfx) := \tilde{\phi}_i(\bfx) \sum_{T \in \omega_i} \chi_T^M(\bfx),
+\end{equation}
+where $\chi_T^M$ is the characteristic function of the material region of triangle $T$.
+
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/truncated_basis}
+\caption{A truncated basis function in dimension $1$. At left, a mesh element with vertices $1$ and $2$ is cut by the red dot, resulting in the two duplicate elements on the right. The original nodal basis ``hat'' function $\tilde{\phi}_2$ corresponding to vertex $2$ (green) gets truncated into derived basis functions $\phi_2$ and $\phi_4$ according the material region within each duplicate element.}
+\label{fig:chap1.truncatedbasis}
+\end{figure}
+
+In many cases, this virtual node approach is equivalent to the more traditional use of Heaviside enrichment as well as the methods of Song et al. \cite{Song06} and Hansbo and Hansbo \cite{Hansbo04}, i.e., they give equivalent finite element spaces. However, certain crack geometries do, in fact, yield different spaces. As an example, the configuration in Figure~\ref{fig:chap1.triplecut}(left) is cut by a crack given by the red line. The resulting finite element spaces differ between the two methods. Heaviside enrichment and the methods of Song et al. \cite{Song06} and Hansbo and Hansbo \cite{Hansbo04} yield the degrees of freedom depicted in Figure~\ref{fig:chap1.triplecut}(center), while the mesh cutting algorithm from \cite{Sifakis07} yields the degrees of freedom depicted in Figure~\ref{fig:chap1.triplecut}. Since the material region of the top triangle to the right of the crack is not materially connected to the bottom triangle, the bottom left virtual nodes are allowed to separate (see top-right of Figure~\ref{fig:chap1.triplecut}). Generally speaking, the finite element spaces resulting from the mesh cutting algorithm are at least as rich as the spaces resulting from Heaviside enrichment, and in some situations it may in fact be strictly richer (i.e., have strictly larger dimension).
+
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/triple_cut}
+\caption{Given the uncut mesh and crack at left, XFEM using traditional Heaviside enrichment yields $8 \times 2$ degrees of freedom (center), while using virtual nodes as described in \S\ref{sec:chap1.cutting} yields $9 \times 2$ degrees of freedom (right).}
+\label{fig:chap1.triplecut}
+\end{figure}
+
+Finally, we note that Sifakis et al. \cite{Sifakis07}, in their presentation of the mesh cutting algorithm, make the simplifying assumption that the cutting surface never coincides with a mesh vertex or aligns with an element face. Nevertheless, the virtual node algorithm is perfectly compatible with such degenerate cases, and this simplifying hypothesis is made only to ease certain implementation challenges related to the representation of the crack as an explicit simplex surface. In fact, the mesh cutting algorithm can accommodate any cut configuration, including these degenerate cases, as long as the following two queries can be algorithmically determined: (a) the number of disjoints fragments a given element is divided into; and (b) material connectivity of element fragments originating from face-adjacent elements.
+
+For example, if the crack surface is instead represented implicitly as the zero isocontour of a level set function sampled at the vertices of the simulation mesh (or a refinement thereof), both of the above queries admit a straightforward algorithm determination, and hence the element duplication and joining algorithm described in \cite{Sifakis07} may be applied, even when the zero isocontour coincides with a mesh vertex. In the present case, with the crack surface represented explicitly as a simplex mesh (segmented curve in $2$ dimensions or triangulated surface in $3$ dimensions), the robust determination of (a) and (b) is challenging given the limited precision of typical floating point arithmetic. Rather than complicate the implementation to address degenerate or near-degenerate scenarios, we found it preferable and practical to avoid these scenarios entirely by simply perturbing the crack surface negligibly. Naturally, if we use a level set representation, no such perturbation is necessary.
 
 \begin{comment}
-
-Now, consider a mesh that has been cut as described above. Since some of the nodes are virtual, meaning they do not correspond to material nodes, as in \cite{Hansbo04} we create nodal basis functions that respect the crack geometry, i.e., we take into account that nodes and triangles may have been duplicated (see Figure \ref{fig.truncated_basis} for a one-dimensional illustration). Take  $\{ \tilde{\phi}_i \}$ to be the usual piecewise affine ``hat'' functions for the simulation mesh, and $\tensorfmt{x_i}$ to be the node of the simulation mesh corresponding to $\tilde{\phi}_i$ (again, this could be a virtual node). Using $\omega_i$ to denote the collection of triangles in the one-ring of the mesh node $\tensorfmt{x_i}$, we define a new set of truncated hat functions $\{ \phi_i \}$ by setting:
-\begin{equation}
-\phi_i(\bfx) =  \tilde{\phi}_i(\bfx) \sum_{\mathcal{T} \in \omega_i} I_{\mathcal{T}_M}(\bfx),
-\label{eqn.basis_modified}
-\end{equation}
-where $I_{\mathcal{T}_M}$ is the characteristic function of the material region for triangle $\mathcal{T}$. 
-
-\begin{figure}[h]
-\begin{center}
-	\includegraphics[scale=1]{figures/truncated_basis.eps}
-	\caption{\captionsize A one-dimensional illustration of our truncated basis functions. At \textit{left}, a mesh element formed by nodes 1 and 2 is depicted with a graph (\textit{in green}) of one of the usual hat functions $\tilde{\phi_2}$; the element is cut (symbolized by the red dot), resulting in two duplicate elements at \textit{right}. The usual hat function $\tilde{\phi_2}$ is then truncated according to the material regions of each copy. }
-	\label{fig.truncated_basis}
-\end{center}
-\end{figure}
-
-In many cases, this virtual node approach is equivalent to the use of Heaviside functions -- and to the methods of Song et al. \cite{Song06} and Hansbo and Hansbo \cite{Hansbo04} -- i.e., they produce equivalent finite element spaces. However, certain crack geometries can produce different finite element spaces. As an example, the configuration in the left of Figure \ref{fig.cutting_diff} is cut by a crack represented by the red line. The resulting finite element spaces differ: using traditional Heaviside enrichment, the method described in Song et al. \cite{Song06}, or that of Hansbo and Hansbo \cite{Hansbo04} would give a space as depicted at the center of Figure \ref{fig.cutting_diff}. The use of virtual nodes with the cutting algorithm is shown at the right of Figure \ref{fig.cutting_diff}. Since the material region of the top triangle (on the right-hand side of the crack) does not share an edge with the material of the bottom triangle (on the right of the crack), the virtual nodes associated to those triangles are allowed to separate (see Figure \ref{fig.cutting_diff}, top of right panel). This separation is a result of the additional degrees of freedom provided by the cutting algorithm. This example illustrates that the finite element spaces resulting from the virtual node/cutting technique are at least as rich as the spaces resulting from Heaviside enrichment, and in some situations the cutting algorithm gives richer spaces (they have more degrees of freedom).
-
-Finally, we note that the geometric cutting algorithm used in our method was presented in \cite{sifakis:cutting}; in that work Sifakis, et al. employed a triangulated surface representation of the crack geometry. In their exposition, they adopted the simplifying assumption that the crack path will not go through a mesh vertex, or coincide with the common boundary of two face-adjacent elements. Nevertheless, the core cutting algorithm is perfectly compatible with such special cases, and this simplifying hypothesis is made only to ease certain implementation challenges related to the representation of the crack as an explicit triangulated surface. In fact, the cutting algorithm of \cite{sifakis:cutting} will accommodate any cut configuration, including those cracks that pass through mesh vertices or split elements along their boundaries, as long as the following two questions can be algorithmically answered: (a) How many pieces is a given element fragmented into? and (b) Given two element fragments originating from face-adjacent elements, do they exhibit material continuity across their common boundary?
-
-In the case where the crack surface is alternatively represented via the zero isocontour of a levelset function sampled at the nodes of the simulation mesh (or a refinement thereof), both of the questions stated above admit a straightforward algorithmic determination. Thus, if a levelset representation for cracks was employed, the cutting algorithm of \cite{sifakis:cutting} can easily accommodate cracks passing through nodes or along mesh element boundaries. In the case where the crack is provided as a triangulated geometry, the robust determination of questions (a) and (b) above is hindered by the limited accuracy of floating point arithmetic, in the same fashion that geometric algorithms such as Delaunay triangulation will need to employ delicate tie-breaking rules to tessellate point sets with certain degeneracies (e.g. collinear or collocated nodes). In our current work, we found it practical to perturb the crack path by a negligible amount to avoid it passing through mesh vertices, in lieu of a more elaborate implementation to handle these marginal cases. Naturally, if we use a levelset crack representation, no such perturbation is necessary.
-
-\begin{figure}[h]
-\begin{center}
-	\includegraphics[scale=.8]{figures/triple_cut.eps}
-	\caption{\captionsize For the mesh with crack at \textit{left}, XFEM using Heaviside enrichment (\textit{center}) gives 16 degrees of freedom; using cutting/virtual nodes (\textit{right}) gives 18 degrees of freedom. Since the material regions on the right-hand side of the crack for the top and bottom triangle do not share and edge, the cutting algorithm allows the non-material nodes for those triangles to separate.}
-	\label{fig.cutting_diff}
-\end{center}
-\end{figure}
-
 
 \section{INTEGRATION}
 \label{sec:chap1.integration}
@@ -150,7 +145,7 @@ Our quadrature rule is similar to another approach from the XFEM literature (see
 
 \subsection{Construction of the Simulation Mesh and Quadrature Mesh}
 
-We now describe the creation of our hybrid mesh in more detail, and we will use notation consistent with \cite{braess2007}. We first construct the simulation mesh by cutting the original mesh using the techniques of Section \ref{sec:chap1.cutting}. Then, using modified hat functions (as in \eqref{eqn.basis_modified}), we define our simulation finite element space $\mathcal{V}_h$ (where $h$ signifies the dependency on the discretization) as those functions $\tensorfmt{u}_h$ with the form:
+We now describe the creation of our hybrid mesh in more detail, and we will use notation consistent with \cite{braess2007}. We first construct the simulation mesh by cutting the original mesh using the techniques of Section \ref{sec:chap1.cutting}. Then, using modified hat functions (as in \eqref{eq:chap1.truncatedbasis}), we define our simulation finite element space $\mathcal{V}_h$ (where $h$ signifies the dependency on the discretization) as those functions $\tensorfmt{u}_h$ with the form:
 \begin{equation}
 \tensorfmt{u}_h(\bfx) = \sum_i \tensorfmt{u}_i \phi_i(\bfx) + \sum_k \phi_k(\bfx) \left( \sum_{\ell=1}^4 \bfc_k^\ell F_\ell(r(\bfx),\theta(\bfx)) \right),
 \label{eqn.enrich_interp}
@@ -162,7 +157,7 @@ Now, we construct the quadrature mesh. We take the original mesh and regularly r
 \tensorfmt{u}^q_h(\bfx) = \sum_i \tensorfmt{u}^q_i \phi^q_i(\bfx)
 \label{eqn.refined_fem_interp}
 \end{equation}
-where $\{ \phi^q_i \}$ are the associated nodal basis functions (multiplied by suitable characteristic functions as in \eqref{eqn.basis_modified}). We denote the degrees of freedom of $\mathcal{V}^q_h$ by $\mathcal{F}^q_h$,
+where $\{ \phi^q_i \}$ are the associated nodal basis functions (multiplied by suitable characteristic functions as in \eqref{eq:chap1.truncatedbasis}). We denote the degrees of freedom of $\mathcal{V}^q_h$ by $\mathcal{F}^q_h$,
 which is identified with $\mathbb{R}^M$, where $M$ is twice the number of nodes on the quadrature mesh. Note that we do not employ crack tip enrichment in this space, so all the degrees of freedom in $\mathcal{F}^q_h$ are identified with nodes of the quadrature mesh.
 
 We use the quadrature finite element space to integrate the gradients of the basis functions of $\mathcal{V}_h$. This is done by embedding the quadrature mesh onto the simulation mesh, through the establishment of a fixed linear relationship between the degrees of freedom $\mathcal{F}^q_h$ and $\mathcal{F}_h$ (see \cite{sifakis:bindings}). Consider $\tensorfmt{u}^q_i \in \mathcal{F}^q_h$ and the position of its corresponding mesh node $\bfx^q_i$. We define the value of $\tensorfmt{u}^q_i$ from the degrees of freedom in $\mathcal{F}_h$ using \eqref{eqn.enrich_interp} by:
@@ -176,7 +171,7 @@ The quadrature mesh node $\bfx^q_i$ does not necessarily correspond to a materia
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/bind_virtual.eps}
+	\includegraphics[scale=.6]{figures/bind_virtual}
 	\caption{\captionsize The polar angle of a virtual node in a quadrature triangle is measured accross the crack to ensure continuity of $\theta$ inside of the quadrature triangles. }
 	\label{fig.bind_virtual}
 \end{center}
@@ -204,12 +199,12 @@ This means that
 \tensorfmt{K}_h \approx \tensorfmt{W}^T \tensorfmt{K}^q_h \tensorfmt{W}.
 \]
 
-Thus our integration scheme will be integrating only an approximation of the non-smooth basis functions (see Figure \ref{fig.sampling}), but this approximation improves as we refine the embedded quadrature mesh. Note that our sampling of the singular basis functions could also occur at points near the singularity. However, unlike integration schemes based on Gauss quadrature or Monte Carlo methods, those evaluations will get additionally weighted by the area of the smaller quadrature triangle. Thus, no single value, possibly located near the singularity at the tip, contributes disproportionally. Finally, we note that for simplicity and improved stability we can further approximate the integrations in \eqref{eqn.k_transform} by treating cut quadrature triangles as if they were full of material, i.e., we remove the multiplication by the characteristic functions introduced in \eqref{eqn.basis_modified} and assemble $K_h$ over the usual nodal ``hat'' functions. Note that this optional modification naturally vanishes under refinement of the quadrature mesh, as the error in the support of the integrated shape functions goes to zero. In Section \ref{section.numerical_experiments}, our data uses the true areas of the cut quadrature triangles. We then present some comparisons of treating quadrature triangles as completely full and using the true area weights.
+Thus our integration scheme will be integrating only an approximation of the non-smooth basis functions (see Figure \ref{fig.sampling}), but this approximation improves as we refine the embedded quadrature mesh. Note that our sampling of the singular basis functions could also occur at points near the singularity. However, unlike integration schemes based on Gauss quadrature or Monte Carlo methods, those evaluations will get additionally weighted by the area of the smaller quadrature triangle. Thus, no single value, possibly located near the singularity at the tip, contributes disproportionally. Finally, we note that for simplicity and improved stability we can further approximate the integrations in \eqref{eqn.k_transform} by treating cut quadrature triangles as if they were full of material, i.e., we remove the multiplication by the characteristic functions introduced in \eqref{eq:chap1.truncatedbasis} and assemble $K_h$ over the usual nodal ``hat'' functions. Note that this optional modification naturally vanishes under refinement of the quadrature mesh, as the error in the support of the integrated shape functions goes to zero. In Section \ref{section.numerical_experiments}, our data uses the true areas of the cut quadrature triangles. We then present some comparisons of treating quadrature triangles as completely full and using the true area weights.
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.2]{figures/lowres.eps}
-	\includegraphics[scale=.2]{figures/highres.eps}
+	\includegraphics[scale=.2]{figures/lowres}
+	\includegraphics[scale=.2]{figures/highres}
 	\caption{\captionsize Tow samplings of the enrichment function $F_1 = \sqrt{r} \sin(\theta/2)$: on the \textit{left}, a sampling on a low resolution quadrature mesh, on the \textit{right}, sampling on a high resolution mesh. }
 	\label{fig.sampling}
 \end{center}
@@ -267,7 +262,7 @@ The first example involves a straight center crack in a rectangular body with a 
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.7]{figures/example1_setup.eps}
+	\includegraphics[scale=.7]{figures/example1_setup}
 	\caption{\captionsize The setup for the first numerical experiment.}
 	\label{fig.example1_setup}
 \end{center}
@@ -318,12 +313,12 @@ Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=.4]{figures/example1_1_i.eps}
-\includegraphics[scale=.4]{figures/example1_1_ii.eps}
-\includegraphics[scale=.4]{figures/example1_3_i.eps}
-\includegraphics[scale=.4]{figures/example1_3_ii.eps}
-\includegraphics[scale=.4]{figures/example1_5_i.eps}
-\includegraphics[scale=.4]{figures/example1_5_ii.eps}
+\includegraphics[scale=.4]{figures/example1_1_i}
+\includegraphics[scale=.4]{figures/example1_1_ii}
+\includegraphics[scale=.4]{figures/example1_3_i}
+\includegraphics[scale=.4]{figures/example1_3_ii}
+\includegraphics[scale=.4]{figures/example1_5_i}
+\includegraphics[scale=.4]{figures/example1_5_ii}
 \end{center}
 \caption{\captionsize Plots showing convergence of computed Mode I (\emph{left}) and Mode II (\emph{right}) SIFs for Example 1. Each row shows results for a fixed refinement of the quadrature mesh: the top row is 1 level, middle is 3 levels, bottom is 5 levels. Each plot is log/log of error versus simulation mesh resolution; the slope of the fit line is close to -1 which indicates first order convergence. }
 \label{fig.convergence_ex_a}
@@ -331,10 +326,10 @@ Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=.3]{figures/example1_1_i_cutcell.eps}
-\includegraphics[scale=.3]{figures/example1_1_ii_cutcell.eps}
-\includegraphics[scale=.3]{figures/example1_5_i_cutcell.eps}
-\includegraphics[scale=.3]{figures/example1_5_ii_cutcell.eps}
+\includegraphics[scale=.3]{figures/example1_1_i_cutcell}
+\includegraphics[scale=.3]{figures/example1_1_ii_cutcell}
+\includegraphics[scale=.3]{figures/example1_5_i_cutcell}
+\includegraphics[scale=.3]{figures/example1_5_ii_cutcell}
 \end{center}
 \caption{\captionsize Plots comparing the convergence when using true areas of cut quadrature triangles versus treating cut quadrature triangles as completely full. The data are computed Mode I (\emph{left}) and Mode II (\emph{right}) SIFs for Example 1. Each row shows results for a fixed refinement of the quadrature mesh: the top row is 1 level, bottom is 5 levels. }
 \label{fig.convergence_cut_nocut}
@@ -342,8 +337,8 @@ Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=.4]{figures/difference_cutcell_example1_i.eps}
-\includegraphics[scale=.4]{figures/difference_cutcell_example1_ii.eps}
+\includegraphics[scale=.4]{figures/difference_cutcell_example1_i}
+\includegraphics[scale=.4]{figures/difference_cutcell_example1_ii}
 \end{center}
 \caption{\captionsize Plots illustrating the difference between using true areas of cut quadrature triangles versus treating cut quadrature triangles as completely full. At \textit{left} is the difference between $K_\text{I}$ SIF for Example 1 computed with true areas versus full areas; the abscissa corresponds to the levels of quadrature refinement. On \textit{right} is $K_\text{II}$ SIF. Both are computed on 64x32 simulation mesh, the difference decreases with increased quadrature mesh refinement.  }
 \label{fig.diff_cut_nocut}
@@ -356,7 +351,7 @@ The second example involved the same geometry as the first example, namely a str
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.7]{figures/example2_setup.eps}
+	\includegraphics[scale=.7]{figures/example2_setup}
 	\caption{\captionsize The setup for the second numerical experiment.}
 	\label{fig.example2_setup}
 \end{center}
@@ -398,12 +393,12 @@ Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=.4]{figures/example2_1_i.eps}
-\includegraphics[scale=.4]{figures/example2_1_ii.eps}
-\includegraphics[scale=.4]{figures/example2_3_i.eps}
-\includegraphics[scale=.4]{figures/example2_3_ii.eps}
-\includegraphics[scale=.4]{figures/example2_5_i.eps}
-\includegraphics[scale=.4]{figures/example2_5_ii.eps}
+\includegraphics[scale=.4]{figures/example2_1_i}
+\includegraphics[scale=.4]{figures/example2_1_ii}
+\includegraphics[scale=.4]{figures/example2_3_i}
+\includegraphics[scale=.4]{figures/example2_3_ii}
+\includegraphics[scale=.4]{figures/example2_5_i}
+\includegraphics[scale=.4]{figures/example2_5_ii}
 \end{center}
 \caption{\captionsize Plots showing convergence of computed Mode I (\emph{left}) and Mode II (\emph{right}) SIFs for Example 2. Each row shows results for a fixed refinement of the quadrature mesh: the top row is 1 level, middle is 3 levels, bottom is 5 levels. }
 \label{fig.convergence_ex_b}
@@ -422,7 +417,7 @@ K_{\text{II}} = \sigma \sqrt{\pi a} \sin(\beta)\cos(\beta).
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.7]{figures/example3_setup.eps}
+	\includegraphics[scale=.7]{figures/example3_setup}
 	\caption{\captionsize The setup for the angled center crack numerical experiment.}
 	\label{fig.example3_setup}
 \end{center}
@@ -432,7 +427,7 @@ We computed the stress intensity factors as $\beta$ ranges from $0$ to $\pi/2$ i
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.7]{figures/angle_64_data.eps}
+	\includegraphics[scale=.7]{figures/angle_64_data}
 	\caption{\captionsize Results for angled crack example: The top row compares percentage error in computed $K_\text{I}$ SIF (\emph{left}) and computed $K_\text{II}$ SIF (\emph{right}) for 0 levels of quadrature refinement (\emph{blue squares}) and 5 levels (\emph{orange diamonds}). The bottom row presents the same data for 0 level vs 1 level. Note that much of the accuracy achieved with a very fine quadrature mesh (5 levels) can be gained by using only 1 level of refinement in the quadrature mesh. }
 	\label{fig.example3_results}
 \end{center}
@@ -445,7 +440,7 @@ In Figures \ref{fig.straight_frames}, \ref{fig.cantilever_paths}, \ref{fig.two_h
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/straight_frames.eps}
+	\includegraphics[scale=.6]{figures/straight_frames}
 	\caption{\captionsize Simulation of a rectangular domain with symmetric boundary displacements; from \emph{upper left}: initial configuration, 5 timesteps, 10 timesteps, 15 timesteps.}
 	\label{fig.straight_frames}
 \end{center}
@@ -455,7 +450,7 @@ Our next propagation example involves the quasistatic propagation of a crack in 
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=1]{figures/cantilever_setup.eps}
+	\includegraphics[scale=1]{figures/cantilever_setup}
 	\caption{\captionsize The setup used to show crack propagation in a beam for various values of the initial perturbation angle $\theta$.}
 	\label{fig.cantilever_setup}
 \end{center}
@@ -463,7 +458,7 @@ Our next propagation example involves the quasistatic propagation of a crack in 
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/cantilever_paths.eps}
+	\includegraphics[scale=.6]{figures/cantilever_paths}
 	\caption{\captionsize The results of cantilever beam propagation; the position of the crack tip at each timestep is plotted using blue triangles for $\theta = 1.43^{\circ}$, orange squares for $\theta = 2.86^{\circ}$, and yellow triangles for $\theta = 5.71^{\circ}$.}
 	\label{fig.cantilever_paths}
 \end{center}
@@ -475,7 +470,7 @@ For this example (and a later propagation example), we use the cutting algorithm
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/two_holes_frames.eps}
+	\includegraphics[scale=.6]{figures/two_holes_frames}
 	\caption{\captionsize Cracks propagating in a domain with holes; \emph{top row}: initial configuration on \emph{left} and a zoom into the 
 holes on \emph{right}; \emph{bottom row}: analagous diagrams for result after 20 timesteps.}
 	\label{fig.two_holes_frames}
@@ -486,7 +481,7 @@ In Figure \ref{fig.bean_frames} we further complicate the geometry of the domain
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.8]{figures/bean_embedding.eps}
+	\includegraphics[scale=.8]{figures/bean_embedding}
 	\caption{\captionsize  An illustration of using the cutting algorithm to mesh our domain. A square containing the domain is triangulated (shown \textit{at left}), and the cutting algorithm is run with the boundary of the domain as input. This results in two disconnected meshes, one corresponds to the interior of the domain (shown \textit{at right}) and the other is the exterior. }
 	\label{fig.bean_embedding}
 \end{center}
@@ -494,7 +489,7 @@ In Figure \ref{fig.bean_frames} we further complicate the geometry of the domain
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/bean_frames.eps}
+	\includegraphics[scale=.6]{figures/bean_frames}
 	\caption{\captionsize Simulation with complex geometry; from \emph{upper left}: initial configuration, 5 timesteps, 15 timesteps, 25 timesteps.}
 	\label{fig.bean_frames}
 \end{center}
@@ -505,7 +500,7 @@ In Figure \ref{fig.bean_frames} we further complicate the geometry of the domain
 \section{CONCLUDING REMARKS}
 \label{section.concluding_remarks}
 
-We presented an XFEM-based method for the simulation of crack propagation. This method uses virtual nodes generated by the cutting algorithm of Sifakis, et.al., \cite{sifakis:cutting} to create the extra degrees of freedom that allow the crack to open, in a way that is general and flexible. Our technique gives accurate stress intensity factors, which we use to propagate the crack. Our discretization and simulation approach can accomodate complex crack and domain geometry. We illustrated the accuracy of our method by comparison with  results from the literature, and showed the geometric flexibity with propagation examples in complicated domains.
+We presented an XFEM-based method for the simulation of crack propagation. This method uses virtual nodes generated by the cutting algorithm of Sifakis, et.al., \cite{Sifakis07} to create the extra degrees of freedom that allow the crack to open, in a way that is general and flexible. Our technique gives accurate stress intensity factors, which we use to propagate the crack. Our discretization and simulation approach can accomodate complex crack and domain geometry. We illustrated the accuracy of our method by comparison with  results from the literature, and showed the geometric flexibity with propagation examples in complicated domains.
 
 \begin{center}
 ACKNOWLEDGEMENTS
