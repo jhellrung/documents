@@ -193,236 +193,220 @@ Ultimately, our integration scheme utilizes an approximation (indeed, a projecti
 
 \section{Crack Propagation} \label{sec:chap1.propagation}
 
-For a fixed state of the system, i.e., a given crack and an equilibrium displacement for that crack and boundary conditions, there are several different criteria used by engineers to determine the angle at which the crack will propagate. We follow \cite{Moes99} in using the maximum circumferential stress criterion to compute the propagation direction and then move the crack by a small fixed increment. We chose this approach so that the results of using our integration technique can be compared against the tests cases in \cite{Moes99}. This method is fairly standard and the details are found in the references, so we only sketch it here.
+For a fixed state of the system (a given crack and boundary conditions and associated equilibrium displacement), engineers use several different criteria to determine the angle at which the crack should propagate. We follow Mo\"{e}s et al. \cite{Moes99} in using the maximum circumferential stress criterion to compute the propagation direction and then move the crack by a small fixed increment. We choose this approach so that the results of using our integration technique can be compared against the test cases in \cite{Moes99}. This method is fairly standard and the details are found in the references, so we only sketch it here.
 
-\begin{comment}
-
-The criterion involves computing the stress intensity factors at the crack tip, and then calculating the angle of maximal stress
-by the relation:
-\begin{eqnarray}
-	\theta_c = 2 \arctan \left( \frac{1}{4} \left[ \frac{K_\text{I}}{K_{\text{II}}}\pm \sqrt{ \left( \frac{K_\text{I}}{K_{\text{II}}} \right)^2 + 8} \right] \right).
-\end{eqnarray}
-To compute the stress intensity factors, we use the so called interaction J-integral, which is defined for two possible states of the system, whose variables we denote using superscript 1 and 2, by:
-\begin{eqnarray}
-\label{eq:contour_interaction_integral}
-	I^{(1,2)} := \int_{\Gamma} \left( W^{(1,2)} \delta_{1j} - \Big[ \sigma_{ij}^{(1)} \frac{\partial u_i^{(2)}}{\partial x_1} + \sigma_{ij}^{(2)} \frac{\partial u_i^{(1)}}{\partial x_1} \Big] \right) n_j ds
-\end{eqnarray}
-where
-\begin{eqnarray}
-	W^{(1,2)} & := & \sigma_{ij}^{(1)} \epsilon_{ij}^{(2)}.
-\end{eqnarray}
-Choosing the two states to be the current state and a pure Mode I state in the above gives $K_\text{I}$:
-\begin{eqnarray}
-	 K_{\text{I}} &=& \frac{E^*}{2}I^{(\text{Curr},\text{Mode I})},
-\end{eqnarray}
-where
-\begin{equation}
-	E^* = 
-	\left\{
-	\begin{aligned}
-		&\frac{E}{1 - \nu^2} &\text{plane strain} \\
-		&E &\text{plane stress},
-	\end{aligned}
-	\right.
+The criterion involves computing the stress intensity factors at the crack tip, and then calculating the angle of maximal stress via
+\begin{equation*}
+\theta_c := 2 \arctan \lrp{\frac{1}{4} \lrp{\frac{K_{\text{I}}}{K_{\text{II}}} \pm \sqrt{\lrp{\frac{K_{\text{I}}}{K_{\text{II}}}}^2 + 8}}}.
+\end{equation*}
+We compute the stress intensity factors using the so-called interaction J-integral, which is defined for two possible states of the system, which we denote using superscripts $1$ and $2$:
+\begin{equation} \label{eq:chap1.Jintegral}
+I^{(1,2)} := \int_{\Gamma} \lrp{W^{(1,2)} \delta_{1j} - \lrp{\sigma_{ij}^{(1)} u_{i,1}^{(2)} + \sigma_{ij}^{(2)} u_{i,1}^{(1)}}} n_j d\bfS
 \end{equation}
-and $E$ is Young's modulus and $\nu$ is Poisson's ratio. $K_{\text{II}}$ is found similarly. As in \cite{Moes99}, to actually compute these interaction integrals requires converting them into area intregrals via multiplication by a suitably smooth test function and applying integration by parts.
+where
+\begin{equation*}
+W^{(1,2)} := \sigma_{ij}^{(1)} \epsilon_{ij}^{(2)}.
+\end{equation*}
+Choosing the two states to be the current state and a pure Mode I state in the above gives $K_{\text{I}}$:
+\begin{equation*}
+K_{\text{I}} := \frac{1}{2} E^* I^{(\text{current}, \text{Mode I})},
+\end{equation*}
+where
+\begin{equation*}
+E^* = \begin{cases} {\displaystyle \frac{E}{1 - \nu^2}}, & \text{plane strain} \\ E, & \text{plane stress} \end{cases},
+\end{equation*}
+and $E$ is Young's modulus and $\nu$ is Poisson's ratio. $K_{\text{II}}$ is found using a similar relation but with a pure Mode II state. As in \cite{Moes99}, we compute these interaction integrals by converting them into area intregrals via multiplication by a suitably smooth test function and applying integration by parts. We then compute the resulting area integral on the quadrature mesh described in \S\ref{sec:chap1.integration}. Having used finite elements to compute the displacement, the stresses and strains for the current state of the system are piecewise affine on the quadrature mesh. We then interpolate the displacements, strains, and stresses for the pure Mode I and pure Mode II solutions used to compute \eqref{eq:chap1.Jintegral} using functions in the space $\bfV_q^h$. The required integrations are then simple to compute, since all the quantities in \eqref{eq:chap1.Jintegral} are piecewise affine. 
 
-The resulting area integral is then computed on the embedded quadrature mesh described in Section \ref{sec:chap1.integration}. Having used finite elements to compute the displacement, the stresses and strains for the current state of the system are piecewise affine on the embedded mesh. We then interpolate the displacements, strains, and stresses for the pure Mode I and pure Mode II solutions used to compute \eqref{eq:contour_interaction_integral} using functions in the space $\mathcal{M}_h$. The required integrations are then simple to compute, since all the quantities in \eqref{eq:contour_interaction_integral} are piecewise affine. 
-
-
-\section{NUMERICAL EXPERIMENTS}
-\label{sec:chap1.examples}
+\section{Numerical Examples and Experiments} \label{sec:chap1.examples}
 
 We tested our approach with some examples from the literature 
-(see \cite{Belytschko99}, \cite{Moes99}). First, we chose these examples because the exact stress intensity factors (or good approximations) can be calculated analytically for comparision, and also we can compare our results to the literature.
-As discussed in Section \ref{sec:chap1.integration}, we note that our data was produced by integrating over the material areas of the cut quadrature triangles. For Example 1 below, we also present some comparisions of using the true material areas and treating quadrature triangles as full of material. As in \cite{Moes99}, all of our examples use Young's modulus of $10^5$ and Poisson ratio of $.3$. For our propagation examples, we chose a fracture toughness of $1$.
+(\cite{Belytschko99} and \cite{Moes99}). We chose these examples because the exact stress intensity factors (or good approximations) can be calculated analytically for comparision; we also compare our results to the literature.
 
-\subsection{ Example 1: Straight Crack with Pure Mode I Displacement }
-The first example involves a straight center crack in a rectangular body with a constant traction applied to part of the boundary of the body, as diagrammed in Figure \ref{fig.example1_setup} (as in \cite{Moes99} we use $L=16$, $W=7$, $a=3.5$, $\epsilon=100$[kpsi] and $\nu=.3$).
+As discussed in Section \ref{sec:chap1.integration}, we computed our approximate solutions by integrating over just the material regions of cut quadrature triangles. For Example 1 below, we also compare this with integrating over the entire area of cut quadrature triangles.
 
-\begin{figure}[h]
-\begin{center}
-	\includegraphics[scale=.7]{figures/example1_setup}
-	\caption{\captionsize The setup for the first numerical experiment.}
-	\label{fig.example1_setup}
-\end{center}
+As in \cite{Moes99}, all of our examples use a Young's modulus of $E := 10^5$ and Poisson's ratio of $\nu := 0.3$. For our propagation examples, we chose a fracture toughness of $1$.
+
+\subsection{Example 1: Straight Crack with Pure Mode I Displacement}
+
+Example 1 involves a straight center crack in a rectangular body with a constant traction applied to part of the boundary of the body; see Figure~\ref{fig:chap1.example1.setup} (as in \cite{Moes99}, we use $L := 16$, $W: = 7$, $a := 3.5$, $\epsilon := 100 [\text{kpsi}]$ and $\nu := 0.3$).
+
+\setlength{\figurewidth}{0.20\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_setup}
+\caption{The setup for Example 1.}
+\label{fig:chap1.example1.setup}
 \end{figure}
 
 In this case, the exact Mode I stress intensity factor is given by
-\[
-K_\text{I} = C \sigma \sqrt{a \pi},
-\]
-where $C$ is the finite geometry correction factor:
-\[
-C = 1.12 - 0.231 \left( \frac{a}{W} \right) + 10.55 \left( \frac{a}{W} \right)^2 - 21.72 \left( \frac{a}{W} \right)^3 + 30.39 \left( \frac{a}{W} \right)^4.
-\]
-We normalize $K_\text{I}$ through an appropriate choice of $\sigma$, and compare our results over various combinations of granularity of the simulation mesh and refinement levels of the quadrature mesh. The results of this study are found in Table \ref{fig.results_ex_a}: each column represents a different resolution for the simulation mesh, and data is presented for different levels of regular refinement near the crack ($0-5$ levels). Note that the computed intensity factors improve as the simulation mesh is refined, as expected, but also we are able to get good results for coarser simulation meshes by refining the quadrature mesh (of course, up to a limit that is determined by the simulation resolution). Also, increasing the refinement levels of the quadrature mesh roughly matches the results for increases in resolution of the simulation mesh, and that accuracy is acheived at less cost since refining the quadrature mesh does not add new degrees of freedom to the system. Figure \ref{fig.convergence_ex_a}, illustrates the results of three convergence studies for this example (one, three, and five levels of quadrature refinement). These plots clearly show first order convergence with refinement of the simulation mesh. Finally, Figures \ref{fig.convergence_cut_nocut} and \ref{fig.diff_cut_nocut} compare the use of the true material areas in the quadrature against treating the quadrature triangles as completely full. First, both of these approaches give linear convergence, with slightly different constants. Second, the difference between those two methods goes to zero under refinement of the quadrature mesh (keeping the simulation mesh at a fixed resolution).
+\begin{equation*}
+K_{\text{I}} = C \sigma \sqrt{a \pi},
+\end{equation*}
+where $C$ is a finite geometry correction factor:
+\begin{equation*}
+C := 1.12 - 0.231 \lrp{\frac{a}{W}} + 10.55 \lrp{\frac{a}{W}}^2 - 21.72 \lrp{\frac{a}{W}}^3 + 30.39 \lrp{\frac{a}{W}}^4.
+\end{equation*}
+We normalize $K_{\text{I}}$ through an appropriate choice of $\sigma$ and compare our results over various combinations of granularity of the simulation mesh and refinement level of the quadrature mesh. Table~\ref{tab:chap1.example1.results} contains the results of this study. The resolution of the simulation mesh varies over the columns while the refinement level of the quadrature mesh varies over the rows. Note that the numerical stress intensity factors improve as the simulation mesh is refined, as expected, but we also get good results by pairing a coarse simulation mesh with a relatively refined quadrature mesh (of course, only up to a limit that is determined by the simulation resolution). Also, increasing the refinement level of the quadrature mesh has roughly the same effect as increasing the resolution of the simulation mesh, and that accuracy improvement is acheived at a lower computational cost since refining the quadrature mesh does not add new degrees of freedom to the system. Figure~\ref{fig:chap1.example1.convergence} illustrates the results of three convergence tests for this example (using $1$, $3$, and $5$ levels of quadrature mesh refinement). These plots clearly show first order convergence respect to the simulation mesh resolution. Finally, Figures~\ref{fig:chap1.cut_nocut.convergence} and \ref{fig:chap1.cut_nocut.diff} compare the use of respecting the actual material regions in the quadrature against treating the quadrature triangles as completely full. Both of these approaches give linear convergence, with slightly different constants. Further, the difference between those two methods goes to zero under refinement of the quadrature mesh (keeping the resolution of the simulation mesh fixed).
 
-\begin{table}[h]
-\tiny
-\begin{center}
-\begin{tabular}{cc}
-      \begin{tabular}{|ccccc|}
-              \multicolumn{5}{c}{$K_{\text{I}}$}\\
-              \hline
-Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
-0 & 7.25207	& 3.02688 & 1.68144 & 1.22950 \\ \hline
-1 & 0.87748	& 0.93603 & 0.96710	& 0.98310  \\ \hline
-2 & 0.90933	& 0.95357 & 0.97632	& 0.98783 \\ \hline
-3 & 0.92324	& 0.96132 & 0.98039	& 0.98991  \\ \hline
-4 & 0.93210	& 0.96621 & 0.98296	& 0.99122  \\ \hline
-5 & 0.93858 & 0.96979 & 0.98482 & 0.99217  \\ \hline
-	\end{tabular}
-&
-	\begin{tabular}{|ccccc|}
-              \multicolumn{5}{c}{$K_{\text{II}}$}\\
-              \hline
-Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
-0 &17.22220	& 5.78543  & 2.01135 & 0.70673 \\ \hline
-1 &-0.00252	&-0.00117  &-0.00068 &-0.00037  \\ \hline
-2 & 0.00003 & 0.000004 &-0.00010 &-0.00008  \\ \hline
-3 &-0.00210 &-0.00091  &-0.00052 &-0.00028 \\ \hline
-4 &-0.00245 &-0.00107  &-0.00059 &-0.00031  \\ \hline
-5 &-0.00267 &-0.00117  &-0.00063 &-0.00034 \\ \hline
-      \end{tabular}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{c|c|.@{}.@{}.@{}.|}
+\cline{2-6}
+& Levels
+& \multicolumn{1}{r}{$64\times32$}
+& \multicolumn{1}{r}{$128\times64$}
+& \multicolumn{1}{r}{$256\times128$}
+& \multicolumn{1}{r|}{$512\times256$} \\
+\cline{2-6}
+\multirow{6}{*}{$K_{\text{I}}$}
+& 0 & 7.25207 & 3.02688 & 1.68144 & 1.22950 \\
+& 1 & 0.87748 & 0.93603 & 0.96710 & 0.98310 \\
+& 2 & 0.90933 & 0.95357 & 0.97632 & 0.98783 \\
+& 3 & 0.92324 & 0.96132 & 0.98039 & 0.98991 \\
+& 4 & 0.93210 & 0.96621 & 0.98296 & 0.99122 \\
+& 5 & 0.93858 & 0.96979 & 0.98482 & 0.99217 \\
+\cline{2-6}
+\multirow{6}{*}{$K_{\text{II}}$}
+& 0 & 17.22220 & 5.78543  &  2.01135 &  0.70673 \\
+& 1 & -0.00252 & -0.00117 & -0.00068 & -0.00037 \\
+& 2 &  0.00003 &  0.000004& -0.00010 & -0.00008 \\
+& 3 & -0.00210 & -0.00091 & -0.00052 & -0.00028 \\
+& 4 & -0.00245 & -0.00107 & -0.00059 & -0.00031 \\
+& 5 & -0.00267 & -0.00117 & -0.00063 & -0.00034 \\
+\cline{2-6}
 \end{tabular}
-\caption{\captionsize Results for first numerical example; analytical result is $K_{\text{I}}=1$, $K_{\text{II}}=0$.}
-\label{fig.results_ex_a}
-\end{center}
+\caption{Results for Example 1. Theory gives $K_{\text{I}} = 1$, $K_{\text{II}} = 0$. ``Levels'' refers to the refinement level of the quadrature mesh.}
+\label{tab:chap1.example1.results}
 \end{table}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=.4]{figures/example1_1_i}
-\includegraphics[scale=.4]{figures/example1_1_ii}
-\includegraphics[scale=.4]{figures/example1_3_i}
-\includegraphics[scale=.4]{figures/example1_3_ii}
-\includegraphics[scale=.4]{figures/example1_5_i}
-\includegraphics[scale=.4]{figures/example1_5_ii}
-\end{center}
-\caption{\captionsize Plots showing convergence of computed Mode I (\emph{left}) and Mode II (\emph{right}) SIFs for Example 1. Each row shows results for a fixed refinement of the quadrature mesh: the top row is 1 level, middle is 3 levels, bottom is 5 levels. Each plot is log/log of error versus simulation mesh resolution; the slope of the fit line is close to -1 which indicates first order convergence. }
-\label{fig.convergence_ex_a}
+\setlength{\figurewidth}{0.49\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_1_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_1_ii} \\
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_3_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_3_ii} \\
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_5_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_5_ii}
+\caption{Log-log convergence plots of the errors in $K_{\text{I}}$ (left) and $K_{\text{II}}$ (right) for Example 1. Each row corresponds to a fixed refinement level of the quadrature mesh: $1$ level (top), $3$ levels (center), and $5$ levels (bottom). All the linear regressions fit to the plots have slopes close to $-1$, incidating first order convergence.}
+\label{fig:chap1.example1.convergence}
 \end{figure}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=.3]{figures/example1_1_i_cutcell}
-\includegraphics[scale=.3]{figures/example1_1_ii_cutcell}
-\includegraphics[scale=.3]{figures/example1_5_i_cutcell}
-\includegraphics[scale=.3]{figures/example1_5_ii_cutcell}
-\end{center}
-\caption{\captionsize Plots comparing the convergence when using true areas of cut quadrature triangles versus treating cut quadrature triangles as completely full. The data are computed Mode I (\emph{left}) and Mode II (\emph{right}) SIFs for Example 1. Each row shows results for a fixed refinement of the quadrature mesh: the top row is 1 level, bottom is 5 levels. }
-\label{fig.convergence_cut_nocut}
+\setlength{\figurewidth}{0.49\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_1_i_cutcell}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_1_ii_cutcell} \\
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_5_i_cutcell}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example1_5_ii_cutcell}
+\caption{Log-log convergence plots of the errors in $K_{\text{I}}$ (left) and $K_{\text{II}}$ (right) for Example 1. Each row corresponds to a fixed refinement level of the quadrature mesh: $1$ level (top) and $5$ levels (bottom). Each plot compares respecting the material region within a cut quadrature triangle during integration against treating the quadrature triangle as completely full. The results indicate first order convergence regardless of the method.}
+\label{fig:chap1.cut_nocut.convergence}
 \end{figure}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=.4]{figures/difference_cutcell_example1_i}
-\includegraphics[scale=.4]{figures/difference_cutcell_example1_ii}
-\end{center}
-\caption{\captionsize Plots illustrating the difference between using true areas of cut quadrature triangles versus treating cut quadrature triangles as completely full. At \textit{left} is the difference between $K_\text{I}$ SIF for Example 1 computed with true areas versus full areas; the abscissa corresponds to the levels of quadrature refinement. On \textit{right} is $K_\text{II}$ SIF. Both are computed on 64x32 simulation mesh, the difference decreases with increased quadrature mesh refinement.  }
-\label{fig.diff_cut_nocut}
+\setlength{\figurewidth}{0.49\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/difference_cutcell_example1_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/difference_cutcell_example1_ii}
+\caption{Plots illustrating the difference betwen respecting the material region within a cut quadrature triangle during integration against treating the quadrature triangle as completely full. We show the differences between $K_{\text{I}}$ (left) and $K_{\text{II}}$ (right) as we vary the quadrature mesh refinement level on a $64 \times 32$ resolution simulation mesh.}
+\label{fig:chap1.cut_nocut.diff}
 \end{figure}
 
-\subsection{ Example 2: Straight Crack with Constant Shear Displacement }
+\subsection{Example 2: Straight Crack with Constant Shear Displacement}
 
-The second example involved the same geometry as the first example, namely a straight edge crack, but we applied a zero displacement condition to one end and a constant shear (with respect to the crack frame) to the other end
-(see the diagram in Figure \ref{fig.example2_setup}). In this case, the stress intensity factors are known (see \cite{Moes99}): $K_\text{I}=34.0$[psi$\sqrt{\mbox{in}}$] and $K_\text{II}=4.55 [$psi$\sqrt{\mbox{in}}$]. Again, we compared our results when varying the refinement of both the simulation and quadrature meshes, with results summarized in Table \ref{fig.results_ex_b}. We performed the same refinement studies as in Example 1, the results are presented in Figure \ref{fig.convergence_ex_b}.
+Example 2 uses the same geometric configuration as Example 1, but this time we apply a zero displacement Dirichlet boundary condition to one end of the domain and a constant shear (with respect to the crack frame) Neumann boundary condition to the other end; see Figure~\ref{fig:chap1.example2.setup}. The stress intensity factors are known (see \cite{Moes99}): $K_{\text{I}} = 34.0 \, [\text{psi}\sqrt{\text{in}}]$ and $K_{\text{II}} = 4.55 [\text{psi}\sqrt{\text{in}}]$. As for Example 1, we vary both the resolution of the simulation mesh and the refinement level of the quadrature mesh, with the results summarized in Table~\ref{tab:chap1.example2.results} and convergence plots in Figure~\ref{fig:chap1.example2.convergence}.
 
-\begin{figure}[h]
-\begin{center}
-	\includegraphics[scale=.7]{figures/example2_setup}
-	\caption{\captionsize The setup for the second numerical experiment.}
-	\label{fig.example2_setup}
-\end{center}
+\setlength{\figurewidth}{0.20\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_setup}
+\caption{The setup for Example 2.}
+\label{fig:chap1.example2.setup}
 \end{figure}
 
-
-\begin{table}[h]
-\tiny
-\begin{center}
-\begin{tabular}{cc}
-      \begin{tabular}{|ccccc|}
-              \multicolumn{5}{c}{$K_{\text{I}}$}\\
-              \hline
-Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
-0 & 27.53640	& 30.42170  & 32.13890 & 33.06540 \\ \hline
-1 & 29.62800	& 31.79550 & 32.90860	&  33.47320 \\ \hline
-2 & 30.72490	& 32.40350 & 33.22860	&  33.63730 \\ \hline
-3 & 31.21530	& 32.67390 & 33.37000	& 33.70950  \\ \hline
-4 & 31.51230	& 32.83990 & 33.45720	& 33.75420  \\ \hline
-5 & 31.73140	& 32.96180 & 33.52120 & 33.78710  \\ \hline
-	\end{tabular}
-&
-	\begin{tabular}{|ccccc|}
-              \multicolumn{5}{c}{$K_{\text{II}}$}\\
-              \hline
-Levels & 64x32 & 128x64 & 256x128 & 512x256 \\ \hline
-0 & 7.81139	& 5.55605 & 4.86779 & 4.64271  \\ \hline
-1 & 4.36623	& 4.46139 & 4.49335 & 4.51208 \\ \hline
-2 & 4.40807 & 4.49142 & 4.51380 & 4.52418 \\ \hline
-3 & 4.34959 & 4.46972 & 4.50476 & 4.52010 \\ \hline
-4 & 4.34610 & 4.46936 & 4.50504 & 4.52036 \\ \hline
-5 & 4.34312 & 4.46894 & 4.50513 & 4.52048 \\ \hline
-      \end{tabular}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{c|c|.@{}.@{}.@{}.|}
+\cline{2-6}
+& Levels
+& \multicolumn{1}{r}{$64\times32$}
+& \multicolumn{1}{r}{$128\times64$}
+& \multicolumn{1}{r}{$256\times128$}
+& \multicolumn{1}{r|}{$512\times256$} \\
+\cline{2-6}
+\multirow{6}{*}{$K_{\text{I}}$}
+& 0 & 27.53640 & 30.42170 & 32.13890 & 33.06540 \\
+& 1 & 29.62800 & 31.79550 & 32.90860 & 33.47320 \\
+& 2 & 30.72490 & 32.40350 & 33.22860 & 33.63730 \\
+& 3 & 31.21530 & 32.67390 & 33.37000 & 33.70950 \\
+& 4 & 31.51230 & 32.83990 & 33.45720 & 33.75420 \\
+& 5 & 31.73140 & 32.96180 & 33.52120 & 33.78710 \\
+\cline{2-6}
+\multirow{6}{*}{$K_{\text{II}}$}
+& 0 & 7.81139 & 5.55605 & 4.86779 & 4.64271 \\
+& 1 & 4.36623 & 4.46139 & 4.49335 & 4.51208 \\
+& 2 & 4.40807 & 4.49142 & 4.51380 & 4.52418 \\
+& 3 & 4.34959 & 4.46972 & 4.50476 & 4.52010 \\
+& 4 & 4.34610 & 4.46936 & 4.50504 & 4.52036 \\
+& 5 & 4.34312 & 4.46894 & 4.50513 & 4.52048 \\
+\cline{2-6}
 \end{tabular}
-\caption{\captionsize Results for second numerical example; analytical result is $K_{\text{I}}=34.0$, $K_{\text{II}}=4.55$. Note that most of the benefits of refinement of the quadrature mesh are realized after only two to three levels of refinement (infinite refinement would correspond to exact quadrature during assembly). Each plot is log/log of error versus simulation mesh resolution; the slope of the fit line is close to -1 which indicates first order convergence. }
-\label{fig.results_ex_b}
-\end{center}
+\caption{Results for Example 2. Theory gives $K_{\text{I}} = 34.0$, $K_{\text{II}} = 4.55$. ``Levels'' refers to the refinement level of the quadrature mesh. Note that most of the benefits of the quadrature mesh are realized after only $2$ or $3$ levels of refinement; beyond that the approximation error from the simulation finite element space dominates the integration error from utilizing the quadrature mesh.}
+\label{tab:chap1.example2.results}
 \end{table}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=.4]{figures/example2_1_i}
-\includegraphics[scale=.4]{figures/example2_1_ii}
-\includegraphics[scale=.4]{figures/example2_3_i}
-\includegraphics[scale=.4]{figures/example2_3_ii}
-\includegraphics[scale=.4]{figures/example2_5_i}
-\includegraphics[scale=.4]{figures/example2_5_ii}
-\end{center}
-\caption{\captionsize Plots showing convergence of computed Mode I (\emph{left}) and Mode II (\emph{right}) SIFs for Example 2. Each row shows results for a fixed refinement of the quadrature mesh: the top row is 1 level, middle is 3 levels, bottom is 5 levels. }
-\label{fig.convergence_ex_b}
+\setlength{\figurewidth}{0.49\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_1_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_1_ii} \\
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_3_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_3_ii} \\
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_5_i}
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example2_5_ii}
+\caption{Log-log convergence plots of the errors in $K_{\text{I}}$ (left) and $K_{\text{II}}$ (right) for Example 2. Each row corresponds to a fixed refinement level of the quadrature mesh: $1$ level (top), $3$ levels (center), and $5$ levels (bottom). All the linear regressions fit to the plots have slopes very close to $-1$, incidating first order convergence.}
+\label{fig:chap1.example2.convergence}
 \end{figure}
 
-\subsection{ Angled Center Crack with Mixed Mode Displacement }
+\subsection{Example 3: Angled Center Crack with Mixed Mode Displacement}
 
-Following the example in Section 4.3 of \cite{Moes99}, we compute the stress intensity factors for a plate with 
-an angled center crack and subjected to a far field constant traction, as pictured in Figure \ref{fig.example3_setup}. The dimensions of the square plate are taken to be $W = 10$[in] and the crack length is set by $a=.5$[in]. Since the crack size is small compared to the dimensions of the plate, the stress intensity factors can be approximated by the intensity factors corresponding to the solution in the entire plane, which are given by
-\[
-K_{\text{I}} = \sigma \sqrt{\pi a} \cos^2(\beta),
-\]
-\[
-K_{\text{II}} = \sigma \sqrt{\pi a} \sin(\beta)\cos(\beta).
-\]
+We borrow the example in Section 4.3 of \cite{Moes99} for Example 3. The domain is a square plate with an angled center crack which is subjected to a far field constant traction; see Figure~\ref{fig:chap1.example3.setup}. We use the parameters $W = 10 [\text{in}]$ and $a = 0.5 [\text{in}]$. Since the crack size is small and far removed from the plate boundaries, the stress intensity factors may be approximated as if the domain were the entire plane, which gives
+\begin{subequations} \label{eq:chap1.example3.K}
+\begin{align}
+K_{\text{I}} & = \sigma  \sqrt{\pi a} \cos^2 \beta, \\
+K_{\text{II}} & = \sigma \sqrt{\pi a} \sin \beta \cos \beta.
+\end{align}
+\end{subequations}
 
-\begin{figure}[h]
-\begin{center}
-	\includegraphics[scale=.7]{figures/example3_setup}
-	\caption{\captionsize The setup for the angled center crack numerical experiment.}
-	\label{fig.example3_setup}
-\end{center}
+\setlength{\figurewidth}{0.20\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/example3_setup}
+\caption{The setup for Example 3.}
+\label{fig:chap1.example3.setup}
 \end{figure}
 
-We computed the stress intensity factors as $\beta$ ranges from $0$ to $\pi/2$ in increments of $\pi/20$. We used a simulation mesh with resolution of $64$x$64$ elements, and varied the levels of refinement for the quadrature mesh. We illustrate in Figure \ref{fig.example3_results} the results of a comparison between the ``exact'' $K_{\text{I}}$ and $K_{\text{II}}$ for the various values of $\beta$ (plotted using blue squares and orange diamonds, respectively) and the computed values (yellow triangles for computed $K_{\text{I}}$ and green triangles for $K_{\text{II}}$). On the left of the figure, we plot the results for one level of refinement in the quadrature mesh; on the right of the figure we plot the results for five levels of refinement. While one level of refinement gives decent agreement with the exact values, as we refine the quadrature mesh the agreement with the exact values becomes much stronger (and is comparable to the results of \cite{Moes99}).
+We computed the stress intensity factors as $\beta$ ranged from $0$ to $\pi/2$ in increments of $\pi/20$. We used a simulation mesh with a resolution of $64 \times 64$ together with a variety of refinement levels in the quadrature mesh. Figure~\ref{fig:chap1.example3.results} shows the relative error in the numerically computed stress intensity factors compared to the approximations \eqref{eq:chap1.example3.K}. Our results are comparable to \cite{Moes99}.
 
-\begin{figure}[h]
-\begin{center}
-	\includegraphics[scale=.7]{figures/angle_64_data}
-	\caption{\captionsize Results for angled crack example: The top row compares percentage error in computed $K_\text{I}$ SIF (\emph{left}) and computed $K_\text{II}$ SIF (\emph{right}) for 0 levels of quadrature refinement (\emph{blue squares}) and 5 levels (\emph{orange diamonds}). The bottom row presents the same data for 0 level vs 1 level. Note that much of the accuracy achieved with a very fine quadrature mesh (5 levels) can be gained by using only 1 level of refinement in the quadrature mesh. }
-	\label{fig.example3_results}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/angle_64_data}
+\caption{Results for Example 3. The top row compares the relative errors in $K_{\text{I}}$ (left) and $K_{\text{II}}$ (right) for $0$ levels of quadrature mesh refinement (blue squares) and $5$ levels of quadrature mesh refinement (orange diamonds). The bottom row compares $0$ levels of refinement to just $1$ level of refinement. Note that much of the accuracy improvement achieved with a very fine quadrature mesh ($5$ levels of refinement) is already present at only $1$ level of refinement of the quadrature mesh.}
+\label{fig:chap1.example3.results}
 \end{figure}
 
-\subsection{ Propagation Examples }
-\label{section.prop_examples}
+\subsection{Propagation Examples}
+
+\begin{comment}
 
 In Figures \ref{fig.straight_frames}, \ref{fig.cantilever_paths}, \ref{fig.two_holes_frames}, and \ref{fig.bean_frames} we show results of using our method for simulating the propagation of cracks (for each of these examples we use Young's modulus is $10^5$ and Poisson Ratio is $.3$, and we use a fracture toughness of $1$). In each of these examples, we compute a release rate via the stress intensity factors, and propagate by a fixed increment (of $.03$) if the release rate exceeds the toughness \cite{anderson:fracture_mechanics}. In the first example, shown in Figure \ref{fig.straight_frames}, we simulate a rectangular domain that has been initialized with a straight crack. We apply symmetric displacement boundary conditions to the right and left sides of the domain, and the result is a crack that moves straight, and in the end cuts the domain into two disconnected regions. The colors of the diagrams in Figure \ref{fig.straight_frames} represent the Frobenius norm of the stress, red denotes relatively large values and blue denotes small values (we also use this color convention for the remaining figures of this section).
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/straight_frames}
-	\caption{\captionsize Simulation of a rectangular domain with symmetric boundary displacements; from \emph{upper left}: initial configuration, 5 timesteps, 10 timesteps, 15 timesteps.}
-	\label{fig.straight_frames}
+ \includegraphics[scale=.6]{partI/chapter1/figures/straight_frames}
+ \caption{\captionsize Simulation of a rectangular domain with symmetric boundary displacements; from \emph{upper left}: initial configuration, 5 timesteps, 10 timesteps, 15 timesteps.}
+ \label{fig.straight_frames}
 \end{center}
 \end{figure}
 
@@ -430,17 +414,17 @@ Our next propagation example involves the quasistatic propagation of a crack in 
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=1]{figures/cantilever_setup}
-	\caption{\captionsize The setup used to show crack propagation in a beam for various values of the initial perturbation angle $\theta$.}
-	\label{fig.cantilever_setup}
+ \includegraphics[scale=1]{partI/chapter1/figures/cantilever_setup}
+ \caption{\captionsize The setup used to show crack propagation in a beam for various values of the initial perturbation angle $\theta$.}
+ \label{fig.cantilever_setup}
 \end{center}
 \end{figure}
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/cantilever_paths}
-	\caption{\captionsize The results of cantilever beam propagation; the position of the crack tip at each timestep is plotted using blue triangles for $\theta = 1.43^{\circ}$, orange squares for $\theta = 2.86^{\circ}$, and yellow triangles for $\theta = 5.71^{\circ}$.}
-	\label{fig.cantilever_paths}
+ \includegraphics[scale=.6]{partI/chapter1/figures/cantilever_paths}
+ \caption{\captionsize The results of cantilever beam propagation; the position of the crack tip at each timestep is plotted using blue triangles for $\theta = 1.43^{\circ}$, orange squares for $\theta = 2.86^{\circ}$, and yellow triangles for $\theta = 5.71^{\circ}$.}
+ \label{fig.cantilever_paths}
 \end{center}
 \end{figure}
 
@@ -450,10 +434,10 @@ For this example (and a later propagation example), we use the cutting algorithm
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/two_holes_frames}
-	\caption{\captionsize Cracks propagating in a domain with holes; \emph{top row}: initial configuration on \emph{left} and a zoom into the 
+ \includegraphics[scale=.6]{partI/chapter1/figures/two_holes_frames}
+ \caption{\captionsize Cracks propagating in a domain with holes; \emph{top row}: initial configuration on \emph{left} and a zoom into the 
 holes on \emph{right}; \emph{bottom row}: analagous diagrams for result after 20 timesteps.}
-	\label{fig.two_holes_frames}
+ \label{fig.two_holes_frames}
 \end{center}
 \end{figure}
 
@@ -461,17 +445,17 @@ In Figure \ref{fig.bean_frames} we further complicate the geometry of the domain
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.8]{figures/bean_embedding}
-	\caption{\captionsize  An illustration of using the cutting algorithm to mesh our domain. A square containing the domain is triangulated (shown \textit{at left}), and the cutting algorithm is run with the boundary of the domain as input. This results in two disconnected meshes, one corresponds to the interior of the domain (shown \textit{at right}) and the other is the exterior. }
-	\label{fig.bean_embedding}
+ \includegraphics[scale=.8]{partI/chapter1/figures/bean_embedding}
+ \caption{\captionsize  An illustration of using the cutting algorithm to mesh our domain. A square containing the domain is triangulated (shown \textit{at left}), and the cutting algorithm is run with the boundary of the domain as input. This results in two disconnected meshes, one corresponds to the interior of the domain (shown \textit{at right}) and the other is the exterior. }
+ \label{fig.bean_embedding}
 \end{center}
 \end{figure}
 
 \begin{figure}[h]
 \begin{center}
-	\includegraphics[scale=.6]{figures/bean_frames}
-	\caption{\captionsize Simulation with complex geometry; from \emph{upper left}: initial configuration, 5 timesteps, 15 timesteps, 25 timesteps.}
-	\label{fig.bean_frames}
+ \includegraphics[scale=.6]{partI/chapter1/figures/bean_frames}
+ \caption{\captionsize Simulation with complex geometry; from \emph{upper left}: initial configuration, 5 timesteps, 15 timesteps, 25 timesteps.}
+ \label{fig.bean_frames}
 \end{center}
 \end{figure}
 

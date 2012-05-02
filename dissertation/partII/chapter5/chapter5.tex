@@ -229,11 +229,11 @@ A_u^{k_3} =
 \begin{figure}[htbp]
 \centering
 \subfloat[]
-{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{partII/chapter5/figures/grid_esm2.png}}
+{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{partII/chapter5/figures/grid_esm2}}
 \subfloat[]
-{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{partII/chapter5/figures/grid_esm1.png}}
+{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{partII/chapter5/figures/grid_esm1}}
 \subfloat[]
-{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{partII/chapter5/figures/grid_esm3.png}}
+{\includegraphics[trim=22cm 28cm 6cm 1cm,clip,width=\figurewidth]{partII/chapter5/figures/grid_esm3}}
 \caption{(a) A interior pressure cell and the $13$ degrees of freedom involved in the corresponding element stiffness matrix. (b) A typical boundary pressure cell. (c) The degrees of freedom involved in the sub-elemental stiffness matrix corresponding to quadrant $\omega_1$. }
 \label{fig:ch5:stiffnessmatrix.element}
 \end{figure}
@@ -243,7 +243,7 @@ The global stiffness matrix $A_u$ generated from the sum of all the element stif
 \setlength{\figurewidth}{\textwidth}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\figurewidth]{partII/chapter5/figures/A_stencil_latex.png}
+\includegraphics[width=\figurewidth]{partII/chapter5/figures/A_stencil_latex}
 \caption{Global stiffness matrix stencils centered at an interior $x$ degree of freedom (left), $y$ degree of freedom (middle), and $p$ degree of freedom (right).}
 \label{fig:chap5.stiffnessmatrix.global}
 \end{figure}
@@ -285,9 +285,9 @@ This doubly refined subgrid is thus a superset of the grids $\calG^x_h, \calG^y_
 \begin{figure}[htbp]
 \centering
 \subfloat[]
-{\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{partII/chapter5/figures/grid_zoomin8.png}}
+{\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{partII/chapter5/figures/grid_zoomin8}}
 \subfloat[]
-{\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{partII/chapter5/figures/grid_bdrycurve8.png}}
+{\includegraphics[trim=160mm 162mm 0mm 0mm,clip,width=\figurewidth]{partII/chapter5/figures/grid_bdrycurve8}}
 \caption{A zoomed-in view of Figure~\ref{fig:chap5.embedding}(a). We sample a the level set function implicitly defining $\Omega$ on the doubly refined subgrid depicted in (a), and use this to generate a segmend curve approximation $\dOmega_h$ to $\dOmega$, as in (b).}
 \label{fig:chap5.boundary}
 \end{figure}
@@ -412,9 +412,9 @@ We then define the boundary band to be the union of all $7 \times 7$ blocks of c
 \begin{figure}[htb]
 \centering
 \subfloat[An example boundary band of pressure cells and boundary variables using $3 \times 3$ blocks of cells centered at each cell that intersects the boundary.]
-{\includegraphics[width=\figurewidth]{partII/chapter5/figures/grid_bdryband_new.png}}
+{\includegraphics[width=\figurewidth]{partII/chapter5/figures/grid_bdryband_new}}
 \subfloat[An example of distributive pressure cells and variables relaxed using distributive relaxation. This example region is defined by excluding $1 \times 1$ blocks of cells (i.e., a single cell) centered at each cell intersecting the boundary.]
-{\includegraphics[width=\figurewidth]{partII/chapter5/figures/grid_dist_final.png}}
+{\includegraphics[width=\figurewidth]{partII/chapter5/figures/grid_dist_final}}
 \caption{Boundary band and distributive region.}
 \label{fig:chap5.boundaryband}
 \end{figure}
@@ -819,7 +819,7 @@ We now investigate the multigrid cycle convergence rates at various resolutions 
 \setlength{\figurewidth}{0.50\textwidth}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\figurewidth]{partII/chapter5/figures/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual.png}
+\includegraphics[width=\figurewidth]{partII/chapter5/figures/Periodic_Square_Regular__FED_Vcycle_PLo_bw42_pr0_49_br10_residual}
 \caption{Multigrid V-$(1,1)$ cycle convergence for a variety of resolutions between $32 \times 32$ and $1024 \times 1024$ ($\nu = 0.49$, periodic boundary conditions, finite element distributive relaxation, and low order prolongation $P_{\text{lo}}$).}
 \label{fig:chap5.multigrid.convergence.resolution}
 \end{figure}
@@ -832,9 +832,9 @@ This time with embedded boundary conditions, we again investigate the multigrid 
 \begin{figure}[htbp]
 \centering
 \subfloat[Dirichlet BCs]
-{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10.png}}
+{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_Dirichlet_NothG_FED_Vcycle_PLo_bw42_pr0_49_br10}}
 \subfloat[Neumann BCs]
-{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10.png}}
+{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_Neumann_FED_Vcycle_PLo_bw42_pr0_49_br10}}
 \caption{Multigrid V-$(1,1)$ cycle convergence rates at various resolutions from $32 \times 32$ to $1024 \times 1024$ ($\nu = 0.49$).}
 \label{fig:chap5.multigrid.convergence.flower.a}
 \end{figure}
@@ -843,9 +843,9 @@ This time with embedded boundary conditions, we again investigate the multigrid 
 \begin{figure}[htbp]
 \centering
 \subfloat[Dirichlet BCs]
-{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}}
+{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_A38_Dirichlet_NothG_FED_Vcycle_PLo_bw32_pr0_49_br10_residual}}
 \subfloat[Neumann BCs]
-{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual.png}}
+{\includegraphics[width=\figurewidth]{partII/chapter5/figures/Egg_Flower_A38_Neumann_FED_Vcycle_PLo_bw32_pr0_49_br10_residual}}
 \caption{Residual norm reduction as a function of iteration number for a multigrid V-$(1,1)$ cycle at various resolutions from $32 \times 32$ to $1024 \times 1024$ ($\nu = 0.49$).}
 \label{fig:chap5.multigrid.convergence.flower.b}
 \end{figure}
