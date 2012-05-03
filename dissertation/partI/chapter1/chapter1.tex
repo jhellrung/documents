@@ -314,7 +314,7 @@ We normalize $K_{\text{I}}$ through an appropriate choice of $\sigma$ and compar
 
 \subsection{Example 2: Straight Crack with Constant Shear Displacement}
 
-Example 2 uses the same geometric configuration as Example 1, but this time we apply a zero displacement Dirichlet boundary condition to one end of the domain and a constant shear (with respect to the crack frame) Neumann boundary condition to the other end; see Figure~\ref{fig:chap1.example2.setup}. The stress intensity factors are known (see \cite{Moes99}): $K_{\text{I}} = 34.0 \, [\text{psi}\sqrt{\text{in}}]$ and $K_{\text{II}} = 4.55 [\text{psi}\sqrt{\text{in}}]$. As for Example 1, we vary both the resolution of the simulation mesh and the refinement level of the quadrature mesh, with the results summarized in Table~\ref{tab:chap1.example2.results} and convergence plots in Figure~\ref{fig:chap1.example2.convergence}.
+Example 2 uses the same geometric configuration as Example 1, but this time we apply a zero displacement Dirichlet boundary condition to one end of the domain and a constant shear (with respect to the crack frame) traction boundary condition to the other end; see Figure~\ref{fig:chap1.example2.setup}. The stress intensity factors are known (see \cite{Moes99}): $K_{\text{I}} = 34.0 \, [\text{psi}\sqrt{\text{in}}]$ and $K_{\text{II}} = 4.55 [\text{psi}\sqrt{\text{in}}]$. As for Example 1, we vary both the resolution of the simulation mesh and the refinement level of the quadrature mesh, with the results summarized in Table~\ref{tab:chap1.example2.results} and convergence plots in Figure~\ref{fig:chap1.example2.convergence}.
 
 \setlength{\figurewidth}{0.20\textwidth}
 \begin{figure}[htbp]
@@ -370,7 +370,7 @@ Example 2 uses the same geometric configuration as Example 1, but this time we a
 
 \subsection{Example 3: Angled Center Crack with Mixed Mode Displacement}
 
-We borrow the example in Section 4.3 of \cite{Moes99} for Example 3. The domain is a square plate with an angled center crack which is subjected to a far field constant traction; see Figure~\ref{fig:chap1.example3.setup}. We use the parameters $W = 10 [\text{in}]$ and $a = 0.5 [\text{in}]$. Since the crack size is small and far removed from the plate boundaries, the stress intensity factors may be approximated as if the domain were the entire plane, which gives
+We borrow the example in Section 4.3 of \cite{Moes99} for Example 3. The domain is a square plate with an angled center crack which is subjected to a far field constant traction; see Figure~\ref{fig:chap1.example3.setup}. We use the parameters $W = 10 [\text{in}]$ and $a = 0.5 [\text{in}]$. Since the crack size is small and far removed from the plate boundaries, the stress intensity factors may be approximated as if the domain were the entire plane, giving
 \begin{subequations} \label{eq:chap1.example3.K}
 \begin{align}
 K_{\text{I}} & = \sigma  \sqrt{\pi a} \cos^2 \beta, \\
@@ -378,7 +378,7 @@ K_{\text{II}} & = \sigma \sqrt{\pi a} \sin \beta \cos \beta.
 \end{align}
 \end{subequations}
 
-\setlength{\figurewidth}{0.20\textwidth}
+\setlength{\figurewidth}{0.25\textwidth}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\figurewidth]{partI/chapter1/figures/example3_setup}
@@ -386,7 +386,7 @@ K_{\text{II}} & = \sigma \sqrt{\pi a} \sin \beta \cos \beta.
 \label{fig:chap1.example3.setup}
 \end{figure}
 
-We computed the stress intensity factors as $\beta$ ranged from $0$ to $\pi/2$ in increments of $\pi/20$. We used a simulation mesh with a resolution of $64 \times 64$ together with a variety of refinement levels in the quadrature mesh. Figure~\ref{fig:chap1.example3.results} shows the relative error in the numerically computed stress intensity factors compared to the approximations \eqref{eq:chap1.example3.K}. Our results are comparable to \cite{Moes99}.
+We compute the stress intensity factors as $\beta$ ranges from $0$ to $\pi/2$ in increments of $\pi/20$. Our simulation mesh has resolution $64 \times 64$ and we use a variety of refinement levels for the quadrature mesh. Figure~\ref{fig:chap1.example3.results} shows the relative error in the numerically computed stress intensity factors compared to the approximations \eqref{eq:chap1.example3.K}. Our results are comparable to \cite{Moes99}.
 
 \setlength{\figurewidth}{\textwidth}
 \begin{figure}[htbp]
@@ -398,77 +398,66 @@ We computed the stress intensity factors as $\beta$ ranged from $0$ to $\pi/2$ i
 
 \subsection{Propagation Examples}
 
-\begin{comment}
+Figures~\ref{fig:chap1.examples.propagation.straight}, \ref{fig:chap1.examples.propagation.cantilever.setup}, \ref{fig:chap1.examples.propagation.two_holes}, and \ref{fig:chap1.examples.propagation.bean} show the results of applying our method to simulate the propagation of cracks (see \S\ref{sec:chap1.propagation}). Each of these examples uses a Young's modulus of $E := 10^5$, Poisson's ratio of $\nu := 0.30$, and fracture toughness of $1$. For each example, we compute a release rate via the stress intensity factors and propagate the crack by a fixed increment of $0.03$ if the release rate exceeds the toughness \cite{Anderson05}.
 
-In Figures \ref{fig.straight_frames}, \ref{fig.cantilever_paths}, \ref{fig.two_holes_frames}, and \ref{fig.bean_frames} we show results of using our method for simulating the propagation of cracks (for each of these examples we use Young's modulus is $10^5$ and Poisson Ratio is $.3$, and we use a fracture toughness of $1$). In each of these examples, we compute a release rate via the stress intensity factors, and propagate by a fixed increment (of $.03$) if the release rate exceeds the toughness \cite{anderson:fracture_mechanics}. In the first example, shown in Figure \ref{fig.straight_frames}, we simulate a rectangular domain that has been initialized with a straight crack. We apply symmetric displacement boundary conditions to the right and left sides of the domain, and the result is a crack that moves straight, and in the end cuts the domain into two disconnected regions. The colors of the diagrams in Figure \ref{fig.straight_frames} represent the Frobenius norm of the stress, red denotes relatively large values and blue denotes small values (we also use this color convention for the remaining figures of this section).
+In Figure~\ref{fig:chap1.examples.propagation.straight}, we simulate a rectangular domain initialized with a straight crack with symmetric displacement Dirichlet boundary conditions applied to the left and right sides of the domain. The result is a crack propagating in a straight line that eventually divides the domain into disconnected halves. The colors used in Figure~\ref{fig:chap1.examples.propagation.straight} represent the Frobenius norm of the stress, with the maximum norm in red and the minimum norm in blue (we use this color convention in the remaining figures as well).
 
-\begin{figure}[h]
-\begin{center}
- \includegraphics[scale=.6]{partI/chapter1/figures/straight_frames}
- \caption{\captionsize Simulation of a rectangular domain with symmetric boundary displacements; from \emph{upper left}: initial configuration, 5 timesteps, 10 timesteps, 15 timesteps.}
- \label{fig.straight_frames}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/straight_frames}
+\caption{Simulation of a rectangular domain with symmetric boundary displacements; initial configuration (upper left), at $5$ time steps (upper right), at $10$ time steps (lower left), and at $15$ time steps (lower right).}
+\label{fig:chap1.examples.propagation.straight}
 \end{figure}
 
-Our next propagation example involves the quasistatic propagation of a crack in a beam, as pictured in the diagram of Figure \ref{fig.cantilever_setup}. As in \cite{Belytschko99}, we use dimension of $L=11.82$ and $W=3.94$, and we varied the inital perturbation angle $\theta$, using values $1.43^{\circ}$, $2.86^{\circ}$, and $5.71^{\circ}$. The results of simulating the propagation for these three angles is presented in Figure \ref{fig.cantilever_paths}, where we have plotted the position of the crack tip at each timestep using blue triangles for $1.43$ degrees, orange squares for $2.86$, and yellow triangles for $5.71$. We use a simulation mesh resolution of 64x20, with three levels of refinement in the quadrature mesh. Our results are in good agreement with the results in \cite{Belytschko99}.
+Figure~\ref{fig:chap1.examples.propagation.cantilever.setup} shows the initial setup for the quasistatic propagation of a crack in a beam. As in \cite{Belytschko99}, we use the beam dimensions $L := 11.82$ and $W := 3.94$, and we vary the initial perturbation angle $\theta$ among $1.43^{\circ}$, $2.86^{\circ}$, and $5.71^{\circ}$. Figure~\ref{fig:chap1.examples.propagation.cantilever.results} shows the results of the simulation for each of these three initial angles, where we have plotted the position of the crack tip at each time step: blue triangles correspond to $\theta = 1.43^{\circ}$; orange squares correspond to $\theta = 2.86^{\circ}$; and yellow triangles correspond to $\theta = 5.71^{\circ}$. Our simulation mesh has resolution $64 \times 20$ and our quadrature mesh has $3$ refinement levels. Our results are in good agreement with \cite{Belytschko99}.
 
-\begin{figure}[h]
-\begin{center}
- \includegraphics[scale=1]{partI/chapter1/figures/cantilever_setup}
- \caption{\captionsize The setup used to show crack propagation in a beam for various values of the initial perturbation angle $\theta$.}
- \label{fig.cantilever_setup}
-\end{center}
+\setlength{\figurewidth}{0.33\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/cantilever_setup}
+\caption{The setup for a crack propagation example involving a beam with a crack at various initial perturbation angles $\theta$.}
+\label{fig:chap1.examples.propagation.cantilever.setup}
 \end{figure}
 
-\begin{figure}[h]
-\begin{center}
- \includegraphics[scale=.6]{partI/chapter1/figures/cantilever_paths}
- \caption{\captionsize The results of cantilever beam propagation; the position of the crack tip at each timestep is plotted using blue triangles for $\theta = 1.43^{\circ}$, orange squares for $\theta = 2.86^{\circ}$, and yellow triangles for $\theta = 5.71^{\circ}$.}
- \label{fig.cantilever_paths}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/cantilever_paths}
+\caption{The results of crack propagation in the cantilever beam example. We plot the position of the crack tip at each time step: blue triangles correspond to $\theta = 2.86^{\circ}$; and yellow triangles correspond to $\theta = 5.71^{\circ}$.}
+ \label{fig:chap1.examples.propagation.cantilever.results}
 \end{figure}
 
-In Figure \ref{fig.two_holes_frames}, we illustrate a more complicated scenario. Our initial setup, pictured in the upper left corner of the figure, is a square (with side length of 1) that has two holes of the same radius ($r=1/64$). The simulation is initialized with two cracks, one emerging from each hole, both at $45^{\circ}$ with respect to the horizontal, so that the resulting geometry is symmetric (see the zoom-in on the holes showing the cracks, at \emph{upper right}). We subject this domain to constant traction at the right and left side of the domain. We use a simulation mesh resolution of 64x64 with two refinements for the quadrature mesh. At each step we propagate by a fixed increment of length $.03$ (where the release rate is high enough). The bottom row of the figure shows the results of the crack simulation after twenty timesteps (note that for clarity we removed the disconnected material region in between the two cracks at the final timestep).
+Figure~\ref{fig:chap1.examples.propagation.two_holes} depicts a more complicated scenario. The initial configuration (Figure~\ref{fig:chap1.examples.propagation.two_holes}(top left)) is a square (with side lengths $1$) with two congruent holes (with radii $1/64$). We initialize the simulation with two cracks, one emerging from each hole and both at $45^{\circ}$ with respect to the horizontal such that the resulting geometry is rotationally symmetric (Figure~\ref{fig:chap1.examples.propagation.two_holes}(top right)). We subject this domain to constant traction boundary conditions on the left and right sides of the domain. Our simulation mesh has resolution $64 \times 64$ and our quadrature mesh has $2$ levels of refinement. The bottom row of Figure~\ref{fig:chap1.examples.propagation.two_holes} shows the simulation after $20$ time steps (for clarity, we removed the disconnected material region between the two cracks).
 
-For this example (and a later propagation example), we use the cutting algorithm to construct a mesh for the domain. The process is as follows: first, we create a triangular mesh on a square domain. Then, we describe the holes using segmented curves. These curves are provided as input to the cutting algorithm. The result is a mesh that has been cut into disconnected pieces, one piece corresponding to the interior of the domain and the rest (inside of the holes) is the exterior. We then simulate propagation on the mesh that represents the interior of the domain, by providing the crack as another segmented curve, and then using the crack to cut the domain interior. Essentially, this process treats the boundary of the domain as a ``crack'' that has fully disconnected the interior and exterior of the domain. The main benefit of this technique is that it allows the domain to have complicated boundaries, and our mesh does not have to conform to the geometry of the boundary (see Figure \ref{fig.bean_embedding} for another example). And, since the cutting algorithm can handle a crack tip inside of a triangle that has been fully cut, we can automatically handle the crack tip reaching the boundary of the domain.
+For the example in Figure~\ref{fig:chap1.examples.propagation.two_holes} and the next example, we use the mesh cutting algorithm from \cite{Sifakis07} to construct an embedding mesh for the domain. We start with a triangulation of a square domain and use the mesh cutting algorithm to excise from it the two circular holes, each represented as a segmentd curve. We thus effectively treat the embedded boundary of the domain around the circular holes as crack surface that has fully disconnected the discs from the square. This illustrates a general technique to mesh a domain which has the advantage that one may control the simulation mesh resolution independent of the geometry of the domain boundary. Further, since the mesh cutting algorithm naturally handles a crack tip inside a fully cut triangle, we can automatically handle the crack tip reaching the (embedded) boundary of the domain.
 
-\begin{figure}[h]
-\begin{center}
- \includegraphics[scale=.6]{partI/chapter1/figures/two_holes_frames}
- \caption{\captionsize Cracks propagating in a domain with holes; \emph{top row}: initial configuration on \emph{left} and a zoom into the 
-holes on \emph{right}; \emph{bottom row}: analagous diagrams for result after 20 timesteps.}
- \label{fig.two_holes_frames}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/two_holes_frames}
+\caption{Crack propagation in a square domain with holes; initial configuration (top row) and simulation after $20$ time steps (bottom row).}
+\label{fig:chap1.examples.propagation.two_holes}
 \end{figure}
 
-In Figure \ref{fig.bean_frames} we further complicate the geometry of the domain and cracks. As in the previous example, we constructed a domain with more complicated geometry by cutting a rectangular domain ($L=2$, $W=1$, mesh resolution is 128x64 with two levels of refinement of the quadrature mesh) with the cutting algorithm. (see Figure \ref{fig.bean_embedding}). Then, we create initial cracks in the domain that have junctions, in order to illustrate the geometric flexibility of our algorithm. Note that, in this case, some of the elements will be duplicated into more than two copies, since the cracks will cut triangles near the junction into three materially distinct elements. We subject this new domain to a displacement condition at the left and right ends: we take the material in the domain which is to the left left of the line $x=-.8$ or to the right of the line $x=.8$ and apply a fixed displacement condition of $.001$; we also apply traction conditions to five other parts of the boundary (in the diagram they can be seen by the higher stresses that they produce). We then simulated the propagation of the cracks over twenty timesteps, propagating with a fixed increment length of $.03$ (where the release rate is high enough). Note that as the cracks evolve they can join with other cracks, which we accomplish by procedurally merging cracks whose paths intersect. However, the crack tips cannot branch (creating new junctions) with the propagation criterion that we use for these examples (see Section \ref{sec:chap1.propagation}).
+Figure~\ref{fig:chap1.examples.propagation.bean} shows an example with more complicated domain and crack geometry. As in the previous example, we mesh the domain by excising a segmented curve from a triangulated rectangle (with $L = 2$ and $W = 1$) with resolution $128 \times 64$ (see Figure~\ref{fig:chap1.examples.propagation.bean.embedding}). We then introduce initial triple-junction cracks into the domain and apply displacement Dirichlet conditions on the left and right. Specifically, we assign a fixed displacement of $0.001$ to subset of the domain to the left of $x = -0.8$ or to the right of $x = +0.8$; these boundary conditions are visually evident in Figure~\ref{fig:chap1.examples.propagation.bean}, where the domain subsets on which we apply the fixed displacement have identically zero stress. We additionally apply traction boundary conditions at five other points along the boundary; these boundary conditions are also visually evident in Figure~\ref{fig:chap1.examples.propagation.bean} by the high stress they induce. Our quadrature mesh has $2$ levels of refinement. We simulate the propagation of the cracks over $20$ time steps. Note that as the cracks evolve they may join with other cracks, which we accomplish by procedurally merging cracks whose paths intersect. However, crack tips cannot branch (creating new junctions) with the propagation methd described in \S\ref{sec:chap1.propagation}.
 
-\begin{figure}[h]
-\begin{center}
- \includegraphics[scale=.8]{partI/chapter1/figures/bean_embedding}
- \caption{\captionsize  An illustration of using the cutting algorithm to mesh our domain. A square containing the domain is triangulated (shown \textit{at left}), and the cutting algorithm is run with the boundary of the domain as input. This results in two disconnected meshes, one corresponds to the interior of the domain (shown \textit{at right}) and the other is the exterior. }
- \label{fig.bean_embedding}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/bean_embedding}
+\caption{An example application of the mesh cutting algorithm to mesh a domain. A triangulated rectangle overlays the domain (left), and the mesh cutting algorithm resolves the domain boundary against the background mesh. This yields two disconnected meshes, an interior one (right) and an exterior one, which we discard.}
+\label{fig:chap1.examples.propagation.bean.embedding}
 \end{figure}
 
-\begin{figure}[h]
-\begin{center}
- \includegraphics[scale=.6]{partI/chapter1/figures/bean_frames}
- \caption{\captionsize Simulation with complex geometry; from \emph{upper left}: initial configuration, 5 timesteps, 15 timesteps, 25 timesteps.}
- \label{fig.bean_frames}
-\end{center}
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter1/figures/bean_frames}
+\caption{Crack propagation simulation with complex geometry; initial configuration (top left), at $5$ time steps (top right), at $10$ time steps (bottom left), and at $25$ time steps (bottom right).}
+\label{fig:chap1.examples.propagation.bean}
 \end{figure}
 
+\section{Discussion and Conclusion}
 
-
-\section{CONCLUDING REMARKS}
-\label{section.concluding_remarks}
-
-We presented an XFEM-based method for the simulation of crack propagation. This method uses virtual nodes generated by the cutting algorithm of Sifakis, et.al., \cite{Sifakis07} to create the extra degrees of freedom that allow the crack to open, in a way that is general and flexible. Our technique gives accurate stress intensity factors, which we use to propagate the crack. Our discretization and simulation approach can accomodate complex crack and domain geometry. We illustrated the accuracy of our method by comparison with  results from the literature, and showed the geometric flexibity with propagation examples in complicated domains.
-
-\begin{center}
-ACKNOWLEDGEMENTS
-\end{center}
-This work was partially supported by UC Lab Fees Research Grant 09-LR-04-116741-BERA, Office of Naval Research grants N00014-03-1-0071 and N00014-10-1-0730, and National Science Foundation grants DMS-0914813 and CCF-0830554. CR was partially supported by the National Science Foundation under grant No. DMS-0714945. 
-
-\end{comment}
+We presented an XFEM-based method for simulating crack propagation. This method employs the mesh cutting algorithm of Sifakis et al. \cite{Sifakis07} to automatically generate the extra degrees of freedom traditionally associated with XFEM Heaviside enrichment; these degrees of freedom enable the two sides of the crack surface to separate. We additionally described an integration scheme based on a subordinate and independently refined quadrature mesh to accurately evaluate integrals involving the nonlinear (and sometimes singular) basis functions. This in turn yields accurately computed stress intensity factors, which we use to propagate the crack. The generality of the mesh cutting algorithm allows us to accommodate complex crack and domain geometry, as shown in the examples. We also illustrated the accuracy of our method, and it compares favorably with the results from the literature.
