@@ -6,4 +6,86 @@
 
 \chapter{Virtual Surgery} \label{chap:partI.virtualsurgery}
 
-[TODO]
+\footnote{The content of this chapter is taken from \cite{Sifakis09} with minor revisions.}
+The core principle of plastic surgery practice is the alteration of the geometry and
+topology of the skin. For a patient diagnosed with malignant melanoma, the plastic surgeon in many cases has to resect the tumor and the surrounding area. The extent of the skin that needs to be removed depends on the size and shape of the tumor. Furthermore, the removal of a large amount of tissue may have a dramatic affect on the patient’s recovery and post-operative quality of life. The excision of tissue and subsequent defect closure constitute a ``puzzle'' the surgeon has to solve. In the past it has been typical for a surgeon to require many years to master the craft of skin flap design. The only documentation on how to solve this difficult three-dimensional problem would typically be limited to collections of two-dimensional illustrations. Currently a plastic surgeon can only practice this skill on a live patient in an operating room. Doing this as a laptop simulation \cite{Pieper95} has long been a dream; yet only recently have computer hardware advances promised sufficient computational capacity to accommodate the accuracy and real-time performance requirements of a tool usable in actual clinical practice.
+
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter2/figures/1}
+\caption{Simulation of a malignant melanoma removal and closure of the resulting defect with a rhomboid flap procedure. The gridded texture demonstrates the post-procedure topology and geometry of the tissue.}
+\label{fig:chap2.1}
+\end{figure}
+
+The methodology illustrated in this paper is focused on the computer-aided simulation of \emph{open surgery}. In contrast, closed surgery, exemplified by endoscopic procedures (e.g. laparoscopy) typically shifts the computational burden to the three-dimensional visualization and navigation of the endoscopic tools in the internal anatomy, while simulation of deformable tissues typically excludes topological manipulation, or where any topological change is limited and localized (e.g. local excision or cauterizaion). In contrast, open surgery is predominantly centered around the alteration of both the \emph{geometry} and \emph{topology} of the surgical subject. A simplistic example can be seen in a tracheostomy where an incision is performed in the neck, cutting through skin, cartilage and muscle down to the wind pipe, and the resulting flap is stitched to the surface. More sophisticated open surgery, such as a cleft lip and palate repair, may involve a highly elaborate sequence of incisions, tissue transposition and suturing. The \emph{essence} of open surgery is thus the topological change involved.
+
+Despite the elaborate nature of certain open surgery procedures, the large majority of such repairs can be constructed from a small number of “building blocks” or fundamental operations. In our virtual surgical simulation environment we formalize the application of these operations via three basic tools:
+
+\begin{itemize}
+
+\item The Incision Tool is used to specify the surface swept by the virtual scalpel, and define the topological change intended by the surgeon.
+
+\item The Retraction Tool is used to grasp and manipulate the skin after or in between performing incisions.
+
+\item The Suture Tool is used to stitch parts of the geometry together, once they have been placed adjacent to one another.
+
+\end{itemize}
+
+The successive application of these fundamental tools is recorded in a replayable script file, such that the sequence of actions may be repeated even if the underlying skin geometry or the discrete simulation mesh are modified. This allows an operation strategy to be efficiently sketched out at interactive simulation rates, and then replayed with a much higher simulation resolution and more accurate material property models to obtain more accurate measurements of tissue deformation and stress.
+
+\section{Technical Background}
+
+A usable, practical and beneficial open surgery simulator needs to meet certain important requirements in order to address the needs of a clinical setting. First, the computational performance must enable real-time interaction when authoring a certain surgical strategy. The material models used must be accurate and representative of the (complex, typically highly nonlinear) constitutive properties of the biological tissues involved. Furthermore, reconstructive surgery typically entails substantial tissue deformation, requiring the numerical and algorithmic robustness of any simulation techniques used. Finally, all these requirements need to be reconciled with the need for a high level of visual detail, both in terms of texture and geometrical detail, to reflect the geometric and visual complexity of the subject tissues and aid in the reproduction of the process in the operating room by providing discernible surface landmarks for the various surgical operations.
+
+\subsection{Real-Time Simulation}
+
+A virtual simulation environment will have a vastly reduced potential for being used in actual practice if it does not offer the ability for a clinician to cut and manipulate the skin in real-time. In a finite-element discretization of a volumetric object representing a tissue flap, certain algorithmic and numerical factors may severely compromise the real-time performance of such a system. First, the resolution of the simulation mesh alone needs to be limited enough to allow for real-time simulation; although discretizations with several hundreds of thousands or millions of tetrahedral elements would be desired (and may actually be feasible in the light of emerging massively parallel computing platforms), commodity computer hardware dictates stricter limits for simulations tractable with the computational resources of a mainstream laptop, for example. Instead of compromising the visual detail contained in our model for the sake of a coarser discretization, we employ an embedded scheme (as in \cite{Sifakis07, Sifakis07b}) to allow a coarser simulation mesh to serve as a ``framework'' for a higher resolution geometry. The surface resolution may be substantially higher than that of the embedding grid, and certain aspects of simulation (such as collision processing) may be handled on the high-resolution embedded geometry if so desired. Additionally, this eliminates the risk of ill-conditioned simulation elements necessitated to resolve intricate geometrical features of the tissue surface. More important, this practice circumvents the need for remeshing of the tissue geometry in order to resolve the topological change incurred by incisions. At all times, the simulation grid is maintained at a regular, lower degree-of-freedom lattice (with a topology adhering as closely as possible to the topology of the continuous tissue volume).
+
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter2/figures/2}
+\caption{Simulation of a z-plasty procedure for the elongation of a scar contracture.}
+\label{fig:chap2.2}
+\end{figure}
+
+\subsection{Accuracy and Nonlinear Deformation}
+
+Although linear material models and mass-spring networks have been widely used for interactive simulation of deformable solids, providing a virtual surgery simulation system with the ability to make reliable predictions about the behavior of real tissue necessitates the adoption of much more accurate, nonlinear, anisotropic constitutive material models. This requirement will be essential in making the virtual surgery framework presented here capable of reliable predictions of the surgical outcome, establishing a virtual system as a dependable platform for surgical planning. The constitutive models that accurately convey the material properties of human flesh have to account for the inhomogeneity of materials (e.g. anatomical parts consisting of passive fatty tissue, active musculature, tendons, ligaments and connective tissue). Furthermore, the materials involved are nonlinear and near-incompressible, in sharp contrast with linear material approximations which may be employed in applications where deformation is limited to the small strain regime, or where physical accuracy is not essential. Our system supports arbitrary nonlinear, inhomogeneous and anisotropic material properties, which may be defined on the basis of every distinct simulation element in the underlying embedding mesh. This also highlights the ability of the system to facilitate a two-pass simulation process, where a lower resolution embedding mesh (where the nonlinearity and inhomogeneity may manifest themselves in a limited capacity) can be used for crafting the surgical approach interactively, and a subsequent pass where the same sequence of actions is repeated offline on a highly refined embedding mesh, which is able to resolve the intricacies of the nonlinear deformation.
+
+\subsection{Robustness Under Large Deformation}
+
+The manipulation of flesh during plastic surgery operations is by no means limited to small geometric change; in fact, large strain deformation is quite typical of the configurations involved in the closure of the tissue flaps created. Therefore, especially given the necessity for nonlinear constitutive models and the relatively under-resolved nature of the simulation (owing to the embedding approach), the simulation methods employed have to address and survive extreme geometric configurations, such as element inversion or collapse. We employ the Invertible Finite Element method of \cite{Irving04} which allows such simulations to continue and gracefully recover when transitioning through such extreme geometric configurations, while still supporting the full gamut of nonlinear constitutive models.
+
+\section{Tools and Methods}
+
+We have created a ``local flaps'' simulator that will allow surgeons to practice their closing designs in a three-dimensional environment with real-time interaction. This environment uses the PhysBAM physics simulation library to allow the user to make incisions, move tissue flaps, and create virtual sutures to simulate closing of a skin defect, all in a scientifically accurate framework. The simulator consists of several simple surgical tools:
+
+\begin{itemize}
+
+\item The Incision Tool. This tool creates a triangulated surface which represents the area swept by the scalpel during an incision. This incision surface is generated by sketching a curve (either a sequence of straight line cuts, or a spline curve) on the surface of the tissue, while controlling the angle which the scalpel forms with the tissue being cut. The result of this operation is a discrete triangulated surface representation of the incision being made. The algorithm of \cite{Sifakis07} is subsequently used to determine the topology resulting from this manipulation of the tissue geometry, generating the necessary degrees of freedom to enable the opening of the tissue at the location of the incision.
+
+\item The Retraction Tool. Once the topology of the incision has been resolved, the action of grasping and manipulating the tissue flap is performed using a simulated hook-and-handle mechanism. By direct selection, a point on the surface of the tissue is defined as the anchor point of a retraction site (i.e. a hook point). At the same time, a ``handle'' point is defined by offsetting the hook location a certain short distance off the surface of the tissue. This handle can be arbitrarily positioned in 3D space, giving rise to deformation of the simulated tissue. The target position of the handle is communicated to the deformable tissue via a spring force that aims to bring the hook at the specified 3D location.
+
+\item The Suture Tool. Once the retraction tool has been used to deform the tissue shape into its target location, this tool emulates the process of suturing two adjacent surfaces together. The suture can be either a point-to-point connection, or a curved path connecting two sides of tissue. The geometry on either side of the suture are brought together by the simulated action of a zero rest-length spring joining the parts of the tissue connected by the suture.
+
+\end{itemize}
+
+The successive application of these fundamental tools is recorded in a replayable script file, such that the sequence of actions may be repeated even if the underlying skin geometry or discrete simulation mesh are modified; this allows an operation strategy to be efficiently sketched out in interactive simulation rates, and then replayed with a much higher resolution simulation mesh to obtain more accurate measurements of tissue deformation and stress. Using this simple combination of surgical tools, the surgeon is able to practice existing procedures for closing the defect. A surgeon may also invent a new pattern altogether and assess its efficacy based on such physically quantifiable metrics as post procedure tension in the tissue and suture. The elasticity of the tissue is simulated using the finite element method defined on a volumetric tetrahedral representation of the tissue. An implicit time stepping scheme is used to obtain a frame rate adequate for interactivity. Tissues involved typically undergo large deformation and the algorithms of \cite{Irving04} and \cite{Teran05} are used to guarantee robust performance in this challenging setting. Tissue incisions are represented using the novel tetrahedral cutting approach of \cite{Sifakis07} and sutures are modeled with the highly flexible embedding framework of \cite{Sifakis07b}.
+
+\setlength{\figurewidth}{\textwidth}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\figurewidth]{partI/chapter2/figures/3}
+\caption{Comparison of the simulated results of Z-plasty procedures with incision angles at 45, 60 and 90 degrees respectively from left to write. Simulation confirms the conventional wisdom that 60 degrees is the optimal incision angle. Also, the 90 degree incision reproduces the so-called ``dog ear'' effect.}
+\label{fig:chap2.3}
+\end{figure}
+
+\section{Results}
+
+Figure~\ref{fig:chap2.1} depicts the results of a local flaps simulation of a rhomboid flap procedure for removing a malignant melanoma and repairing the skin near the excision region. This is a very common procedure and the simulated tissue configuration matches the conventional wisdom very closely. Different stages in a z-plasty procedure (typically used for elongating scar contractures) shown in Figures~\ref{fig:chap2.2} and \ref{fig:chap2.3}, show the effects of varying the angles of the z-incision. In practice, the optimal angle of incision is 60 degrees. Our simulated results also suggest that 60 degrees is the optimal angle as lower angles fail to produce sufficient elongation and large angles produce non-planar equilibrium configurations (or the so-called ``dog ear'' effect).
+
+\section{Conclusions}
+
+The local flaps environment is an effective tool that the plastic surgeon can utilize to leverage physically accurate simulation in an interactive environment to improve many aspects of his cognitive surgical practice. The uses of the environment fit into two basic categories. The first is related to training in existing procedures. These scenarios demand realtime interaction but not necessarily the highest degree of physical accuracy. The second is related to design of new procedures. Such applications require a higher degree of physical accuracy. Our finite element based approach allows for this and has the ability for future incorporation of subject specific constitutive models that can be used to study repair of unique injuries (e.g. those arising on the battlefield).
