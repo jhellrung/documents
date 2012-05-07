@@ -2,10 +2,9 @@
 
 \section{Handling Inversion via Diagonalization}
 
-\emph{[excerpted from \cite{Irving04}, shortened and with minor modifications]}
-
 \subsection{Diagonalization}
 
+\footnote{This section is an excerpt from \cite{Irving04}, shortened and with minor modifications.}
 Since rigid body rotations do not change the physics of a deformable object, the stress $\bfP$ satisfies $\bfP \left( \bfU \bfF \right) = \bfU \bfP \left( \bfF \right)$ for any rotation $\bfU$. (Here $\bfP \left( \bfF \right)$ denotes function application.) Furthermore, if we temporarily assume an isotropic constitutive model, $\bfP$ is invariant under rotations of material space, i.e., $\bfP \left( \bfF \bfV^T \right) = \bfP \left( \bfF \right) \bfV^T$. Therefore, if we diagonalize $\bfF$ via rotations $\bfU$ and $\bfV$ to obtain $\bfF = \bfU \hat{\bfF} \bfV^T$, $\bfP$ becomes
 \begin{equation}\label{eq:P.diagonalized}
 \bfP = \bfP \left( \bfV \right) = \bfU \bfP \left( \hat{\bfF} \right) \bfV^T = \bfU \hat{\bfP} \bfV^T
@@ -36,8 +35,7 @@ If the constitutive model includes anisotropic components, it is no longer invar
 
 \section{Constitutive Model for Muscle}
 
-\emph{[excerpted from \cite{Teran05b}, shortened and with minor modifications]}
-
+\footnote{This section is an excerpt from \cite{Teran05b}, shortened and with minor modifications.}
 Muscle tissue has a highly complex material behavior—--it is a nonlinear, incompressible, anisotropic, hyperelastic material and we use a state-of-the-art constitutive model to describe it with a strain energy of the following form:
 \begin{equation*}
 W \left( I_1, I_2, \lambda, \bfa_0, \alpha \right) = F_1 \left( I_1, I_2 \right) + U(J) + F_2 \left( \lambda, \bfa_0, \alpha \right),
@@ -65,9 +63,9 @@ This formula holds throughout both the muscle and tendon tetrahedra, however, th
 
 \section{Guaranteeing Positive Definiteness of the Linear Systems in Newton Iterations}
 
-\emph{[excerpted from \cite{Teran05a}, shortened and with minor modifications]}
-
 \subsection{Finite Element Forces}
+
+\footnote{This section is an excerpt from \cite{Teran05a}, shortened and with minor modifications.}
 Consider a time dependent map $\bff$ from the undeformed material coordinates $\bfX$ to world coordinates $\bfx$. The stress at a point $\bfX$ in the material depends on the deformation gradient $\bfF \left( \bfX \right) = \partial\bfx/\partial\bfX$ of this mapping. We use constant strain tetrahedral elements where $\bfF$ is a constant $3 \times 3$ matrix in each tetrahedron. We define edge vectors for each tetrahedron in both material coordinates, $\bfd_{m1} = \bfX_1 - \bfX_0$, $\bfd_{m2} = \bfX_2 - \bfX_0$, $\bfd_{m3} = \bfX_3 - \bfX_0$, and world coordinates, $\bfd_{s1} = \bfx1 - \bfx0$, $\bfd_{s2} = \bfx_2 - \bfx_0$, $\bfd_{s3} = \bfx_3 - \bfx_0$, and construct $3 \times 3$ matrices $\bfD_m$ and $\bfD_s$ using the edge vectors as columns. Then $\bfF = \bfD_s \bfD_m^{-1}$, and $\bfD_m^{-1}$ is constant and can be precomputed and stored for efficiency. 
 
 For hyperelastic materials, stress is defined as the derivative of a strain energy typically constructed from various strain invariants, and we use the first Piola-Kirchhoff stress which is the gradient of the strain energy with respect to the deformation gradient, $\bfP = \partial\Psi/\partial \bfF$. $\bfP$ maps area weighted normals in material space to forces in world space. The force on a node $i$ due to a single tetrahedron incident to it is $\bfg_i = -\bfP \left( A_1 \bfN_1 + A_2 \bfN_2 + A_3 \bfN_3 \right) / 3$, where the $A_j \bfN_j$ are the area weighted normals of the faces of the tetrahedron incident to node $i$. Since these do not change during the simulation, we can precompute a vector $\bfb_i$ such that $\bfg_i = \bfP \bfb_i$. For efficiency, we compute $\bfg_0 = -\left( \bfg_1 + \bfg_2 + \bfg_3 \right)$ and compactly express the other three $\bfg_i$ as $\bfG = \bfP \bfB_m$ where $\bfG = \left( \bfg_1, \bfg_2, \bfg_3 \right)$ and $\bfB_m = \left( \bfb_1, \bfb_2, \bfb_3 \right) = -V \bfD_m^{-T}$ with $V$ the volume of the tetrahedron in material space.
