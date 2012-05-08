@@ -12,7 +12,7 @@
 To review, this chapter addresses the solution of the equilibrium equations of linear elasticity, repeated here for convenience:
 \begin{subequations} \label{eq:chap5.LE}
 \begin{align}
--\lrp{\Delta \bfI + (\lambda + \mu) \nabla \nabla^t} \bfu & = \bff \quad \in \Omega \label{eq:chap5.LE.PDE} \\
+-\lrp{\mu \Delta \bfI + (\lambda + \mu) \nabla \nabla^t} \bfu & = \bff \quad \in \Omega \label{eq:chap5.LE.PDE} \\
 \bfu & = \bfu_0 \quad \in \dOmega_d \label{eq:chap5.LE.D} \\
 \mu \lrp{\bfu \cdot \hatn + \nabla \lrp{\bfu \cdot \hatn}} + \lambda \lrp{\nabla \cdot \bfu} \hatn & = \bfg \quad \in \dOmega_n \label{eq:chap5.LE.N}.
 \end{align}
@@ -42,7 +42,7 @@ are then equivalent to the original equations \eqref{eq:chap5.LE}.
 
 We use this augmented form of the equations to derive an equivalent variational form of the equilibrium equations of linear elasticity. A weak form can be derived by taking the inner product of the strong form with an arbitrary vector-valued function $\bfv \in \bfV_0 := (H_{0,\dOmega_d}^1(\Omega))^d$ and by enforcing $p = -(\lambda/\mu) \nabla \cdot \bfu$ weakly:
 \begin{center}
-Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$, $\bfu \rvert_{\dOmega_d} = \bfu_0$, such that
+Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$, $\bfu \rvert_{\dOmega_d} = \bfu_0$ such that
 \end{center}
 \begin{subequations} \label{eq:chap5.augmented.weak}
 \begin{align}
@@ -297,7 +297,7 @@ This partitioning of the domain into doubly refined quadrilaterals naturally sup
 
 We have thus far assumed that our solution satisfies the Dirichlet boundary conditions \eqref{eq:chap5.LE.D} and that our test functions vanish on the Dirichlet boundary. However, because we use a regular Cartesian grid that does not conform to the actual domain, it is not convenient to directly define a finite element space with a specific value at the irregular boundary. Instead, we enforce these conditions weakly (cf. \eqref{eq:chap5.augmented.weak}):
 \begin{center}
-Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$, such that
+Find $(\bfu,p) \in (H^1(\Omega))^d \times L^2(\Omega)$ such that
 \end{center}
 \begin{subequations} \label{eq:chap5.dirichlet.weak}
 \begin{align}
