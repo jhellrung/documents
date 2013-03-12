@@ -1,0 +1,187 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, F04 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Consider the following two statements:
+
+\begin{enumerate}
+\item The sequence \(\{a_n\}\) converges.
+
+\item The sequence \(\{(a_1 + a_2 + \cdots + a_n)/n\}\) converges.
+
+\end{enumerate}
+
+Does (a) imply (b)?  Does (b) imply (a)?  Prove your answers.
+
+{\bf Solution}
+
+Let \(a_n = (-1)^n\).  Then \((a_1 + \cdots + a_n)/n \to 0\) but \(\{a_n\}\) certainly doesn't converge.  Therefore (b) does not imply (a).
+
+Suppose \(a_n \to a\).  Then given \(\epsilon > 0\), there exists an \(N\) such that \(|a_n - a| < \epsilon\) for \(n \geq N\).  Then for \(m > N\),
+\[\frac{\sum_{i = 1}^m a_i}{m}
+  = \frac{1}{m} \sum_{i = 1}^{N - 1} a_i + \frac{1}{m} \sum_{i = N}^m a_i
+  = c_m + \frac{1}{m} \sum_{i = N}^m a_i\]
+where \(c_m \to 0\) as \(m \to \infty\).  Thus
+\[\left| \frac{\sum_{i = 1}^m a_i}{m} - \frac{m - N + 1}{m} a \right|
+  \leq |c_m| + \frac{1}{m} \sum_{i = N}^m |a_i - a|
+     < |c_m| + \frac{m - N + 1}{m} \epsilon
+     < |c_m| + \epsilon.\]
+Letting \(m \to \infty\), and noting that \(\epsilon\) was arbitrary, allows us to conclude that
+\[\lim_{m \to \infty} \frac{\sum_{i = 1}^m a_i}{m} = a.\]
+Therefore (a) implies (b).
+
+
+
+\item State and prove Rolle's Theorem.  (You can use without proof theorems about the maxima and minima of continuous or differentiable functions.)
+
+{\bf Solution}
+
+If \(f : [a,b] \to \mathbb{R}\) is continuous on \([a,b]\) and differentiable on \((a,b)\), and \(f(a) = f(b)\), then \(f'(x) = 0\) for some \(x \in (a,b)\).
+
+If \(f\) is constant on \([a,b]\), then \(f' \equiv 0\) on \((a,b)\).  Otherwise, suppose \(f(t) > f(a)\) for some \(t \in (a,b)\).  Since \(f\) is continuous on \([a,b]\), \(f\) achieves its minimum and maximum value.  Let \(x \in (a,b)\) be a point at which \(f\) achieves its maximum value (must be on the interior of \([a,b]\) since \(f(t) > f(a) = f(b)\)).  Then \(f'(x) = 0\).  Similarly, if \(f(t) < f(a)\) for some \(t \in (a,b)\), there again exists an \(x \in (a,b)\) such that \(f'(x) = 0\).
+
+
+
+\item Show that if \(f_n \to f\) uniformly on the bounded closed interval \([a,b]\), then
+\[\int_a^b f_n(x) dx \to \int_a^b f(x) dx.\]
+
+{\bf Solution}
+
+(S04.3)
+
+
+
+\item Suppose that \((\mathcal{M}, \rho)\) is a metric space, \(x,y \in \mathcal{M}\), and that \(\{x_n\}\) is a sequence in this metric space such that \(x_n \to x\).  Prove that \(\rho(x_n,y) \to \rho(x,y)\).
+
+{\bf Solution}
+
+Given \(\epsilon > 0\), let \(N\) be such that \(\rho(x_n, x) < \epsilon\) for \(n > N\).  Then
+\[\left| \rho(x_n,y) - \rho(x,y) \right| \leq \rho(x_n,x) < \epsilon\]
+for \(n > N\), hence \(\rho(x_n,y) \to \rho(x,y)\).
+
+
+
+\item Prove that the space \(C[0,1]\) of continuous functions from \([0,1]\) to \(\mathbb{R}\) with the supremum norm, \(\|f\|_{\infty} = \sup_{[0,1]} |f(x)|\), is complete.  (You can use without proof the fact that a uniform limit of continuous functions is continuous.)
+
+{\bf Solution}
+
+(F03.7)
+
+
+
+\item The Bolzano-Weirstrass Theorem in \(\mathbb{R}^n\) states that if \(S\) is a bounded closed subset of \(\mathbb{R}^n\) and \(\{x_n\}\) is a sequence which takes values in \(S\), then \(\{x_n\}\) has a subsequence which converges to a point in \(S\).  Assume this statement known in case \(n = 1\), and use it to prove the statement in case \(n = 2\).
+
+{\bf Solution}
+
+Let \(\{(x_n,y_n)\}_{n = 1}^{\infty}\) be a sequence in \(S\), a bounded closed subset of \(\mathbb{R}^2\).  Let \(T = \{x \ | \ \exists y \in \mathbb{R}, (x,y) \in S\}\) be the project of \(S\) onto the first coordinate.  Then \(\{x_n\}_{n = 1}^{\infty}\) is a sequence in \(T\), a bounded closed subset of \(\mathbb{R}\), hence there exists some subsequence \(\{x_{n_i}\}_{i = 1}^{\infty}\) which converges to \(x^* \in T\).  Now consider the sequence \(\{(x_{n_i}, y_{n_i})\}_{i = 1}^{\infty}\) in \(S\).  Similar as before, \(\{y_{n_i}\}_{i = 1}^{\infty}\) is a sequence in a bounded closed subset of \(\mathbb{R}\), hence there exists a subsequence \(\{y_{n_i'}\}_{i = 1}^{\infty}\) which converges to \(y^*\).  It follows that \((x_{n_i'}, y_{n_i'}) \to (x^*, y^*)\).  Further, \((x^*, y^*) \in S\) by the closedness of \(S\), which proves the theorem in the case \(n = 2\).
+
+
+
+\item Observe that the point \(P = (1,1,1)\) belongs to the set \(S\) of points in \(\mathbb{R}^3\) satisfying the equation
+\[x^4y^2 + x^2z + yz^2 = 3.\]
+Explain carefully how, in this case, the Implicit Function Theorem allows us to conclude that there exists a differentiable function \(f(x,y)\) such that \((x,y,f(x,y))\) lies in \(S\) for all \((x,y)\) in a small open set containing \((1,1)\).
+
+{\bf Solution}
+
+Let \(G : \mathbb{R}^2 \times \mathbb{R} \to \mathbb{R}\) defined by
+\[G(x,y,z) = x^4y^2 + x^2z + yz^2 - 3.\]
+Then \(G(1,1,1) = 0\) and \(D_zG = x^2 + 2yz = 3 \neq 0\) at \(P = (1,1,1)\).  By the Implicit Function Theorem, there exist open sets \(U\) and \(V\), \((1,1) \in U \subset \mathbb{R}^2\), \(1 \in V \subset \mathbb{R}\), and a differentiable function \(f\) such that \(G(x,y,f(x,y)) = 0\) for each \((x,y) \in U\).
+
+
+
+\item Let \(A = (a_{ij})\) be a real, \(n \times n\) symmetric matrix and let \(Q(v) = v \cdot Av\) (ordinary dot product) be the associated quadratic form defined for \(v = (v_1, \ldots, v_n) \in \mathbb{R}^n\).
+
+\begin{enumerate}
+\item Show that \(\nabla Q_v = 2Av\) where \(\nabla Q_v\) is the gradient at \(v\) of the function \(Q\).
+
+\item Let \(M\) be the minimum value of \(Q(v)\) on the unit sphere \(S^n = \{v \in \mathbb{R}^n : \|v\| = 1\}\) and let \(u \in S^n\) be a vector such that \(Q(u) = M\).  Prove, using Lagrange multipliers, that \(u\) is an eigenvector of \(A\) with eigenvalue \(M\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We have that
+\[Q(v) = v \cdot Av = \sum_i \sum_j a_{ij} v_i v_j,\]
+so
+\[D_kQ(v) = \sum_i a_{ik} v_i + \sum_j a_{kj} v_j = 2 \sum_j a_{kj} v_i,\]
+therefore
+\[\nabla Q_v = \left( D_1Q(v) \ \cdots \ D_nQ(v) \right) = 2 A v.\]
+
+\item If we set
+\[g(v) = \|v\|^2 - 1,\]
+then \(Q\) attains its minimum and maximum values at points \(v \in \mathbb{R}^n\) satisfying
+\[\nabla Q_v = \lambda \nabla g_v,\]
+\[g(v) = 0.\]
+The first equality gives
+\[2Av = \lambda (2v),\]
+so \(\lambda\) is an eigenvalue of \(A\), and \(v\) is a corresponding eigenvector.  If \(M\) is the minimum value on \(S^n\), and \(Q(u) = M\) for \(u \in S^n\), then by the previous statement, \(u\) is an eigenvector for \(A\).  Furthermore,
+\[M = Q(u) = u \cdot Au = u \cdot (\lambda u) = \lambda \|u\|^2 = \lambda.\]
+
+\end{enumerate}
+
+
+
+\item Let \(T : \mathbb{C}^n \to \mathbb{C}^n\) be a linear transformation and \(P\) a polynomial such that \(P(T) = 0\).  Prove that every eigenvalue of \(T\) is a root of \(P\).
+
+{\bf Solution}
+
+Let \(\lambda \in \mathbb{C}\), \(x \in \mathbb{C}^n\) be an eigenvalue-eigenvector pair for \(T\).  Then, since
+\[T^kx = \lambda^kx,\]
+we have that
+\[0 = P(T)x = P(\lambda)x.\]
+Since \(x \neq 0\), it must be that \(P(\lambda) = 0\), i.e., \(\lambda\) is a root of \(P\).
+
+
+
+\item Let \(V = \mathbb{R}^n\) and let \(T : V \to V\) be a linear transformation.  For \(\lambda \in \mathbb{C}\), the subspace
+\[V(\lambda) = \{v \in V : (T - \lambda I)^N v = 0 \text{ for some } N \geq 1\}\]
+is called a generalized eigenspace.
+
+\begin{enumerate}
+\item Prove that there exists a fixed number \(M\) such that \(V(\lambda) = \ker((T - \lambda I)^M)\).
+
+\item Prove that if \(\lambda \neq \mu\), then \(V(\lambda) \cap V(\mu) = \{0\}\).  Hint:  use the following equation by raising both sides to a high power.
+\[\frac{T - \lambda I}{\mu - \lambda} + \frac{T - \mu I}{\lambda - \mu} = I\]
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Without loss of generality, let \(\lambda = 0\).  Denote
+\[K_n = \ker(T^n).\]
+Clearly, \(K_n \subset K_{n + 1}\).  We show that \(T\) maps \(K_{n + 2} / K_{n + 1}\) injectively into \(K_{n + 1} / K_n\).  Indeed, for \(v,w \in K_{n + 2} / K_{n + 1}\), if \(Tv - Tw = T(v - w) \in K_n\), then \(v - w \in K_{n + 1}\) and, in fact, are equal in \(K_{n + 2} / K_{n + 1}\).  Thus the dimension of the quotient spaces are monotonically decreasing.  Eventually, the quotient spaces must become trivial, for otherwise we could construct an infinite set of linearly independent vectors in \(V\) by selecting a nonzero vector from each of the quotient spaces, contradicting the fact that \(V\) is finite dimesional.  Thus, there exists some \(N\) such that \(K_n = K_N\) for all \(n > N\), and \(V(\lambda) = K_N\).
+
+\item Suppose \(v \in V(\lambda) \cap V(\mu)\).  Let \(N\) and \(M\) be such that \(V(\lambda) = \ker((T - \lambda I)^N)\) and \(V(\mu) = \ker((T - \mu I)^M)\).  Set \(R = N + M - 1\).  Then
+\[\begin{array}{rcl}
+  I & = & I^R \\
+    & = & \left( \frac{T - \lambda I}{\mu - \lambda} + \frac{T - \mu I}{\lambda - \mu} \right)^R \\
+    & = & \sum_{n = 0}^R (-1)^n \frac{(T - \lambda I)^n (T - \mu I)^{R - n}}{(\lambda - \mu)^R}
+  \end{array}.\]
+Now \(T - \lambda I\) and \(T - \mu I\) commute; further, either \(n \geq N\) or \(R - n \geq M\), so \((T - \lambda I)^n (T - \mu I)^{R - n} v = 0\) for all \(n = 0, \ldots, R\).  Thus, applying the last summation to \(v\) gives \(0\), but applying \(I\) to \(v\) yields \(v\), hence \(v = 0\), proving the claim.
+    
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

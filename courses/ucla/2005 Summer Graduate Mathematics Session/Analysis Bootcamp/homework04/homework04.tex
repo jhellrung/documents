@@ -1,0 +1,158 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Friday, September 02, 2005 \\
+Analysis Bootcamp, Homework 4 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item {\em Rudin, page 138.  Problems 1 - 6, 8.}
+
+\begin{itemize}
+
+\item[1.] {\em Suppose \(\alpha\) increases on \([a,b]\), \(a \leq x_0 \leq b\), \(\alpha\) continuous at \(x_0\), \(f(x_0) = 1\), and \(f(x) = 0\) if \(x \neq x_0\).  Prove that \(f \in \mathcal{R}(\alpha)\) and that \(\int f d\alpha = 0\).}
+
+{\bf Solution}
+
+Clearly, if \(a = b\), \(\int f d\alpha = 0\), so suppose \(a < b\).  Further suppose that \(x_0 < b\) (a similar argument works for \(x_0 = b\)).
+
+Given \(\epsilon > 0\), let \(\delta > 0\) be such that \(|\alpha(x) - \alpha(x_0)| < \epsilon\) whenever \(|x - x_0| < \delta\) (possible since \(\alpha\) is continuous at \(x_0\)) and such that \(x_0 + \delta/2 \leq b\).  Let \(P\) be the partition \(\{a, x_0, x_0 + \delta/2, b\}\).  Then, evidently, \(0 \leq U(P,f,\alpha) = \alpha(x_0 + \delta/2) - \alpha(x_0) < \epsilon\), and since \(\epsilon\) was arbitrary, we conclude that
+\[\overline{\int} f d\alpha = \inf U(P,f,\alpha) = 0.\]
+Further, by the nonnegativity of \(f\),
+\[0 \leq \underline{\int} f d\alpha \leq \overline{\int} f d\alpha\]
+and we conclude the upper and lower integrals are equal to each other and to \(0\), hence \(\int f d\alpha = 0\).
+
+
+
+\item[2.] {\em Suppose \(f \geq 0\), \(f\) is continuous on \([a,b]\), and \(\int_a^b f(x) dx = 0\).  Prove that \(f(x) = 0\) for all \(x \in [a,b]\).  (Compare this with Exercise 1.)}
+
+{\bf Solution}
+
+Suppose \(f(x_0) > 0\) for some \(x_0 \in [a,b]\).  Then given some \(\epsilon > 0\), there exists some neighborhood \([c,d] \subset [a,b]\), \(c < d\), containing \(x_0\) and such that \(f(x) > \epsilon\) for \(x \in [c,d]\), by continuity of \(f\).  By the nonnegativity of \(f\), then,
+\[\int_a^b f(x) dx = \underline{\int}_a^b f(x) dx \geq \epsilon (d - c) > 0,\]
+a contradiction.  It follows that \(f \equiv 0\) on \([a,b]\).
+
+
+
+\item[3.] {\em Define three functions \(\beta_1, \beta_2, \beta_3\) as follows:  \(\beta_j(x) = 0\) if \(x < 0\), \(\beta_j(x) = 1\) if \(x > 0\) for \(j = 1,2,3\); and \(\beta_1(0) = 0\), \(\beta_2(0) = 1\), \(\beta_3(0) = \frac{1}{2}\).  Let \(f\) be a bounded function on \([-1,1]\).
+\begin{enumerate}
+\item Prove that \(f \in \mathcal{R}(\beta_1)\) if and only if \(f(0+) = f(0)\) and that then
+\[\int f \beta_1 = f(0).\]
+\item State and prove a similar result for \(\beta_2\).
+\item Prove that \(f \in \mathcal{R}(\beta_3)\) if and only if \(f\) is continuous at \(0\).
+\item If \(f\) is continuous at \(0\) prove that
+\[\int f d\beta_1 = \int f d\beta_2 = \int f d\beta_3 = f(0).\]
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Suppose that \(f \in \mathcal{R}(\beta_1)\), and let \(\epsilon > 0\).  Then, by Theorem 6.6, there exists a partition \(P\) such that
+\[U(P,f,\beta_1) - L(P,f,\beta_1) < \epsilon.\]
+Let \(P^* = P \cup \{0\}\) and \(\delta\) the minimum positive element of \(P\).  Then
+\[U(P,f,\beta_1) = \left( \beta_1(\delta) - \beta_1(0) \right) \sup_{x \in [0,\delta]} f(x)
+                 = \sup_{x \in [0,\delta]} f(x),\]
+\[L(P,f,\beta_1) = \left( \beta_1(\delta) - \beta_1(0) \right) \inf_{x \in [0,\delta]} f(x)
+                 = \inf_{x \in [0,\delta]} f(x).\]
+In particular, then, for any \(x \in [0,\delta]\),
+\[|f(x) - f(0)| < \epsilon,\]
+from which it follows that \(f(0+) = f(0)\).
+
+Now suppose that \(f(0+) = f(0)\), and let \(2\epsilon > 0\).  Then there exists a \(\delta > 0\) such that
+\[|f(x) - f(0)| < \epsilon\]
+whenever \(x \in [0,\delta]\).  We then take \(P = \{a, 0, \delta, b\}\) (\(a \leq 0\) and \(b \geq \delta\) defining the relevant interval) and see that, as before,
+\[U(P,f,\beta_1) = \sup_{x \in [0,\delta]} f(x),\]
+\[L(P,f,\beta_1) = \inf_{x \in [0,\delta]} f(x),\]
+and since \(f(x)\) is within \(\epsilon\) of \(f(0)\) for all \(x \in [0,\delta]\),
+\[U(P,f,\beta_1) - L(P,f,\beta_1) < 2\epsilon,\]
+implying that \(f \in \mathcal{R}(\beta_1)\), by Theorem 6.6.
+
+Further, \(U(P,f,\beta_1)\) and \(L(P,f,\beta_1)\) can be made within \(\epsilon\) of \(f(0)\), for \(\epsilon\) arbitrary, hence \(\int f \beta_1 = f(0)\).
+
+\item The proof of the following claim is almost precisely the same as above:  \(f \in \mathcal{R}(\beta_2)\) if and only if \(f(0-) = f(0)\), and in that case \(\int f d\beta_2 = f(0)\).
+
+\item
+\[\int_0^b f d\beta_3 = \frac{1}{2} \int_0^b f d\beta_1\]
+exists if and only if \(f(0+) = f(0)\), and
+\[\int_a^0 f d\beta_3 = \frac{1}{2} \int_a^0 f d\beta_2\]
+exists if and only if \(f(0-) = f(0)\), hence
+\[\int_a^b f d\beta_3\]
+exists if and only if \(f\) is continuous at \(0\).
+
+\item We know that
+\[\int_a^0 f d\beta_1 = \int_0^b f d\beta_2 = 0,\]
+hence, from the above equalities,
+\[\int_a^b f d\beta_1 = \int_a^b f d\beta_2 = \int_a^b f d\beta_3 = f(0).\]
+
+\end{enumerate}
+
+
+
+\item[4.] {\em If \(f(x) = 0\) for all irrational \(x\), \(f(x) = 1\) for all rational \(x\), prove that \(f \notin \mathcal{R}\) on \([a,b]\) for any \(a < b\).}
+
+{\bf Solution}
+
+For any partition \(P = \{x_i\}\),
+\[U(P,f) = \sum M_i \Delta x_i = \sum (b - a) \Delta x_i = b - a,\]
+while
+\[L(P,f) = \sum m_i \Delta x_i = \sum (0) \Delta x_i = 0,\]
+hence \(f \notin \mathcal{R}\).
+
+
+
+\item[5.] {\em Suppose \(f\) is a bounded real function on \([a,b]\), and \(f^2 \in \mathcal{R}\) on \([a,b]\).  Does it follow that \(f \in \mathcal{R}\)?  Does the answer change if we assume that \(f^3 \in \mathcal{R}\)?}
+
+{\bf Solution}
+
+No; take \(f\) such that \(f(x) = 1\) for \(x\) rational and \(f(x) = -1\) for \(x\) irrational.  \(f^2 \equiv 1\), hence \(f^2 \in \mathcal{R}\), but \(f \notin \mathcal{R}\).
+
+Yes; apply Theorem 6.11 to \(\phi(y) = y^{1/3}\), which is continuous everywhere.
+
+
+
+\item[6.] {\em Let \(P\) be the Cantor set constructed in Sec. 2.44.  Let \(f\) be a bounded real function on \([0,1]\) which is continuous at every point outside \(P\).  Prove that \(f \in \mathcal{R}\) on \([0,1]\).  {\em Hint:}  \(P\) can be covered by finitely many segmenets whose total length can be made as small as desired.  Proceed as in Theorem 6.10.}
+
+{\bf Solution}
+
+
+
+\item[8.] {\em Suppose \(f \in \mathcal{R}\) on \([a,b]\) for every \(b > a\) where \(a\) is fixed.  Define
+\[\int_a^{\infty} f(x) dx = \lim_{b \to \infty} \int_a^b f(x) dx\]
+if this limit exists (and is finite).  In that case, we say that the integral on the left {\em converges}.  If it also converges after \(f\) has been replaced by \(|f|\), it is said to converge {\em absolutely}.
+
+Assume that \(f(x) \geq 0\) and that \(f\) decreases monotonically on \([1,\infty)\).  Prove that
+\[\int_1^{\infty} f(x) dx\]
+converges if and only if
+\[\sum_{n = 1}^{\infty} f(n)\]
+converges.  (This is the so-called ``integral test'' for convergence of series.)}
+
+{\bf Solution}
+
+The inequalities
+\[\int_1^N f(x) dx \leq \sum_{n = 1}^{N - 1} f(n)\]
+and
+\[\sum_{n = 1}^N f(n) \leq f(1) + \int_1^N f(x) dx,\]
+for integral \(N \geq 1\), establish the convergence result (these follow from the fact that \(f\) is monotonically decreasing).
+
+
+
+\end{itemize}
+
+
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,316 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\rank{\mathop{\rm rank}\nolimits}
+\def\im{\mathop{\rm im}\nolimits}
+\def\span{\mathop{\rm span}\nolimits}
+
+\newcommand{\matrixiibyii}[4]{\left( \begin{array}{cc} #1 & #2 \\ #3 & #4 \end{array} \right)}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, W02 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item
+
+\begin{enumerate}
+\item State some reasonably general conditions under which this ``differentiation under the integral sign'' formula is valid:
+\[\frac{d}{dx} \int_c^d f(x,y) dy = \int_c^d \frac{\partial f}{\partial x}(x,y) dy.\]
+
+\item Prove that the formula is valid under the conditions you gave in part (a).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item
+\begin{enumerate}
+\item \(f\) is defined on \([a,b] \times [c,d]\).
+\item \(f(x,\cdot) = f^x \in \mathcal{R}\) for all \(x \in [a,b]\).
+\item \(D_1f\) is continuous on \([a,b] \times [c,d]\).
+\end{enumerate}
+
+\item Since \(D_1f\) is continuous on \([a,b] \times [c,d]\), \(D_1f\) is uniformly continuous, hence given an \(\epsilon > 0\), there exists a \(\delta > 0\) such that, in particular,
+\[\left| D_1f(x,y) - D_1f(t,y) \right| < \epsilon\]
+whenever \(y \in [c,d]\) and \(x,t \in (a,b)\) with \(|x - t| < \delta\).  Fix \(x \in (a,b)\) and let
+\[g_x(t,y) = \frac{f(x,y) - f(t,y)}{x - t}\]
+for \(t \in (a,b)\), \(y \in [c,d]\).  Now to each such \(t\), the Mean Value Theorem provides a \(u = u_y(t)\) between \(x\) and \(t\) such that
+\[g_x(t,y) = D_1f(u,y).\]
+If we restrict \(|x - t| < \delta\), then the uniform continuity of \(D_1f\) implies that
+\[\left| g_x(t,y) - D_1f(x,y) \right| < \epsilon,\]
+for all \(y \in [c,d]\).  Thus \(g_x(t,\cdot) \to D_1f(x,\cdot)\) uniformly on \([c,d]\) as \(t \to x\).  Now if we set
+\[I(s) = \int_c^d f(s,y) dy,\]
+then
+\[\frac{I(x) - I(t)}{x - t} = \int_c^d g_x(t,y) dy\]
+hence
+\[\frac{d}{dx} \int_c^d f(x,y) dy
+  = \lim_{t \to x} \frac{I(x) - I(t)}{x - t}
+  = \lim_{t \to x} \int_c^d g_x(t,y) dy
+  = \int_c^d \lim_{t \to x} g_x(t,y) dy
+  = \int_c^d D_1f(x,y) dy,\]
+as the limit and the integral may be interchanged since \(g_x(t,\cdot) \to D_1f(x,\cdot)\) uniformly.
+
+We prove, for completeness, that, given \(f_n \to f\) uniformly on \([a,b]\), with each \(f_n \in \mathcal{R}\), then
+\[\int_a^b f(x) dx = \lim_{n \to \infty} \int_a^b f_n(x) dx.\]
+To this end, let
+\[\epsilon_n = \sup_{[a,b]} \left| f_n - f \right|.\]
+Then
+\[f_n - \epsilon_n \leq f \leq f_n + \epsilon_n,\]
+hence
+\[\int_a^b (f_n - \epsilon_n) dx
+  \leq \underline{\int}_a^b f dx
+  \leq \overline{\int}_a^b f dx
+  \leq \int_a^b (f_n + \epsilon_n) dx,\]
+so
+\[0 \leq \overline{\int}_a^b f dx - \underline{\int}_a^b f dx
+    \leq \int_a^b 2\epsilon_n dx
+       = 2 \epsilon_n (b - a).\]
+As \(n \to \infty\), \(\epsilon_n \to 0\), and the upper and lower integrals of \(f\) converge.  Further,
+\[\left| \int_a^b f dx - \int_a^b f_n dx \right| \leq \epsilon_n (b - a),\]
+from which the claim follows.
+
+\end{enumerate}
+
+
+
+\item  Prove that the unit interval \([0,1]\) is sequentially compact, i.e., that every infinite sequence has a convergent subsequence.
+
+(Prove this directly.  Do not just quote general theorems like Heine-Borel.)
+
+{\bf Solution}
+
+Given a sequence \(\{x_n\}_{n = 1}^{\infty}\), define \(x_n^0 = x_n\) for \(n \geq 1\).  We begin with the closed unit interval \(I_0 = [a, b] = [0, 1]\).  Consider the subintervals \(L = [a, m]\) and \(R = [m, b]\) for \(m = (a + b)/2\).  Since \(L \cup R = I_0\), infinitely many of the points in \(\{x_n^0\}_{n = 1}^{\infty}\) must lie in either \(L\) or \(R\) (or both).  If \(L\) contains infinitely many such points, let \(\{x_n^1\}\) be the subsequence of \(\{x_n^0\}\) of those points lying in \(L\), and set \(I_1 = L\); otherwise, let \(\{x_n^1\}\) be the subsequence of \(\{x_n^0\}\) of those points lying in \(R\), and set \(I_1 = R\).  Repeat this process to obtain the subsequence \(\{x_n^2\}\) and \(I_2\), and so on.  The \(i^{th}\) step will generate a subsequence \(\{x_n^i\}\) contained within some closed interval \(I_i\), which will have length \(2^{-i}\).
+
+As the \(I_i\)'s are a nested sequence of closed intervals, their intersection must be nonempty.  Indeed, the left endpoints of the \(I_i\)'s form a bounded, monotonically increasing sequence in \([0,1] \subset \mathbb{R}\), hence have some limit \(\ell \in [0,1]\) (since \([0,1]\) is closed), and since the left endpoint of any \(I_i\) is less than or equal to \(\ell\), \(\ell \in I_i\) for each \(i\) (note that, by the nesting property of the \(I_i\)'s, \(\ell\) must be strictly less than the right endpoint of any \(I_i\)), hence \(\ell \in \bigcap_i I_i\).  Similarly, the limit \(r \in [0,1]\) of the right endpoints is in the intersection, hence we conclude that \([l,r] = \bigcap_i I_i\).  As the length of the \(I_i\)'s tend to zero, we conclude that \(\ell = r\) and the intersection consists of precisely one point, \(x^* = \ell = r\).
+
+We now construct a subsequence of \(\{x_n\}\) converging to \(x^*\) as follows.  Select \(x_{n_i}\) from \(\{x_n^i\}\) and such that \(n_i < n_{i + 1}\).  Since both \(x^* \in I_i\) and \(x_{n_i} \in I_i\), \(|x^* - x_{n_i}| \leq 2^{-i} \to 0\) as \(i \to \infty\), showing that \(x_{n_i} \to x^*\).
+
+
+
+\item Prove that open unit ball in \(\mathbb{R}^2\)
+\[\left\{ (x,y) \in \mathbb{R}^2 : x^2 + y^2 < 1 \right\}\]
+is connected.
+
+(You may assume that intervals in \(\mathbb{R}\) are connected.  You should not just quote other general results, but give a direct proof.)
+
+{\bf Solution}
+
+Set
+\[U = \left\{ (x,y) \in \mathbb{R}^2 \ | \ x^2 + y^2 < 1 \right\}.\]
+We show first that \(U\) is path-connected.  Indeed, taking two points \(p,q \in U\), let
+\[\gamma(t) = p + t(q - p) = (1 - t)p + tq, \ t \in [0,1].\]
+Then
+\[\|\gamma(t)\|_2 \leq (1 - t)\|p\|_2 + t\|q\|_2 \leq \max \{\|p\|_2, \|q\|_2\} < 1\]
+for all \(t \in [0,1]\).  Hence \(\gamma\) is a path from \(p\) to \(q\) within \(U\).
+
+Now suppose that \(U\) is not connected.  Then there exists nonempty subsets \(A\) and \(B\) such that \(U = A \cup B\) but \(A \cap \overline{B} = \overline{A} \cap B = \emptyset\).  Let \(p \in A\) and \(q \in B\) and let \(\gamma : [0,1] \to U\) be a path from \(p\) to \(q\).  Set \(A' = A \cap \gamma([0,1])\) and \(B' = B \cap \gamma([0,1])\).  It follows that \(\gamma([0,1])\) is not connected, as it can be partitioned into \(A'\) and \(B'\) such that \(A' \cap \overline{B'} = \overline{A'} \cap B = \emptyset\) (in the subspace topology of \(\gamma([0,1])\)).  But \(\gamma([0,1])\) is homeomorphic to the unit interval \([0,1]\), which is connected, and homeomorphisms of connected sets are connected.  This is a contradiction, hence \(U\) must be connected.
+
+
+
+\item Prove that the set of irrational numbers in \(\mathbb{R}\) is not a countable union of closed sets.
+
+{\bf Solution}
+
+Suppose \(\bigcup_n E_n = \mathbb{R} \backslash \mathbb{Q}\) for some countable sequence \(\{E_n\}\) of closed subsets of \(\mathbb{R}\).  Each \(E_n\) must have empty interior (else would contain some of \(\mathbb{Q}\), since \(\mathbb{Q}\) is dense in \(\mathbb{R}\)), hence each \(E_n\) is nowhere dense.  Enumerate \(\mathbb{Q}\) by \(x_n\), so that \(\bigcup_n \{x_n\} = \mathbb{Q}\).  Each \(\{x_n\}\) is also nowhere dense, hence by a corollary to the Baire Category Theorem,
+\[\left( \bigcup_n E_n \right) \cup \left( \bigcup_n \{x_n\} \right)\]
+must have empty interior, as it is a countable union of nowhere dense sets of a complete metric space.  Yet the union above is equal to all of \(\mathbb{R}\), whose interior is certainly all of \(\mathbb{R}\), a contradiction.  It follows that \(\mathbb{R} \backslash \mathbb{Q}\) cannot be expressed as a countable union of closed sets.
+
+
+
+\item 
+
+\begin{enumerate}
+\item Let \(f : U \to \mathbb{R}^k\) be a function on an open set \(U\) in \(\mathbb{R}^n\).  Define what it means for \(f\) to be differentiable at a point \(x \in U\).
+
+\item State carefully the Chain Rule for the composition of differentiable functions of several variables.
+
+\item Prove the Chain Rule you stated in part (b).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item \(f\) is differentiable at \(x \in U\) if there exists a linear transformation \(T : \mathbb{R}^n \to \mathbb{R}^k\) such that
+\[\lim_{t \to x} \frac{f(t) - f(x) - T(t - x)}{\|t - x\|} = 0,\]
+or, equivalently, the ``remainder function'' \(R\) defined by
+\[f(t) - f(x) - T(t - x) = R(t)\]
+is such that
+\[\lim_{t \to x} \frac{R(t)}{\|t - x\|} = 0.\]
+We denote \(T\) by \(f'(x)\).
+
+\item Let \(f : \mathbb{R}^n \to \mathbb{R}^m\) and \(g : \mathbb{R}^m \to \mathbb{R}^k\), \(f\) differentiable at \(x \in \mathbb{R}^n\), and \(g\) differentiable at \(f(x) \in \mathbb{R}^m\).  Then \(g \circ f : \mathbb{R}^n \to \mathbb{R}^k\) is differentiable at \(x\), with derivative
+\[(g \circ f)'(x) = g'(f(x)) \circ f'(x).\]
+
+\item Set \(y = f(x)\).  Then the remainder function \(R(t)\) defined by
+\[f(t) - f(x) - f'(x)(t - x) = R(t)\]
+is such that \(R(t) / \|t - x\| \to 0\) as \(t \to x\).  Also, the remainder function \(S(s)\) defined by
+\[g(s) - g(y) - g'(y)(s - y) = S(s)\]
+is such that \(S(s) / \|s - y\| \to 0\) as \(s \to y\).  If we let \(s = f(t)\), then
+\[\begin{array}{rcl}
+  (g \circ f)(t) - (g \circ f)(x)
+  & = & g(s) - g(y) \\
+  & = & g'(y)(s - y) + S(s) \\
+  & = & g'(f(x))(f(t) - f(x)) + S(f(t)) \\
+  & = & g'(f(x))(f'(x)(t - x) + R(t)) + S(f(t)) \\
+  & = & g'(f(x))(f'(x)(t - x)) + g'(f(x))(R(t)) + S(f(t))
+  \end{array}.\]
+Let
+\[P(t) = g'(f(x))(R(t)) + S(f(t)).\]
+Then
+\[\|P(t)\| \leq \|g'(f(x))\| \|R(t)\| + \|S(f(t))\|\]
+so
+\[\lim_{t \to x} \frac{\|P(t)\|}{\|t - x\|}
+  \leq \lim_{t \to x} \frac{\|S(f(t))\|}{\|t - x\|}.\]
+Now
+\[s - y = f'(x)(t - x) + R(t),\]
+hence
+\[\frac{1}{\|t - x\|} \leq \frac{\|f'(x)\| + \|R(t)\|/\|t - x\|}{\|s - y\|},\]
+and since \(s \to y\) as \(t \to x\),
+\[\lim_{t \to x} \frac{\|S(f(t))\|}{\|t - x\|}
+  = \lim_{t \to x} \frac{\|S(s)\|}{\|s - y\|} \left( \|f'(x)\| + \frac{\|R(t)\|}{\|t - x\|} \right)
+  = 0,\]
+which proves that
+\[(g \circ f)'(x) = g'(f(x)) \circ f'(x).\]
+
+\end{enumerate}
+
+
+
+\item 
+
+\begin{enumerate}
+\item State some reasonably general conditions on a function \(f : \mathbb{R}^2 \to \mathbb{R}\) under which
+\[  \frac{\partial}{\partial x} \left( \frac{\partial f}{\partial y} \right)
+  = \frac{\partial}{\partial y} \left( \frac{\partial f}{\partial x} \right).\]
+
+\item Prove the formula under the conditions you stated.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item
+\begin{enumerate}
+\item \(f\) is continuous.
+\item The partial derivatives \(D_1f\) and \(D_2f\) exist and are continuous.
+\item The mixed partials \(D_{21}f\) and \(D_{12}f\) exist and are continuous.
+\end{enumerate}
+
+\item (F01.5)
+
+\end{enumerate}
+
+
+
+\item Suppose \(F : \mathbb{R}^2 \to \mathbb{R}^2\) is everywhere differentiable and that its first derivative (Jacobian) matrix
+\[\matrixiibyii{\frac{\partial F_1}{\partial x}}
+               {\frac{\partial F_1}{\partial y}}
+               {\frac{\partial F_2}{\partial x}}
+               {\frac{\partial F_2}{\partial y}}\]
+is continuous everywhere and nonsingular everywhere.
+
+(Here we use the notation \(F(x,y) = (F_1(x,y), F_2(x,y)) \in \mathbb{R}^2\).)
+
+Suppose also that
+\[\|F((x,y))\| \geq 1 \ \text{ if } \ \|(x,y)\| = 1 \ \text{ and that } \ F((0,0)) = (0,0).\]
+Prove that
+\[F \left( \left\{ (x,y) : x^2 + y^2 < 1 \right\} \right) \supset \left\{ (x,y) : x^2 + y^2 < 1 \right\}.\]
+(Hint:  With \(U = \left\{ (x,y) : x^2 + y^2 < 1 \right\}\), prove that \(F(U) \cap U\) is open and is closed in \(U\).)
+
+{\bf Solution}
+
+Let \(y \in F(U) \cap U\).  Then there exists some \(x \in U\) such that \(F(x) = y\), and \(F'(x)\) is nonsingular.  The Inverse Function Theorem then gives us open sets \(V \subset U\) and \(W \subset \mathbb{R}^2\), \(x \in V\), \(y \in W\), \(F\) is one-to-one on \(V\), and \(F(V) = W\).  Thus \(W \cap U \subset F(U) \cap U\) is an open (with respect to \(U\)) neighborhood of \(y\), hence \(F(U) \cap U\) is open in \(U\).
+
+Now suppose \(y \in U\) is a limit point of \(F(U)\).  Then there exists a sequence \(\{y_n\}_{n = 1}^{\infty} \subset F(U)\) such that \(y_n \to y\).  For each \(n\), let \(x_n \in U\) such that \(F(x_n) = y_n\).  Then \(\{x_n\}_{n = 1}^{\infty}\) is a sequence within \(\overline{U}\), a compact set, hence there exists a convergent subsequence \(\{x_{n_i}\}_{i = 1}^{\infty}\) with \(x_{n_i} \to x^* \in \overline{U}\).  By the continuity of \(F\), then, \(F(x^*) = y\).  Now since \(F(\partial U) \cap U = \emptyset\), \(x^* \notin \partial U\), as \(F(x^*) = y \in U\).  Thus \(x^* \in U\) and \(y = F(x^*) \in F(U)\), showing that \(F(U) \cap U\) is closed in \(U\).
+
+Finally, \(F(U) \cap U \neq \emptyset\), since \(F((0,0)) = (0,0)\).  Thus, as \(F(U) \cap U\) is both open and closed in \(U\), \(F(U) \cap U = U\) and \(F(U) \supset U\).
+
+
+
+\item Let \(T : V \to W\) and \(S : W \to X\) be linear transformations of finite dimensional real vector spaces.  Prove that
+\[\rank(T) + \rank(S) - \dim(W) \leq \rank(S \circ T) \leq \min \left\{ \rank(T), \rank(S) \right\}.\]
+(The rank of a linear transformation is the dimension of its image.)
+
+{\bf Solution}
+
+The rank of the restriction of \(S\) to any subspace of \(W\) can be no larger than \(\rank(S)\), hence
+\[\rank(S) \geq \rank \left( S|_{\im(T)} \right) = \rank(S \circ T).\]
+Further, the dimension of the image of a subspace under a linear transformation is no larger than the dimension of the subspace, hence
+\[\rank(T) = \dim(\im(T)) \geq \dim(S(\im(T))) = \dim(\im(S \circ T)) = \rank(S \circ T).\]
+Thus the right inequality is established.
+
+We have that
+\[\dim(V) = \rank(T) + \dim(\ker(T)),\]
+\[\dim(W) = \rank(S) + \dim(\ker(S)),\]
+\[\dim(V) = \rank(S \circ T) + \dim(\ker(S \circ T)),\]
+hence
+\[\rank(T) + \rank(S) - \dim(W) = \rank(S \circ T) + \dim(\ker(S \circ T)) - \dim(\ker(T)) - \dim(\ker(S)).\]
+Now \(T(\ker(S \circ T)) \subset \ker(S)\) (since \(v \in \ker(S \circ T)\) implies \(S(Tv) = 0\), hence \(Tv \in \ker S\)), hence
+\[\dim \left( \im \left( T|_{\ker(S \circ T)} \right) \right) \leq \dim(\ker(S)).\]
+Further, \(\ker \left( T|_{\ker(S \circ T)} \right) = \ker(T)\) (\(v \in \ker(T)\) implies \(v \in \ker(S \circ T)\), and the opposite inclusion is obvious), hence
+\[\dim(\ker(S \circ T))
+     = \dim \left( \im  \left( T|_{\ker(S \circ T)} \right) \right)
+     + \dim \left( \ker \left( T|_{\ker(S \circ T)} \right) \right)
+  \leq \dim(\ker(S)) + \dim(\ker(T))\]
+and it follows that
+\[\rank(T) + \rank(S) - \dim(W) \leq \rank(S \circ T),\]
+which establishes the left inequality.
+
+
+
+\item Let \(V\) be a real vector space and \(T : V \to V\) be a linear transformation.  Let \(\lambda_1, \ldots, \lambda_m\) be distinct eigenvalues of \(T\).  Let \(0 \neq v_i\) be an eigenvector of \(T\) with eigenvalue \(\lambda_i\) for \(1 \leq i \leq m\).  Show that \(\{v_1, \ldots, v_m\}\) is linearly independent.
+
+{\bf Solution}
+
+(F01.10)
+
+
+
+\item Let \(V\) be a finite dimensional complex inner product space and \(f : V \to \mathbb{C}\) a linear functional.  Show that there exists a vector \(w \in V\) such that \(f(v) = \langle v, w \rangle\) for all \(v \in V\).
+
+{\bf Solution}
+
+Let \(\{e_1, \ldots, e_n\}\) be an orthonormal basis for \(V\) with respect to its inner product, let
+\[w_i = \overline{f(e_i)}\]
+for \(i = 1, \ldots, n\), and set \(w = \sum_{i = 1}^n w_i e_i\).  Then for \(v = \sum_{i = 1}^n v_i e_i\),
+\[(v,w) = \left( \sum_i v_i e_i, \sum_j w_j e_j \right)
+        = \sum_i \sum_j v_i \overline{w_j} (e_i, e_j)
+        = \sum_i v_i \overline{w_i}
+        = \sum_i v_i f(e_i)
+        = f \left( \sum_i v_i e_i \right)
+        = f(v).\]
+
+
+
+\item Let \(V\) be a finite dimensional complex inner product space and \(T : V \to V\) a linear transformation.  Prove that there exists an orthonormal ordered basis for \(V\) such that the matrix representation \(A\) in this basis is upper triangular, i.e., \(A_{ij} = 0\) if \(i > j\).
+
+(Hint:  First show if \(S : V \to V\) is a linear transformation and \(W\) is a subspace then \(W\) is \(S\)-invariant if and only if \(W^{\perp}\) is \(S^*\)-invariant, where \(S^*\) is the adjoint of \(S\).)
+
+{\bf Solution}
+
+Let \(\lambda \in \mathbb{C}\) be an eigenvector of \(T^*\) (whose existence is guaranteed by the presence of roots in the characteristic polynomial), and \(x\) a corresponding eigenvector; that is, \(T^*x = \lambda x\).  Let \(y \in x^{\perp}\).  Then
+\[(Ty, x) = (y, T^*x) = (y, \lambda x) = \overline{\lambda} (y, x) = 0,\]
+hence \(Ty \in x^{\perp}\).  It follows that \(T\) is invariant on \(x^{\perp}\), i.e., the restriction of \(T\) to \(x^{\perp}\) is a linear transformation.  By induction, there exists an orthonormal basis \(\{e_1, \ldots, e_{n - 1}\}\) such that the matrix representation of \(T|_{x^{\perp}}\) is upper triangular.  If we set \(e_n = x / \|x\|\), then \(e_n\) is a unit vector orthogonal to \(\{e_1, \ldots, e_{n - 1}\} \subset x^{\perp}\), hence \(\{e_1, \ldots, e_n\}\) is an orthonormal basis, and the matrix representation of \(T\) in this basis is upper triangular (since, by repeated application of the inductive step, \(T \left( \span \{e_1, \ldots, e_k\} \right) \subset \span \{e_1, \ldots, e_k\}\)).
+
+
+
+\end{enumerate}
+
+\end{document}

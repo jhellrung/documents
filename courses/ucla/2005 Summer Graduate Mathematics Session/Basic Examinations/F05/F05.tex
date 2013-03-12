@@ -1,0 +1,290 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\tr{\mathop{\rm tr}\nolimits}
+\def\ker{\mathop{\rm ker}\nolimits}
+\def\dim{\mathop{\rm dim}\nolimits}
+\def\im{\mathop{\rm im}\nolimits}
+\def\span{\mathop{\rm span}\nolimits}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, F05 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item A real number \(\alpha\) is said to be {\em algebraic} if for some finite set of integers \(a_0, \ldots, a_n\), not all \(0\),
+\[a_0 + a_1 \alpha + \cdots + a_n \alpha^n = 0.\]
+Prove that the set of algebraic real numbers is countable.
+
+{\bf Solution}
+
+(S05.5)
+
+
+
+\item State some reasonable conditions on a real-valued function \(f(x,y)\) on \(\mathbb{R}^2\) which guarantee that \(\frac{\partial^2 f}{\partial x \partial y} = \frac{\partial^2 f}{\partial y \partial x}\) at every point of \(\mathbb{R}^2\).  Then prove that your conditions do in fact guarantee this equality.
+
+{\bf Solution}
+
+(F01.5)
+
+
+
+\item
+
+\begin{enumerate}
+\item Prove that if \(f_j : [0,1] \to \mathbb{R}\) is a sequence of continuous functions which converges uniformly on \([0,1]\) to a (necessarily continuous) function \(F : [0,1] \to \mathbb{R}\), then
+\[\int_0^1 F^2(x) dx = \lim_{j \to \infty} \int_0^1 f_j^2(x) dx.\]
+
+\item Give an example of a sequence \(f_j : [0,1] \to \mathbb{R}\) of continuous functions which converges to a continuous function \(F : [0,1] \to \mathbb{R}\) pointwise and for which
+\[\lim_{j \to \infty} \int_0^1 f_j^2(x) dx \ \text{ exists, but}\]
+\[\lim_{j \to \infty} \int_0^1 f_j^2(x) dx \neq \int_0^1 F^2(x) dx\]
+(\(f_j\) converges to \(F\) ``pointwise'' means that for each \(x \in [0,1]\), \(F(x) = \lim_{j \to \infty} f_j(x)\)).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Since \(F\) is continuous on \([0,1]\), a compact set, \(F\) is bounded, say, \(|F| < M\) on \([0,1]\).  Let \(\epsilon > 0\) be given.  Then there exists a \(J\) such that \(\sup_{[0,1]} |F - f_j| < \epsilon\) for all \(j > J\).  Thus
+\[\left| \int_0^1 F^2(x) dx - \int_0^1 f_j^2(x) dx \right|
+  \leq \int_0^1 |F(x) + f_j(x)| |F(x) - f_j(x)| dx
+  \leq (2M + \epsilon) \epsilon\]
+for all \(j > J\), so since \(\epsilon\) was arbitrary, we conclude that
+\[\lim_{j \to \infty} \int_0^1 f_j^2(x) dx = \int_0^1 F^2(x) dx.\]
+
+\item Define
+\[f_j(x) = \begin{cases}
+           \sqrt{j^2x},      &           0 \leq x \leq \frac{1}{j} \\
+           \sqrt{2j - j^2x}, & \frac{1}{j} \leq x \leq \frac{2}{j} \\
+           0,                & \frac{2}{j} \leq x \leq 1
+           \end{cases}\]
+for \(j = 1, 2, \ldots\).  Then \(f_j(x) \to 0\) for all \(x \in [0,1]\), but
+\[\int_0^1 f_j^2(x) dx = 1.\]
+
+\end{enumerate}
+
+
+
+\item Suppose \(F : [0,1] \to [0,1]\) is a \(C^2\) function with \(F(0) = 0\), \(F(1) = 0\), and \(F''(x) < 0\) for all \(x \in [0,1]\).  Prove that the arc length of the curve \(\{(x,F(x)) : x \in [0,1]\}\) is less than \(3\).  (Suggestion:  Remember that \(\sqrt{a^2 + b^2} < |a| + |b|\) when you are looking at the arc length formula - and at a picture of what \(\{(x,F(x))\}\) could look like.)
+
+{\bf Solution}
+
+By the Mean Value Theorem, since \(F(0) = F(1) = 0\), there exists an \(x_0 \in (0,1)\) such that \(F'(x_0) = 0\).  Since \(F'' < 0\) on \([0,1]\), it follows that \(F'(x) > 0\) for \(x < x_0\) and \(F'(x) < 0\) for \(x > x_0\).
+
+Define \(\gamma : [0,1] \to \mathbb{R}^2\) by \(\gamma(t) = (t, F(t))\).  Then the image of \(\gamma\) is the curve in question, and, since \(\gamma \in C^1\), the length of this curve is given by
+\[\begin{array}{rcl}
+  \Lambda(\gamma)
+  &   =  & \int_0^1 |\gamma'(t)| dt \\
+  &   =  & \int_0^1 \sqrt{1 + F'(t)^2} dt \\
+  & \leq & \int_0^1 \left( 1 + |F'(t)| \right) dt \\
+  &   =  & \int_0^{x_0} (1 + F'(t)) dt + \int_{x_0}^1 (1 - F'(t)) dt \\
+  &   =  & (x_0 - 0 + F(x_0) - F(0)) + (1 - x_0 - F(1) + F(x_0)) \\
+  &   =  & 1 + 2F(x_0)
+  \end{array},\]
+where we have used the fact that \(\sqrt{a^2 + b^2} \leq \sqrt{a^2 + b^2 + 2|a||b|} = |a| + |b|\) for \(a,b \in \mathbb{R}\).  But \(F(x_0) \in [0,1]\), hence
+\[\Lambda(\gamma) \leq 3.\]
+
+
+
+\item Prove carefully that \(\mathbb{R}^2\) is not a (countable) union of sets \(S_i\), \(i = 1, 2, \ldots\), with each \(S_i\) being a subset of some straight line \(L_i\) in \(\mathbb{R}^2\).
+
+{\bf Solution}
+
+The closure of each \(S_i\) is contained in \(L_i\), and each \(L_i\) has empty interior, hence each \(S_i\) is nowhere dense.  By a corollary to the Baire Category Theorem, \(\bigcup_i S_i\) also has empty interior, hence certainly cannot be all of \(\mathbb{R}^2\).
+
+
+
+\item
+
+\begin{enumerate}
+\item Prove that if \(P\) is a real-coefficient polynomial and if \(A\) is a real symmetric matrix, then the eigenvalues of \(P(A)\) are exactly the numbers \(P(\lambda)\), where \(\lambda\) is an eigenvalue of \(A\).
+
+\item Use part (a) to prove that if \(A\) is a real symmetric matrix, then \(A^2\) is nonnegative definite.
+
+\item Check part (b) by verifying directly that \(\det A^2\) and \(\tr A^2\) are nonnegative when \(A\) is real symmetric.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Clearly, every eigenvalue \(\lambda\) of \(A\) gives a corresponding eigenvalue \(P(\lambda)\) of \(P(A)\) (with the same eigenvector).  To get the converse, note that \(A\) and \(P(A)\) commute, and if \(A\) is real symmetric, so is \(P(A)\).  Thus the Spectral Theorem allows us to construct an orthonormal basis of eigenvectors of both \(A\) and \(P(A)\).  Let \(\mu\) be an eigenvalue of \(P(A)\), and \(x\) a corresponding eigenvector from the aforementioned basis.  Then \(x\) is also an eigenvector of \(A\), and let its corresponding eigenvalue be \(\lambda\).  Then it follows that
+\[P(A)x = P(\lambda)x,\]
+and we conclude \(\mu = P(\lambda)\), establishing the converse.
+
+\item As discussed in part (a), there exists an orthornormal basis \(\{x_i\}_{i = 1}^n\) of eigenvectors of both \(A\) and \(A^2\).  Each eigenvector \(x_i\) of \(A^2\) has a corresponding eigenvalue \(\mu_i = \lambda_i^2\), where \(\lambda_i\) is an eigenvalue of \(A\).  Thus, for any \(x = \sum_i c_i x_i\),
+\[(A^2x,x) = \left( A^2 \sum_i c_i x_i, \sum_j c_j x_j \right)
+           = \left( \sum_i c_i \lambda_i^2 x_i, \sum_j c_j x_j \right)
+           = \sum_i c_i^2 \lambda_i^2
+        \geq 0,\]
+where we have taken advantage of the orthonormality of the \(x_i\)'s.
+
+\item We have that
+\[\det A^2 = \prod_i \lambda_i^2 \geq 0,\]
+\[\tr A^2 = \sum_i \lambda_i^2 \geq 0.\]
+
+\end{enumerate}
+
+
+
+\item Let \(A\) be a real \(n \times m\) matrix.  Prove that the maximum number of linearly independent rows of \(A = \) the maximum number of linearly independent columns.  (``row rank = column rank'')
+
+{\bf Solution}
+
+(F01.7)
+
+
+
+\item For a real \(n \times n\) matrix \(A\), let \(T_A : \mathbb{R}^n \to \mathbb{R}^n\) be the associated linear mapping.  Set \(\|A\| = \sup_{x \in \mathbb{R}^n, \|x\| = 1} \|Ax\|\) (here \(\|x\| = \) the usual Euclidean norm, i.e.,
+\[\left. \|(x_1, \ldots, x_n)\| = \left( x_1^2 + \cdots + x_n^2 \right)^{1/2} \right).\]
+
+\begin{enumerate}
+\item Prove that \(\|A + B\| \leq \|A\| + \|B\|\).
+
+\item Use part (a) to check that the set \(M\) of all \(n \times n\) matrices is a metric space if the distance function \(d\) is defined by
+\[d(A,B) = \|B - A\|.\]
+
+\item Prove that \(M\) is a complete metric space with this ``distance function''.
+
+(Suggestion:  The \(ij^{th}\) element of \(A = (T_Ae_j, e_i)\), where \(e_i = (0, \ldots, 1, \ldots 0)\), \(1\) in the \(i^{th}\) position.)
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(x \in \mathbb{R}^n\) with \(\|x\| = 1\).  Then
+\[\|(A + B)x\| = \|Ax + Bx\|
+            \leq \|Ax\| + \|Bx\|
+            \leq \|A\| + \|B\|,\]
+and taking the supremum over all \(x \in \mathbb{R}^n\) with \(\|x\| = 1\) establishes the claim.
+
+\item \(d\) is certainly symmetric and positive definite.  The triangle inequality follows from
+\[\|A - C\| = \|(A - B) + (B - C)\|
+         \leq \|A - B\| + \|B - C\|.\]
+
+\item Let \(\{A_k\}_{k = 1}^{\infty}\) be a Cauchy sequence in \((M,d)\).  Let \(a^k_{ij}\) be the \(ij^{th}\) entry of \(A_k\).  Then
+\[\begin{array}{rcl}
+  \left| a^k_{ij} - a^{\ell}_{ij} \right|
+  &   =  & (A_ke_j, e_i) - (A_{\ell}e_j, e_i) \\
+  &   =  & ((A_k - A_{\ell})e_j, e_i) \\
+  & \leq & \|(A_k - A_{\ell})e_j\| \|e_i\| \\
+  & \leq & \|A_k - A_{\ell}\|
+  \end{array},\]
+where we have applied the Cauchy Schwarz inequality and the fact that \(\|e_i\| = 1\).  It follows that \(\{a^k_{ij}\}_{k = 1}^{\infty}\) is a Cauchy sequence in \(\mathbb{R}\), so converges to some \(a_{ij}\).  Let \(A \in M\) have \(ij^{th}\) entry equal to \(a_{ij}\).  For \(\epsilon > 0\), let \(K\) be large enough such that \(\left| a^k_{ij} - a_{ij} \right| < \epsilon\) for all \(i,j\) and \(k > K\) (possible since there are finitely many such combinations of \(i,j\)).  Then for any \(x = \sum_i x_i e_i\) such that \(\|x\| = 1\),
+\[\begin{array}{rcl}
+  \|(A - A_k)x\|
+  &   =  & \left\| \sum_j x_j (A - A_k)e_j \right| \\
+  & \leq & \sum_j |x_j| \|(A - A_k)e_j\| \\
+  & \leq & \sum_j \|(A - A_k)e_j\| \\
+  &   =  & \sum_j \sqrt{ \sum_i (a_{ij} - a^k_{ij})^2 } \\
+  &   <  & \sum_j \sqrt{ n \epsilon^2 } \\
+  &   =  & n^{3/2} \epsilon
+  \end{array},\]
+so it follows that \(\|A - A_k\| < n^{3/2} \epsilon\) for all \(k > K\), and since \(\epsilon\) was arbitrary, we conclude that \(A_k \to A\) with respect to \(d\).
+
+\end{enumerate}
+
+
+
+\item Suppose \(V_1\) and \(V_2\) are subspaces of a finite-dimensional vector space \(V\).
+
+\begin{enumerate}
+\item Show that
+\[\dim(V_1 \cap V_2) = \dim(V_1) + \dim(V_2) - \dim(\span(V_1 \cup V_2)),\]
+where \(\span(V_1 \cup V_2)\) is by definition the smallest subspace that contains both \(V_1\) and \(V_2\).
+
+\item Let \(n = \dim(V)\).  Use part (a) to show that, if \(k < n\), then an intersection of \(k\) subspaces of dimension \(n - 1\) always has dimension at least \(n - k\).
+
+(Suggestion:  Do induction on \(k\).)
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(\{u_1, \ldots, u_j\}\) be a basis for \(V_1 \cap V_2\), and extend this basis with \(\{v^i_1, \ldots, v^i_{k_i}\}\) to form a basis for \(V_i\), \(i = 1,2\).  Then the claim is that \(\{u_1, \ldots, u_j, v^1_1, \ldots, v^1_{k_1}, v^2_1, \ldots, v^2_{k_2}\}\) is a basis for \(\span(V_1 \cup V_2)\).  Indeed, any vector in \(\span(V_1 \cup V_2)\) can be written as a linear combination of vectors in the claimed basis.  Further, if we suppose some trivial linear combination,
+\[\sum_i c_i u_i + \sum_i c^1_i v^1_i + \sum_i c^2_i v^2_i = 0,\]
+Then
+\[\sum_i c_i u_i + \sum_i c^1_i v^1_i = 0,\]
+\[\sum_i c^2_i v^2_i = 0,\]
+since the former resides in \(V_1\) while the latter resides in the complement.  Thus each \(c^2_i = 0\), and a similar argument leads to \(c^1_i = 0\), from which it follows that \(c_i = 0\) as well.  Thus the claimed basis is also linearly independent, so is a basis as claimed.  Therefore,
+\[\begin{array}{rcl}
+  \dim(V_1) + \dim(V_2) - \dim(\span(V_1 \cup V_2))
+  & = & (j + k_1) + (j + k_2) - (j + k_1 + k_2) \\
+  & = & j \\
+  & = & \dim(V_1 \cap V_2)
+  \end{array}.\]
+
+\item The claim is trivial for \(k = 1\), so suppose the claim for \(k - 1\).  Let \(V_1, \ldots, V_k\) be subspaces of \(V\) of dimension \(n - 1\).  By the induction hypothesis,
+\[\dim(V_1 \cap \cdots \cap V_{k - 1}) \geq n - (k - 1),\]
+hence, by part (a),
+\[\begin{array}{rcl}
+  \dim(V_1 \cap \cdots \cap V_k)
+  &   =  & \dim(V_1 \cap \cdots \cap V_{k - 1}) + \dim(V_k) - \dim(\span((V_1 \cap \cdots \cap V_{k - 1}) \cup V_k)) \\
+  & \geq & (n - k + 1) + (n - 1) - n \\
+  &   =  & n - k
+  \end{array},\]
+which proves the claim for \(k\), hence the claim is proved in general by induction.
+
+\end{enumerate}
+
+
+
+\item
+
+\begin{enumerate}
+\item For each \(n = 2, 3, 4, \ldots\), is there an \(n \times n\) matrix \(A\) with \(A^{n - 1} \neq 0\) but \(A^n = 0\)?  (Give example or proof of nonexistence.)
+
+\item Is there an \(n \times n\) upper triangular matrix \(A\) with \(A^n \neq 0\) but \(A^{n + 1} = 0\)?  (Give an example or proof of nonexistence.)
+
+(Note:  A square matrix is {\em upper triangular} if all the entries below the main diagonal are \(0\).)
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(A \in M_{n \times n}(\mathbb{R})\) be such that the \(ij^{th}\) entry of \(A\), \((A)_{ij}\), is \(0\) for \(j - i \leq 0\) and \(1\) for \(j - i \geq 1\).  We prove by induction that \((A^m)_{ij} > 0\) if and only if \(j - i \geq m\).  Indeed, the claim is true for \(m = 1\) by definition, and, assuming the claim for \(m - 1\), we know that
+\[(A^m)_{ij} = \sum_k (A^{m - 1})_{ik} (A)_{kj}.\]
+Now \((A^{m - 1})_{ik} > 0\) if and only if \(k - i \geq m - 1\), by the inductive hypothesis, and \((A)_{kj} > 0\) if and only if \(j - k \geq 1\).  It follows that there are nonzero terms in the above sum if and only if there exists a \(k\), \(1 \leq k \leq n\), such that
+\[k - i \geq m - 1\]
+and
+\[j - k \geq 1\]
+simulataneously.  Note that this occurs only if \(j - i \geq m\) (by adding the inequalities), hence \((A^m)_{ij}\) is nonzero only if \(j - i \geq m\).  To see the converse, notice that if \(j - i \geq m\), the term in the sum corresponding to \(k = j - 1\) is nonzero, and all nonzero terms must be positive, hence in this case, \((A^m)_{ij} > 0\).  This proves the claim by induction.
+
+It follows immediately that \(A^{n - 1} \neq 0\) (since \((A^{n - 1})_{1n} > 0\)), while \(A^n = 0\).
+
+\item Denote by
+\[K_m = \ker A^m.\]
+Note first that \(A\) maps \(K_{m + 1}\) into \(K_m\), since \(x \in K_{m + 1}\) implies that
+\[0 = A^{m + 1} x = A^m (Ax),\]
+so \(Ax \in K_m\).  It follows that \(A\) maps the quotient space \(K_{m + 2} / K_{m + 1}\) into the quotient space \(K_{m + 1} / K_m\).  Indeed, this mapping is injective.  For suppose \(x,y \in K_{m + 2} / K_{m + 1}\) were such that \(Ax = Ay \pmod{K_m}\).  But then \(A(x - y) \in K_m\), i.e.,
+\[0 = A^m(A(x - y)) = A^{m + 1}(x - y),\]
+so \(x - y \in K_{m + 1}\) and \(x = y \pmod{K_{m + 1}}\).
+
+Now suppose \(K_{n + 1} / K_n\) was nontrivial, i.e., there existed some \(x \in K_{n + 1}\) with \(x \neq 0 \pmod{K_n}\).  Then, by the previous argument, \(Ax \in K_n / K_{n - 1}\) with \(Ax \neq 0 \pmod{K_{n - 1}}\), and, in general, \(A^mx \in K_{n - m + 1} / K_{n - m}\) with \(A^mx \neq 0 \pmod{K_{n - m}}\) for \(m = 0, \ldots, n\).  Note that then, by the containment \(K_m \subset K_{m + 1}\), we obtain a sequence of vectors \(A^mx \in K_{n - m + 1}\) such that \(A^mx \notin K_k\) for \(k = 0, \ldots, n - m\), hence it follows that the \(A^mx\)'s are linearly independent.  But there are \(n + 1\) such values of \(m\), implying the existence of a set of \(n + 1\) linearly independent vectors in \(\mathbb{R}^n\), an absurdity.  It follows that \(K_{n + 1} / K_n\) is the trivial vector space, i.e., \(K_{n + 1} = K_n\).
+
+Now if we have \(A \in M_{n \times n}(\mathbb{R})\) such that \(A^{n + 1} = 0\), then \(K_n = K_{n + 1} = \mathbb{R}^n\), hence \(A^n = 0\) as well.
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

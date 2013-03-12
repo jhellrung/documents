@@ -1,0 +1,322 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\tr{\mathop{\rm tr}\nolimits}
+\def\ker{\mathop{\rm ker}\nolimits}
+\def\dim{\mathop{\rm dim}\nolimits}
+\def\im{\mathop{\rm im}\nolimits}
+\def\span{\mathop{\rm span}\nolimits}
+\def\dist{\mathop{\rm dist}\nolimits}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, S05 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Given \(n \geq 1\), let \(\tr : M_n(\mathbb{C}) \to \mathbb{C}\) denote the trace of a matrix:
+\[\tr(A) = \sum_{k = 1}^n A_{k,k}.\]
+
+\begin{enumerate}
+\item Determine a basis for the kernel (or null-space) of \(\tr\).
+
+\item For \(X \in M_n(\mathbb{C})\), show that \(\tr(X) = 0\) if and only if there exists an integer \(m\) and matrices \(A_1, \ldots, A_m, B_1, \ldots, B_m \in M_n(\mathbb{C})\) so that
+\[X = \sum_{j = 1}^m A_j B_j - B_j A_j.\]
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(E_{ij}\) be the matrix with \(ij\) entry equal to \(1\) and the rest \(0\).  Then a basis for the kernel of \(\tr\) includes \(E_{ij}\) for \(i \neq j\) and \(E_{11} - E_{ii}\) for \(i > 1\).  Note that this is a linearly independent set of matrices, and they number \((n^2 - n) + (n - 1) = n^2 - 1\), which is the dimension of \(\ker(\tr)\) (since \(\dim(\im(\tr)) = 1\) and \(\dim(M_n(\mathbb{C})) = n^2\)), so must span \(\ker(\tr)\).
+
+\item Note that
+\[E_{ij} E_{k\ell} - E_{k\ell} E_{ij} = E_{i\ell} \delta_{jk} - E_{kj} \delta_{\ell i}.\]
+Thus for \(\ell \neq i\),
+\[E_{ij} E_{j\ell} - E_{j\ell} E_{ij} = E_{i\ell},\]
+and for \(i > 1\),
+\[E_{i1} E_{1i} - E_{1i} E_{i1} = E_{ii} - E_{11}.\]
+It follows that the set of matrices \(\{E_{ij} E_{k\ell} - E_{k\ell} E_{ij}\}\) spans \(\ker(\tr)\), from which we can deduce the given representation.
+
+\end{enumerate}
+
+
+
+\item  Let \(V\) be a finite-dimensional vector space, and let \(V^*\) denote the dual space; that is, the space of linear maps \(\phi : V \to \mathbb{C}\).  For a set \(W \subset V\), let
+\[W^{\perp} = \{\phi \in V^* : \phi(w) = 0 \ \forall w \in W\}.\]
+For a subset \(U \subset V^*\), let
+\[^{\perp}U = \{v \in V : \phi(v) = 0 \ \forall \phi \in U\}.\]
+
+\begin{enumerate}
+\item Show that for any subset \(W \subset V\), \(^{\perp}(W^{\perp}) = \span(W)\).
+
+Recall that the span of a set of vectors is the smallest vector subspace that contains these vectors.
+
+\item Let \(W \subset V\) be a linear subspace.  Give an explicit isomorphism between \((V/W)^*\) and \(W^{\perp}\).  Show that it is an isomorphism.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We first show that \(W^{\perp} = \span(W)^{\perp}\).  Indeed, given any \(\phi \in W^{\perp}\), any \(w \in \span(W)\) can be expressed as a linear combination of vectors in \(W\), hence \(\phi(w) = 0\) and \(\phi \in \span(W)^{\perp}\).  Conversely, \(W \subset \span(W)\), so certainly any \(\phi\) vanishing on \(\span(W)\) will likewise vanish on \(W\).  This shows the claim.  We are thus reduced to the case of showing \(^{\perp}(W^{\perp}) = W\) for a subspace \(W\) of \(V\).
+
+Let \(\{w_1, \ldots, w_k\}\) be a basis for \(W\), and complete this with \(\{v_{k + 1}, \ldots, v_n\}\) to give a basis for \(V\).  Then \(\{v_i^*\}_{i = k + 1}^n\) is a basis for \(W^{\perp}\).  Certainly \(w \in W\) if and only if \(v_i^*(w) = 0\) for \(i = k + 1, \ldots, n\), hence \(^{\perp}(W^{\perp}) = W\), as claimed.
+
+\item Let \(\phi \in W^{\perp}\); then define \(\Phi \in (V/W)^*\) by
+\[\Phi \{v\} = \phi(v).\]
+It follows from \(\phi \in W^{\perp}\) that this is well-defined, hence provides an injection from \(W^{\perp}\) to \((V/W)^*\).  Conversely, given \(\Phi \in (V/W)^*\), we can define \(\phi \in V^*\) by
+\[\phi(v) = \Phi \{v\},\]
+and since \(\Phi \{v\} = \Phi \{0\} = 0\) for any \(v \in W\), we have that \(\phi \in W^{\perp}\).  This provides an injection in the other direction, hence the two spaces are isomorphic.
+
+\end{enumerate}
+
+
+
+\item Let \(A\) be a Hermitian-symmetric \(n \times n\) complex matrix.  Show that if \((Av,v) \geq 0\) for all \(v \in \mathbb{C}^n\), then there exists an \(n \times n\) matrix \(T\) so that \(A = T^*T\).
+
+{\bf Solution}
+
+
+
+\item Let \(\mathcal{A} = M_n(\mathbb{C})\) denote the set of all \(n \times n\) matrices with complex entries.
+
+We say that \(\mathcal{I} \subset \mathcal{A}\) is a {\em two-sided ideal} in \(\mathcal{A}\) if
+\begin{enumerate}
+\item for all \(A,B \in \mathcal{I}\), \(A + B \in \mathcal{I}\)
+\item for all \(A \in \mathcal{I}\) and \(B \in \mathcal{A}\), \(AB\) and \(BA\) belong to \(\mathcal{I}\)
+\end{enumerate}
+Show that the only two-side ideals in \(\mathcal{A}\) are \(\{0\}\) and \(\mathcal{A}\) itself.
+
+{\bf Solution}
+
+Suppose \(\mathcal{I} \neq \{0\}\).  Then there exists some \(A \in \mathcal{I}\) with \(A \neq 0\).  Let \(\alpha = (A)_{rc} \neq 0\) be the \(rc^{th}\) entry of \(A\).
+
+Let \(E_{ij} \in \mathcal{A}\) have \(ij^{th}\) entry equal to \(1\) and the rest \(0\).  Then by iterative applications of (b),
+\[E_{ir}AE_{cj} \left( \frac{c}{\alpha}I \right) = cE_{ij} \in \mathcal{I}\]
+for any \(i,j\) and \(c \in \mathbb{C}\).  It follows from (a) and the fact that \(\span \{E_{ij}\} = \mathcal{A}\) that \(\mathcal{I} = \mathcal{A}\).
+
+
+
+\item For a subset \(X \subset \mathbb{R}\), we say that \(X\) is {\em algebraic}, if there exists a family \(\mathcal{F}\) of polynomials with rational coefficients, so that \(x \in X\) if and only if \(p(x) = 0\) for some \(p \in \mathcal{F}\).
+
+\begin{enumerate}
+\item Show that the set \(\mathbb{Q}\) of rational numbers is algebraic.
+
+\item Show that the set \(\mathbb{R} \backslash \mathbb{Q}\) of irrational numbers is not algebraic.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(\mathcal{F} = \{x \mapsto qx - p \ | \ q,p \in \mathbb{Z}\}\).  Then for each \(x = \frac{p}{q} \in \mathbb{Q}\), with \(p,q \in \mathbb{Z}\), \(q \neq 0\), \(x\) is a root of \(qx - p\), so it follows that \(\mathbb{Q}\) is algebraic.
+
+\item The set of all polynomials \(P\) with rational coefficients is countable.  Indeed, if
+\[P_n = \left\{ \left. x \mapsto \sum_{i = 0}^n a_i x^i \ \right| \ a_i \in \mathbb{Q} \right\}\]
+is the set of all polynomials of degree \(n\) or less, we see that each \(p \in P_n\) can be associated with the \(n\)-tuple of its coefficients, hence \(P_n \cong \mathbb{Q}^n\), which is countable.
+
+Now each \(p \in P_n\) has at most \(n\) roots, hence the set of \(x \in \mathbb{R}\) for which \(x\) is a root of some \(p \in P_n\) is countable for each \(n\), and it follows that the set of all algebraic numbers themselves, which is the union of all such \(x\) over \(n\), is countable.  Since \(\mathbb{R} \backslash \mathbb{Q}\) is uncountable, it therefore can't be algebraic.
+
+\end{enumerate}
+
+
+
+\item Let \(X\) be the set of all infinite sequences \(\{\sigma_n\}_{n = 1}^{\infty}\) of \(1\)'s and \(0\)'s endowed with the metric
+\[\dist \left( \{\sigma_n\}_{n = 1}^{\infty},
+               \{\sigma'_n\}_{n = 1}^{\infty} \right)
+  = \sum_{n = 1}^{\infty} \frac{1}{2^n} \left| \sigma_n - \sigma'_n \right|.\]
+Give a direct proof that every infinite subset of \(X\) has an accumulation point.
+
+{\bf Solution}
+
+Let \(S\) be an infinite subset of \(X\).  Construct nested infinite subsets \(S_0, S_1, S_2, \ldots\) of \(S\) as follows.  Set \(S_0 = S\), and given \(S_n\) infinite, select \(\sigma_{n + 1}\) such that infinitely many of the sequences in \(S_n\) have \((n + 1)^{th}\) term equal to \(\sigma_{n + 1}\).  Then set \(S_{n + 1}\) to be the set of sequences of \(S_n\) with \((n + 1)^{th}\) term equal to \(\sigma_{n + 1}\).  Thus \(S_{n + 1}\) is also infinite, and the process can continue.
+
+The claim is that the sequence \(s = \{\sigma_i\}_{i = 1}^{\infty}\) is an accumulation point of \(S\).  Indeed, any \(s' = \{\sigma'_i\}_{i = 1}^{\infty} \in S_n\) agrees with \(s\) in the first \(n\) terms, hence
+\[\dist(s, s')
+     = \sum_{i = n + 1}^{\infty} \frac{1}{2^i} \left| \sigma_i - \sigma'_i \right|
+  \leq \sum_{i = n + 1}^{\infty} \frac{1}{2^i}
+     = \frac{1}{2^n}\]
+which tends to \(0\) as \(n \to \infty\).  Since each \(S_n\) has infinitely many sequences, it follows that \(s\) is an accumulation point of \(S\).
+
+
+
+\item Let \(X,Y\) be two topological spaces.  We say that a continuous function \(f : X \to Y\) is {\em proper} if \(f^{-1}(K)\) is compact for any compact set \(K \subset Y\).
+
+\begin{enumerate}
+\item Give an example of a function that is proper but not a homeomorphism.
+
+\item Give an example of a function that is continuous but not proper.
+
+\item Suppose \(f : \mathbb{R} \to \mathbb{R}\) is \(C^1\) (that is, has a continuous derivative) and
+\[|f'(x)| \geq 1 \ \text{ for all } x \in \mathbb{R}.\]
+Show that \(f\) is proper.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(f : \mathbb{R} \to [0,\infty)\) be the function \(x \mapsto |x|\).  Then if \(K \subset [0,\infty)\) is compact, \(f^{-1}(K) = K \cup -K\) is certainly compact, where \(-K = \{x \ | \ -x \in K\}\), hence \(f\) is proper, but \(f\) is not injective hence not a homeomorphism.
+
+\item Let \(f :\mathbb{R} \to \{0\}\) be the function \(x \mapsto 0\).  Then \(f^{-1}(\{0\}) = \mathbb{R}\), which is not compact, hence \(f\) is not proper.
+
+\item We first show that \(f\) is a homeomorphism, i.e., bijective.  Let \(x,y \in \mathbb{R}\).  Then by the Mean Value Theorem,
+\[|f(x) - f(y)| = |f'(c)| |x - y| \geq |x - y|\]
+for some \(c\) between \(x\) and \(y\), which shows that \(f\) is injective.  Now \(f'\) is continuous, hence either \(f' \geq 1\) or \(f' \leq -1\) on all of \(\mathbb{R}\).  If \(f' \geq 1\), we have
+\[f(y) - f(0) \geq y\]
+for any \(y \geq 0\), so, since \(f\) is continuous, by the Intermediate Value Theorem there exists an \(x \in [0,y]\) such that \(f(x) = f(0) + y\).  A similar argument can be made for \(y \leq 0\) and for when \(f' \leq -1\), and we conclude that \(f\) is surjective, hence a homeomorphism.
+
+Now let \(K \subset \mathbb{R}\) be compact.  Then \(K\) is closed, hence \(f^{-1}(K)\) is closed by the continuity of \(f\).  Further, \(K\) is bounded, say, \(|y| < M\) for all \(y \in K\).  Then \(f^{-1}(-M)\) and \(f^{-1}(M)\) bound \(f^{-1}(K)\), for take any \(x \in f^{-1}(K)\) and set \(y = f(x)\).  Then \(y\) is bounded between \(-M\) and \(M\), hence \(x\) is bounded between \(f^{-1}(-M)\) and \(f^{-1}(M)\) (either \(f\) or \(-f\) preserves ordering).  Thus \(f^{-1}(K)\) is closed and bounded, hence compact, and it follows that \(f\) is proper.
+
+\end{enumerate}
+
+
+
+\item Suppose \(f : \mathbb{R} \to \mathbb{R}\) is \(C^1\) (i.e., continuously differentiable).  Show that
+\[\lim_{n \to \infty} \sum_{j = 1}^n \left| f \left( \frac{j - 1}{n} \right) -
+                                            f \left( \frac{j}{n} \right) \right|\]
+is equal to
+\[\int_0^1 |f'(t)| dt.\]
+
+{\bf Solution}
+
+\(f'\) is continuous on \([0,1]\), a compact set, hence uniformly continuous.  Let \(\epsilon > 0\) be given.  Then there exists an \(N\) such that, if \(n > N\), \(|f'(x) - f'(y)| < \epsilon\) whenever \(|x - y| < \frac{1}{n}\).  By the Mean Value Theorem,
+\[f \left( \frac{j}{n} \right) - f \left( \frac{j - 1}{n} \right)
+  = f'(x_j) \frac{1}{n},\]
+\(x_j \in \left( \frac{j}{n}, \frac{j - 1}{n} \right)\), for each \(j = 1, \ldots, n\).  Let
+\[P = \left\{ \frac{j}{n} \right\}_{j = 0}^{n}\]
+be a partition of \([0,1]\), and set
+\[M_j = \sup_{\left[ \frac{j - 1}{n}, \frac{j}{n} \right]} |f'|,\]
+\[m_j = \inf_{\left[ \frac{j - 1}{n}, \frac{j}{n} \right]} |f'|\]
+for \(j = 1, \ldots, n\).  Then
+\[M_j - |f'(x_j)| < \epsilon,\]
+\[|f'(x_j)| - m_j < \epsilon,\]
+thus
+\[U(P,|f'|) - \sum_{j = 1}^n \left| f \left( \frac{j - 1}{n} \right) -
+                                 f \left( \frac{j}{n} \right) \right|
+  < \sum_{j = 1}^n \epsilon \frac{1}{n}
+  = \epsilon,\]
+and similarly
+\[\sum_{j = 1}^n \left| f \left( \frac{j - 1}{n} \right) -
+                        f \left( \frac{j}{n} \right) \right| - L(P,|f'|)
+  < \epsilon,\]
+hence
+\[U(P,|f'|) - L(P,|f'|) < 2\epsilon,\]
+so \(|f'|\) is Riemann integrable on \([0,1]\).  Further,
+\[\left| \int_0^1 |f'(t)| dt
+  - \sum_{j = 1}^n \left| f \left( \frac{j - 1}{n} \right) -
+                          f \left( \frac{j}{n} \right) \right|
+  \right| < \epsilon\]
+for all \(n > N\), which proves the claim.
+
+
+
+\item
+
+\begin{enumerate}
+\item Suppose
+\[\lim_{n \to \infty} a_n = A.\]
+Show that
+\[\lim_{N \to \infty} \frac{1}{N} \sum_{n = 1}^N a_n = A.\]
+
+\item Show by example that the converse is false.
+
+\end{enumerate}
+
+{\bf Solution}
+
+(F04.1)
+
+
+
+\item Consider the set of \(f : [0,1] \to \mathbb{R}\) that obey
+\[|f(x) - f(y)| \leq |x - y| \ \text{ and } \ \int_0^1 f(x) dx = 1.\]
+Show that this is a compact subset of \(C([0,1])\).
+
+{\bf Solution}
+
+By the Arzela-Ascoli Theorem, \(A \subset C([0,1])\) is compact if and only if
+\begin{enumerate}
+\item \(A\) is closed.
+\item \(A\) is uniformly bounded.
+\item \(A\) is equicontinuous.
+\end{enumerate}
+Let \(A\) be the subset described above.  To show (a), suppose \(\{f_n\}_{n = 1}^{\infty}\) is a Cauchy sequence of functions in \(A\).  Then, for each \(x \in [0,1]\), \(\{f_n(x)\}_{n = 1}^{\infty}\) is a Cauchy sequence in \(\mathbb{R}\), hence converges.  Define \(f : [0,1] \to \mathbb{R}\) by \(f(x) = \lim_{n \to \infty} f_n(x)\).  Then given \(\epsilon > 0\), there exists an \(N\) such that \(\sup_{[0,1]} |f_n - f_m| < \epsilon\) for \(n,m > N\), hence, letting \(m \to \infty\), we see that \(\sup_{[0,1]} |f_n - f| \leq \epsilon\) for \(n > N\).  Thus
+\[|f(x) - f(y)| \leq |f_n(x) - f_n(y)| + 2\epsilon \leq |x - y| + 2\epsilon\]
+for any \(x,y \in [0,1]\), and since \(\epsilon\) was arbitrary, \(f\) satisfies the first condition of being in \(A\).  Note that \(f_n \to f\) uniformly on \([0,1]\), hence
+\[\int_0^1 f dx = \lim_{n \to \infty} \int_0^1 f_n dx = 1,\]
+and \(f\) satisfies the second condition of being in \(A\).  Therefore, \(f \in A\) and \(A\) is closed.
+
+To show (b), let \(f \in A\).  Then the first condition implies that
+\[|f(x) - f(0)| \leq x \leq 1\]
+for all \(x \in [0,1]\), hence
+\[f(0) - 1 \leq f(x) \leq f(0) + 1.\]
+Now using the second condition,
+\[1 = \int_0^1 f(x) dx \geq f(0) - 1,\]
+so \(f(0) \leq 2\) and \(f \leq 3\) on \([0,1]\).  On the other hand,
+\[1 = \int_0^1 f(x) dx \leq f(0) + 1,\]
+so \(f(0) \geq 0\) and \(f \geq -1\) on \([0,1]\).  Thus \(f\) is bounded in absolute value by \(3\), and since \(f\) was arbitrary, \(A\) is uniformly bounded.
+
+(c) follows directly from the first condition, so we conclude that \(A\) is compact.
+
+
+
+\item Let us make \(M_n(\mathbb{C})\) into a metric space in the following fashion:
+\[\dist(A,B) = \left( \sum_{i,j} \left| A_{ij} - B_{ij} \right|^2 \right)^{1/2}\]
+(which is just the usual metric on \(\mathbb{R}^{n^2}\)).
+
+\begin{enumerate}
+\item Suppose \(F : \mathbb{R} \to M_n(\mathbb{C})\) is continuous.  Show that the set
+\[\left\{ x \in \mathbb{R} : F(x) \text{ is invertible} \right\}\]
+is open (in the usual topology on \(\mathbb{R}\)).
+
+\item Show that on the set given above, \(x \mapsto F(x)^{-1}\) is continuous.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Since \(\det A\) is a continuous function of the entries of \(A\) (indeed, it is a polynomial in the entries of \(A\)), \(x \mapsto \det F(x)\) is a continuous mapping, hence the inverse image of \(\mathbb{R} \backslash \{0\}\) under this mapping is open, which is precisely those \(x\) such that \(F(x)\) is invertible.
+
+\item Since the entries of \(A^{-1}\) are continuous functions of the entries of \(A\) (indeed, rational functions of the entries of \(A\)), it follows that \(x \mapsto F(x)^{-1}\) is continuous.
+
+\end{enumerate}
+
+
+
+\item Let \((X,d)\) be a metric space.  Prove that the following are equivalent:
+\begin{enumerate}
+\item There is a countable dense set.
+\item There is a countable basis for the topology.
+\end{enumerate}
+Recall that a collection of open sets \(\mathcal{U}\) is called a basis if every open set can be written as a union of elements of \(\mathcal{U}\).
+
+{\bf Solution}
+
+Let \(Y\) be a countable dense set of \(X\).  Consider the family of open sets
+\[\mathcal{U} = \left\{ B_d(y;r) \ | \ y \in Y, r \in \mathbb{Q} \right\}.\]
+Note that \(\mathcal{U}\) is countable.  Further, given some open set \(U \subset X\), every \(x \in U\) is covered by some \(B_d(y_x;r_x) \subset U\) (since \(Y\) is dense and \(U\) is open), hence
+\[U = \bigcup_{x \in U} B_d(y_x;r_x),\]
+from which it follows that \(\mathcal{U}\) is a countable basis for \((X,d)\).
+
+Conversely, let \(\mathcal{U} = \{U_n\}_{n = 1}^{\infty}\) be a countable basis for \((X,d)\), and choose \(x_n \in U_n\).  Then since every \(B(x;r)\) contains some \(U_n\) for every \(x \in X\), \(r \in \mathbb{R}\), \(\{x_n\}_{n = 1}^{\infty}\) is a countable dense subset of \(X\).
+
+
+
+\end{enumerate}
+
+\end{document}

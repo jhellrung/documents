@@ -1,0 +1,449 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Numerical Analysis Qualifying Exam, Winter 2006 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item (5 Pts.) Consider the fixed point problem \(x = G(x)\) with a solution \(\alpha\).  Assume that \(G(x)\) is two times continuously differentiable and that \(G'(\alpha) = 0\) but \(G''(\alpha) = K \neq 0\).
+
+\begin{enumerate}
+\item Show that if the initial iterate \(x^0\) is sufficiently close to \(\alpha\) then the fixed point iteration \(x^{n + 1} = G(x^n)\) converges to \(\alpha\) quadratically.
+
+\item Give an estimate of the size of \(\epsilon\) that ensures the iteration \(x^{n + 1} = G(x^n)\) converges to \(\alpha\) if \(x^0 \in [\alpha - \epsilon, \alpha + \epsilon]\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Denote the error of the \(n^{th}\) iterate by \(e_n = \left| x^n - \alpha \right|\).  By Taylor's Theorem,
+\begin{eqnarray*}
+G(x) & = & G(\alpha) + G'(\alpha) (x - \alpha) + G''(\beta) (x - \alpha)^2 \\
+     & = & \alpha + G''(\beta) (x - \alpha)^2
+\end{eqnarray*}
+for some \(\beta\) between \(x\) and \(\alpha\).  It follows that, for some \(\beta_n\) between \(x^n\) and \(\alpha\),
+\begin{eqnarray*}
+e_{n + 1} & = & \left| x^{n + 1} - \alpha \right| \\
+          & = & \left| G(x^n) - \alpha \right| \\
+          & = & \left| \left( \alpha + G''(\beta_n) (x^n - \alpha)^2 \right) - \alpha \right| \\
+          & = & \left| G''(\beta_n) \right| e_n^2,
+\end{eqnarray*}
+establishing the desired quadratic convergence.
+
+\item Choose \(\epsilon > 0\) small enough such that
+\begin{itemize}
+\item \(|x - \alpha| < \epsilon\) implies \(\left| G''(x) - K \right| < \frac{1}{2} |K|\) (possible by the continuity of \(G''\));
+\item \(\epsilon < 1\); and
+\item \(\epsilon < \frac{1}{2|K|}\).
+\end{itemize}
+It follows then that if \(e_n < \epsilon\),
+\[\frac{e_{n + 1}}{e_n} = \left| G''(\beta_n) \right| e_n
+                        < \left( \frac{3}{2} |K| \right) \left( \frac{1}{2|K|} \right)
+                        < \frac{3}{4},\]
+which also implies that \(e_{n + 1} < \epsilon\) as well.  By induction, if \(e_0 < \epsilon\), then \(e_n < (3/4)^n \epsilon \to 0\), i.e., \(x^n \to \alpha\).
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) Let \(A\) be a square non-singular matrix and \(x\) be the solution to \(Ax = b\).  Assume one has an approximate solution \(z\) with an associated residual \(r = b - Az\).  Give a derivation of the following relation between the norm of the error and the norm of the residual:
+\[\frac{\|x - z\|_2}{\|x\|_2} \leq \|A\|_2 \|A^{-1}\|_2 \frac{\|r\|_2}{\|b\|_2}.\]
+
+{\bf Solution}
+
+We have immediately that
+\[b = Ax \ \Rightarrow \ \|b\|_2 \leq \|A\|_2 \|x\|_2,\]
+and
+\[x - z = A^{-1}b - A^{-1}(b - r) = A^{-1} r \ \Rightarrow \ \|x - z\|_2 \leq \|A^{-1}\|_2 \|r\|_2,\]
+so combining these two inequalities gives
+\[\|x - z\|_2 \|b\|_2 \leq \|A^{-1}\|_2 \|r\|_2 \|A\|_2 \|x\|_2,\]
+from which the claim follows (assuming \(b \neq 0\)).
+
+
+
+\item (5 Pts.) Given data points \((x_i,y_i)\) for \(i = 1, \ldots, N + 1\) with distinct ordinates, prove that the interpolating polynomial of degree at most \(N\) is unique.
+
+{\bf Solution}
+
+Let \(p\) and \(q\) each be such interpolating polynomials, and consider \(r = p - q\).  Then \(r\) is a polynomial of degree at most \(N\) with \(N + 1\) distinct roots (each \(x_i\) is a root).  This implies that the \(N + 1\) degree polynomial \(\prod_{i = 1}^{N + 1} (x - x_i)\) divides into \(r\), which is impossible if \(r\) has degree at most \(N\), unless \(r \equiv 0\).  It follows that \(p \equiv q\) and the interpolating polynomial is unique.
+
+
+
+\item (10 Pts.) Consider the ordinary differential equation
+\[y'(t) = f(t,y(t)), \ y(t_0) = y_0.\]
+
+\begin{enumerate}
+\item Give a derivation of the trapezoidal method in a manner analogous to the derivation of general linear multistep methods.
+
+\item Find the leading term of the local truncation error of the trapezoidal method.  What is the global error of the method?
+
+\item Analyze the linear stability for the trapezoidal method and show that the method is A-stable.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item By Taylor's Theorem,
+\begin{eqnarray*}
+y(t + h) & = & y(t) + y'(t) h + \frac{1}{2} y''(t) h^2 + \frac{1}{6} y^{(3)}(\alpha_1) h^3 \\
+y(t) & = & y(t + h) - y'(t + h) h + \frac{1}{2} y''(t + h) h^2 - \frac{1}{6} y^{(3)}(\alpha_2) h^3
+\end{eqnarray*}
+for some \(\alpha_1, \alpha_2 \in [t, t + h]\).  Combining the above two equalities gives
+\[y(t + h) = y(t) + \frac{1}{2} (y'(t) + y'(t + h)) h + \frac{1}{4} (y''(t) - y''(t + h)) h^2 + \frac{1}{12} (y^{(3)}(\alpha_1) + y^{(3)}(\alpha_2)) h^3.\]
+This suggests the trapezoidal method
+\[y_{k + 1} = y_k + \frac{1}{2} (f(t,y_k) + f(t + h, y_{k + 1})) h.\]
+
+\item To compute the local truncation error, we suppose \(y_k = y(t)\).  Then, noting that \(y'(t) = f(t,y(t))\),
+\begin{eqnarray*}
+e & = & y(t + h) - y_{k + 1} \\
+  & = & \frac{1}{2} (f(t + h, y(t + h)) - f(t + h, y_{k + 1})) h \\
+  & + & \frac{1}{4} (y''(t) - y''(t + h)) h^2
+      + \frac{1}{12} \left( y^{(3)}(\alpha_1) + y^{(3)}(\alpha_2) \right) h^3.
+\end{eqnarray*}
+Now by the Mean Value Theorem,
+\[f(t + h, y(t + h)) - f(t + h, y_{k + 1})
+  = f_y(t + h, \beta) (y(t + h) - y_{k + 1})
+  = f_y(t + h, \beta) e\]
+for some \(\beta\) between \(y(t + h)\) and \(y_{k + 1}\).  Also by the Mean Value Theorem,
+\[y''(t) - y''(t + h) = -y^{(3)}(\alpha_3) h\]
+for some \(\alpha_3 \in [t, t + h]\).  Thus,
+\[e = \frac{1}{2} f_y(t + h, \beta) h e
+    + \frac{1}{12} \left( y^{(3)}(\alpha_1) + y^{(3)}(\alpha_2) - 3y^{(3)}(\alpha_3) \right) h^3\]
+and solving for \(e\) yields
+\[e = \frac{y^{(3)}(\alpha_1) + y^{(3)}(\alpha_2) - 3y^{(3)}(\alpha_3)}
+           {6 \left( 2 - f_y(t + h, \beta) h \right)}
+      h^3
+    \in O(h^3).\]
+
+\item The stability of the method is determined by analyzing the method's behavior when applied to the model problem \(y'(t) = f(t,y(t)) = \lambda y(t)\).  In this case,
+\[y_{k + 1} = y_k + \frac{1}{2} (f(t,y_k) + f(t + h, y_{k + 1})) h
+            = y_k + \frac{1}{2} \lambda (y_k + y_{k + 1}) h\]
+\[\Rightarrow \ \frac{1}{2} \left( (2 - \lambda h) y_{k + 1} - (2 + \lambda h) y_k \right) = 0,\]
+so the characteristic polynomial is given by
+\[\rho(\theta) = \frac{1}{2} \left( (2 - \lambda h) \theta - (2 + \lambda h) \right)\]
+which has the single root
+\[\zeta = \frac{2 + \lambda h}{2 - \lambda h}.\]
+The stability region is the set of complex \(\lambda h\) such that
+\[\left| \frac{2 + \lambda h}{2 - \lambda h} \right| < 1.\]
+Since this is the case for \(\Re(\lambda h) < 0\), the method is A-stable.
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the second order partial differential equation
+\[u_{tt} = u_{xx} + u_{yy} + 2 b u_{xy}\]
+to be solved for \(0 \leq x,y \leq 1\), periodic boundary conditions, and smooth initial data
+\begin{eqnarray*}
+u(x,y,0) & = & u_0(x,y) \\
+u_t(x,y,0) & = & u_1(x,y)
+\end{eqnarray*}
+
+\begin{enumerate}
+\item For which real values of \(b\) is this a well-posed problem?  Why?
+
+\item Set up a second-order accurate convergent finite difference scheme.  Justify your answer.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We first compute the symbol \(p(s,\xi,\eta)\) of the differential operator \(P = \partial_t^2 - \partial_x^2 - \partial_y^2 - 2 b \partial_{xy}\):
+\begin{eqnarray*}
+p(s,\xi,\eta)
+& = & \left. P \left( e^{st} e^{i(\xi x + \eta y)} \right) \right/ e^{st} e^{i(\xi x + \eta y)} \\
+& = & s^2 + \xi^2 + \eta^2 + 2 b \xi \eta.
+\end{eqnarray*}
+The roots of the symbol (as a function of \(s\)) are then
+\[q_{\pm}(\xi,\eta) = \pm \sqrt{-\xi^2 - \eta^2 - 2b \xi \eta}.\]
+Well-posedness requires that \(\Re \left( q_{\pm} \right)\) be bounded above for all \(\xi,\eta\), i.e., in this case, due to homogeneity of \(q_{\pm}\) in \(\xi,\eta\),
+\[\xi^2 + \eta^2 + 2b \xi \eta \geq 0.\]
+Considering \(\xi = \eta\) gives the requirement \(b \geq -1\); considering \(\xi = -\eta\) gives the requirement \(b \leq 1\).  We now show that these bounds are not only necessary, but also sufficient.  So suppose \(-1 \leq b \leq 1\); then
+\begin{eqnarray*}
+\xi^2 + \eta^2 + 2b \xi \eta
+& \geq & \xi^2 + \eta^2 - 2 |\xi \eta| \\
+&   =  & \left( |\xi| - |\eta| \right)^2 \\
+& \geq & 0,
+\end{eqnarray*}
+as desired.  Therefore, the problem is well-posed for \(-1 \leq b \leq 1\).
+
+\item We consider using centered differences to approximate all derivatives:
+\begin{eqnarray*}
+P_{k,h_x,h_y} u^n_{\ell,m}
+& = & D_t^2 u^n_{\ell,m} - D_x^2 u^n_{\ell,m} - D_y^2 u^n_{\ell,m} - 2b D_{x0} D_{y0} u^n_{\ell,m} \\
+& = & \frac{u^{n+1}_{\ell,m} - 2u^n_{\ell,m} + u^{n-1}_{\ell,m}}{k^2}
+    - \frac{u^n_{\ell+1,m} - 2u^n_{\ell,m} + u^n_{\ell-1,m}}{h_x^2} \\
+& - & \frac{u^n_{\ell,m+1} - 2u^n_{\ell,m} + u^n_{\ell,m-1}}{h_y^2}
+    - 2b \frac{u^n_{\ell+1,m+1} - u^n_{\ell+1,m-1} - u^n_{\ell-1,m+1} + u^n_{\ell-1,m-1}}{4h_xh_y}; \\
+R_{k,h_x,h_y} f^n_{\ell,m} & = & f^n_{\ell,m}.
+\end{eqnarray*}
+The symbols \(p_{k,h_x,h_y}(s,\xi,\eta)\) and \(r_{k,h_x,h_y}(s,\xi,\eta)\) for these difference operators are
+\begin{eqnarray*}
+p_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left. P_{k,h_x,h_y} \left( e^{snk} e^{i(\xi\ell h_x + \eta mh_y)} \right) \right/ e^{snk} e^{i(\xi\ell h_x + \eta mh_y)} \\
+& = & \frac{1}{k^2} \left( e^{sk} - 2 + e^{-sk} \right) \\
+& - & \frac{1}{h_x^2} \left( e^{i\xi h_x} - 2 + e^{-i\xi h_x} \right) \\
+& - & \frac{1}{h_y^2} \left( e^{i\eta h_y} - 2 + e^{-i\eta h_y} \right) \\
+& - & \frac{b}{2h_xh_y} \left( e^{i\xi h_x} - e^{-i\xi h_x} \right) \left( e^{i\eta h_y} - e^{-i\eta h_y} \right) \\
+& = & \frac{2}{k^2} (\cosh sk - 1) \\
+& + & \frac{2}{h_x^2} (1 - \cos \xi h_x) \\
+& + & \frac{2}{h_y^2} (1 - \cos \eta h_y) \\
+& + & \frac{2b}{h_xh_y} \sin \xi h_x \sin \eta h_y; \\
+r_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left. R_{k,h_x,h_y} \left( e^{snk} e^{i(\xi mh_x + \eta \ell h_y)} \right) \right/ e^{snk} e^{i(\xi mh_x + \eta \ell h_y)} \\
+& = & 1.
+\end{eqnarray*}
+Second-order accuracy is quickly verified by noting that \(p_{k,h_x,h_y}(s,\xi,\eta) - r_{k,h}(s,\xi,\eta) p(s,\xi,\eta) \in O(k^2) + O(h_x^2) + O(h_y^2)\).  This follows easily by applying Taylor's Theorem to each of the terms in \(p_{k,h_x,h_y}(s,\xi,\eta)\):
+\begin{eqnarray*}
+\frac{2}{k^2} (\cosh sk - 1) & = & s^2 + O(k^2) \\
+\frac{2}{h_x^2} (1 - \cos \xi h_x) & = & \xi^2 + O(h_x^2) \\
+\frac{2}{h_y^2} (1 - \cos \eta h_y) & = & \eta^2 + O(h_y^2) \\
+\frac{2b}{h_xh_y} \sin \xi h_x \sin \eta h_y & = & 2b\xi\eta + O(h_x^2) + O(h_y^2)
+\end{eqnarray*}
+and noticing that each term matches with a term in \(p(s,\xi,\eta)\).
+
+Convergence will be implied by stability via the Lax-Richtmyer Equivalence Thereom.  As such, we replace \(g = e^{sk}\) in \(p_{k,h_x,h_y}(s,\xi,\eta) = 0\) and solve for \(g\) to determine the roots of the amplification polynomial:
+\begin{eqnarray*}
+\lefteqn{\frac{2}{k^2} \left( g - 2 + g^{-1} \right)
+  + \frac{2}{h_x^2} (1 - \cos \xi h_x)
+  + \frac{2}{h_y^2} (1 - \cos \eta h_y)
+  + \frac{2b}{h_xh_y} \sin \xi h_x \sin \eta h_y = 0} \\
+& \Rightarrow & g - 2 + g^{-1} + 2 \lambda_x^2 (1 - \cos \theta) + 2 \lambda_y^2 (1 - \cos \phi) + 2b \lambda_x \lambda_y \sin \theta \sin \phi = 0.
+\end{eqnarray*}
+Let \(4c = 2 \lambda_x^2 \ldots \sin \theta \sin \phi\) to simplify the notation.  Then
+\begin{eqnarray*}
+\lefteqn{g - 2 + g^{-1} + 4c = 0} \\
+& \Rightarrow & \left( g^{1/2} - g^{-1/2} \right)^2 = -4c \\
+& \Rightarrow & g^{1/2} - g^{-1/2} = \pm \sqrt{-4c} \\
+& \Rightarrow & g \pm \left( \sqrt{-4c} \right) g^{1/2} - 1 = 0 \\
+& \Rightarrow & g_{\pm}^{1/2} = \pm \sqrt{-c} \pm \sqrt{1 - c}.
+\end{eqnarray*}
+Noting that \(|g_{\pm}| \leq 1\) if and only if \(\left| g_{\pm}^{1/2} \right| \leq 1\), we see that \(|g_{\pm}| \leq 1\) if and only if \(0 \leq c \leq 1\) (indeed, in such case \(|g_{\pm}| = 1\)).  The lower bound on \(c\) can be established as follows:
+\begin{eqnarray*}
+4c &   =  & 2\lambda_x^2 (1 - \cos \theta)
+          + 2\lambda_y^2 (1 - \cos \phi)
+          + 2b \lambda_x \lambda_y \sin \theta \sin \phi \\
+   &   =  & 2(\lambda_x \sin \theta)^2 \frac{1 - \cos \theta}{\sin^2 \theta}
+          + 2(\lambda_y \sin \phi)^2 \frac{1 - \cos \phi}{\sin^2 \phi}
+          + 2b (\lambda_x \sin \theta) (\lambda_y \sin \phi) \\
+   &   =  & (\lambda_x \sin \theta)^2 \frac{2}{1 + \cos \theta}
+          + (\lambda_y \sin \phi)^2 \frac{2}{1 + \cos \phi}
+          + 2b (\lambda_x \sin \theta) (\lambda_y \sin \phi) \\
+   & \geq & (\lambda_x \sin \theta)^2
+          + (\lambda_y \sin \phi)^2
+          + 2b (\lambda_x \sin \theta) (\lambda_y \sin \phi) \\
+   & \geq & 0
+\end{eqnarray*}
+if \(-1 \leq b \leq 1\) (same argument as in (a)).  We can get the upper bound on \(c\) by restricting \(\lambda_x + \lambda_y \leq 1\), for in this case (remembering that \(|b| \leq 1\)),
+\begin{eqnarray*}
+c &   =  & \frac{1}{2} \left( \lambda_x^2 (1 - \cos \theta)
+                            + \lambda_y^2 (1 - \cos \phi)
+                            + b \lambda_x \lambda_y \sin \theta \sin \phi \right) \\
+  & \leq & \lambda_x^2 + \lambda_y^2 + \frac{1}{2} \lambda_x \lambda_y \\
+  & \leq & \lambda_x^2 + \lambda_y^2 + 2 \lambda_x \lambda_y \\
+  &   =  & (\lambda_x + \lambda_y)^2 \\
+  & \leq & 1,
+\end{eqnarray*}
+as desired.  It follows that for \(-1 \leq b \leq 1\) and \(\lambda_x + \lambda_y \leq 1\), the scheme is stable, hence convergent.
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the convection-diffusion equation
+\[u_t + a u_x = b u_{xx}, \ b > 0, \ a \neq 0 \ \text{for} \ 0 \leq x \leq 1.\]
+
+\begin{enumerate}
+\item Construct a second-order accurate unconditionally stable scheme.
+
+\item Do you think it is uniformly stable in the maximum norm as \(b \downarrow 0\)?  Justify your answers.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We consider using Crank-Nicolson to approximate \(u_x\) and \(u_{xx}\):
+\begin{eqnarray*}
+P_{k,h} u^n_m
+& = & D_{t+} u^n_m + \frac{1}{2} a \left( D_{x0} u^{n+1}_m + D_{x0} u^n_m \right)
+    - \frac{1}{2} b \left( D^2_x u^{n+1}_m + D^2_x u^n_m \right) \\
+& = & \frac{u^{n+1}_m - u^n_m}{k}
+    + \frac{1}{2} a \left( \frac{u^{n+1}_{m+1} - u^{n+1}_{m-1}}{2h}
+                         + \frac{u^n_{m+1} - u^n_{m-1}}{2h} \right) \\
+& - & \frac{1}{2} b \left( \frac{u^{n+1}_{m+1} - 2u^{n+1}_m + u^{n+1}_{m-1}}{h^2}
+                         + \frac{u^n_{m+1} - 2u^n_m + u^n_{m-1}}{h^2} \right); \\
+R_{k,h} f^n_m
+& = & \frac{1}{2} \left( f^{n + 1}_m + f^n_m \right).
+\end{eqnarray*}
+The symbols \(p_{k,h}(s,\xi)\) and \(r_{k,h}(s,\xi)\) for these difference operators are
+\begin{eqnarray*}
+p_{k,h}(s,\xi)
+& = & \left. P_{k,h} \left( e^{snk} e^{i\xi mh} \right) \right/  e^{snk} e^{i\xi mh} \\
+& = & \frac{e^{sk} - 1}{k}
+    + \frac{1}{2} a \left( e^{ks} \frac{e^{i\xi h} - e^{-i\xi h}}{2h}
+                                + \frac{e^{i\xi h} - e^{-i\xi h}}{2h} \right) \\
+& - & \frac{1}{2} b \left( e^{ks} \frac{e^{i\xi h} - 2 + e^{-i\xi h}}{h^2}
+                                + \frac{e^{i\xi h} - 2 + e^{-i\xi h}}{h^2} \right) \\
+& = & \frac{e^{sk} - 1}{k}
+    + i\frac{a}{2h} \left( e^{sk} + 1 \right) \sin \xi h
+    + \frac{b}{h^2} \left( e^{sk} + 1 \right) \left( 1 - \cos \xi h \right); \\
+r_{k,h}(s,\xi)
+& = & \left. R_{k,h} \left( e^{snk} e^{i\xi mh} \right) \right/  e^{snk} e^{i\xi mh} \\
+& = & \frac{1}{2} \left( e^{sk} + 1 \right).
+\end{eqnarray*}
+The symbol \(p(s,\xi)\) of the differential operator \(P = \partial_t + a \partial_x - b \partial^2_x\) is
+\begin{eqnarray*}
+p(s,\xi)
+& = & \left. P \left( e^{st} e^{i\xi x} \right) \right/ e^{st} e^{i\xi x} \\
+& = & s + ia\xi + b\xi^2.
+\end{eqnarray*}
+To show second-order accuracy, we verify that \(p_{k,h}(s,\xi) - r_{k,h}(s,\xi) p(s,\xi) \in O(k^2) + O(h^2)\):
+\begin{eqnarray*}
+p_{k,h}(s,\xi) - r_{k,h}(s,\xi) p(s,\xi)
+& = & \frac{e^{sk} - 1}{k}
+    + i\frac{a}{2h} \left( e^{sk} + 1 \right) \sin \xi h
+    + \frac{b}{h^2} \left( e^{sk} + 1 \right) \left( 1 - \cos \xi h \right) \\
+& - & \frac{1}{2} \left( e^{sk} + 1 \right) \left( s + ia\xi + b\xi^2 \right) \\
+& = & s + \frac{1}{2} s^2 k + O(k^2) \\
+& + & i \frac{a}{2h} \left( 2 + sk + O(k^2) \right) \left( \xi h + O(h^3) \right) \\
+& + & \frac{b}{h^2} \left( 2 + sk + O(k^2) \right) \left( \frac{1}{2} \xi^2 h^2 + O(h^4) \right) \\
+& - & \frac{1}{2} \left( 2 + sk + O(k^2) \right) \left( s + ia\xi + b\xi^2 \right) \\
+& = & s + \frac{1}{2} s^2 k + O(k^2) \\
+& + & ia\xi + \frac{1}{2} ias\xi k + O(k^2) + O(h^2) \\
+& + & b\xi^2 + \frac{1}{2} bs\xi^2 k + O(k^2) + O(h^2) \\
+& - & \left( 1 + \frac{1}{2} sk \right) \left( s + ia\xi + b\xi^2 \right) + O(k^2) + O(h^2) \\
+& = & O(k^2) + O(h^2),
+\end{eqnarray*}
+as desired.
+
+To show stability, we replace \(g = e^{sk}\) in \(p_{k,h} = 0\) and solve for \(g\) to determine the root of the amplification polynomial:
+\begin{eqnarray*}
+\lefteqn{\frac{g - 1}{k} + (g + 1) \left( i \frac{a}{2h} \sin \xi h + \frac{b}{h^2} \left( 1 - \cos \xi h \right) \right) = 0} \\
+& \Rightarrow & g - 1 + (g + 1) \left( i \frac{1}{2} a \lambda \sin \theta + b \mu (1 - \cos \theta) \right) = 0 \\
+& \Rightarrow & g(\theta) = \frac{1 - i \frac{1}{2} a \lambda \sin \theta - b \mu (1 - \cos \theta)}
+                                 {1 + i \frac{1}{2} a \lambda \sin \theta + b \mu (1 - \cos \theta)}
+\end{eqnarray*}
+Since \(|1 + b \mu (1 - \cos \theta)| \geq |1 - b \mu (1 - \cos \theta)|\) for all \(\theta\) (recall that \(b > 0\)), we see that \(|g(\theta)| \leq 1\) for all \(\theta\), hence the scheme is unconditionally stable.
+
+\item Yes, since \(|g| \uparrow 1\) as \(b \downarrow 0\).
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the problem
+\begin{eqnarray*}
+-\Delta u + u = f(x,y) & & (x,y) \in \Omega, \\
+u = 1 & & (x,y) \in \partial\Omega_1, \\
+\frac{\partial u}{\partial \nu} + u = x & & (x,y) \in \partial\Omega_2,
+\end{eqnarray*}
+where
+\begin{eqnarray*}
+\Omega & = & \left\{ (x,y) \ | \ x^2 + y^2 < 1 \right\}, \\
+\partial\Omega_1 & = & \left\{ (x,y) \ | x^2 + y^2 = 1, \ x \leq 0 \right\}, \\
+\partial\Omega_2 & = & \left\{ (x,y) \ | \ x^2 + y^2 = 1, \ x > 0 \right\},
+\end{eqnarray*}
+and \(f \in L^2(\Omega)\).
+
+\begin{enumerate}
+\item Determine an appropriate weak variational formulation.
+
+\item Verify conditions on the corresponding linear and bilinear forms needed for existence and uniqueness of the solution.
+
+\item Assume that the boundary \(\partial\Omega\) is approximated by a polygonal curve.  Describe a finite element approximation using \(P_1\) elements.  Discuss the form and properties of the stiffness matrix and the existence and uniqueness of the solution of the linear system thus obtained.  Give a rate of convergence.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We set \(w = u - 1\) (so \(u = w + 1\)) and reformulate the problem in terms of \(w\) to obtain homogeneous boundary conditions:
+\begin{eqnarray*}
+-\Delta w + w = f(x,y) - 1 = g(x,y) & & (x,y) \in \Omega, \\
+w = 0 & & (x,y) \in \partial\Omega_1, \\
+\frac{\partial w}{\partial \nu} + w = x - 1 = h(x,y) & & (x,y) \in \partial\Omega_2.
+\end{eqnarray*}
+Let \(V = \left\{ v \in H^1(\Omega) \ | \ v|_{\partial\Omega_1} \equiv 0 \right\}\) equipped with the norm \(\|\cdot\|_{H^1(\Omega)}\).  We determine a weak variational formulation by multiplying the differential equation by \(v \in V\), applying integration by parts, and noting that \(v|_{\partial\Omega_1} \equiv 0\):
+\begin{eqnarray*}
+\lefteqn{(-\Delta w + w) v = fv} \\
+& \Rightarrow & \int_{\Omega} (-\Delta w + w) v = \int_{\Omega} fv \\
+& \Rightarrow & -\int_{\partial\Omega} v \frac{\partial w}{\partial \nu} + \int_{\Omega} \nabla w \cdot \nabla v + \int_{\Omega} wv = \int_{\Omega} fv \\
+& \Rightarrow & -\int_{\partial\Omega_2} v (h - w) + \int_{\Omega} \left( \nabla w \cdot \nabla v + wv \right) = \int_{\Omega} fv \\
+& \Rightarrow & \int_{\Omega} \left( \nabla w \cdot \nabla v + wv \right) + \int_{\partial\Omega_2} wv = \int_{\Omega} fv + \int_{\partial\Omega_2} hv.
+\end{eqnarray*}
+Let
+\begin{eqnarray*}
+a(w,v) & = & \int_{\Omega} \left( \nabla w \cdot \nabla v + wv \right) + \int_{\partial\Omega_2} wv \\
+L v & = & \int_{\Omega} fv + \int_{\partial\Omega_2} hv
+\end{eqnarray*}
+such that the weak variational formulation is to find \(w \in V\) such that
+\[a(w,v) = Lv \ \text{for all} \ v \in V.\]
+
+\item The Lax-Milgram Lemma provides sufficient conditions the bilinear form \(a\) and the linear form \(L\) must satisfy for existence and uniqueness of \(w\):
+
+\begin{itemize}
+\item {\em \(a\) is symmetric.}  Clearly \(a(v_1,v_2) = a(v_2,v_1)\) for \(v_1,v_2 \in V\).
+
+\item {\em \(a\) is continuous.}  For \(v_1,v_2 \in V\), by the Cauchy-Schwarz Inequality,
+\begin{eqnarray*}
+|a(v_1,v_2)| &   =  & \left| \int_{\Omega} \left( \nabla v_1 \cdot \nabla v_2 + v_1 v_2 \right) + \int_{\partial\Omega_2} v_1 v_2 \right| \\
+             & \leq & \|v_1\|_{H^1(\Omega)} \|v_2\|_{H^1(\Omega)} + \|v_1\|_{L^2(\partial\Omega_2)} \|v_2\|_{L^2(\partial\Omega_2)}.
+\end{eqnarray*}
+But
+\[\|v_i\|_{L^2(\partial\Omega_2)} \leq C \|v_i\|_{H^1(\Omega)}\]
+for some \(C > 0\), so, in fact,
+\[|a(v_1,v_2) \leq (1 + C) \|v_1\|_{H^1(\Omega)} \|v_2\|_{H^1(\Omega)},\]
+and we conclude that \(a\) is continuous.
+
+\item {\em \(a\) is \(V\)-elliptic.}  For \(v \in V\),
+\begin{eqnarray*}
+a(v,v) &   =  & \int_{\Omega} \left( |\nabla v|^2 + v^2 \right) + \int_{\partial\Omega_2} v^2 \\
+       & \geq & \int_{\Omega} \left( |\nabla v|^2 + v^2 \right) \\
+       &   =  & \|v\|_{H^1(\Omega)}^2,
+\end{eqnarray*}
+and so \(a\) is indeed \(V\)-elliptic.
+
+\item {\em \(L\) is continuous.}  For \(v \in V\), by the Cauchy-Schwarz Inequality,
+\begin{eqnarray*}
+|Lv| &   =  & \left| \int_{\Omega} fv + \int_{\partial\Omega_2} hv \right| \\
+     & \leq & \|f\|_{L^2(\Omega)} \|v\|_{L^2(\Omega)} + \|h\|_{L^2(\partial\Omega_2)} \|v\|_{L^2(\partial\Omega_2)} \\
+     & \leq & \left( \|f\|_{L^2(\Omega)} + C \|h\|_{L^2(\partial\Omega_2)} \right) \|v\|_{H^1(\Omega)},
+\end{eqnarray*}
+hence \(L\) is continuous.
+
+\end{itemize}
+
+Therefore, we have existence and uniqueness of the solution \(w\).
+
+\item For the finite element approximation, we suppose some triangulation \(\{K\}_h\), where \(h\) denotes the fineness of the triangulation mesh, with nodes denoted by \(\{N_j\}\).  Let
+\[V_h = \left\{ v \in V \ | \ v|_K \in P_1(K) \ \text{for each} \ K \right\}.\]
+The approximate variational formulation then becomes to find \(w_h \in V_h\) such that \(a(w_h,v) = Lv\) for all \(v \in V_h\).  By linearity, if \(\{\phi_i\}\) is a basis for \(V_h\), this is equivalent to finding \(w_h \in V_h\) such that \(a(w_h,\phi_i) = L\phi_i\) for all \(\phi_i\).  We take \(\phi_i\) such that \(\phi_i(N_j) = \delta_{ij}\).  Now we can also express \(w_h = \sum_j \xi_j \phi_j\), thus obtaining the linear system
+\[\sum_j \xi_j a(\phi_j,\phi_i) = L\phi_i \ \Rightarrow \ A \xi = b,\]
+where the entries of the stiffness matrix are \(A_{ij} = a(\phi_j,\phi_i)\) and the entries of the load vector are \(b_i = L\phi_i\).  If the enumeration of the \(N_j\)'s is done efficiently, \(A\) will be sparse (since \(a(\phi_j,\phi_i) = 0\) if \(|i - j|\) is too large) and banded, allowing for efficient solving of the system.  Further, \(A\) is positive definite (since \(a\) is an inner product), hence is nonsingular, so the system has a unique solution.
+
+If \(w\) is the solution to the weak variational formulation and \(w_h\) is the solution to the approximate variational formulation, then we have the bound \(\|w - w_h\|_a \leq \|w - v\|_a\) for any \(v \in V_h\), where \(\|\cdot\|_a\) is the norm induced by the inner product \(a(\cdot,\cdot)\).  In particular, we can take the linear interpolant \(\pi_h w \in V_h\) of \(w\), and we know that \(\|w - \pi_h w\|_a \leq C_w h^2\) for some constant \(C_w\) (dependent on \(w\) but independent of \(h\)), from which we obtain the convergence rate estimate \(\|w - w_h\|_a \leq C_w h^2\).
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

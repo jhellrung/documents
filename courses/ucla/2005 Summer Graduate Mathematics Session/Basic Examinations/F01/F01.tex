@@ -1,0 +1,247 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\im{\mathop{\rm im}\nolimits}
+\def\ker{\mathop{\rm ker}\nolimits}
+\newcommand{\matrixiiibyiii}[9]{\left( \begin{array}{ccc} #1 & #2 & #3 \\ #4 & #5 & #6 \\ #7 & #8 & #9 \end{array} \right)}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, F01 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Let \(K\) be a compact set of real numbers and let \(f(x)\) be a continuous function on \(K\).  Prove there exists \(x_0 \in K\) such that \(f(x) \leq f(x_0)\) for all \(x \in K\).
+
+{\bf Solution}
+
+We claim that \(f(K)\) is compact in \(\mathbb{R}\).  For any open cover \(\{U_{\alpha}\}\) of \(f(K)\) corresponds to an open cover \(\{f^{-1}(U_{\alpha})\}\) of \(K\) (since \(f\) is continuous, the inverse image of any open set is an open set; further, given some \(x \in K\), \(f(x) \in U_{\alpha}\) for some \(\alpha\), hence \(x \in f^{-1}(U_{\alpha})\), so the set of open sets is indeed a cover of \(K\)), hence there exists some finite subcover \(\{f^{-1}(U_{\alpha_i})\}\) of \(K\), hence a corresponding finite subcover \(\{U_{\alpha_i}\}\) of \(f(K)\).  Thus \(f(K)\) is compact, as claimed, hence closed and bounded.  It follows that there exists some maximal element \(y_0\) of \(f(K)\), hence there exists an \(x_0 \in K\) such that \(f(x_0) = y_0\) is the maximal element of \(f(K)\).
+
+
+
+\item Let \(\mathbb{N}\) denote the positive integers, let \(a_n = (-1)^n \frac{1}{n}\), and let \(\alpha\) be any real number.  Prove there is a one-to-one and onto mapping \(\sigma : \mathbb{N} \to \mathbb{N}\) such that
+\[\sum_{n = 1}^{\infty} a_{\sigma(n)} = \alpha.\]
+
+{\bf Solution}
+
+Assume, without loss of generality, that \(\alpha \geq 0\).  Set \(i_0 = j_0 = 0\) and \(\alpha_1 = \alpha\).  Choose \(i_1 > i_0\) such that
+\[\sum_{k = i_0 + 1}^{i_1 - 1} a_{2k} \leq \alpha_1 < \sum_{k = i_0 + 1}^{i_1} a_{2k},\]
+possible since \(\sum_k a_{2k}\) diverges.  Set
+\[\alpha_1' = \alpha_1 - \sum_{k = i_0 + 1}^{i_1} a_{2k} < 0.\]
+Next choose \(j_1 > j_0\) such that
+\[\sum_{k = j_0 + 1}^{j_1 - 1} a_{2k - 1} \geq \alpha_1' > \sum_{k = j_0 + 1}^{j_1} a_{2k - 1},\]
+again possible since \(\sum_k a_{2k - 1}\) diverges.  Set
+\[\alpha_2 = \alpha_1' - \sum_{k = j_0 + 1}^{j_1} a_{2k - 1} > 0.\]
+Repeat this process, obtaining at step \(t\) positive integers \(i_t\) and \(j_t\) and real numbers \(\alpha_t'\) and \(\alpha_{t + 1}\) such that
+\[\sum_{k = i_{t - 1} + 1}^{i_t - 1} a_{2k} \leq \alpha_t < \sum_{k = i_{t - 1} + 1}^{i_t} a_{2k},\]
+\[\alpha_t' = \alpha_t - \sum_{k = i_{t - 1} + 1}^{i_t} a_{2k} < 0,\]
+\[\sum_{k = j_{t - 1} + 1}^{j_t - 1} a_{2k - 1} \geq \alpha_t' > \sum_{k = j_{t - 1} + 1}^{j_t} a_{2k - 1},\]
+\[\alpha_{t + 1} = \alpha_t' - \sum_{k = j_{t - 1} + 1}^{j_t} a_{2k - 1} > 0.\]
+Then we claim that
+\[\alpha = \sum_{t = 1}^{\infty} \left( \sum_{k = i_{t - 1} + 1}^{i_t} a_{2k} +
+                                        \sum_{k = j_{t - 1} + 1}^{j_t} a_{2k - 1} \right)\]
+and that all the \(a_n\)'s are used precisely once.  The latter claim is easily verified, since both \(\{i_t\}\) and \(\{j_t\}\) are strictly increasing sequences of integers, hence there exists precisely one \(t\) such that \(2i_{t - 1} < n \leq 2i_t\) for even \(n\) and \(2j_{t - 1} - 1 < n \leq 2j_t - 1\) for odd \(n\) (in which case \(a_n\) would appear in the \(t^{th}\) summand in the series above).
+
+To prove the former claim, note that
+\[\alpha - \sum_{t = 1}^T \left( \sum_{k = i_{t - 1} + 1}^{i_t} a_{2k} +
+                                 \sum_{k = j_{t - 1} + 1}^{j_t} a_{2k - 1} \right) = \alpha_{T + 1},\]
+and
+\[0 < \alpha_{T + 1} \leq -a_{2j_T - 1}.\]
+Simiarly,
+\[-a_{2j_{T + 1}} \leq \alpha_{T + 1}' < 0.\]
+Thus, the \(\alpha_t\)'s form a strictly decreasing sequence of positive numbers down to \(0\), the \(\alpha_t'\)'s form a strictly increasing sequence of negative numbers up to \(0\).  Further, the difference between \(\alpha\) and the partial sums past \(t\) lie between \(\alpha_t\) and \(\alpha_t'\), hence the partial sums tend to \(\alpha\) as \(t \to \infty\).
+
+
+
+\item Let \(E\) be the set of real numbers and let \(\{f_n\}\) be a sequence of continuous real-valued functions on \(E\).  Prove that if \(\{f_n(x)\}\) converges to \(f(x)\) {\em uniformly} on \(E\), then \(f(x)\) is continuous on \(E\).  (Recall that \(f_n(x)\) converges to \(f(x)\) uniformly on \(E\) means that for every \(\epsilon > 0\) there is \(N\) such that whenever \(n > N\) and \(x \in E\), \(|f_n(x) - f(x)| < \epsilon\).)
+
+{\bf Solution}
+
+Let \(\epsilon > 0\) and \(x_0 \in E\) be given.  Then there exists an \(N\) such that \(|f_n(x) - f(x)| < \epsilon\) for all \(n \geq N\) and \(x \in E\), and there exists a \(\delta > 0\) such that \(|f_N(x_0) - f_N(x)| < \epsilon\) whenever \(|x_0 - x| < \delta\).  It follows that
+\[|f(x_0) - f(x)| < |f(x_0) - f_N(x_0)| + |f_N(x_0) - f_N(x)| + |f_N(x) - f(x)| < 3\epsilon\]
+whenver \(|x_0 - x| < \delta\), proving that \(f\) is continuous at \(x_0\).  As \(x_0 \in E\) was arbitrary, \(f\) is continuous on \(E\).
+
+
+
+\item Let \(S\) be the set of all sequences \((x_1, x_2, \ldots)\) such that for all \(n\),
+\[x_n \in \{0,1\}.\]
+Prove that there does not exist a one-to-one mapping from the set \(\mathbb{N} = \{1, 2, \ldots\}\) {\em onto} the set \(S\).
+
+{\bf Solution}
+
+Suppose \(f : \mathbb{N} \to S\).  Let \(f(n)_k\) denote the \(k^{th}\) component of the sequence \(f(n)\), and consider the sequence \(s = (x_1, x_2, \ldots) \in S\) defined by \(x_k = 1 - f(k)_k\).  Then \(s\) differs in the \(k^{th}\) component of \(f(k)\) for all \(k \in \mathbb{N}\), hence \(s \notin f(\mathbb{N})\) and \(f\) cannot be onto.
+
+
+
+\item Suppose that \(f : \mathbb{R}^2 \to \mathbb{R}\) is a continuous function such that the partial derivatives \(\frac{\partial f}{\partial x}\) and \(\frac{\partial f}{\partial y}\) of \(f\) exist everywhere and are continuous everywhere, and \(\frac{\partial}{\partial x} \left( \frac{\partial f}{\partial y} \right)\) and \(\frac{\partial}{\partial y} \left( \frac{\partial f}{\partial x} \right)\) also exist and are continuous everywhere.  Prove that
+\[  \frac{\partial}{\partial x} \left( \frac{\partial f}{\partial y} \right)
+  = \frac{\partial}{\partial y} \left( \frac{\partial f}{\partial x} \right)\]
+at every point of \(\mathbb{R}^2\).
+
+{\bf Solution}
+
+Fix \((a,b) \in \mathbb{R}^2\).  For \(b,k \in \mathbb{R}\), define
+\[d(b,k) = f(a + h, b + k) - f(a + h, b) - f(a, b + k) + f(a, b).\]
+Then for \(u(t) = f(t, b + k) - f(t, b)\), the Mean Value Theorem gives us \(x\) between \(a\) and \(a + h\) and \(y\) between \(b\) and \(b + k\) such that
+\[d(b,k) = u(a + h) - u(a)
+         = h u'(x)
+         = h \left( D_1f(x, b + k) - D_1f(x, b) \right)
+         = h k D_{21}f(x,y).\]
+A similar argument for \(v(t) = f(a + h, t) - f(a, t)\) yields \(x'\) between \(a\) and \(a + h\) and \(y\) between \(b\) and \(b + k\) such that
+\[d(b,k) = h k D_{12}f(x,y).\]
+By the continuity of \(D_{21}f\) and \(D_{12}f\),
+\[\frac{d(b,k)}{hk} = D_{21}f(x,y) \to D_{21}f(a,b)\]
+as \(h,k \to 0\), and similarly \(\frac{d(b,k)}{hk} \to D_{12}f(a,b)\), hence, by the uniqueness of limits,
+\[D_{21}f(a,b) = D_{12}f(a,b).\]
+
+
+
+\item Suppose that \(F : \mathbb{R}^2 \to \mathbb{R}^2\) is a continuously differentiable function with \(F((0,0)) = (0,0)\) and with the Jacobian of \(F\) at \((0,0)\) equal to the identity matrix (i.e., if \(F = (f_1, f_2)\) then \(\left. \frac{\partial f_i}{\partial x_j} \right|_{(0,0)} = 1\) if \(i = j\) and \( = 0\) if \(i \neq j\)).  Outline a proof that there exists \(\delta > 0\) each that if \(a^2 + b^2 < \delta\) then there is a point \((x,y)\) in \(\mathbb{R}^2\) with \(F(x,y) = (a,b)\).  (Prove this directly; do not just restate the Inverse Function Theorem.  Your argument will be pat of the proof of the Inverse Function Theorem.  You may use any basic estimation you need about the change in \(F\) being approximated by the differential of \(F\) without proof.)
+
+{\bf Solution}
+
+Let \(A = F'((0,0))\), and set
+\[\lambda = \frac{1}{2\|A^{-1}\|}.\]
+Let \(U\) be an open ball around \((0,0)\) such that
+\[\|F'(x) - A\| < \lambda,\]
+possible by the continuity of \(F'\).  Now to each \(y \in \mathbb{R}^2\), define \(\phi_y : \mathbb{R}^2 \to \mathbb{R}^2\) by
+\[\phi_y(x) = x + A^{-1}(y - F(x)).\]
+Note that \(\phi_y(x) = x\) if and only if \(F(x) = y\).
+
+Now
+\[\phi_y'(x) = I + A^{-1}F'(x) = A^{-1}(A - F'(x)),\]
+so
+\[\|\phi_y'(x)\| < \|A^{-1}\| \lambda = \frac{1}{2}\]
+for \(x \in U\).  An extension of the Mean Value Theorem then allows us to conclude that
+\[|\phi_y(x_1) - \phi_y(x_2)| \leq \frac{1}{2} |x_1 - x_2|\]
+for \(x_1,x_2 \in U\).  Hence \(\phi_y\) restricted to \(U\) is a contraction.  Thus any fixed point of \(\phi_y\) is unique, showing that \(F\) is injective on \(U\).
+
+Now put \(V = f(U)\), and pick \(y_0 \in V\).  Then \(y_0 = f(x_0)\) for some \(x_0 \in U\).  Let \(B(x_0;r)\) be such that its closure is contained in \(U\).  Then for \(y \in B(y_0; \lambda r)\), define \(\phi_y\) as above, so
+\[\left| \phi_y(x_0) - x_0 \right|
+     = \left| A^{-1}(y - y_0) \right|
+  \leq \| A^{-1} \| \lambda r
+     = \frac{r}{2},\]
+and if \(x \in \overline{B(x_0;r)}\), then
+\[\left| \phi_y(x) - x_0 \right|
+  \leq \left| \phi_y(x) - \phi_y(x_0) \right| + \left| \phi_y(x_0) - x_0 \right|
+     < \frac{1}{2} |x - x_0| + \frac{r}{2}
+  \leq r,\]
+so \(\phi_y(x) \in B(x_0;r)\).
+
+Thus \(\phi_y\) is a contraction of \(\overline{B(x_0;r)}\) into \(\overline{B(x_0;r)}\).  Since \(\overline{B(x_0;r)}\) is closed in \(\mathbb{R}^2\), it is complete, so the Contraction Mapping Principle furnishes an \(x \in \overline{B(x_0;r)} \subset U\) such that \(\phi_y(x) = x\), i.e., \(f(x) = y\).  Further, \(y \in f(U) = V\), which shows that \(V\) is open.
+
+
+
+\item If \(V\) is a vector space and \(X\) is a subspace, let \(V^* = \{f : V \to \mathbb{R} \ | \ f \text{ is linear}\}\) be the dual space of \(V\) and \(X^{\circ} = \{f \in V^* \ | \ f(x) = 0 \text{ on all } x \in X\}\) be the annihilator of \(X\).  Let \(T : V \to W\) be a linear transformation of finite dimensional real vector spaces.  Recall that the {\em transpose} of \(T\) is the linear map \(T^t : W^* \to V^*\) defined by \(T^t(f) = f \circ T\).  Prove the following:
+\begin{enumerate}
+\item \(\im(T)^{\circ} = \ker(T^t)\).  (Here \(\im(T)\) is the image or range of \(T\) and \(\ker(T)\) is the kernel or null space of \(T\).)
+\item \(\dim \im(T) = \dim \im(T^t)\).
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item
+\[\begin{array}{*{5}{c}}
+  g \in \im(T)^{\circ}
+  & \Leftrightarrow & g(w) = 0 \ \forall w \in \im(T) & & \\
+  & \Leftrightarrow & g(Tv) = 0 \ \forall v \in V & & \\
+  & \Leftrightarrow & (g \circ T)(v) = 0 \ \forall v \in V & & \\
+  & \Leftrightarrow & T^t(g)(v) = 0 \ \forall v \in V & & \\
+  & \Leftrightarrow & T^t(g) = 0
+  & \Leftrightarrow & g \in \ker(T^t)
+  \end{array}\]
+
+\item We have that
+\[\dim W = \dim \im(T) + \dim \im(T)^{\circ},\]
+\[\dim W^* = \dim \im(T^t) + \dim \ker(T^t),\]
+so by the equality \(\dim W = \dim W^*\) and the equality established in (a),
+\[\dim \im(T) = \dim \im(T^t).\]
+
+\end{enumerate}
+
+
+
+\item Let \(T : \mathbb{R}^3 \to \mathbb{R}^3\) be the rotation by \(60^{\circ}\) counterclockwise about the plane perpendicular to the vector \((1,1,1)\) and \(S : \mathbb{R}^3 \to \mathbb{R}^3\) be the reflection about the plane perpendicular to the vector \((1,0,1)\).  Determine the matrix representation of \(S \circ T\) in the standard basis \(\{(1,0,0), (0,1,0), (0,0,1)\}\).  You do not have to multiply the resulting matrices but you must determine any inverses that arise.
+
+{\bf Solution}
+
+Let
+\[B_T = \matrixiiibyiii{\frac{1}{\sqrt{3}}}{ \frac{1}{\sqrt{2}}}{ \frac{1}{\sqrt{6}}}
+                       {\frac{1}{\sqrt{3}}}{-\frac{1}{\sqrt{2}}}{ \frac{1}{\sqrt{6}}}
+                       {\frac{1}{\sqrt{3}}}{                  0}{-\frac{2}{\sqrt{6}}}.\]
+Then regarding the columns of \(B_T\) as an orthonormal basis, the matrix representation of \(T\) in this basis is
+\[[T]_{B_T} = \matrixiiibyiii{1}{               0}{              0}
+                             {0}{ \cos 60^{\circ}}{\sin 60^{\circ}}
+                             {0}{-\sin 60^{\circ}}{\cos 60^{\circ}},\]
+so the matrix representation of \(T\) in the standard basis is
+\[T = B_T [T]_{B_T} B_T^{-1}
+    = B_T [T]_{B_T} B_T^t.\]
+Let
+\[B_S = \matrixiiibyiii{\frac{1}{\sqrt{2}}}{0}{ \frac{1}{\sqrt{2}}}
+                       {                 0}{1}{                  0}
+                       {\frac{1}{\sqrt{2}}}{0}{-\frac{1}{\sqrt{2}}}.\]
+Then regarding the columns of \(B_S\) as an orthonormal basis, the matrix representation of \(S\) in this basis is
+\[[S]_{B_S} = \matrixiiibyiii{-1}{0}{0}
+                             { 0}{1}{0}
+                             { 0}{0}{1},\]
+so the matrix representation of \(S\) in the standard basis is
+\[S = B_S [S]_{B_S} B_S^{-1}
+    = B_S [S]_{B_S} B_S^t,\]
+and it follows that
+\[S \circ T = B_S [S]_{B_S} B_S^t B_T [T]_{B_T} B_T^t.\]
+
+
+
+\item Let \(A\) be a real symmetric matrix.  Prove that there exists an invertible matrix \(P\) such that \(P^{-1}AP\) is diagonal.
+
+(You cannot just quote a theorem, but must prove it from scratch.)
+
+{\bf Solution}
+
+Let \(A\) be \(n \times n\).  Let \(\lambda \in \mathbb{C}\) be an eigenvalue of \(A\) (whose existence is guaranteed by the presence of roots in the characteristic polynomial), and \(x \in \mathbb{C}^n\) a corresponding eigenvector.  Then in the extended complex inner product space,
+\[\lambda (x, x) = (\lambda x, x) = (Ax, x) = (x, A^*x) = (x, Ax) = (x, \lambda x) = \overline{\lambda} (x, x),\]
+hence \(\lambda = \overline{\lambda}\), so in fact \(\lambda \in \mathbb{R}\).  Further, if we write \(x = u + iv\) for \(u,v \in \mathbb{R}^n\),
+\[Au + i Av = Ax = \lambda x = \lambda u + i \lambda v,\]
+so equating real and imaginary parts allows us to conclude that \(u\) and \(v\) are eigenvectors of \(A\) as well.  Thus we can assume \(x \in \mathbb{R}^n\).
+
+We next show that \(A\) maps \(x^{\perp}\) into \(x^{\perp}\).  For suppose \(y \in x^{\perp}\).  Then
+\[(Ay, x) = (y, A^tx) = (y, Ax) = (y, \lambda x) = \lambda (y, x) = 0,\]
+hence \(Ay \in x^{\perp}\) as well.  \(x^{\perp}\) is a vector space of dimension \(n - 1\), hence we can inductively diagonalize the restriction of \(A\) to \(x^{\perp}\) (the restriction is still self-adjoint); that is, there exists a basis \(\{e_1, \ldots, e_{n - 1}\}\) of \(x^{\perp}\) such that \(Ae_i = \lambda_i\).  If we set \(e_n = x\) and \(\lambda_n = \lambda\), then \(A\) itself is diagonalizable by \(P = (e_1 \ \cdots \ e_n)\):
+\[P^{-1} A P = D\]
+where \(D_{ij} = \delta_{ij} \lambda_{ii}\).
+
+
+
+\item Let \(V\) be a complex vector space and \(T : V \to V\) a linear transformation.  Let \(v_1, \ldots, v_n\) be non-zero vectors in \(V\), each an eigenvector of a different eigenvalue.  Prove that \(\{v_1, \ldots, v_n\}\) is linearly independent.
+
+{\bf Solution}
+
+The claim is trivial for \(n = 1\), so assume that \(\{v_1, \ldots, v_{n - 1}\}\) is linearly independent.  Let \(\lambda_i\) be the corresponding eigenvalue for \(v_i\), \(i = 1, \ldots, n\), and suppose that
+\[\sum_{i = 1}^n c_i v_i = 0.\]
+Then
+\[0 = T0 = T \sum_i c_i v_i = \sum_i c_i Tv_i = \sum_i c_i \lambda_i v_i.\]
+Multiplying the first equation by \(\lambda_n\) yields
+\[0 = \sum_i c_i \lambda_n v_i,\]
+and subtracting gives
+\[0 = \sum_i c_i (\lambda_i - \lambda_n) v_i
+    = \sum_{i = 1}^n c_i (\lambda_i - \lambda_n) v_i.\]
+Now \(\lambda_i \neq \lambda_n\) for \(i = 1, \ldots, n - 1\), by assumption, hence we conclude, by the linear independence of \(\{v_i\}_{i = 1}^{n - 1}\), that \(c_i = 0\), \(i = 1, \ldots, n - 1\), hence \(c_n = 0\) as well, implying that, indeed, \(\{v_1, \ldots, v_n\}\) is linearly independent.
+
+
+
+\end{enumerate}
+
+\end{document}

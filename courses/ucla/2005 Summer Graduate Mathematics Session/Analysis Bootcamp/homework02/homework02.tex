@@ -1,0 +1,250 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Wednesday, August 24, 2005 \\
+Analysis Bootcamp, Homework 2 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item {\em Let \((X,d)\) and \((Y,\rho)\) be metric spaces and let \(\{f_n\}\) be a sequence of continuous functions \(f_n : X \to Y\).  Assume \(\{f_n\}\) converges uniformly on \(X\) (defined on page 10 of Gamelin-Greene) to \(f : X \to Y\).  Prove that \(f\) is continuous.}
+
+{\bf Solution}
+
+Let \(x \in X\) and \(\epsilon > 0\) be given.  Since \(\{f_n\}\) converges uniformly on \(X\), there exists an \(N\) such that \(\rho(f_n(y),f(y)) < \epsilon\) for all \(n \geq N\).  Further, since each \(f_n\) is continuous, there exists a \(\delta > 0\) such that \(\rho(f_N(y),f_N(x)) < \epsilon\) for \(d(y,x) < \delta\).  Hence, for \(d(y,x) < \delta\),
+\[\rho(f(y),f(x)) \leq \rho(f(y),f_N(y)) + \rho(f_N(y),f_N(x)) + \rho(f_N(x),f(x)) < 3\epsilon,\]
+which proves that \(f\) is continuous.
+
+
+
+\item {\em Gamelin and Greene, page 25.  4, 5, 8.}
+
+\begin{itemize}
+
+\item[4.] {\em Let \(\{U_{\alpha}\}_{\alpha \in A}\) be a finite open cover of a compact metric space \(X\).
+
+\begin{enumerate}
+\item Show that there exists \(\epsilon > 0\) such that for each \(x \in X\), the open ball \(B(x;\epsilon)\) is contained in one of the \(U_{\alpha}\)'s.
+
+{\em Remark:}  Such an \(\epsilon\) is called a {\em Lebesgue number} of the cover.
+\item Show that if at least one of the \(U_{\alpha}\)'s is a proper subset of \(X\), then there is a largest Lebesgue number for the cover.
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Suppose no such \(\epsilon\) exists.  Then, for each integral \(n \geq 1\), there exists some \(x_n\) such that \(B \left( x_n; \frac{1}{n} \right)\) is contained in no \(U_{\alpha}\).  Thus \(\{x_n\}_{n = 1}^{\infty}\) is a sequence in the compact space \(X\), hence by Theorem 5.1, there exists a convergent subsequence, say, \(\left\{ x_{n_k} \right\}_{k = 1}^{\infty}\) such that \(x_{n_k} \to x \in X\) as \(k \to \infty\).  Now \(x \in U_{\alpha}\) for some \(\alpha \in A\), and since \(U_{\alpha}\) is open, there exists some \(r > 0\) such that \(B(x;r) \subset U_{\alpha}\).  Let \(K\) be large enough such that \(1/n_k < r/2\) and \(d \left( x_{n_k}, x \right) < r/2\) for \(k > K\).  Then \(B \left( x_{n_k}; \frac{1}{n_k} \right) \subset B(x;r) \subset U_{\alpha}\) for \(k > K\), contradicting the construction of \(\{x_n\}\).  This establishes the existence of such an \(\epsilon\).
+
+\item Let \(E\) be the set of Lebesgue numbers for the cover \(\{U_{\alpha}\}_{\alpha \in A}\).  Since \(X\) is compact, by Theorem 5.1, \(X\) is totally bounded, hence \(X\) is bounded by Lemma 5.2 and there exists an \(R\) such that \(X = B(x;r)\) for all \(x \in X\) and \(r \geq R\).  It follows that if some \(U_{\alpha}\) is such that \(U_{\alpha} = X\), \(U_{\alpha} = B(x;r)\) for all \(x \in X\) and \(r \geq R\), hence \(E\) is unbounded.  On the other hand, if all the \(U_{\alpha}\)'s are a proper subset of \(X\), \(B(x;R) \not\subset U_{\alpha}\) for any \(\alpha\) and for any \(x\), and so \(R \notin E\).  By the definition of a Lebesgue number, \(r \in E\) implies \((r,0) \subset E\), hence \(R\) must be an upper bound for \(E\).  Let \(\epsilon\) be the least upper bound for \(E \subset \mathbb{R}\).  Then, evidently, \([\epsilon,0) \supset E \supset (\epsilon,0)\).
+
+We claim that \(\epsilon \in E\), i.e., the second inclusion is strict.  Indeed, given some \(x \in X\), we know that \(B(x;r)\) is contained in some \(U_{\alpha(r)}\) for each positive \(r < \epsilon\).  Note that \(\alpha(r)\) may be dependent on \(r\) (as the notation suggests), but we show that need not to be the case.  For take \(\alpha_n = \alpha \left( \epsilon - \frac{1}{n} \right)\).  Then \(\{\alpha_n\}_{n = 1}^{\infty}\) is a sequence of elements of \(A\), a finite set, hence there exists some constant subsequence \(\left\{ \alpha_{n_k} \right\}_{k = 1}^{\infty} = \{\alpha, \alpha, \ldots\}\).  It follows that \(U_{\alpha}\) contains \(B(x;r)\) for each positive \(r < \epsilon\).  Now consider some \(y \in B(x;\epsilon)\).  Since \(d(x,y) < \epsilon\), there exists some \(r < \epsilon\) such that \(d(x,y) < r\) as well, hence \(y \in B(x;r) \subset U_{\alpha}\).  Since \(y\) was arbitrary, we conclude that, in fact, \(B(x;\epsilon) \subset U_{\alpha}\), and since \(x\) was arbitrary, \(\epsilon \in E\), as was to be shown.  \(\epsilon\) then corresponds to the largest Lebesgue number for the cover.
+\end{enumerate}
+
+
+
+\item[5.] {\em Prove that the product of a finite number of compact metric spaces is compact.}
+
+{\bf Solution}
+
+Let \((X_1,d_1), \ldots, (X_n,d_n)\) be compact metric spaces, set \(X = X_1 \times \cdots \times X_n\), and let \(d = \max \{d_1, \ldots, d_n\}\) be the product metric.  Let \(\epsilon > 0\) be given, and let \(\left\{ B(x_j^i;\epsilon) \right\}_{i = 1}^{m_j}\) be a finite covering of \(X_j\) of open balls of radius \(\epsilon\) (possible since each \(X_j\) is compact, hence by Theorem 5.1, is totally bounded).  Then the set of open sets
+\[\left\{ B \left( x_1^{i_1}; \epsilon \right) \times \cdots \times
+          B \left( x_n^{i_n}; \epsilon \right) \right\},\]
+where the indices range independently as
+\[1 \leq i_1 \leq m_1,\]
+\[\vdots\]
+\[1 \leq i_n \leq m_n,\]
+is a finite covering (there are \(\prod_{j = 1}^n m_j < \infty\) open sets) of \(X\).  Further, in the product metric \(d\) above, each of these sets is equal to the open ball \(B \left( \left( x_1^{i_1}, \ldots, x_n^{i_n} \right); \epsilon \right)\), hence \(X\) can be covered by a finite number of open balls of radius \(\epsilon\), and since \(\epsilon\) was arbitrary, this means that \(X\) is totally bounded.  By Theorem 5.1, \(X\) is compact.
+
+
+
+\item[8.] {\em Let \((X,d)\) be a bounded metric space and let \(\mathcal{E}\) be the family of nonempty closed subsets of \(X\).  Show that
+\[\rho(E,F) = \max \left( \sup_{x \in E} d(x,F), \sup_{y \in F} d(y,E) \right)\]
+defines a metric on \(\mathcal{E}\).  Show that \(\mathcal{E}\) is compact whenever \(X\) is compact.}
+
+{\bf Solution}
+
+Clearly, \(\rho(E,F) \geq 0\).
+
+\(d(x,E) = 0\) for any \(x \in E \in \mathcal{E}\), hence \(\rho(E,E) = 0\) for any \(E \in \mathcal{E}\).  Conversely, suppose \(\rho(E,F) = 0\) for \(E,F \in \mathcal{E}\).  Then \(\sup_{x \in E} d(x,F) = 0\), i.e., \(d(x,F) = 0\) for all \(x \in E\), implying that every point of \(E\) is adherent to \(F\), hence \(E \subset \overline{F} = F\).  A similar argument shows that \(F \subset E\) as well, hence \(E = F\).
+
+The definition is symmetrical with respect to \(E\) and \(F\), hence \(\rho(E,F) = \rho(F,E)\) for any \(E,F \in \mathcal{E}\).
+
+Let \(E,F,G \in \mathcal{E}\) and \(\epsilon > 0\).  Fix \(x \in E\), and choose \(y \in F\) such that \(d(x,y) \leq d(x,F) + \epsilon\).  Then \(d(x,y) \leq d(x,F) \leq \rho(E,F)\).  Choose \(z \in G\) such that \(d(y,z) \leq d(y,G) + \epsilon\).  Then \(d(y,z) \leq d(y,G) \leq \rho(F,G)\).  Hence
+\[d(x,G) \leq d(x,z) \leq d(x,y) + d(y,z) \leq \rho(E,F) + \rho(F,G) + 2\epsilon.\]
+Letting \(\epsilon \to 0\) and taking the supremum over \(x\) yields
+\[\sup_{x \in E} d(x,G) \leq \rho(E,F) + \rho(F,G).\]
+A similar argument establishes the same bound for \(\sup_{y \in F} d(y,G)\), which proves the triangle inequality.
+
+
+
+\end{itemize}
+
+\item {\em Gamelin and Greene, page 27.  Problems 2, 8, 9, 11.}
+
+\begin{itemize}
+
+\item[2.] {\em Prove that two metrics \(d\) and \(\rho\) for \(X\) are equivalent if and only if the identity map \((X,d) \to (X,\rho)\) is bicontinuous (that is, it and its inverse are continuous).}
+
+{\bf Solution}
+
+According to Exercise 1.12, \(d\) and \(\rho\) are equivalent if and only if they have the same convergent sequences.  Let \(f:(X,d) \to (X,\rho)\) be the identity mapping; then \(d\) and \(\rho\) are equivalent if and only if \(\{x_n\}\) converges whenever \(\{f(x_n)\}\) converges.  But this is precisely the condition of continuity for \(f\).  Reversing \(d\) and \(\rho\) establishes the continuity of the inverse mapping as well.
+
+
+
+\item[8.] {\em Prove that a continuous real-valued function on a compact metric space assumes its maximum value and its minimum value.}
+
+{\bf Solution}
+
+Let \(f:X \to \mathbb{R}\) for \(X\) a compact metric space.  We show first that \(f(X)\) is a compact subspace of \(\mathbb{R}\).  Indeed, let \(\{U_{\alpha}\}\) be an open cover of \(f(X)\).  Then by Theorem 6.2, \(\{f^{-1}(U_{\alpha})\}\) is an open cover of \(X\), hence the compactness of \(X\) implies there exists some finite subcover \(\left\{ f^{-1} \left( U_{\alpha_n} \right) \right\}\).  It follows that \(\left\{ U_{\alpha_n} \right\}\) is a finite subcover of \(\{U_{\alpha}\}\), which establishes that \(f(X)\) is compact.  By Theorem 5.5, \(f(X)\) is closed and bounded, hence has a maximum and minimum value.
+
+
+
+\item[9.] {\em Prove that a metric space \(X\) is compact if and only if every continuous real-valued function on \(X\) is bounded.}
+
+{\bf Solution}
+
+That \(X\) being compact implies that every continuous real-valued function on \(X\) is bounded is established in Exercise 6.8.
+
+Suppose every continuous real-valued function on \(X\) is bounded.  Let \(\{x_n\}_{n = 1}^{\infty}\) be a Cauchy sequence in \(X\).  Now if \(X\) is not complete, then the function \(f : X \to \mathbb{R}\) defined by \(f(x) = \lim_{n \to \infty} 1/d(x,x_n)\) is defined for all \(x \in X\), and is continuous.  However, given any \(M > 0\), there exists an \(N\) such that \(d(x_n,x_m) < \frac{1}{M}\) for \(n,m \geq N\), hence, in particular, \(d(x_N,x_n) < \frac{1}{M}\) for \(n > N\), and it follows that \(f(x_N) > M\).  Thus \(f\) is unbounded, contradicting the hypothesis for \(X\).  This establishes that \(X\) is complete.
+
+Suppose that \(X\) is not totally bounded.  Then there exists an \(\epsilon > 0\) and a sequence \(\{x_n\}_{n = 1}^{\infty}\) such that \(d(x_n,x_m) > \epsilon\) for all \(n \neq m\).  Define \(f : X \to \mathbb{R}\) by \(f(x) = n(1 - 2d(x,x_n)/\epsilon)\) if \(d(x,x_n) < \epsilon/2\) (at most one such \(x_n\) will be within \(\epsilon/2\) of \(x\)), and \(f(x) = 0\) otherwise.  \(f\) is continuous and unbounded, again contradicting the hypothesis for \(X\), establishing that \(X\) is totally bounded.  By Theorem 5.1, therefore, \(X\) is compact.
+
+
+
+\item[11.] {\em Show that there exists a continuous real-valued function \(h\) on \([0,1]\) such that
+\[\limsup_{t \to 0+} \left| \frac{h(x + t) - h(x)}{t} \right| = \infty\]
+whenever \(0 \leq x < 1\).
+
+{\em Hint:}  Consider the space \(C([0,2])\) of continuous real-valued functions on the interval \([0,2]\), with the metric of uniform convergence.  Let \(E_m\) be the set of \(f \in C([0,2])\) for which there exists \(x \in [0,1]\) satisfying \(|f(x + t) - f(x)| / |t| \leq m\) for \(t > 0\), \(x + t \leq 2\).  Show that \(E_m\) is a closed nowhere-dense subset of \(C([0,2])\).}
+
+{\bf Solution}
+
+
+
+\end{itemize}
+
+\item {\em Gamelin and Greene, page 35.  Problems 10, 12.}
+
+\begin{itemize}
+
+\item[10.] {\em Show that \(\|f\|_1 = \int_0^1 |f(s)| ds\) defines a norm on \(f \in C[0,1]\).}
+
+{\bf Solution}
+
+Let \(f,g \in C[0,1]\), \(c \in \mathbb{R}\).
+
+Clearly \(\|f\|_1 \geq 0\) as \(|f| \geq 0\).  Equally clear is that \(\|0\|_1 = 0\).  Further, if \(\|f\|_1 = 0\), the continuity of \(f\) allows us to conclude that \(f = 0\).
+
+\(\|cf\|_1 = \int_0^1 |(cf)(s)| dx = |c| \int_0^1 |f(s)| ds = |c| \|f\|_1\).
+
+\(|f + g| \leq |f| + |g|\), hence \(\|f + g\|_1 = \int_0^1 |(f + g)(s)| ds \leq \int_0^1 \left( |f(s)| + |g(s)| \right) ds = \int_0^1 |f(s)| ds + \int_0^1 |g(s)| ds = \|f\|_1 + \|g\|_1\).
+
+
+
+\item[12.] {\em
+\begin{enumerate}
+\item Prove that if \(f\) and \(g\) are continuous real-valued functions on \([0,1]\), then
+\[\int_0^1 f(s) g(s) ds \leq \left( \int_0^1 f(s)^2 ds \right)^{1/2} \left( \int_0^1 g(s)^2 ds \right)^{1/2}.\]
+
+{\em Remark:}  This is an integral version of the Cauchy-Schwarz inequality.  For the proof, refer back to Exercise 1.3 and consider the integral
+\[\int_0^1 \left( f(s) - \lambda g(s) \right)^2 ds,\]
+which is nonnegative for all values of the real parameter \(\lambda\).
+\item Using (a), show that the formula
+\[\|f\|_2 = \left( \int_0^1 f(s)^2 ds \right)^{1/2}\]
+defines a norm on the space of continuous real-valued functions on \([0,1]\).
+\item Prove that if \(f\) and \(g\) are continuous complex-valued functions on \([0,1]\), then
+\[\int f(s) \overline{g(s)} ds \leq \left( \int |f(s)|^2 ds \right)^{1/2} \left( \int |g(s)|^2 ds \right)^{1/2}.\]
+
+{\em Remark:}  This is an integral form of the complex version of the Cauchy-Schwarz inequality.
+\item Show that the formula
+\[\|f\|_2 = \left( \int_0^1 |f(s)|^2 ds \right)^{1/2}\]
+defines a norm on the space of continuous complex-valued functions on \([0,1]\).
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item If \(\int g(s)^2 ds = 0\), then the continuity of \(g\) implies that \(g \equiv 0\), and the conclusion follows.  So suppose \(\int g(s)^2 ds > 0\).  Expand the polynomial in \(\lambda\)
+\[\int \left( f(s) - \lambda g(s) \right)^2 ds \geq 0\]
+and substitute \(\lambda = \int f(s) g(s) ds / \int g(s)^2 ds\).  Rearranging quickly yields
+\[\int f(s)^2 ds \int g(s)^2 ds \geq \left( \int f(s) g(s) ds \right)^2.\]
+
+\item The positivity and scalar factoring of \(\|\cdot\|_2\) are immediate from the definition.  Let \(f,g \in C([0,1])\).  Then
+\[\|f + g\|_2^2 = \int (f + g)(s)^2 ds
+                = \int f(s)^2 ds + \int g(s)^2 ds + 2 \int f(s) g(s) ds\]
+\[           \leq \|f\|_2^2 + \|g\|_2^2 + 2 \|f\|_2 \|g\|_2
+                = (\|f\|_2 + \|g\|_2)^2.\]
+
+\item The procedure in (a) is still valid, except we start with
+\[\int | f(s) - \lambda g(s) |^2 ds \geq 0\]
+and substitute
+\[\lambda = \frac{\int f(s) \overline{g(s)} ds}{\int |g(s)|^2 ds}\]
+to obtain
+\[\int |f(s)|^2 ds \int |g(s)|^2 ds \geq \left| \int f(s) \overline{g(s)} ds \right|^2.\]
+
+\item The positivity and scalar factoring of \(\|\cdot\|_2\) are immediate from the definition.  Let \(f,g \in C([0,1] \to \mathbb{C})\).  Then
+\[\|f + g\|_2^2 = \int (f + g)(s) \overline{(f + g)}(s) ds
+                = \int |f(s)|^2 + \int |g(s)|^2 + 2 \Re \int f(s) \overline{g(s)} ds\]
+\[           \leq \|f\|_2^2 + \|g\|_2^2 + 2 \left| \int f(s) \overline{g(s)} ds \right|
+             \leq \|f\|_2^2 + \|g\|_2^2 + 2 \|f\|_2 \|g\|_2
+                = (\|f\|_2 + \|g\|_2)^2.\]
+
+\end{enumerate}
+
+
+
+\end{itemize}
+
+\item {\em Let \((X,d_X)\) be a compact metric space and let \(C(X)\) be the set of continuous functions from \(X\) to the real numbers \(\mathbb{R}\).  Give \(C(X)\) the metric
+\[d(f,g) = \sup_X |f(x) - g(x)|\]
+of uniform convergence.  Then by Exercise 1, \(C(X)\) is complete.
+
+Now let \(A \subset C(X)\).  Prove that \(A\) is compact (relative to the metric of \(C(X)\)) if and only if (a), (b), and (c) hold:
+
+\begin{enumerate}
+\item \(A\) is closed.
+\item \(A\) is uniformly bounded:  There is an \(M < \infty\) such that \(d(f,0) \leq M\) for all \(f \in A\) (i.e., \(|f(x)| \leq M\) for all \(f \in A\) and all \(x \in X\)).
+\item \(A\) is {\em equicontinuous}:  For every \(\epsilon > 0\) there is a \(\delta > 0\) (not depending on \(f \in A\)) such that
+\[d_X(x,y) < \delta \ \Rightarrow \ \sup_{f \in A} |f(x) - f(y)| < \epsilon.\]
+\end{enumerate}
+
+This is the Arzela-Ascoli theorem.  Hint:  Use Theorem 5.1 and figure out what it means for \(A\) to be totally bounded (With respect to the metric of \(C(X)\)).}
+
+{\bf Solution}
+
+We show first that {\em (a)} -- {\em (c)} imply the compactness of \(A\).  First, \(A\) is closed by {\em (a)}, \(C(X)\) is complete, and a closed subspace of a complete metric space is complete, by Theorem 2.3.  Thus \(A\) is complete.
+
+We next show that \(A\) is totally bounded.  Let \(2\epsilon > 0\) be given.  Let \(\delta > 0\) be as in {\em (c)} concerning the equicontinuity of \(A\), i.e., \(|f(x) - f(y)| < \epsilon\) whenever \(f \in A\) and \(d_X(x,y) < \delta\).  By Theorem 5.1, there exists a finite covering \(\{B_X(x_i,\delta)\}_{i = 1}^n\) of \(X\) of \(\delta\)-balls.  Let \(M\) be as in {\em (b)} concerning the uniform boundedness of \(A\), i.e., \(|f(x)| < M\) whenever \(f \in A\) and \(x \in X\).  Set \(y_j = j \epsilon\), \(j \in \left\{ -\left\lceil \frac{M}{\epsilon} \right\rceil, \ldots, 0, \ldots, \left\lceil \frac{M}{\epsilon} \right\rceil \right\} = J\).
+
+Now consider the family of functions
+\[\Phi = \left\{ x \mapsto \frac{\sum_{x_i \in B_X(x,\delta)} y_{j_i} (\delta - d_X(x,x_i))}{\sum_{x_i \in B_X(x,\delta)} \delta - d_X(x,x_i)} \right\},\]
+where each \(j_i \in J\) for \(i = 1, \ldots, n\).  We first note that \(\Phi\) is finite, for it has at most \(|J|^n = \left( 2\left\lceil \frac{M}{\epsilon} \right\rceil + 1 \right)^n\) elements.  Secondly, any \(\phi \in \Phi\) is continuous (which is left as an exercise to the reader!).  We claim that any \(f \in A\) is at most \(2\epsilon\) from some \(\phi \in \Phi\), thus showing that \(A\) can be covered by a finite number of \(2\epsilon\)-balls in \(C(X)\), from which it follows that \(A\) can be covered by a finite number of \(2\epsilon\)-balls in \(A\), i.e., \(A\) is totally bounded.
+
+Let \(f \in A\) and choose \(\phi \in \Phi\) by specifying \(\left| y_{j_i} - f(x_i) \right| < \epsilon\) for \(i = 1, \ldots, n\) (possible due to the uniform boundedness of \(A\) and the construction of the \(y_j\)'s).  Additionally, fix \(x \in X\).  By the equicontinuity of \(f\), \(|f(x_i) - f(x)| < \epsilon\) for any \(x_i \in B_X(x,\delta)\), hence \(\left| y_{j_i} - f(x) \right| < 2\epsilon\) for any \(x_i \in B_X(x,\delta)\).  It follows that
+\[|f(x) - \phi(x)| = \frac{\sum_{x_i \in B_X(x,\delta)} \left| f(x) - y_{i_j} \right| (\delta - d_X(x,x_i))}{\sum_{x_i \in B_X(x,\delta)} \delta - d_X(x,x_i)} < \frac{\sum \epsilon (\delta - d_X(x,x_i))}{\sum \delta - d_X(x,x_i)} = 2\epsilon.\]
+Since \(x\) was arbitrary, we see that \(d(f,\phi) < 2\epsilon\), as desired.  Therefore, since \(A\) is both complete and totally bounded, by Theorem 5.1, \(A\) is compact.
+
+Now we show that if \(A\) is compact, then {\em (a)} -- {\em (c)} hold.  First, a compact subspace of a compact metric space is closed, by Thereom 2.4, establishing {\em (a)}.  Secondly, compact spaces are totally bounded, by Theorem 5.1, hence bounded, by Lemma 5.2, establishing {\em (b)}.  Lastly, let \(3\epsilon > 0\) be given.  By Theorem 5.1, there exists a finite covering \(\{B(f_i,\epsilon)\}\) of \(A\) of \(\epsilon\)-balls.  By Theorem 6.3, each \(f_i\), being a function from a compact metric space (\(X\)), is uniformly continuous.  Thus, for each \(f_i\), there exists a \(\delta_i\) such that \(|f_i(x) - f_i(y)| < \epsilon\) whenever \(d_X(x,y) < \delta_i\).  Set \(\delta = \min_i \delta_i\) (which exists and is positive, since there are finitely many \(\delta_i\)'s).  Then given any \(f \in A\) and \(x,y \in X\) such that \(d_X(x,y) < \delta\), there exists an \(f_i\) such that \(d(f,f_i) < \epsilon\), hence
+\[|f(x) - f(y)| < |f(x) - f_i(x)| + |f_i(x) - f_i(y)| + |f_i(y) - f(y)| < 3\epsilon,\]
+establishing {\em (c)}.
+
+(Note:  The first part of the solution is made easier if, instead of constructing each \(\phi \in \Phi\), one simply picks \(f \in A\) that is ``close'' to a given \(\phi\), but the idea is the same.)
+  
+
+
+
+\end{enumerate}
+
+\end{document}

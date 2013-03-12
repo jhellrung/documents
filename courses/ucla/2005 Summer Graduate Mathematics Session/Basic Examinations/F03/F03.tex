@@ -1,0 +1,264 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\dist{\mathop{\rm dist}\nolimits}
+\def\dim{\mathop{\rm dim}\nolimits}
+\def\im{\mathop{\rm im}\nolimits}
+\def\ker{\mathop{\rm ker}\nolimits}
+\def\span{\mathop{\rm span}\nolimits}
+\def\rowrank{\mathop{\rm rowrank}\nolimits}
+\def\colrank{\mathop{\rm colrank}\nolimits}
+\def\nullity{\mathop{\rm nullity}\nolimits}
+\newcommand{\matrixiibyii}[4]{\left( \begin{array}{cc} #1 & #2 \\ #3 & #4 \end{array} \right)}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, F03 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Prove that \(\mathbb{R}\) is uncountable.  If you like to use the Baire Category Theorem, you have to prove it.
+
+{\bf Solution}
+
+It suffices to show that the interval \((0,1]\) is uncountable.  Consider the following isomorphism between \((0,1]\) and a subset of \(S_{0,1}\), the set of sequences composed only of \(0\)'s and \(1\)'s.  Let \(x \in (0,1]\) and express
+\[x = \sum_{n = 1}^{\infty} \frac{d_n}{2^n},\]
+where each \(d_n \in \{0,1\}\) and \(d_n = 1\) infinitely often.  Note this is always possible, as it is an expression of the following process.  Subdivide \((0,1]\) into \(2^m\) half-open equal-lengthed subintervals of length \(2^{-m}\); thus each subinterval has the form \((x_i, x_{i + 1}]\) with each
+\[x_i = \sum_{n = 1}^m \frac{d_n^i}{2^n} = \frac{i}{2^m},\]
+\(i = 0, \ldots, 2^m\).  Now note the left endpoint of the subinterval within which \(x\) falls; this is the \(m^{th}\) partial sum of the above infinite sum, which is always bounded above by \(x\) and within \(2^{-m}\) of \(x\).  Further, in choosing the left endpoint of the half-open interval, we guarantee that \(d_n = 1\) infinitely often (if we could represent \(x\) such that \(d_n = 0\) after some point, then \(x\) would be an endpoint of some fine subinterval and \(x\) could never be a partial sum of the above infinite sum, since we always choose the {\em left} endpoint, which is not included in the half-open interval).
+
+This thus provides an injective mapping \(\phi\) from \((0,1]\) into \(S_{0,1}\) by mapping \(x\) to \((d_1, d_2, \ldots)\).  A diagonalization argument shows that \(S_{0,1}\) is itself uncountable, so we have only to show that \(S_{0,1} \backslash \phi((0,1])\) is countable to establish that \((0,1]\) is uncountable.  Note that \(S_{0,1} \backslash \phi((0,1])\) consists of those sequences of \(0\)'s and \(1\)'s which are constantly \(0\) after some point, for all other sequences may be mapped to an \(x \in (0,1]\) by the infinite summation.  Therefore, let \(T_n \subset S_{0,1}\) be the set of sequences which are constantly \(0\) from the \(n^{th}\) term on.  Then each \(T_n\) is finite (indeed, it has cardinality \(2^{n - 1}\)).  Thus
+\[S_{0,1} \backslash \phi((0,1]) = \bigcup_{n = 1}^{\infty} T_n,\]
+which is certainly at most countable.  This establishes the claim.
+
+
+
+\item Let \(f : \mathbb{R} \to \mathbb{R}\) be an infinitely often differentiable function.  Assume that for each element \(x \in [0,1]\) there is a positive integer \(m\) such that the \(m^{th}\) derivative of \(f\) at \(x\) is not zero.
+
+Prove that there exists an integer \(M\) such that the following stronger statement holds:
+
+For each element \(x \in [0,1]\), there is a positive integer \(m\) with \(m \leq M\) such that the \(m^{th}\) derivative of \(f\) at \(x\) is not zero.
+
+{\bf Solution}
+
+As given, for each \(x \in [0,1]\), there exists an \(m_x\) such that the \(m_x^{th}\) derivative of \(f\) at \(x\) is nonzero; by the continuity of \(f^{(m_x)}\), there exists a \(\delta_x\) such that \(f^{(m_x)}\) is nonzero in the neighborhood \(B(x; \delta_x)\) of \(x\).  The family of open sets \(\{B(x; \delta_x)\}_{x \in [0,1]}\) is an open cover of \([0,1]\), which is compact, hence there exists a finite subcover \(\left\{ B \left( x_i; \delta_{x_i} \right) \right\}_{i = 1}^n\).  Set \(M = \max_i m_{x_i}\).  Then each \(x \in [0,1]\) lies in some \(B \left( x_i; \delta_{x_i} \right)\), hence the \(m_{x_i}^{th}\) derivative of \(f\) at \(x\) is nonzero, and \(m_{x_i} \leq M\) by construction.
+
+
+
+\item Prove that the sequence \(a_1, a_2, \ldots\) with
+\[a_n = \left( 1 + \frac{1}{n} \right)^n\]
+converges as \(n \to \infty\).
+
+{\bf Solution}
+
+\[\begin{array}{rcl}
+  a_n & = & \left( 1 + \frac{1}{n} \right)^n \\
+      & = & \sum_{i = 0}^n \binom{n}{i} \frac{1}{n^i} \\
+      & = & \sum_{i = 0}^n \frac{n!}{(n - i)!i!} \frac{1}{n^i} \\
+      & = & \sum_{i = 0}^n \frac{n (n - 1) (n - 2) \cdots (n - i + 1)}{(n) (n) (n) \cdots (n)} \frac{1}{i!} \\
+      & < & \sum_{i = 0}^n \frac{1}{i!} \\
+      & < & \sum_{i = 0}^{\infty} \frac{1}{i!} \\
+      & = & e
+  \end{array},\]
+hence the \(a_n\)'s are a sequence of positive real numbers bounded above by \(e\).
+
+
+
+\item Let \(f : \mathbb{R} \to \mathbb{R}\) be a continuous function.  State the definition of the Riemann integral
+\[\int_0^1 f(x) dx\]
+and prove that it exists.
+
+{\bf Solution}
+
+Let \(P = \{0 = x_0 \leq x_1 \leq \cdots \leq x_n = 1\}\) be a partition of \([0,1]\) and define \(\Delta x_i = x_i - x_{i - 1}\), \(m_i = \inf_{[x_{i - 1}, x_i]} f\), and \(M_i = \sup_{[x_{i - 1}, x_i]} f\), \(i = 1, \ldots, n\).  Then we denote
+\[U(P,f) = \sum_{i = 1}^n M_i \Delta x_i,\]
+\[L(P,f) = \sum_{i = 1}^n m_i \Delta x_i,\]
+and set
+\[\overline{\int}_0^1 f dx = \inf_{P \subset [0,1]} U(P,f),\]
+\[\underline{\int}_0^1 f dx = \sup_{P \subset [0,1]} L(P,f).\]
+If the upper Riemann integral and lower Riemann integral are equal, then \(f\) is Riemann integrable and
+\[\int_0^1 f dx\]
+is their common value.
+
+Now if \(f\) is continuous on \([0,1]\), then \(f\) is uniformly continuous.  Thus, given an \(\epsilon > 0\), there exists a \(\delta > 0\) such that \(|f(x) - f(y)| < \epsilon\) whenever \(x,y \in [0,1]\) with \(|x - y| < \delta\).  Let \(P\) be a partition of \([0,1]\) such that \(\Delta x_i < \delta/2\).  Then \(M_i - m_i < \epsilon\) and
+\[U(P,f) - L(P,f) = \sum_{i = 1}^n (M_i - m_i) \Delta x_i
+                  < \epsilon \sum_{i = 1}^n \Delta x_i
+                  = \epsilon,\]
+and since \(\epsilon\) was aribtrary, we conclude that \(f\) is Riemann integrable on \([0,1]\).
+
+
+
+\item Assume \(f : \mathbb{R}^2 \to \mathbb{R}\) is a function such that all partial derivatives of order \(3\) exist and are continuous.  Write down (explicitly in terms of partial derivatives of \(f\)) a quadratic polynomial \(P(x,y)\) in \(x\) and \(y\) such that
+\[|f(x,y) - P(x,y)| \leq C(x^2 + y^2)^{3/2}\]
+for all \((x,y)\) in some small neighborhood of \((0,0)\), where \(C\) is a number that may depend on \(f\) but not on \(x\) and \(y\).  Then prove the above estimate.
+
+{\bf Solution}
+
+Let \(U\) be some open ball of \((0,0)\), and let \(M\) be a bound for each of the order \(3\) partial derivatives of \(f\) on \(U\) (which exists by the continuity of these partials).  Let
+\[P(x,y) = f(0,0) + (D_1f)x + (D_2f)y + (D_{11}f) \frac{x^2}{2} + (D_{12}f)xy + (D_{22}f) \frac{y^2}{2},\]
+where each partial derivative is evaluated at \((0,0)\).  Then
+\[g(x,y) = f(x,y) - P(x,y)\]
+has vanishing partial derivatives of order up to \(2\) at \((0,0)\).  Fix \((x,y) \in U\) and define \(h : [0,1] \to \mathbb{R}\) by
+\[h(t) = g(tx,ty).\]
+Then
+\[h(0) = h'(0) = h''(0) = 0\]
+and
+\[h^{(3)}(t) = (D_{111}g)x^3 + 3(D_{112}g)x^2y + 3(D_{122}g)xy^2 + (D_{222}g)y^3,\]
+where each partial derivative is evaluated at \((tx,ty) \in U\).  Thus
+\[\left| h^{(3)}(t) \right| \leq M \left( \max \{x,y\} \right)^3
+                            \leq M \left( x^2 + y^2 \right)^{3/2}.\]
+By Taylor's Theorem,
+\[h(1) = h(0) + h'(0) + h''(0)/2 + h^{(3)}(t)/6\]
+for some \(0 \leq t \leq 1\), hence
+\[|f(x,y) - P(x,y)| = |g(x,y)| = |h(1)| \leq M/6 \left( x^2 + y^2 \right)^{3/2}\]
+for all \((x,y) \in U\).
+
+
+
+\item Let \(U = \{(x,y) : x^2 + y^2 < 1\}\) be the standard unit ball in \(\mathbb{R}^2\) and let \(\partial U\) denotes its boundary.
+
+Suppose \(F : \mathbb{R}^2 \to \mathbb{R}^2\) is continuously differentiable and that the Jacobian determinant of \(F\) is everywhere non-zero.  Suppose also that \(F(x,y) \in U\) for some \((x,y) \in U\) and \(F(x,y) \notin U \cup \partial U\) for all \((x,y) \in \partial U\).  Prove that \(U \subset F(U)\).
+
+{\bf Solution}
+
+(W02.7)
+
+
+
+\item Prove that the space of continuous functions on the closed interval \([0,1]\) with the metric
+\[\dist(f,g) = \sup_{x \in [0,1]} |f(x) - g(x)| = \|f - g\|_{\infty}\]
+is complete.  You do not need to show that this is a metric space.
+
+{\bf Solution}
+
+Let \(\{f_n\}_{n = 1}^{\infty}\) be a Cauchy sequence of continuous functions on \([0,1]\) with the metric \(\dist\).  For each \(x \in [0,1]\), it follows that \(\{f_n(x)\}_{n = 1}^{\infty}\) is a Cauchy sequence in \(\mathbb{R}\), hence define \(f : [0,1] \to \mathbb{R}\) by
+\[f(x) = \lim_{n \to \infty} f_n(x).\]
+We show now that \(f\) is uniformly continuous on \([0,1]\), hence continuous.  To this end, let \(\epsilon > 0\) be given; then there exists an \(N\) such that \(\|f_n - f_m\|_{\infty} < \epsilon\) for all \(n,m \geq N\), that is, \(|f_n(x) - f_m(x)| < \epsilon\) for all \(x \in [0,1]\) and \(n,m \geq N\).  Letting \(m \to \infty\), we see that \(|f_n(x) - f(x)| \leq \epsilon\) for all \(x \in [0,1]\) and \(n \geq N\).  \(f_N\) is continuous on \([0,1]\), hence uniformly continuous, so there exists a \(\delta\) such that \(|f_N(x) - f_N(y)| < \epsilon\) whenever \(|x - y| < \delta\).  It follows that
+\[|f(x) - f(y)| \leq |f(x) - f_N(x)| + |f_N(x) - f_N(y)| + |f_N(y) - f(y)| < 3\epsilon,\]
+proving that \(f\) is uniformly continuous.
+
+
+
+\item Prove the following three statements.  You certainly may choose an order of these statements and then use the earlier statements to prove the later statements.
+
+\begin{enumerate}
+\item If \(T : V \to W\) is a linear transformation between two finite dimensional real vector spaces \(V,W\), then
+\[\dim(\im(T)) = \dim(V) - \dim(\ker(T)).\]
+
+\item If \(T : V \to V\) is a linear transformation on a finite dimensional real inner product space and \(T^*\) denotes its adjoint, then \(\im(T^*)\) is the orthogonal complement of \(\ker(T)\) in \(V\).
+
+\item Let \(A\) be an \(n\) by \(n\) real matrix; then the maximal number of linearly independent rows (row rank) in the matrix equals the maximal number of linearly independent columns (column rank).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(U\) be any subspace of \(V\), and let \(\{u_1, \ldots, u_k\}\) be a basis for \(U\).  Extend this to a basis of \(V\) with \(\{u_{k + 1}, \ldots, u_n\}\).  Then \(\{\{u_{k + 1}\}, \ldots, \{u_n\}\}\) is evidently a basis for \(V/U\), hence
+\[\dim(U) + \dim(V/U) = k + (n - k) = n = \dim(V).\]
+Let \(U = \ker(T)\), and define \(T\) acting on \(V/U\) by setting
+\[T\{x\} = Tx.\]
+Then \(T\) provides an isomorphism between \(V/U\) and \(\im(T)\), hence
+\[\dim(V) = \dim(U) + \dim(V/U) = \dim(\ker(T)) + \dim(\im(T)).\]
+
+\item We show first that \(\im(T^*)^{\perp} = \ker(T)\):
+\[\begin{array}{*{5}{c}}
+  v \in \im(T^*)^{\perp}
+  & \Leftrightarrow & (v,x) = 0 \ \forall x \in \im(T^*) & & \\
+  & \Leftrightarrow & (v,T^*y) = 0 \ \forall y \in V^* & & \\
+  & \Leftrightarrow & (Tv,y) = 0 \ \forall y \in V^* & & \\
+  & \Leftrightarrow & Tv = 0
+  & \Leftrightarrow & v \in \ker(T)
+  \end{array}.\]
+We next show that, for a subspace \(W\) of \(V*\), \(W^{\perp\perp} = W\).  Indeed,
+\[x \in W \ \Leftrightarrow \ (v,x) = 0 \ \forall v \in W^{\perp}
+          \ \Leftrightarrow \ x \in W^{\perp\perp},\]
+hence
+\[\im(T^*) = \im(T^*)^{\perp\perp} = \ker(T)^{\perp}.\]
+
+\item We have that
+\[n = \dim(\im(A^t)) + \dim(\ker(A^t)) = \rowrank(A^t) + \nullity(A^t).\]
+But
+\[\rowrank(A^t) = \colrank(A)\]
+and
+\[\nullity(A^t) = n - \dim(\ker(A^t)^{\perp}) = n - \dim(\im(A)) = n - \rowrank(A),\]
+from which it follows that \(\colrank(A) = \rowrank(A)\).
+
+\end{enumerate}
+
+
+
+\item Consider a \(3\) by \(3\) real symmetric matrix with determinant \(6\).  Assume \((1,2,3)\) and \((0,3,-2)\) are eigenvectors with eigenvalues \(1\) and \(2\).  Give answers to (a) and (b) below and justify the answers.
+
+\begin{enumerate}
+\item Give an eigenvector of the form \((1,x,y)\) for some real \(x,y\) which is linearly independent of the two vectors above.
+
+\item What is the eigenvalue of this eigenvector.
+
+\end{enumerate}
+
+{\bf Solution}
+
+Since the product of all (real and complex) eigenvalues of a matrix \(A\) is equal to the determinant \(A\), it follows that if \(A \in M_{3 \times 3}(\mathbb{R})\) with eigenvalues \(1\) and \(2\) and \(\det(A) = 6\), then the third eigenvalue is \(\lambda = 3\).  If, additionally, \(A\) is symmetric, then the eigenspace associated with the eigenvalue \(3\) is orthogonal to the other \(2\) eigenspaces; it follows that \((1,x,y)\) is an eigenvector with eigenvalue \(3\) if and only if
+\[0 = (1,x,y) \cdot (1,2,3) = 1 + 2x + 3y,\]
+\[0 = (1,x,y) \cdot (0,3,-2) = 3x - 2y,\]
+from which we solve \(x = -2/13\), \(y = -3/13\).
+
+
+
+\item
+
+\begin{enumerate}
+\item Let \(t \in \mathbb{R}\) such that \(t\) is not an integer multiple of \(\pi\).  For the matrix
+\[A = \matrixiibyii{\cos(t)}{\sin(t)}{-\sin(t)}{\cos(t)}\]
+prove that there does not exist a real valued matrix \(B\) such that \(BAB^{-1}\) is a diagonal matrix.
+
+\item Do the same for the matrix
+\[A = \matrixiibyii{1}{\lambda}{0}{1}\]
+where \(\lambda \in \mathbb{R} \backslash \{0\}\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Suppose \(BAB^{-1} = D\) is diagonal for some real-valued matrix \(B\), and let its diagonal entries be \(\lambda_1\) and \(\lambda_2\).  Then each \(\lambda_i\) is an eigenvalue of \(D\), hence an eigenvalue of \(A\) since
+\[\begin{array}{rcl}
+  0 & = & \det(\lambda_i I - D) \\
+    & = & \det(\lambda_i BB^{-1} - BAB^{-1}) \\
+    & = & \det(B(\lambda_i I - A)B^{-1}) \\
+    & = & \det(\lambda_i I - A)
+  \end{array}.\]
+But any \(\lambda\) satisfying
+\[\det(\lambda I - A) = 0\]
+is not real, since
+\[0 = \det(\lambda I - A)
+    = (\lambda - \cos(t))^2 + \sin(t)^2\]
+implies that
+\[\lambda = \cos(t) \pm i \sin(t),\]
+and \(\sin(t) \neq 0\) as \(t\) is not a multiple of \(\pi\).  But \(D = BAB^{-1}\) must be real-valued since it is a product of real-valued matrices, a contradiction.  This proves there can exist no such \(B\).
+
+\item Suppose \(BAB^{-1} = D\) is diagonal for some real-valued matrix \(B\).  Again, the diagonal entries of \(D\) correspond to eigenvalues of \(A\), so we compute
+\[0 = \det(\mu I - A)
+    = (\mu - 1)^2,\]
+thus \(\mu = 1\) is the only eigenvalue of \(A\), so we conclude that \(D = I\), and \(A = B^{-1}DB = B^{-1}B = I\), which is contradiction to the given \(A\) for \(\lambda \neq 0\).  This proves there can exist no such \(B\).
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

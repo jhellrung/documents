@@ -1,0 +1,223 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Applied Differential Equations Qualifying Exam, Winter 2005 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Consider the partial differential equation
+\[\frac{\partial^2 u}{\partial t^2} - \frac{\partial^2 u}{\partial x^2} - 2 \frac{\partial u}{\partial x} = 0, \ 0 < x < 1, \ t > 0, \ \ \ \ (1)\]
+with the boundary conditions
+\[\frac{\partial u}{\partial x}(t,0) = \frac{\partial u}{\partial x}(t,1) = 0, \ t > 0,\]
+and initial conditions
+\[u(0,x) = e^{-x}(\pi \cos \pi x + \sin \pi x), \ \frac{\partial u}{\partial t}(0,x) = 0, \ 0 < x < 1.\]
+
+\begin{itemize}
+\item Show that a separation of variables in (1) leads to an eigenvalue problem in the variable \(x\).
+
+\item Determine the eigenvalues and the eigenfunctions for the eigenvalue problem in question.
+
+\item Determine a solution to (1) which satisfies the boundary and the initial conditions.
+
+\end{itemize}
+
+{\bf Solution}
+
+\begin{itemize}
+\item We assume \(u(x,t) = X(x) T(t)\), yielding
+\[X T'' - X'' T - 2 X' T = 0 \ \Rightarrow \ \frac{T''}{T} = \frac{X'' + 2 X'}{X} = \lambda\]
+for some constant \(\lambda\).  We thus obtain an eigenvalue problem for \(X\):
+\[LX = X'' + 2 X' = \lambda X\]
+subject to \(X'(0) = X'(1) = 0\).
+
+\item Multiplying the equation by \(e^x\) gives
+\[\left( e^x X \right)'' = (\lambda + 1) \left( e^x X \right),\]
+and hence the general solution is
+\[X = e^{-x} \left( C_1 \sinh \left( \sqrt{\lambda + 1} x \right) + C_2 \cosh \left( \sqrt{\lambda + 1} x \right) \right)\]
+if \(\lambda + 1 > 0\), while
+\[X = e^{-x} \left( C_1 \sin \left( \sqrt{-(\lambda + 1)} x \right) + C_2 \cos \left( \sqrt{-(\lambda + 1)} x \right) \right)\]
+if \(\lambda + 1 < 0\).  In the former case (\(\lambda + 1 > 0\)), we compute that
+\begin{eqnarray*}
+X'(0) & = & \sqrt{\lambda + 1} C_1 - C_2; \\
+X'(1) & = & \frac{1}{e} \left( \left( \sqrt{\lambda + 1} C_2 - C_1 \right) \sinh \sqrt{\lambda + 1} + \left( \sqrt{\lambda + 1} C_1 - C_2 \right) \cosh \sqrt{\lambda + 1} \right).
+\end{eqnarray*}
+For these to simultaneously vanish (and avoid \(C_1 = C_2 = 0\)), we'd require \(\lambda = 0\) or \(\lambda = -1\), giving the two eigenfunctions
+\[X_0(x) = 1, \ X_{-1}(x) = e^{-x}.\]
+In the latter case above (\(\lambda + 1 < 0\)), we compute
+\begin{eqnarray*}
+X'(0) & = & \sqrt{-(\lambda + 1)} C_1 - C_2; \\
+X'(1) & = & \frac{1}{e} \left( -\left( \sqrt{-(\lambda + 1)} C_2 + C_1 \right) \sin \sqrt{-(\lambda + 1)} + \left( \sqrt{-(\lambda + 1)} C_1 - C_2 \right) \cos \sqrt{-(\lambda + 1)} \right).
+\end{eqnarray*}
+For these to simultaneously vanish, we'd require \(\sqrt{-(\lambda + 1)} = k \pi\) for \(k \geq 0\) integral, i.e., \(\lambda_k = -(1 + \pi^2 k^2)\), giving the remaining eigenfunctions
+\[X_k(x) = e^{-x} \left( \sin k \pi x + k \pi \cos k \pi x \right).\]
+
+\item We note that \(u(x,t) = X_1(x)\), hence we need only solve \(T'' = \lambda_1 T = -(1 + \pi^2) T\), yielding
+\[T(t) = C_1 \sin \left( (1 + \pi^2) t \right) + C_2 \cos \left( (1 + \pi^2) t \right).\]
+The condition \(T'(0) = 0\) gives \(T(t) = \cos \left( (1 + \pi^2) t \right)\).  It follows that
+\[u(x,t) = \cos \left( (1 + \pi^2) t \right) e^{-x} \left( \sin \pi x + \pi \cos \pi x \right).\]
+
+\end{itemize}
+
+
+
+\item Let \(\phi \in C^1(\mathbb{R}^2)\).  Solve the following Cauchy problem in \(\mathbb{R}^3\):
+\[\left\{ \begin{array}{l} x_1 \partial_{x_1} u + 2 x_2 \partial_{x_2} u + \partial_{x_3} u = 3 u, \\ u(x_1,x_2,0) = \phi(x_1,x_2) \end{array} \right..\]
+
+{\bf Solution}
+
+We use the method of characteristics, parametrizing the initial condition curve as \((s_1,s_2) \mapsto (s_1, s_2, 0, \phi(s_1,s_2))\).  The system of ODEs results in
+\begin{eqnarray*}
+x_1' & = & x_1; \\
+x_2' & = & 2 x_2; \\
+x_3' & = & 1; \\
+z' & = & 3 z.
+\end{eqnarray*}
+All equations may be solved immediately, giving
+\begin{eqnarray*}
+x_1(t) & = & s_1 e^t; \\
+x_2(t) & = & s_2 e^{2 t}; \\
+x_3(t) & = & t; \\
+z(t) & = & \phi(s_1,s_2) e^{3 t}.
+\end{eqnarray*}
+We can solve for \(s_1,s_2,t\) in terms of \(x_1,x_2,x_3\):
+\[s_1 = x_1 e^{-x_3}; \ s_2 = x_2 e^{-2 x_3}; \ t = x_3.\]
+The solution is thus
+\[u(x_1,x_2,x_3) = z = \phi \left( x_1 e^{-x_3}, x_2 e^{-2 x_3} \right) e^{3 x_3}.\]
+
+
+
+\item Let \(u(x)\) be harmonic in the unit disc \(|x| < 1\) in \(\mathbb{R}^2\), and assume that \(u \geq 0\).  Prove the following {\em Harnack's inequality}:
+\[\frac{1 - |x|}{1 + |x|} u(0) \leq u(x) \leq \frac{1 + |x|}{1 - |x|} u(0), \ |x| < 1.\]
+
+{\bf Solution}
+
+\(u\) is given by
+\[u(x,y) = (1 - x^2 - y^2) \frac{1}{2\pi} \int\limits_{\xi^2 + \eta^2 = 1} \frac{g(\xi,\eta)}{(x - \xi)^2 + (y - \eta)^2} dS_{\xi,\eta}.\]
+From the inequalities
+\[1 - \sqrt{x^2 + y^2} \leq \sqrt{(x - \xi)^2 + (y - \eta)^2} \leq 1 + \sqrt{x^2 + y^2},\]
+and from the mean value property of \(u\), we obtain
+\[u(x,y) \leq \frac{1 - x^2 - y^2}{\left( 1 - \sqrt{x^2 + y^2} \right)^2} \frac{1}{2\pi} \int g(\xi,\eta) dS_{\xi,\eta} = \frac{1 + \sqrt{x^2 + y^2}}{1 - \sqrt{x^2 + y^2}} u(0,0)\]
+and
+\[u(x,y) \geq \frac{1 - x^2 - y^2}{\left( 1 + \sqrt{x^2 + y^2} \right)^2} \frac{1}{2\pi} \int g(\xi,\eta) dS_{\xi,\eta} = \frac{1 - \sqrt{x^2 + y^2}}{1 + \sqrt{x^2 + y^2}} u(0,0).\]
+
+
+
+\item Let \(u(x,t) \in C^{\infty}(\mathbb{R}^3 \times \mathbb{R})\) solve the Cauchy problem for the wave equation
+\[\left\{ \begin{array}{l} \left( \partial_t^2 - \Delta_x \right) u = 0, \ x \in \mathbb{R}^3, \ t > 0, \\ u|_{t = 0} = \phi(x), \ \partial_t \phi|_{t = 0} = \psi(x), \end{array} \right. \ \ \ \ (2)\]
+with \(\phi(x)\) and \(\psi(x)\) being smooth compactly supported functions on \(\mathbb{R}^3\).  Use an explicit formula for the solution of (2) (the Kirchhoff's formula) to show that there exists a constant \(C > 0\) such that we have, uniformly in \(x \in \mathbb{R}^3\),
+\[|u(x,t)| \leq \frac{C}{t}, \ t > 0.\]
+
+{\bf Solution}
+
+\(u\) is given by
+\[u(x,t) = \frac{1}{4\pi} \frac{\partial}{\partial t} \left( t \int_{|\xi| = 1} \phi(x + t \xi) dS_{\xi} \right) + t \frac{1}{4\pi} \int_{|\xi| = 1} \psi(x + t \xi) dS_{\xi}.\]
+Let \(R > 0\) be large enough such that \(\phi(x) = \psi(x) = 0\) for \(|x| \geq R\) (possible by compact support), and let \(M > 0\) be such that \(|\phi|, |\psi|, |\phi'| \leq M\) (possible by smoothness), where we denote \(\phi'(x) = \phi_{x_1}(x) + \phi_{x_2}(x) + \phi_{x_3}(x)\).  We first note that
+\[\left| \frac{1}{4\pi} \int_{|\xi| = 1} \psi(x + t \xi) dS_{\xi} \right| = \left| \frac{1}{4 \pi t^2} \int_{|\eta + x| = t} \psi(\eta) dS_{\eta} \right| \leq \frac{R^2}{t^2} M\]
+since the maximal surface area of \(\{\eta \ | \ |\eta + x| = t \ \text{and} \ |\eta + x| \leq R\}\) is \(4 \pi R^2\).  Similarly,
+\[\left| \frac{1}{4\pi} \int_{|\xi| = 1} \phi(x + t \xi) dS_{\xi} \right|, \left| \frac{1}{4\pi} \int_{|\xi| = 1} \phi'(x + t \xi) dS_{\xi} \right| \leq \frac{R^2}{t^2} M,\]
+and so
+\begin{eqnarray*}
+|u(x,t)| &   =  & \left| \frac{1}{4\pi} \frac{\partial}{\partial t} \left( t \int_{|\xi| = 1} \phi(x + t \xi) dS_{\xi} \right) + t \frac{1}{4\pi} \int_{|\xi| = 1} \psi(x + t \xi) dS_{\xi} \right| \\
+         &   =  & \left| \frac{1}{4\pi} \int_{|\xi| = 1} \phi(x + t \xi) dS_{\xi} + \frac{1}{4\pi} t \int_{|\xi| = 1} \phi'(x + t \xi) dS_{\xi} + t \frac{1}{4\pi} \int_{|\xi| = 1} \psi(x + t \xi) dS_{\xi} \right| \\
+         & \leq & \left( \frac{1}{t^2} + \frac{1}{t} + \frac{1}{t} \right) \frac{M}{R^2} \\
+         & \leq & \frac{C}{t}
+\end{eqnarray*}
+for some constant \(C\) with \(t\) bounded away from \(0\).  Of course, we also have the bound
+\[|u(x,t)| \leq M (2 t + 1),\]
+which takes care of \(t\) near \(0\).
+
+
+
+\item Solve the inhomogeneous problem for the Laplace operator in the unit disc \(\mathbb{D} = \{(x,y) \in \mathbb{R}^2 \ | \ x^2 + y^2 < 1\}\),
+\[\left\{ \begin{array}{l} \Delta u = x^2 - y^2 \ \text{in \(\mathbb{D}\)}, \\ u = 0 \ \text{along \(\partial\mathbb{D}\)}. \end{array} \right.\]
+
+{\bf Solution}
+
+We note that,
+\[v(x,y) = \frac{1}{12} (x^4 - y^4)\]
+satisfies \(\Delta v = x^2 - y^2\), but fails to vanish on \(\partial\mathbb{D}\).  Hence we seek a harmonic function \(w\) agreeing with \(v\) on \(\partial\mathbb{D}\).  In polar coordinates,
+\[v(r,\theta) = \frac{1}{12} r^4 \cos 2\theta,\]
+so that
+\[v(1,\theta) = \frac{1}{12} \cos 2\theta.\]
+By inspection, we see that
+\[w(x,y) = \frac{1}{12} (x^2 - y^2) = \frac{1}{12} r^2 \cos 2\theta\]
+is harmonic and agrees with \(v\) on \(\partial\mathbb{D}\).  Hence
+\[u(x,y) = v(x,y) - w(x,y) = \frac{1}{12} (x^4 - x^2 - y^4 + y^2).\]
+Alternatively, to find \(w\), we can change to polar coordinates, seeking \(w\) such that
+\[0 = \Delta w = w_{rr} + \frac{1}{r} w_r + \frac{1}{r^2} w_{\theta\theta}\]
+subject to the boundary conditions \(w(1,\theta) = \frac{1}{12} \cos 2\theta\).  Setting \(w(r,\theta) = R(r) \Theta(\theta)\) and separating variables yields
+\[R'' \Theta + \frac{1}{r} R' \Theta + \frac{1}{r^2} R \Theta'' = 0 \ \Rightarrow \ \frac{r^2 R'' + r R'}{R} = -\frac{\Theta''}{\Theta} = \lambda\]
+for some constant \(\lambda\).  From the periodic boundary conditions for \(\Theta\), we thus require \(\lambda = k^2\) for \(k \geq 0\) integral, giving
+\[\Theta(\theta) = c_k \cos k \theta + s_k \sin k \theta.\]
+We now examine the differential equation that \(R\) satisfies:
+\[r^2 R'' + r R' - k^2 R = 0,\]
+which has linearly independent solutions \(R = r^k\) and \(R = r^{-k}\), and, in the case of \(k = 0\), \(R = \log r\).  Since we desire bounded solutions as \(r \to 0\), we limit consideration to \(R = r^k\).  By linearity, then,
+\[w(r,\theta) = \sum_{k \geq 0} r^k \left( c_k \cos k \theta + s_k \sin k \theta \right).\]
+The boundary conditions give \(c_2 = 1/12\) and all other coefficients \(0\), hence
+\[w(r,\theta) = \frac{1}{12} r^2 \cos 2 \theta = \frac{1}{12} (x^2 - y^2),\]
+as before.
+
+
+
+\item Find the Fourier transform of the integrable function \(x \mapsto (\sin x)^2 / x^2\).
+
+{\em Hint.}  Determine first the Fourier transform of \(x \mapsto x^{-1} \sin x\).
+
+{\bf Solution}
+
+Let \(\mathcal{F}\) denote the Fourier transformation, i.e., formally at least,
+\[\mathcal{F}_x(f(x))(\xi) = \int_{-\infty}^{\infty} e^{-i x \xi} f(x) dx.\]
+The following properties of the Fourier transform are easy to derive, at least formally:
+\begin{eqnarray*}
+\mathcal{F}_x(1)(\xi) & = & 2 \pi \delta(\xi); \\
+\mathcal{F}_x \left( e^{i a x} \right)(\xi) & = & 2 \pi \delta(\xi - a); \\
+\mathcal{F}_x \left( x f(x) \right)(\xi) & = & i \frac{d}{d\xi} \mathcal{F}_x(f(x))(\xi); \\
+\mathcal{F}_x \left( f(x) g(x) \right)(\xi) & = & \left( \mathcal{F}_x(f(x)) * \mathcal{F}_x(g(x)) \right)(\xi).
+\end{eqnarray*}
+We thus compute
+\[\mathcal{F}_x(\sin x)(\xi) = \mathcal{F}_x \left( \frac{1}{2 i} \left( e^{i x} - e^{-i x} \right) \right)(\xi) = \frac{\pi}{i} \left( \delta(\xi - 1) - \delta(\xi + 1) \right).\]
+It follows that
+\[\frac{\pi}{i} \left( \delta(\xi - 1) - \delta(\xi + 1) \right) = \mathcal{F}_x(\sin x)(\xi) = \mathcal{F}_x \left( x \frac{1}{x} \sin x \right)(\xi) = i \frac{d}{d\xi} \mathcal{F}_x \left( \frac{1}{x} \sin x \right)(\xi),\]
+hence
+\[\mathcal{F}_x \left( \frac{1}{x} \sin x \right)(\xi) = -\pi \int_{-\infty}^{\xi} \left( \delta(\eta - 1) - \delta(\eta + 1) \right) d\eta = \begin{cases} 0, & \xi < -1 \\ \pi, & -1 < \xi < 1 \\ 0, & \xi > 1 \end{cases} = \pi \chi_{[-1,1]}(\xi).\]
+Note that the constant of integration is correct since \(\mathcal{F}\) maps \(L^2\) to \(L^2\), so, as \((\sin x)/x\) is in \(L^2\), its Fourier transform must also be in \(L^2\), so must decay at \(\pm \infty\).  We therefore finally obtain
+\begin{eqnarray*}
+\mathcal{F}_x \left( \frac{\sin^2 x}{x^2} \right)(\xi)
+& = & \pi^2 \left( \chi_{[-1,1]} * \chi_{[-1,1]} \right)(\xi) \\
+& = & \pi^2 \int_{-\infty}^{\infty} \chi_{[-1,1]}(\eta) \chi_{[-1,1]}(\xi - \eta) d\eta \\
+& = & \pi^2 \int_{-1}^1 \chi_{[-1,1]}(\xi - \eta) d\eta \\
+& = & \pi^2 \int_{\xi - 1}^{\xi + 1} \chi_{[-1,1]}(\eta) d\eta \\
+& = & \begin{cases} 0, & \xi < -2 \\ \pi^2 (2 + \xi), & -2 < \xi < 0 \\ \pi^2 (2 - \xi), & 0 < \xi < 2 \\ 0, & \xi > 2 \end{cases}.
+\end{eqnarray*}
+
+
+
+\item Consider an autonomous system in \(\mathbb{R}^n\), \(x'(t) = f(x(t))\), where \(f = (f_1, f_2, \ldots, f_n)\) is a smooth vector field, such that
+\[\sum_{k = 1}^n x_k f_k(x) < 0 \ \text{for \(x \neq 0\)}.\]
+show that \(x(t) \to 0\) as \(t \to \infty\), for each solution of the system, independently of the initial condition \(x(0)\).
+
+{\bf Solution}
+
+Notice that
+\[\frac{d}{dt} \|x(t)\|_2^2 = 2 x(t) \cdot x'(t) = 2 x(t) \cdot f(x(t)) < 0\]
+for \(x(t) \neq 0\).  It follows that any given trajectory \(x(t)\) eventually leaves any compact set \(K \subset \mathbb{R}^n\) not containing \(0\) (since the quantity \(x \cdot f(x) < -\epsilon\) for some \(\epsilon > 0\) on \(K\)), from which we conclude that \(x(t) \to 0\) as \(t \to \infty\).
+
+
+
+\end{enumerate}
+
+\end{document}

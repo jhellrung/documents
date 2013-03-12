@@ -1,0 +1,469 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Numerical Analysis Qualifying Exam, Fall 2005 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item (5 Pts.) Let \(\{x_n\}\) be a sequence such that \(x_n \geq \overline{x}\) for all \(n\) and \(\lim_{n \to \infty} x_n = \overline{x}\).  Assume there exist constants \(\alpha\) and \(p > 0\) such that, for sufficiently large \(n\),
+\[x_{n+1} - \overline{x} \approx \alpha \left( x_n - \overline{x} \right)^p.\]
+
+\begin{enumerate}
+\item Assuming \(\overline{x}\) is known, give a derivation of a formula that estimates \(p\) in terms of \(\overline{x}\) and some number of consecutive iterates of the sequence \(\{x_n\}\).
+
+\item Assuming \(\overline{x}\) is {\em unknown}, give a derivation of a formula that estimates \(p\) in terms of some number of consecutive iterates of the sequence \(\{x_n\}\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Denote \(e_n = x_n - \overline{x}\).  Then the givens stipulate that, for large enough \(n\),
+\[e_{n+1} \approx \alpha e_n^p,\]
+in which case we also have
+\[e_{n+2} \approx \alpha e_{n+1}^p,\]
+so
+\[\frac{e_{n+1}}{e_{n+2}} \approx \left( \frac{e_n}{e_{n+1}} \right)^p \ 
+  \Rightarrow \ p \approx \frac{\ln e_{n+1} - \ln e_{n+2}}{\ln e_n - \ln e_{n+1}}.\]
+
+\item We suppose that \(e_n = x_n - \overline{x} \approx x_n - x_{n+1}\), and similarly for \(e_{n+1}\) and \(e_{n+2}\), obtaining
+\[p \approx \frac{\ln(x_{n+1} - x_{n+2}) - \ln(x_{n+2} - x_{n+3})}
+                 {\ln(x_n - x_{n+1}) - \ln(x_{n+1} - x_{n+2})}.\]
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) Consider the forward and backward difference operators \(D^+\) and \(D^-\) defined by
+\[D^+f(x) = \frac{f(x + h) - f(x)}{h} \ D^-f(x) = \frac{f(x) - f(x - h)}{h}.\]
+
+\begin{enumerate}
+\item Assuming \(f\) is smooth, derive asymptotic error expansions for each of these operators.
+
+\item What combination of \(D^+f(x)\) and \(D^-f(x)\) gives a second order accurate approximation to the derivative \(f'(x)\)?  Justify your answer.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item By Taylor's Theorem,
+\begin{eqnarray*}
+f(x + h) & = & f(x) + f'(x)h + \frac{1}{2} f''(\alpha_1) h^2, \\
+f(x - h) & = & f(x) - f'(x)h + \frac{1}{2} f''(\alpha_2) h^2,
+\end{eqnarray*}
+where \(\alpha_1\) and \(\alpha_2\) are between \(x,x+h\) and \(x,x-h\), respectively.  It follows that
+\begin{eqnarray*}
+D^+f(x) & = & f'(x) + \frac{1}{2} f''(\alpha_1) h \\
+D^-f(x) & = & f'(x) + \frac{1}{2} f''(\alpha_2) h.
+\end{eqnarray*}
+
+\item Further using Taylor's Theorem,
+\begin{eqnarray*}
+f(x + h) & = & f(x) + f'(x) h + \frac{1}{2} f''(x) h^2 + \frac{1}{6} f^{(3)}(\alpha_3) h^3, \\
+f(x - h) & = & f(x) - f'(x) h + \frac{1}{2} f''(x) h^2 - \frac{1}{6} f^{(3)}(\alpha_4) h^3,
+\end{eqnarray*}
+so that
+\[\frac{1}{2} \left( D^+ + D^- \right) f(x)
+  = \frac{f(x + h) - f(x - h)}{2h}
+  = f'(x) + \frac{1}{12} \left( f^{(3)}(\alpha_3) + f^{(3)}(\alpha_4) \right) h^2.\]
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) Consider the following factorization of a tri-diagonal matrix \(A\):
+\[A = \left( \begin{array}{*{5}{c}}
+             a_1 & c_1 \\
+             b_2 & a_2 & c_2 \\
+             & * & * & * \\
+             & & * & * & c_{n-1} \\
+             & & & b_n & a_n \\
+             \end{array} \right)
+    = \left( \begin{array}{*{5}{c}}
+             1 \\
+             d_2 & 1 \\
+             & * & * \\
+             & & * & * \\
+             & & & d_n & 1 \\
+             \end{array} \right)
+      \left( \begin{array}{*{5}{c}}
+             e_1 & c_1 \\
+             & e_2 & c_2 \\
+             & & * & * \\
+             & & & * & c_{n-1} \\
+             & & & & e_n \\
+             \end{array}
+      \right).\]
+
+\begin{enumerate}
+\item Derive the recurrence relations that determine the values of the \(d_k\)'s and \(e_k\)'s in terms of the values of the \(a_k\)'s, \(b_k\)'s, and \(c_k\)'s.
+
+\item Give a condition on the matrix \(A\) which ensures your recurrence relations won't break down.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item By simply multiplying out the matrices on the right,
+\begin{eqnarray*}
+e_1 & = & a_1 \\
+d_k & = & b_k / e_{k - 1}, \ 2 \leq k \leq n \\
+e_k & = & a_k - c_{k - 1} d_k, \ 2 \leq k \leq n.
+\end{eqnarray*}
+
+\item Errors using machine-precision approximations won't propagate if, e.g., \(A\) is diagonally dominant, i.e., \(|a_i| \geq |b_i| + |c_i|\).
+
+\end{enumerate}
+
+
+
+\item (10 Pts.)
+
+\begin{enumerate}
+\item Find conditions on the coefficients \(a_1,a_2,p_1,p_2\) so that the following Runge-Kutta method for \(y'(t) = f(t,y(t))\) is of order \(m \geq 2\):
+\[y_{n + 1} = y_n + h \left( a_1 f(t_n,y_n) + a_2 f(t_n + p_1 h, y_n + p_2 h f(t_n,y_n)) \right).\]
+
+\item Show by an example that the order cannot exceed two.
+
+\item Analyze the linear stability of the scheme when \(a_1 = 0\), \(a_2 = 1\), \(p_1 = \frac{1}{2}\), \(p_2 = \frac{1}{2}\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Suppose \(y(t_n) = y_n\).  By Taylor's Theorem,
+\begin{eqnarray*}
+y(t_n + h) & = & y_n + y'(t_n) h + \frac{1}{2} y''(t_n) h^2 + O(h^3) \\
+           & = & y_n + f(t_n,y_n) h + \frac{1}{2} \left( f_t(t_n,y_n) + f_y(t_n,y_n) f(t_n,y_n) \right) h^2 + O(h^3).
+\end{eqnarray*}
+Also by Taylor's Theorem,
+\[f(t_n + p_1h, y_n + p_2 h f(t_n,y_n))
+  = f(t_n,y_n) + p_1 f_t(t_n,y_n) h + p_2 f_y(t_n,y_n) f(t_n,y_n) h + O(h^2),\]
+hence
+\begin{eqnarray*}
+y_{n + 1} & = & y_n + h \left( a_1 f(t_n,y_n) + a_2 f(t_n + p_1 h, y_n + p_2 h f(t_n,y_n)) \right) \\
+          & = & y_n + h \left( a_1 f(t_n,y_n) + a_2 \left( f(t_n,y_n) + p_1 f_t(t_n,y_n) h + p_2 f_y(t_n,y_n) f(t_n,y_n) h  + O(h^2) \right) \right) \\
+          & = & y_n + (a_1 + a_2) f(t_n,y_n) h + a_2 \left( p_1 f_t(t_n,y_n) + p_2 f_y(t_n,y_n) f(t_n,y_n) \right) h^2 + O(h^3)
+\end{eqnarray*}
+which agrees with the expression for \(y(t_n + h)\) to \(O(h^3)\) if \(a_1 + a_2 = 1\), \(p_1 = p_2\), and \(a_2 p_1 = a_2 p_2 = \frac{1}{2}\).
+
+\item If \(f\) is simply a function of \(t\), i.e., \(f(t,y(t)) = f(t)\), then the scheme reduces to (again, applying Taylor's Theorem)
+\begin{eqnarray*}
+y_{n + 1} & = & y_n + h \left( a_1 f(t_n) + a_2 f(t_n + p_1 h) \right) \\
+          & = & y_n + h \left( a_1 f(t_n) + a_2 \left( f(t_n) + p_1 f'(t_n) h + \frac{1}{2} p_1^2 f''(t_n) h^2 + O(h^3) \right) \right) \\
+          & = & y_n + (a_1 + a_2) f(t_n) h + a_2 p_1 f'(t_n) h^2 + \frac{1}{2} a_2 p_1^2 f''(t_n) h^3 + O(h^4).
+\end{eqnarray*}
+Matching coefficients on \(h\) up with the Taylor expansion of \(y(t_n + h)\) about \(t_n\) up to \(h^3\) yields
+\begin{eqnarray*}
+a_1 + a_2 & = & 1; \\
+a_2 p_1 & = & \frac{1}{2}; \\
+\frac{1}{2} a_2 p_1^2 & = & \frac{1}{6}.
+\end{eqnarray*}
+The last two equalities give \(p_1 = \frac{2}{3}\), from which we determine that \(a_2 = \frac{3}{4}\) and \(a_1 = \frac{1}{4}\).  Thus, in this special case, the order can actually exceed two.
+
+\item We analyze stability by applying the method to the model problem \(y'(t) = f(t,y(t)) = \lambda y(t)\):
+\begin{eqnarray*}
+y_{n + 1} & = & y_n + h f \left( t_n + \frac{1}{2} h, y_n + \frac{1}{2} h f(t_n,y_n) \right) \\
+          & = & y_n + h \lambda \left( y_n + \frac{1}{2} h \lambda y_n \right) \\
+          & = & \left( 1 + \lambda h + \frac{1}{2} (\lambda h)^2 \right) y_n
+\end{eqnarray*}
+giving the root of the characteristic polynomial to be
+\[\zeta = 1 + \lambda h + \frac{1}{2} (\lambda h)^2.\]
+The stability region is the set of complex \(\lambda h\) such that
+\[\left| 1 + \lambda h + \frac{1}{2} (\lambda h)^2 \right| < 1.\]
+In particular, this is satisfied by \(\lambda h \in (-2,0)\).
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Let \(a(x,y)\) and \(b(x,y)\) be smooth positive functions.  Consider the equation
+\[u_t = \left( a(x,y) u_x \right)_x + \left( b(x,y) u_y \right)_y\]
+be solved for \(t > 0\), \((x,y) \in [0,1] \times [0,1]\), with smooth initial data \(u(x,y,0) = u_0(x,y)\) and periodic boundary conditions in \(x\) and \(y\): \(u(0,y,t) \equiv u(1,y,t)\), \(u(x,0,t) \equiv u(x,1,t)\).
+
+\begin{enumerate}
+\item Construct a second-order accurate unconditionally stable scheme for this equation.  Justify the accuracy and stability properties of your scheme.
+
+\item Construct a second-order accurate unconditionally stable scheme for this equation that only requires the inversion of one dimensional operators.  Justify the accuracy and stability properties of your scheme.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We consider using Crank-Nicolson:
+\begin{eqnarray*}
+P_{k,h_x,h_y} u^n_{\ell,m}
+& = & \frac{1}{k} \left( u^{n+1}_{\ell,m} - u^n_{\ell,m} \right) \\
+& - & \frac{1}{2h_x} \left( a \left( x + \frac{1}{2} h_x, y \right) \frac{u^{n+1}_{\ell+1,m} - u^{n+1}_{\ell,m}}{h_x}
+                          - a \left( x - \frac{1}{2} h_x, y \right) \frac{u^{n+1}_{\ell,m} - u^{n+1}_{\ell-1,m}}{h_x} \right) \\
+& - & \frac{1}{2h_x} \left( a \left( x + \frac{1}{2} h_x, y \right) \frac{u^n_{\ell+1,m} - u^n_{\ell,m}}{h_x}
+                          - a \left( x - \frac{1}{2} h_x, y \right) \frac{u^n_{\ell,m} - u^n_{\ell-1,m}}{h_x} \right) \\
+& - & \frac{1}{2h_y} \left( b \left( x, y + \frac{1}{2} h_y \right) \frac{u^{n+1}_{\ell,m+1} - u^{n+1}_{\ell,m}}{h_y}
+                          - b \left( x, y - \frac{1}{2} h_y \right) \frac{u^{n+1}_{\ell,m} - u^{n+1}_{\ell,m-1}}{h_y} \right) \\
+& - & \frac{1}{2h_y} \left( b \left( x, y + \frac{1}{2} h_y \right) \frac{u^n_{\ell,m+1} - u^n_{\ell,m}}{h_y}
+                          - b \left( x, y - \frac{1}{2} h_y \right) \frac{u^n_{\ell,m} - u^n_{\ell,m-1}}{h_y} \right) \\
+& = & \frac{1}{k} \left( u^{n+1}_{\ell,m} - u^n_{\ell,m} \right) \\
+& - & \frac{1}{2h_x^2} \left( a \left( x + \frac{1}{2} h_x, y \right) \left( u^{n+1}_{\ell+1,m} - u^{n+1}_{\ell,m} + u^n_{\ell+1,m} - u^n_{\ell,m} \right) \right. \\
+&   & \left.                - a \left( x - \frac{1}{2} h_x, y \right) \left( u^{n+1}_{\ell,m} - u^{n+1}_{\ell-1,m} + u^n_{\ell,m} - u^n_{\ell-1,m} \right) \right) \\
+& - & \frac{1}{2h_y^2} \left( b \left( x, y + \frac{1}{2} h_y \right) \left( u^{n+1}_{\ell,m+1} - u^{n+1}_{\ell,m} + u^n_{\ell,m+1} - u^n_{\ell,m} \right) \right. \\
+&   & \left.                - b \left( x, y - \frac{1}{2} h_y \right) \left( u^{n+1}_{\ell,m} - u^{n+1}_{\ell,m-1} + u^n_{\ell,m} - u^n_{\ell,m-1} \right) \right); \\
+R_{k,h_x,h_y} f^n_{\ell,m}
+& = & \frac{1}{2} \left( f^{n+1}_{\ell,m} + f^n_{\ell,m} \right). \\
+\end{eqnarray*}
+The symbols \(p_{k,h_x,h_y}(s,\xi,\eta)\) and \(r_{k,h_x,h_y}(s,\xi,\eta)\) for these difference operators are given by
+\begin{eqnarray*}
+p_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left. P_{k,h_x,h_y} \left( e^{skn} e^{i(\xi\ell h_x + \eta mh_y)} \right) \right/ e^{skn} e^{i(\xi\ell h_x + \eta mh_y)} \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right) \\
+& - & \frac{1}{2h_x^2} \left( e^{sk} + 1 \right) \left( a \left( x + \frac{1}{2} h_x, y \right) \left( e^{i\xi h_x} - 1 \right) - a \left( x - \frac{1}{2} h_x, y \right) \left( 1 - e^{-i\xi h_x} \right) \right) \\
+& - & \frac{1}{2h_y^2} \left( e^{sk} + 1 \right) \left( b \left( x, y + \frac{1}{2} h_y \right) \left( e^{i\eta h_y} - 1 \right) - b \left( x, y - \frac{1}{2} h_y \right) \left( 1 - e^{-i\eta h_y} \right) \right); \\
+r_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left. R_{k,h_x,h_y} \left( e^{skn} e^{i(\xi\ell h_x + \eta mh_y)} \right) \right/ e^{skn} e^{i(\xi\ell h_x + \eta mh_y)} \\
+& = & \frac{1}{2} \left( e^{sk} + 1 \right).
+\end{eqnarray*}
+We can simplify \(p_{k,h_x,h_y}\) to order \(O(k^2) + O(h_x^2) + O(h_y^2)\) as follows.  First, utilizing Taylor's Theorem,
+\begin{eqnarray*}
+\lefteqn{a \left( x + \frac{1}{2} h_x, y \right) \left( e^{i\xi h_x} - 1 \right)
+       - a \left( x - \frac{1}{2} h_x, y \right) \left( 1 - e^{-i\xi h_x} \right)} \\
+& = & a \left( x + \frac{1}{2} h_x, y \right) \left( i\xi h_x - \frac{1}{2} \xi^2 h_x^2 - \frac{1}{6} i\xi^3 h_x^3 + O(h_x^4) \right) \\
+& - & a \left( x - \frac{1}{2} h_x, y \right) \left( i\xi h_x + \frac{1}{2} \xi^2 h_x^2 - \frac{1}{6} i\xi^3 h_x^3 + O(h_x^4) \right) \\
+& = & i \xi a_x(x,y) h_x^2 - \xi^2 a(x,y) h_x^2 + O(h_x^4),
+\end{eqnarray*}
+and similarly
+\begin{eqnarray*}
+\lefteqn{b \left( x, y + \frac{1}{2} h_y \right) \left( e^{i\eta h_y} - 1 \right) - b \left( x, y - \frac{1}{2} h_y \right) \left( 1 - e^{-i\eta h_y} \right)} \\
+& = & i \eta b_y(x,y) h_y^2 - \eta^2 b(x,y) h_y^2 + O(h_y^4).
+\end{eqnarray*}
+Also, we have that
+\begin{eqnarray*}
+\frac{1}{k} \left( e^{sk} - 1 \right)
+& = & \frac{1}{k} \left( sk + \frac{1}{2} s^2 k^2 + O(k^3) \right) \\
+& = & s + \frac{1}{2} s^2 k + O(k^2) \\
+& = & \frac{1}{2} \left( 1 + 1 + sk + O(k^2) \right) s \\
+& = & \frac{1}{2} \left( e^{sk} + 1 \right) s + O(k^2)
+\end{eqnarray*}
+Thus,
+\begin{eqnarray*}
+p_{k,h_x,h_y}(s,\xi,\eta)
+& = & \frac{1}{k} \left( e^{sk} - 1 \right) \\
+& - & \frac{1}{2h_x^2} \left( e^{sk} + 1 \right) \left( i \xi a_x h_x^2 - \xi^2 a h_x^2 + O(h_x^4) \right) \\
+& - & \frac{1}{2h_y^2} \left( e^{sk} + 1 \right) \left( i \eta b_y h_y^2 - \eta^2 b h_y^2 + O(h_y^4) \right) \\
+& = & \frac{1}{2} \left( e^{sk} + 1 \right) \left( s - i \xi a_x + \xi^2 a - i \eta b_y + \eta^2 b \right) + O(k^2) + O(h_x^2) + O(h_y^2).
+\end{eqnarray*}
+The symbol \(p(s,\xi,\eta)\) of the differential operator \(P = \partial_t - \partial_x(a\partial_x) - \partial_y(b\partial_y)\) is
+\begin{eqnarray*}
+p(s,\xi,\eta) & = & \left. P \left( e^{sk} e^{i(\xi x + \eta y)} \right) \right/ e^{sk} e^{i(\xi x + \eta y)} \\
+              & = & s - i \xi a_x + \xi^2 a - i \eta b_x + \eta^2 b,
+\end{eqnarray*}
+from which we see that \(p_{k,h_x,h_y}(s,\xi,\eta)\) agrees with \(r_{k,h_x,h_y}(s,\xi,\eta) p(s,\xi,\eta)\) to \(O(k^2) + O(h_x^2) + O(h_y^2)\), as required for second-order accuracy.
+
+Stability is analyzed by replacing \(g = e^{sk}\) in \(p_{k,h_x,h_y}(s,\xi,\eta) = 0\) and solving for \(g\) to determine the roots of the amplification polynomial:
+\begin{eqnarray*}
+\lefteqn{\frac{1}{k}(g - 1) + \frac{1}{2}(g + 1) \left( \frac{1}{h_x^2} \left( a \left( x + \frac{1}{2} h_x, y \right) \left( 1 - e^{i\xi h_x} \right) + a \left( x - \frac{1}{2} h_x, y \right) \left( 1 - e^{-i\xi h_x} \right) \right) \right.} \\
+& + & \left. \frac{1}{h_y^2} \left( b \left( x, y + \frac{1}{2} h_y \right) \left( 1 - e^{i\eta h_y} \right) + b \left( x, y - \frac{1}{2} h_y \right) \left( 1 - e^{-i\eta h_y} \right) \right) \right) = 0 \\
+& \Rightarrow & g - 1 + \frac{1}{2} (g + 1) c = 0 \\
+& \Rightarrow & g = \frac{2 - c}{2 + c},
+\end{eqnarray*}
+where we have let
+\begin{eqnarray*}
+c & = & \mu_x \left( a \left( x + \frac{1}{2} h_x, y \right) \left( 1 - e^{i\xi h_x} \right) + a \left( x - \frac{1}{2} h_x, y \right) \left( 1 - e^{-i\xi h_x} \right) \right) \\
+  & + & \mu_y \left( b \left( x, y + \frac{1}{2} h_y \right) \left( 1 - e^{i\eta h_y} \right) + b \left( x, y - \frac{1}{2} h_y \right) \left( 1 - e^{-i\eta h_y} \right) \right).
+\end{eqnarray*}
+Observing that \(\Re(c) \geq 0\) for all \(\xi,\eta,x,y\) (here the nonnegativity of \(a\) and \(b\) is required), we get that \(|g| \leq 1\), hence the scheme is unconditionally stable.
+
+\item Abbreviate the operators
+\[\partial_x \left( a \partial_x \right) = A, \ 
+  \partial_y \left( b \partial_y \right) = B.\]
+Then \(P = \partial_t - A - B\).  By Taylor's Theorem, if \(u_t = Au + Bu\),
+\[\frac{u^{n+1} - u^n}{k}
+  = \frac{1}{2} \left( Au^{n+1} + Au^n \right)
+  + \frac{1}{2} \left( Bu^{n+1} + Bu^n \right) + O(k^2).\]
+Rearranging gives
+\[\left( I - \frac{k}{2} A - \frac{k}{2} B \right) u^{n+1}
+  = \left( I + \frac{k}{2} A + \frac{k}{2} B \right) u^n + O(k^3),\]
+so
+\[\left( I - \frac{k}{2} A \right) \left( I - \frac{k}{2} B \right) u^{n+1}
+  = \left( I + \frac{k}{2} A \right) \left( I + \frac{k}{2} B \right) u^n
+  + \frac{k^2}{4} A B (u^{n+1} - u^n) + O(k^3),\]
+and since \(u^{n+1} - u^n \in O(k)\), we obtain
+\[\left( I - \frac{k}{2} A \right) \left( I - \frac{k}{2} B \right) u^{n+1}
+  = \left( I + \frac{k}{2} A \right) \left( I + \frac{k}{2} B \right) u^n + O(k^3).\]
+It follows that if \(A_{h_x}\) and \(B_{h_y}\) approximate \(A\) and \(B\) to \(O(h_x^2)\) and \(O(h_y^2)\), respectively, then
+\[\left( I - \frac{k}{2} A_{h_x} \right) \left( I - \frac{k}{2} B_{h_y} \right) u^{n+1}
+  = \left( I + \frac{k}{2} A_{h_x} \right) \left( I + \frac{k}{2} B_{h_y} \right) u^n
+  + O(k^3) + O(kh_x^2) + O(kh_y^2).\]
+This suggests the second-order ADI scheme
+\[\left( I - \frac{k}{2} A_{h_x} \right) \left( I - \frac{k}{2} B_{h_y} \right) u^{n+1}
+  = \left( I + \frac{k}{2} A_{h_x} \right) \left( I + \frac{k}{2} B_{h_y} \right) u^n.\]
+We would use the \(A_{h_x}\) and \(B_{h_y}\) suggested by the scheme in (a), as we have already shown these to be second-order accurate.  The operators may be split according to
+\begin{eqnarray*}
+\left( I - \frac{k}{2} A_{h_x} \right) \widetilde{u}^{n+1/2}
+& = & \left( I + \frac{k}{2} B_{h_y} \right) u^n, \\
+\left( I - \frac{k}{2} B_{h_y} \right) u^{n+1}
+& = & \left( I + \frac{k}{2} A_{h_x} \right) \widetilde{u}^{n+1/2}.
+\end{eqnarray*}
+We show stability in a way similar as before.  To simplify the notation, set
+\begin{eqnarray*}
+c_x & = & \mu_x \left( a \left( x + \frac{1}{2} h_x, y \right) \left( 1 - e^{i\xi h_x} \right) + a \left( x - \frac{1}{2} h_x, y \right) \left( 1 - e^{-i\xi h_x} \right) \right); \\
+c_y & = & \mu_y \left( b \left( x, y + \frac{1}{2} h_y \right) \left( 1 - e^{i\eta h_y} \right) + b \left( x, y - \frac{1}{2} h_y \right) \left( 1 - e^{-i\eta h_y} \right) \right).
+\end{eqnarray*}
+As before, \(\Re(d_x), \Re(d_y) \geq 0\).  We can now quickly compute the amplification factor:
+\begin{eqnarray*}
+\left( 1 + \frac{1}{2} c_x \right) \widetilde{g} & = & 1 - \frac{1}{2} c_y, \\
+\left( 1 + \frac{1}{2} c_y \right) g & = & \left( 1 - \frac{1}{2} c_x \right) \widetilde{g},
+\end{eqnarray*}
+so
+\[g = \frac{\left( 1 - \frac{1}{2} c_x \right) \left( 1 - \frac{1}{2} c_y \right)}
+           {\left( 1 + \frac{1}{2} c_x \right) \left( 1 + \frac{1}{2} c_y \right)},\]
+from which it is evident that \(|g| \leq 1\), hence the scheme is unconditionally stable.
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the initial boundary value problem
+\[u_t + a u_x = 0,\]
+where \(a\) is a real number, to be solved for \(x \geq 0\) and \(t \geq 0\), with smooth initial data \(u(x,0) = u_0(x)\).
+
+\begin{enumerate}
+\item For a given value of the constant \(a\), what boundary conditions, if any, are needed to solve this problem?
+
+\item Suppose the Lax-Wendroff scheme
+\[u^{n+1}_j = u^n_j - \frac{a\lambda}{2} \left( u^n_{j+1} - u^n_{j-1} \right) + \frac{a^2\lambda^2}{2} \left( u^n_{j+1} - 2u^n_j + u^n_{j-1} \right);\]
+where \(\lambda = \frac{\Delta t}{\Delta x}\), \(j = 1, 2, \ldots\), and \(n = 0, 1, 2, \ldots\); is used to approximate solutions to this equation.  Give stable boundary conditions for \(u^n_0\).  Justify your statements.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item If \(a < 0\), the solution to the boundary value problem is simply \(u(x,t) = u_0(x - at)\).  In this case, the characteristics travel to the left, and no boundary conditions are necessary.  On the other hand, if \(a > 0\), the characteristics travel to the right, and boundary conditions would be necessary to determine \(u(x,t)\) for \(t > x/a\).
+
+\item 
+
+\end{enumerate}
+
+
+
+\item The following elliptic problem is approximated by the finite element method:
+\begin{eqnarray*}
+-\nabla \cdot \left( a(x) \nabla u(x) \right) & = & f(x), \ x \in \Omega \subset \mathbb{R}^2, \\
+u(x) & = & u_0(x), \ x \in \Gamma_1, \\
+\frac{\partial u}{\partial x_1}(x) + u(x) & = & 0, \ x \in \Gamma_2, \\
+\frac{\partial u}{\partial x_2}(x) & = & 0, \ x \in \Gamma_3;
+\end{eqnarray*}
+where
+\begin{eqnarray*}
+\Omega & = & \left\{ (x_1,x_2) \ | \ 0 < x_1 < 1, \ 0 < x_2 < 1 \right\}, \\
+\Gamma_1 & = & \left\{ (x_1,x_2) \ | \ x_1 = 0, \ 0 \leq x_2 \leq 1 \right\}, \\
+\Gamma_2 & = & \left\{ (x_1,x_2) \ | \ x_1 = 1, \ 0 \leq x_2 \leq 1 \right\}, \\
+\Gamma_3 & = & \left\{ (x_1,x_2) \ | \ 0 < x_1 < 1, \ x_2 = 0,1 \right\};
+\end{eqnarray*}
+\[0 < A \leq a(x) \leq B \ \text{for a.e.} \ x \in \Omega, \ f \in L^2(\Omega);\]
+and \(u_0|_{\Gamma_1}\) is the trace of a function \(u_0 \in H^1(\Omega)\).
+
+\begin{enumerate}
+\item Determine an appropriate weak variational formulation of the problem.
+
+\item Prove conditions on the corresponding linear and bilinear forms which are needed for existence and uniqueness of the solution.
+
+\item Setup a finite element approximation using \(P_1\) elements and a set of basis functions such that the associated linear system is sparse and of band structure.  Discuss the linear system thus obtained, and give the rate of convergence.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We set \(w = u - u_0\) (so \(u = w + u_0\)) and reformulate the problem in terms of \(w\) to obtain homogeneous boundary conditions:
+\begin{eqnarray*}
+-\nabla \cdot (a(x) \nabla w(x)) & = & f(x) + \nabla \cdot (a(x) \nabla u_0(x)) = g(x), \ x \in \Omega, \\
+w(x) & = & 0, \ x \in \Gamma_1, \\
+\frac{\partial w}{\partial x_1}(x) + w(x) & = & -\frac{\partial u_0}{\partial x_1}(x) - u_0(x) = h(x), \ x \in \Gamma_2, \\
+\frac{\partial w}{\partial x_2}(x) & = & -\frac{\partial u_0}{\partial x_2}(x) = k(x), \ x \in \Gamma_3.
+\end{eqnarray*}
+Let \(V = \{v \in H^1(\Omega) \ | \ v|_{\Gamma_1} \equiv 0\}\) equipped with the norm \(\|\cdot\|_{H^1(\Omega)}\).  We determine a weak variational formulation by multiplying the differential equation by \(v \in V\), applying integration by parts, and noting that \(v|_{\Gamma_1} \equiv 0\):
+\begin{eqnarray*}
+\lefteqn{-\nabla \cdot \left( a \nabla w \right) v = g v} \\
+& \Rightarrow & \int_{\Omega} -\nabla \cdot \left( a \nabla w \right) v = \int_{\Omega} g v \\
+& \Rightarrow & -\int_{\partial\Omega} a v \frac{\partial w}{\partial \nu} + \int_{\Omega} a \nabla w \cdot \nabla v = \int_{\Omega} g v \\
+& \Rightarrow & -\int_{\Gamma_2} a v \frac{\partial w}{\partial x_1} + \int_{\Gamma_3, x_2 = 0} a v \frac{\partial w}{\partial x_2} - \int_{\Gamma_3, x_2 = 1} a v \frac{\partial w}{\partial x_2} + \int_{\Omega} a \nabla w \cdot \nabla v = \int_{\Omega} g v \\
+& \Rightarrow & -\int_{\Gamma_2} a v \left( h - w \right) + \int_{\Gamma_3, x_2 = 0} a k v - \int_{\Gamma_3, x_2 = 1} a k v + \int_{\Omega} a \nabla w \cdot \nabla v = \int_{\Omega} g v \\
+& \Rightarrow & \int_{\Omega} a \nabla w \cdot \nabla v + \int_{\Gamma_2} a w v = \int_{\Omega} g v + \int_{\Gamma_2} a h v - \int_{\Gamma_3, x_2 = 0} a k v + \int_{\Gamma_3, x_2 = 1} a k v.
+\end{eqnarray*}
+Let
+\begin{eqnarray*}
+a(w,v) & = & \int_{\Omega} a \nabla w \cdot \nabla v + \int_{\Gamma_2} a w v \\
+Lv & = & \int_{\Omega} g v + \int_{\Gamma_2} a h v - \int_{\Gamma_3, x_2 = 0} a k v + \int_{\Gamma_3, x_2 = 1} a k v
+\end{eqnarray*}
+such that the weak variational formulation is to find \(w \in V\) such that
+\[a(w,v) = Lv \ \text{for all} \ v \in V.\]
+
+\item The Lax-Milgram Lemma provides sufficient conditions the bilinear form \(a\) and the linear form \(L\) must satisfy for existence and uniqueness of \(w\):
+
+\begin{itemize}
+\item {\em \(a\) is symmetric.}  Clearly \(a(v_1,v_2) = a(v_2,v_1)\) for all \(v_1,v_2 \in V\).
+
+\item {\em \(a\) is continuous.} For \(v_1,v_2 \in V\), by the Cauchy-Schwarz Inequality,
+\begin{eqnarray*}
+|a(v_1,v_2)| &   =  & \left| \int_{\Omega} a \nabla v_1 \cdot \nabla v_2 + \int_{\Gamma_2} a v_1 v_2 \right| \\
+             & \leq & B \|\nabla v_1\|_{L^2(\Omega)} \|\nabla v_2\|_{L^2(\Omega)} + B \|v_1\|_{L^2(\Gamma_2)} \|v_2\|_{L^2(\Gamma_2)} \\
+             & \leq & B \|v_1\|_{H^1(\Omega)} \|v_2\|_{H^2(\Omega)} + B \|v_1\|_{L^2(\Gamma_2)} \|v_2\|_{L^2(\Gamma_2)}.
+\end{eqnarray*}
+But
+\[\|v_i\|_{L^2(\Gamma_2)} \leq C \|v_i\|_{H^1(\Omega)}\]
+for some \(C > 0\), so, in fact,
+\[|a(v_1,v_2)| \leq B(1 + C) \|v_1\|_{H^1(\Omega)} \|v_2\|_{H^2(\Omega)},\]
+and we conclude that \(a\) is continuous.
+
+\item {\em \(a\) is \(V\)-elliptic.}  For \(v \in V\),
+\begin{eqnarray*}
+a(v,v) &   =  & \int_{\Omega} a |\nabla v|^2 + \int_{\Gamma_2} a v^2 \\
+       & \geq & A \int_{\Omega} |\nabla v|^2 + A \int_{\Gamma_2} v^2 \\
+       &   =  & A \|\nabla v\|_{L^2(\Omega)}^2 + A \|v\|_{L^2(\Gamma_2)}^2 \\
+       & \geq & A \|\nabla v\|_{L^2(\Omega)}^2.
+\end{eqnarray*}
+Now since \(v|_{\Gamma_1} = 0\) and \(\Gamma_1\) has positive length,
+\[\|\nabla v\|_{L^2(\Omega)} \geq C' \|v\|_{H^1(\Omega)}\]
+for some \(C' > 0\), so
+\[a(v,v) \geq A C'^2 \|v\|_{H^1(\Omega)}^2,\]
+and so \(a\) is \(V\)-elliptic.
+
+\item {\em \(L\) is continuous.}  For \(v \in V\), by the Cauchy-Schwarz Inequality,
+\begin{eqnarray*}
+|Lv| &   =  & \left| \int_{\Omega} g v + \int_{\Gamma_2} a h v - \int_{\Gamma_3, x_2 = 0} a k v + \int_{\Gamma_3, x_2 = 1} a k v \right| \\
+     & \leq & \|g\|_{L^2(\Omega)} \|v\|_{L^2(\Omega)} + B \|h\|_{L^2(\Gamma_2)} \|v\|_{L^2(\Gamma_2)} + B \|k\|_{L^2(\Gamma_3)} \|v\|_{L^2(\Gamma_3)}.
+\end{eqnarray*}
+As before,
+\[\|v\|_{L^2(\Gamma_3)} \leq C'' \|v\|_{H^1(\Omega)}\]
+for some \(C'' > 0\), so that
+\[|Lv| \leq \left( \|g\|_{L^2(\Omega)} + B C \|h\|_{L^2(\Gamma_2)} + B C'' \|k\|_{L^2(\Gamma_3)} \right) \|v\|_{H^1(\Omega)},\]
+hence \(L\) is continuous.
+
+\end{itemize}
+
+\item (W06.7(c))
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

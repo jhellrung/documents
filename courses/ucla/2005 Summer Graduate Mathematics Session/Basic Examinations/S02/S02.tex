@@ -1,0 +1,202 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\grad{\mathop{\rm grad}\nolimits}
+\def\dim{\mathop{\rm dim}\nolimits}
+\newcommand{\matrixiiibyiii}[9]{\left( \begin{array}{ccc} #1 & #2 & #3 \\ #4 & #5 & #6 \\ #7 & #8 & #9 \end{array} \right)}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, S02 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Prove that the closed interval \([0,1]\) is connected.
+
+{\bf Solution}
+
+Suppose \([0,1]\) is not connected.  Then \([0,1] = A \cup B\) for two nonempty sets \(A,B\) such that \(A \cap \overline{B} = \overline{A} \cap B = \emptyset\).  Suppose, without loss of generality, that \(0 \in A\) and \(1 \in B\).  Let
+\[x = \sup A.\]
+Since \(A \subset [0,1]\) is contained in a closed set, \(x \in [0,1]\).  Now certainly \(x \in \overline{A}\), for otherwise \(x\) could not be a least upper bound for \(A\).  Hence \(x \notin B\), since \(\overline{A} \cap B = \emptyset\), so \(x \in A\), since \(x \in A \cup B\), thus \(x \notin \overline{B}\), since \(A \cap \overline{B} = \emptyset\).  Hence there exists a neighborhood \(U \subset [0,1]\) of \(x\) disjoint from \(B\).  Thus \(U \subset A\).  Since \(1 \in B\) and \(x \notin B\), \(x < 1\).  But then any neighborhood within \([0,1]\) of \(x\) contains points greater than \(x\), hence some \(y \in U \subset A\) is such that \(y > x\).  This contradicts the construction of \(x\) as the least upper bound for \(A\), and we conclude that \([0,1]\) is connected.
+
+
+
+\item Show that the set \(\mathbb{Q}\) of rational numbers in \(\mathbb{R}\) is not expressible as the intersection of a countable collection of open subset of \(\mathbb{R}\).
+
+{\bf Solution}
+
+Suppose \(\bigcap_n E_n = \mathbb{Q}\) for some countable sequence \(\{E_n\}\) of open subsets of \(\mathbb{R}\).  Each \(E_n\) must be dense in \(\mathbb{R}\), since their intersection \(\mathbb{Q} \subset E_n\) is dense in \(\mathbb{R}\).  Enumerate the elements of \(\mathbb{Q}\) by \(x_n\), and set \(F_n = \mathbb{R} \backslash \{x_n\}\).  Then each \(F_n\) is also open and dense in \(\mathbb{R}\), hence by the Baire Category Theorem,
+\[\left( \bigcap_n E_n \right) \cap \left( \bigcap_n F_n \right)\]
+must be dense in \(\mathbb{R}\), as it is a countable intersection of dense open sets in a complete metric space.  Yet the intersection above is empty, hence certainly not dense in \(\mathbb{R}\), a contradiction.  It follows that \(\mathbb{Q}\) cannot be expressed as the intersection of a countable collection of open subsets of \(\mathbb{R}\).
+
+
+
+\item Suppose that \(X\) is a compact metric space (in the covering sense of the word compact).  Prove that every sequence \(\{x_n : x_n \in X, n = 1, 2, 3, \ldots\}\) has a convergent subsequence.  (Prove this directly.  Do not just quote a theorem.)
+
+{\bf Solution}
+
+Suppose that for each \(y \in X\), there exists an \(\epsilon = \epsilon_y > 0\) such that \(B(y; \epsilon_y)\) contains only finitely many points of \(\{x_n\}\).  The family \(\{B(y; \epsilon_y)\}_{y \in X}\) is an open cover of \(X\), hence contains some finite subcover \(\{B(y_i; \epsilon_{y_i})\}_{i = 1}^m\) by compactness of \(X\).  Every \(x_n\) must lie within some \(B(y_i; \epsilon_{y_i})\), thus, as there are only finitely many of the \(B(y_i; \epsilon_{y_i})\)'s, and each contains finitely many of the \(x_n\)'s, there must be only finitely many of the \(x_n\)'s, a contradiction.  It follows that there exists some \(y^* \in X\) such that \(B(y^*; \epsilon)\) contains infinitely points of \(\{x_n\}\) for all \(\epsilon > 0\).
+
+We construct a convergent subsequence of \(\{x_n\}\) converging to \(y^*\) as follows.  Select \(x_{n_j} \in B(y^*; 1/j)\) from \(\{x_n\} \cap B(y^*; 1/j)\) and such that \(n_j < n_{j + 1}\), which is always possible due to the infinitude of the intersection for all \(j = 1, 2, \ldots\).  Then \(d(y^*, x_{n_j}) < 1/j \to 0\) as \(j \to \infty\), hence \(x_{n_j} \to y^*\) and \(\{x_{n_j}\}_{j = 1}^{\infty}\) is a convergence subsequence of \(\{x_n\}\).
+
+
+
+\item
+
+\begin{enumerate}
+\item Define {\em uniform continuity} of a function \(F : X \to \mathbb{R}\), \(X\) a metric space.
+
+\item Prove that a function \(f : (0,1) \to \mathbb{R}\) is the restriction to \((0,1)\) of a continuous function \(F : [0,1] \to \mathbb{R}\) if and only if \(f\) is uniformly continuous on \((0,1)\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item \(F\) is uniformly continuous if for every \(\epsilon > 0\), there exists a \(\delta > 0\) such that \(|F(x) - F(y)| < \epsilon\) whenever \(x,y \in X\) with \(d(x,y) < \delta\).
+
+\item Suppose \(f : (0,1) \to \mathbb{R}\) is the restriction to \((0,1)\) of a continuous function \(F : [0,1] \to \mathbb{R}\).  Then \(F\) is uniformly continuous (since \([0,1]\) is compact), from which the uniform continuity of \(f\) follows immediately.
+
+Now suppose that \(f\) is uniformly continuous on \((0,1)\).  Let \(\delta_n\) be such that \(|f(x) - f(y)| < 1/n\) whenever \(x,y \in (0,1)\) with \(|x - y| < \delta_n\), and further ensure that \(\delta_n \leq \delta_{n + 1}\).  Set \(x_n = \delta_n / 2\).  Then for \(n,m > N\), \(x_n,x_m \in (0,\delta_N)\), hence \(|f(x_n) - f(x_m)| < 1/N\), which shows that \(\{f(x_n)\}\) is a Cauchy sequence.  Since \(\mathbb{R}\) is complete, the limit exists and we can set \(a = \lim_{n \to \infty} f(x_n)\).
+
+Now given an \(\epsilon > 0\), there exists a \(\delta > 0\) such that \(|f(x) - f(y)| < \epsilon\) whenever \(x,y \in (0,1)\) with \(|x - y| < \delta\).  Now if \(x \in (0,\delta)\), there exists an \(x_n \in (0,\delta)\) such that \(|a - f(x_n)| < \epsilon\), hence \(|a - f(x)| < |a - f(x_n)| + |f(x_n) - f(x)| < 2\epsilon\), showing that, indeed \(a = \lim_{x \to 0} f(x)\).  Similarly, we can set \(b = \lim_{x \to 1} f(x)\), and define \(F : [0,1] \to \mathbb{R}\) by
+\[F(x) = \begin{cases} a,    & x = 0 \\
+                       f(x), & 0 < x < 1 \\
+                       b,    & x = 1
+         \end{cases}.\]
+Evidently, \(F\) is continuous on \([0,1]\), by construction, and \(f\) is the restriction of \(F\) to \((0,1)\).
+
+\end{enumerate}
+
+
+
+\item State some reasonable conditions under which a function \(f : \mathbb{R}^2 \to \mathbb{R}\) satisfies
+\[  \frac{\partial}{\partial x} \left( \frac{\partial f}{\partial y} \right)
+  = \frac{\partial}{\partial y} \left( \frac{\partial f}{\partial x} \right)\]
+everywhere on \(\mathbb{R}^2\) and prove this equality under the conditions you give.
+
+{\bf Solution}
+
+(F01.5)
+
+
+
+\item Suppose \(f : \mathbb{R}^3 \to \mathbb{R}\) is a continuously differentiable function with \(\grad f \neq \vec{0}\) at \(\vec{0}\) (\(\vec{0} = (0,0,0)\) in \(\mathbb{R}^3\)).  Show that there are two continuously differentiable functions \(g : \mathbb{R}^3 \to \mathbb{R}\), \(h : \mathbb{R}^3 \to \mathbb{R}\) such that the function
+\[(x,y,z) \mapsto (f(x,y,z), g(x,y,z), h(x,y,z))\]
+from \(\mathbb{R}^3\) to \(\mathbb{R}^3\) is one-to-one on some neighborhood of \(\vec{0}\).
+
+{\bf Solution}
+
+Without loss of generality, suppose \(\frac{\partial f}{\partial x} \neq 0\) at \(0\).  Set \(h(x,y,z) = y\) and \(g(x,y,z) = z\).  Set
+\[F(x,y,z) = (f(x,y,z), g(x,y,z), h(x,y,z));\]
+then
+\[F'(x,y,z) = \matrixiiibyiii{\frac{\partial f}{\partial x}}{\frac{\partial f}{\partial y}}{\frac{\partial f}{\partial z}}{0}{1}{0}{0}{0}{1}\]
+is nonsingular at \(0\), hence the Inverse Function Theorem guarantees open sets \(U\) and \(V\) of \(\mathbb{R}^3\) with \(0 \in U\), \(F(0) \in V\), \(F\) is one-to-one on \(U\), and \(F(U) = V\).
+
+
+
+\item Suppose \(F : \mathbb{R}^2 \to \mathbb{R}^2\) is continuously differentiable and that the Jacobian matrix of \(F\) is everywhere nonsingular.  Suppose also that \(F(\vec{0}) = \vec{0}\) and that \(\|F((x,y))\| \geq 1\) for all \((x,y)\) with \(\|(x,y)\| = 1\).
+
+Prove that \(F(\{(x,y) : \|(x,y)\| < 1\}) \supset \{(x,y) : \|(x,y)\| < 1\}\).
+
+(Hint:  Show, with \(U = \{(x,y) : \|(x,y)\| < 1\}\), that \(F(U) \cap U\) is both open and closed in \(U\).)
+
+{\bf Solution}
+
+(W02.7)
+
+
+
+\item Let \(V\) be a finite dimensional real vector space.  Let \(W \subset V\) be a subspace and \(W^{\circ} = \{f : V \to \mathbb{F} \text{ linear} \ | \ f = 0 \text{ on } W\}\).  Prove that
+\[\dim(V) = \dim(W) + \dim(W^{\circ}).\]
+
+{\bf Solution}
+
+We show an isomorphism between \(W^{\circ}\) and \((V/W)^*\).  Given \(f \in W^{\circ}\), define \(L \in (V/W)^*\) by
+\[L\{x\} = f(x),\]
+where \(\{x\}\) is the equivalence class in \(V/W\) of \(x\).  It follows from the fact that \(f \in W^{\circ}\) that \(L\) is well-defined, hence this defines a homomorphism from \(W^{\circ}\) to \((V/W)^*\).  Conversely, given \(L \in (V/W)^*\), define \(f \in V*\) by
+\[f(x) = L\{x\}\]
+for \(x \in V\).  Since \(L\{x\} = 0\) for any \(x \in W\), it follows that, in fact, \(f \in W^{\circ}\), hence this defines a homomorphism from \((V/W)^*\) to \(W^{\circ}\).  Thus \(W^{\circ} \cong (V/W)^*\), and isomorphic vector spaces have equal dimension.  Therefore,
+\[\dim(V) = \dim(W) + \dim(V/W) = \dim(W) + \dim((V/W)^*) = \dim(W) + \dim(W^{\circ}).\]
+
+
+
+\item Find the matrix representation in the standard basis for either rotation by an angle \(\theta\) in the plane perpendicular to the subspace spanned by the vectors \((1,1,1,1)\) and \((1,1,1,0)\) in \(\mathbb{R}^4\).
+
+(You do not have to multiply the matrices out but must compute any inverses.)
+
+{\bf Solution}
+
+Let
+\[B_T = \left( \begin{array}{*{4}{c}}
+               \frac{1}{\sqrt{3}} & 0 &  \frac{1}{\sqrt{2}} &  \frac{1}{\sqrt{6}} \\
+               \frac{1}{\sqrt{3}} & 0 & -\frac{1}{\sqrt{2}} &  \frac{1}{\sqrt{6}} \\
+               \frac{1}{\sqrt{3}} & 0 &                   0 & -\frac{2}{\sqrt{6}} \\
+                                0 & 1 &                   0 &                   0 \\
+               \end{array} \right).\]
+Then regarding the columns of \(B_T\) as an orthonormal basis, the matrix representation of \(T\) in this basis is
+\[[T]_{B_T} = \left( \begin{array}{*{4}{c}}
+                     1 & 0 &            0 &           0 \\
+                     0 & 1 &            0 &           0 \\
+                     0 & 0 &  \cos \theta & \sin \theta \\
+                     0 & 0 & -\sin \theta & \cos \theta \\
+                     \end{array} \right),\]
+so the matrix representation of \(T\) in the standard basis is
+\[T = B_T [T]_{B_T} B_T^{-1}
+    = B_T [T]_{B_T} B_T^t.\]
+
+
+
+\item Let \(V\) be a complex inner product space and \(W\) a finite dimensional subspace.  Let \(v \in V\).  Prove that there exists a unique vector \(v_W \in W\) such that
+\[\|v - v_W\| \leq \|v - w\|\]
+for all \(w \in W\).  Deduce that equality holds if and only if \(w = v_W\).
+
+{\bf Solution}
+
+Let \(\{e_1, \ldots, e_k\}\) be an orthonormal basis of \(W\) with respect to the inner product of \(V\), and set
+\[v_W = \sum_{i = 1}^k (v,e_i) e_i.\]
+Then for any \(w = \sum_i w_i e_i \in W\),
+\[\begin{array}{rcl} \|v - w\|^2
+  & = & (v - w, v - w) \\
+  & = & (v,v) + (w,w) - (v,w) - (w,v) \\
+  & = & \|v\|^2 + \sum_i |w_i|^2 - \sum_i \overline{w_i} (v,e_i) - \sum_i w_i (e_i,v) \\
+  & = & \|v\|^2 + \sum_i \left( |w_i|^2 - \overline{w_i} (v,e_i) - w_i \overline{(v,e_i)} \right)
+  \end{array}.\]
+In particular,
+\[\|v - v_W\|^2 = \|v\|^2 - \sum_i |(v,e_i)|^2,\]
+hence
+\[\begin{array}{rcl} \|v - w\|^2 - \|v - v_W\|^2
+  & = & \sum_i \left( |w_i|^2 + |(v,e_i)|^2 - \overline{w_i} (v,e_i) - w_i \overline{(v,e_i)} \right) \\
+  & = & \sum_i \left( w_i - (v,e_i) \right) \left( \overline{w_i} - \overline{(v,e_i)} \right) \\
+  & = & \sum_i \left| w_i - (v,e_i) \right|^2 \\
+  & \geq & 0
+  \end{array}\]
+for all \(w \in W\), with equality if and only if \(w_i = (v,e_i)\) for each \(i = 1, \ldots, k\).
+
+
+
+\item Let \(V\) be a finite dimensional real inner product space and \(T,S : V \to V\) two commuting hermitian linear operators.  Show that there exists an orthonormal basis for \(V\) consisting of vectors that are simultaneously eigenvectors of \(T\) and \(S\).
+
+{\bf Solution}
+
+Let \(\{\lambda_i\}_{i = 1}^k\) be the eigenvectors of \(S\), and consider the eigenspaces \(E_i = \ker(S - \lambda_i I)\), \(i = 1, \ldots, k\).  Note that each pair of eigenspaces are orthogonal, since \(S\) is self-adjoint; indeed, the Spectral Theorem for self-adjoint matrices allows us to decompose \(V\) as
+\[V = \bigoplus_i E_i.\]
+Now for \(x \in E_i\), \(Sx = \lambda_i x\), so \(S(Tx) = T(Sx) = T(\lambda_i x) = \lambda_i(Tx)\), hence \(Tx \in E_i\) as well.  Thus \(T\) is invariant on each of the subspaces \(E_i\), so the restriction of \(T\) to \(E_i\) is a linear, self-adjoint operator.  The Spectral Theorem for self-adjoint matrices then allows us to choose an orthonormal basis for \(E_i\) of eigenvectors of \(T\), which also happen to be eigenvectors of \(S\) since they belong to \(E_i\).  Applying the Spectral Theorem to each restriction to \(E_i\) of \(T\) thus allows us to find an orthonormal basis for all of \(V\) of eigenvectors of both \(S\) and \(T\).
+
+
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,107 @@
+\documentclass[12pt]{article} 
+
+\begin{document} 
+
+Fall 2005, NA Qual 
+
+[7] The following elliptic problem is approximated by the finite 
+element method,
+\begin{eqnarray*}
+-\nabla\cdot \Big(a(x)\nabla u(x)\Big)&=&f(x),\ x\in \Omega\subset R^2,\\
+u(x)&=&u_0(x),\ x\in \Gamma_1,\\
+\frac{\partial u(x)}{\partial x_1}+u(x)&=&0, \ x\in \Gamma_2,\\
+\frac{\partial u(x)}{\partial x_2}&=&0,\ x\in\Gamma_3,
+\end{eqnarray*}
+where 
+\begin{eqnarray*}
+\Omega&=&\{(x_1,x_2): \ 0<x_1<1,\ 0<x_2<1\},\\
+\Gamma_1&=&\{(x_1,x_2): \ x_1=0,\ 0\leq x_2\leq1\},\\
+\Gamma_2&=&\{(x_1,x_2): \ x_1=1,\ 0\leq x_2\leq1\},\\
+\Gamma_3&=&\{(x_1,x_2): \ 0<x_1<1,\ x_2=0,\ 1\},\\
+\end{eqnarray*}
+$$0<A\leq a(x)\leq B,\ \ a.e. \mbox{ in }\Omega,\ \ f\in L^2(\Omega),$$
+and $u_0|_{\Gamma_1}$ is the trace of a function $u_0\in H^1(\Omega)$. 
+
+(a) Determine an appropriate weak variational formulation of the problem. 
+
+(b) Prove conditions on the corresponding linear and bilinear forms which are 
+needed for existence and uniqueness of the solution. 
+
+(c) Setup a finite element approximation using $P_1$ elements, and a set of 
+basis functions such that the associated linear system 
+is sparse and of band structure. Discuss the linear system thus 
+obtained, and give the rate of convergence. 
+
+\underline{For part (a):} Start by plotting the domain $\Omega$ as a square, show the boundary and the components of the exterior normals to each $\Gamma_i$ and on each side of the square. 
+
+Remark: To apply Lax-Milgram, we need a linear subspace $V$ of $H^1(\Omega)$. We cannot choose $V=\{u\in H^1(\Omega): u(x)=u_0(x) \mbox{ on } \Gamma_1\}$, because this is not a linear subspace (due to the inhomogeneous BC on $\Gamma_1$). It is given that $u_0$ on $\Gamma_1$
+is the trace of a function $u_0\in H^1(\Omega)$. So we want to obtain the problem with homogenous BC on $\Gamma_1$, therefore we introduce the new unknown 
+$w=u-u_0$, or $u=u_0+w$. The problem in $w$ becomes 
+\begin{eqnarray*}
+-\nabla\cdot \Big(a(x)\nabla w(x)\Big)&=&f(x)+\nabla\cdot \Big(a(x)\nabla u_0(x)\Big),\ x\in \Omega\subset R^2,\\
+w(x)&=&0,\ x\in \Gamma_1,\\
+\frac{\partial w(x)}{\partial x_1}+w(x)&=&-\frac{\partial u_0(x)}{\partial x_1}-u_0(x), \ x\in \Gamma_2,\\
+\frac{\partial w(x)}{\partial x_2}&=&-\frac{\partial u_0(x)}{\partial x_2},\ x\in\Gamma_3.
+\end{eqnarray*}
+
+Now choose $V=\{v\in H^1(\Omega),\ v(x)=0\mbox{ on }\Gamma_1\}$. Note that the measure of $\Gamma_1$ is not 0 (as length measure). On this space, the semi-norm $\|\nabla v\|_{L^2(\Omega)}$ becomes a norm (see list of ``Useful results''), equivalent with $\|v\|_{H^1(\Omega)}$. We will use $\|v\|_{V}=\|\nabla v\|_{L^2(\Omega)}$, with the associated scalar product $(v,w)_{V}=\int_{\Omega}\nabla v\cdot\nabla wdx$. 
+
+We multiply the PDE by a test function $v\in V$ (here both test functions and the unknown $w$ belong to the same space $V$). We integrate by parts and we obtain (here $\nabla\cdot$ denotes the divergence operator): 
+$$-\int_{\Omega}\nabla\cdot\Big(a(x)\nabla w(x)\Big)v(x)dx=\int_{\Omega}f(x)v(x)dx+\int_{\Omega}\nabla\cdot\Big(a(x)\nabla u_0(x)\Big)v(x)dx.$$
+After integration by parts, we get 
+$$\int_{\Omega}a(x)\nabla w\cdot\nabla vdx-\int_{\partial\Omega}a(x)\frac{\partial w}{\partial \vec{n}}vds=\int_{\Omega}fvdx -\int_{\Omega}a(x)\nabla u_0\cdot\nabla vdx+\int_{\partial\Omega}a(x)\frac{\partial u_0}{\partial \vec{n}}vds,$$
+or
+$$\int_{\Omega}a(x)\nabla w\cdot\nabla vdx-\int_{\Gamma_1}a(x)\frac{\partial w}{\partial \vec{n}}vds-\int_{\Gamma_2}a(x)\frac{\partial w}{\partial \vec{n}}vds-\int_{\Gamma_3}a(x)\frac{\partial w}{\partial \vec{n}}vds$$
+$$=\int_{\Omega}fvdx -\int_{\Omega}a(x)\nabla u_0\cdot\nabla vdx+\int_{\partial\Omega}a(x)\frac{\partial u_0}{\partial \vec{n}}vds.$$
+We have $v=0$ on $\Gamma_1$, also $\frac{\partial w}{\partial \vec{n}}=\frac{\partial w}{\partial x_1}n_1+\frac{\partial w}{\partial x_2}n_2$, where $(n_1,n_2)$ is the exterior unit normal. On $\Gamma_2$ we have $n_1=1$, $n_2=0$, while on 
+$\Gamma_3$ we have two cases, call them $\Gamma_3'$ with $(n_1,n_2)=(0,1)$ and 
+$\Gamma_3''$ with $(n_1,n_2)=(0,-1)$. All these will give 
+$$\int_{\Omega}a(x)\nabla w\cdot\nabla vdx-\int_{\Gamma_2}a(x)\frac{\partial w}{\partial x_1}vds-\int_{\Gamma_3'}a(x)\frac{\partial w}{\partial x_2}(+1)vds
+-\int_{\Gamma_3''}a(x)\frac{\partial w}{\partial x_2}(-1)vds$$
+$$=\int_{\Omega}fvdx -\int_{\Omega}a(x)\nabla u_0\cdot\nabla vdx+\int_{\partial\Omega}a(x)\frac{\partial u_0}{\partial \vec{n}}vds.$$
+
+Now use the BC on $\Gamma_2$ and $\Gamma_3$, to obtain: 
+$$\int_{\Omega}a(x)\nabla w\cdot\nabla vdx
+-\int_{\Gamma_2}a(x)(-w-u_0-{u_0}_{x_1})vds
+-\int_{\Gamma_3'}a(x)(-{u_0}_{x_2})(+1)vds$$
+$$-\int_{\Gamma_3''}a(x)(-{u_0}_{x_2})(-1)vds
+=\int_{\Omega}fvdx -\int_{\Omega}a(x)\nabla u_0\cdot\nabla vdx+\int_{\partial\Omega}a(x)\frac{\partial u_0}{\partial \vec{n}}vds.$$
+
+Now keep the $w$ terms on the LHS and obtain: 
+$$\int_{\Omega}a(x)\nabla w\cdot\nabla vdx+\int_{\Gamma_2}a(x)wvds$$
+$$=\int_{\Omega}fvdx -\int_{\Omega}a(x)\nabla u_0\cdot\nabla vdx+\int_{\partial\Omega}a(x)\frac{\partial u_0}{\partial \vec{n}}vds $$
+$$-\int_{\Gamma_2}a(x)(u_0+{u_0}_{x_1})vds+\int_{\Gamma_3'}a(x)(-{u_0}_{x_2})(+1)vds
++\int_{\Gamma_3''}a(x)(-{u_0}_{x_2})(-1)vds,$$
+for every $v\in V$. 
+
+This last form is the weak variational formulation of the problem. We can introduce notations $\alpha(w,v)=LHS$ and $L(v)=RHS$.  
+
+\underline{For part (b):} Clearly $\alpha$ and $L$ are bilinear and linear forms on $V$. Note also that $\alpha$ is symmetric (just a remark, symmetry is not necessary for Lax-Milgram). 
+
+We need to show that $\alpha$, $L$ are continuous (or bounded), and that $\alpha$ is V-coercive (see Chapter 2 in Johnson). 
+
+We will use Cauchy-Schwartz, the bounds on $a(x)$, additional bounds on $u_0$, and some of the properties from ``Useful Results''. 
+For instance, we will use several times 
+$$\|v\|_{L^2(\Gamma_2)}\leq \|v\|_{L^2(\Omega)} \leq C\|v\|_{V}.$$
+Thus we have 
+$$|\alpha(w,v)|\leq |\int_{\Omega}a(x)\nabla w\cdot\nabla wdx|+|\int_{\Gamma_2}a(x)wvds|\leq B\int_{\Omega}|\nabla w\cdot \nabla v|dx+B\int_{\Gamma_2}|wv|ds$$
+$$\leq B\|\nabla w\|_{L^2(\Omega)}\|\nabla v\|_{L^2(\Omega)}+B\|w\|_{L^2(\Gamma_2)}\|v\|_{L^2(\Gamma_2)}\leq B\|w\|_V\|v\|_V+B(C\|w\|_V\|v\|_V)$$
+$$=B(1+C)\|w\|_V\|v\|_V,$$
+therefore $\alpha$ is continuous. 
+
+Similary we obtain that $L$ is continuous (we use similar steps and inequalities), to show that 
+$$|L(v)|\leq const\|v\|_V.$$ 
+(assume all quantities for $u_0$ are with bounded norms). 
+
+To show that $\alpha$ is coercive, it is easy here:
+$$\alpha(v,v)=\int_{\Omega}a(x)|\nabla v|^2dx+\int_{\Gamma_2}a(x)v^2ds\geq 
+\int_{\Omega}a(x)|\nabla v|^2dx\geq A\int_{\Omega}|\nabla v|^2dx=A\|v\|_V^2$$
+
+Therefore, the weak formulation has a unique solution $w$. 
+
+\underline{For part (c):} setup a FEM using P1 elements as in the general case from Johnson, Section 2.2 (pages 52-53), see also pages 28-29 for the basis functions. 
+So give a brief description of $\phi_{j}$ (1 at note $N_j$ and 0 at the all other nodes), of $K$=triangulation, give the finite dim. space $V_h$, obtain the linear system $A\xi=b$ by substituting in the discrete weak formulation $v_h$ by the basis functions and $u_h$ by $\sum \xi_j\phi_j$, with $\xi_j$ scalars, etc. Show that, based on the properties of the linear form $a(\cdot,\cdot)$, then $A$ is positive definite, thus the linear system has unique solution. Mention if the unknown is given on part of the boundary, etc (so this part as in the general case for 2nd order problems with P1 elements). Discuss that $A$ is sparse 
+because $A_{ij}=0$ if nodes $N_i$ and $N_j$ are not adjacent. 
+(all part c) as in the book in the general case, only the main steps).
+
+\end{document} 

@@ -1,0 +1,260 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Applied Differential Equations Qualifying Exam, Fall 2003 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item For the ODE
+\begin{eqnarray*}
+u_t & = & v - u^2 \\
+v_t & = & u - v
+\end{eqnarray*}
+
+\begin{enumerate}
+\item Find stationary points and their type.
+
+\item Draw the plase plane and find all connections between the stationary points.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item
+
+\item
+
+\end{enumerate}
+
+
+
+\item
+
+\begin{enumerate}
+\item Let \(\Omega_1\) and \(\Omega_2\) be two smooth sets in \(\mathbb{R}^2\) with \(\Omega_1\) a (strict) subset of \(\Omega_2\).  Let \(-\lambda_1\) and \(-\lambda_2\) be the smallest (i.e., least negative) eigenvalues for the Dirichlet problem on \(\Omega_1\) and \(\Omega_2\), with eigenfunctions \(\phi_1\) and \(\phi_2\), respectively.  That is,
+\begin{eqnarray*}
+\Delta \phi_1 & = & -\lambda_1 \phi_1 \ \text{in \(\Omega_1\)}; \\
+\Delta \phi_2 & = & -\lambda_2 \phi_2 \ \text{in \(\Omega_2\)}; \\
+\phi_1 & = & 0 \ \text{on \(\partial\Omega_1\)}; \\
+\phi_2 & = & 0 \ \text{on \(\partial\Omega_2\)}.
+\end{eqnarray*}
+Show that \(\lambda_1 > \lambda_2 > 0\).  Hint:  Use the variational characterization of the smallest eigenvalue \(\lambda\) for a set \(\Omega\) that \(\lambda = \min_u \int_{\Omega} |\nabla u|^2 dx / \int_{\Omega} u^2 dx\).
+
+\item Suppose \(\Omega\) is a smooth set in \(\mathbb{R}^2\) with mirror symmetry about the \(y\) axis, i.e., if \((x,y) \in \Omega\) then \((-x,y) \in \Omega\).  Let \(\phi\) be the eigenfunction for the Dirichlet problem on \(\Omega\) with the smallest eigenvalue.  Use the result in (a) to show that \(\phi(x,y) = \phi(-x,y)\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Given \(u_1 \in C^1(\Omega_1)\), let \(u_2 \in C(\Omega_2)\) extend \(u_1\) on \(\Omega_2 \backslash \Omega_1\) by defining \(u_2 = 0\) there.  Then \(u_2\) is weakly differentiable, and
+\[\int_{\Omega_1} |\nabla u_1|^2 dx = \int_{\Omega_2} |\nabla u_2|^2 dx, \ 
+  \int_{\Omega_1} u_1^2 dx = \int_{\Omega_2} u_2^2 dx,\]
+hence the Rayleigh Quotients are identical.  Since
+\[\lambda_j = -\max_{u = 0 \ \text{on \(\partial\Omega_j\)}} \frac{(\Delta u, u)}{(u, u)}
+            = \min_{u = 0 \ \text{on \(\partial\Omega_j\)}} \frac{\int_{\Omega_j} |\nabla u|^2 dx}{\int_{\Omega_j} u^2 dx},\]
+we conclude that \(0 < \lambda_2 < \lambda_1\), since the set of admissible functions with \(u = 0\) on \(\Omega_2\) (strictly) contains those with \(u = 0\) on \(\Omega_1\).
+
+\item 
+
+\end{enumerate}
+
+
+
+\item The function
+\[h(X,T) = (4 \pi T)^{-1/2} \exp \left( -X^2 / 4 T \right)\]
+satisfies (you do not need to show this)
+\[h_T = h_{XX}.\]
+Using this result, verify that for any smooth function \(U\)
+\[u(x,t) = \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) h(x - t^2 - \xi, t) d\xi\]
+satisfies
+\[u_t + x u = u_{xx}.\]
+Given that \(U(x)\) is bounded and continuous everywhere on \(-\infty \leq x \leq \infty\), establish that
+\[\lim_{t \to 0} \int_{-\infty}^{\infty} U(\xi) h(x - \xi, t) d\xi = U(x)\]
+and show that \(u(x,t) \to U(x)\) as \(t \to 0\).  (You may use the fact that \(\int_0^{\infty} e^{-\xi^2} d\xi = \sqrt{\pi}/2\).)
+
+{\bf Solution}
+
+We compute
+\begin{eqnarray*}
+u_t(x,t) & = & (t^2 - x) \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) h(x - t^2 - \xi, t) d\xi \\
+         &   & \ + \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) \left( -2 t h_X(x - t^2 - \xi, t) + h_T(x - t^2 - \xi, t) \right) d\xi;
+\end{eqnarray*}
+\begin{eqnarray*}
+u_{xx}(x,t) & = & t^2 \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) h(x - t^2 - \xi, t) d\xi \\
+            &   & \ - 2 t \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) h_X(x - t^2 - \xi, t) d\xi \\
+            &   & \ + \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) h_{XX}(x - t^2 - \xi, t) d\xi;
+\end{eqnarray*}
+so upon summing,
+\[(u_t + x u_x - u_{xx})(x,t) = \exp \left( \frac{1}{3} t^3 - x t \right) \int_{-\infty}^{\infty} U(\xi) \left( h_T(x - t^2 - \xi, t) - h_{XX}(x - t^2 - \xi, t) \right) d\xi = 0\]
+since \(h\) satisfies \(h_T - h_{XX} = 0\).
+
+We compute
+\begin{eqnarray*}
+\lim_{t \searrow 0} \int_{-\infty}^{\infty} U(\xi) h(x - \xi, t) d\xi
+& = & \lim_{t \searrow 0} \frac{1}{\sqrt{4 \pi t}} \int_{-\infty}^{\infty} e^{-(x - \xi)^2 / 4 t} U(\xi) d\xi \\
+& = & \lim_{t \searrow 0} \frac{1}{\sqrt{\pi}} \int_{-\infty}^{\infty} e^{-\eta^2} U \left( x + \eta \sqrt{4 t} \right) d\eta \ \ \ \ \left[ \xi = x + \eta \sqrt{4 t} \right] \\
+& = & \frac{1}{\sqrt{\pi}} \int_{-\infty}^{\infty} e^{-\eta^2} \left( \lim_{t \searrow 0} U \left( x + \eta \sqrt{4 t} \right) \right) d\eta,
+\end{eqnarray*}
+by the Dominated Convergence Theorem, and
+\[\lim_{t \searrow 0} U \left( x + \eta \sqrt{4 t} \right) = U(x),\]
+hence
+\[\lim_{t \searrow 0} \int_{-\infty}^{\infty} U(\xi) h(x - \xi, t) d\xi = U(x) \frac{1}{\sqrt{\pi}} \int_{-\infty}^{\infty} e^{-\eta^2} d\eta = U(x).\]
+It follows that \(u(x,t) \to U(x)\) as \(t \to 0\).
+
+
+
+\item Find the characteristics of the partial differential equation
+\[x u_{xx} + (x - y) u_{xy} - y u_{yy} = 0, \ x > 0, \ y > 0,\]
+and then show that it can be transformed into the canonical form
+\[(\xi^2 + 4 \eta) u_{\xi\eta} + \xi u_{\eta} = 0\]
+whence \(\xi\) and \(\eta\) are suitably chosen canonical coordinates.  Use this to obtain the general solution in the form
+\[u(\xi,\eta) = f(\xi) + \int^\eta \frac{g(\eta')}{(\xi^2 + 4 \eta')^{1/2}} d\eta'\]
+where \(f\) and \(g\) are arbitrary functions of \(\xi\) and \(\eta\).
+
+{\bf Solution}
+
+Let \(\gamma(s) = (f(s),g(s))\) be a curve in \(\mathbb{R}^2\), and suppose we specify
+\[u|_{\gamma} = h, \ u_x|_{\gamma} = \phi, \ u_y|_{\gamma} = \psi.\]
+Then
+\[\phi' = u_{xx} f' + u_{xy} g', \ \psi' = u_{xy} f' + u_{yy} g',\]
+and, together with the fact that \(a u_{xx} + b u_{xy} + c u_{yy} = d\), we obtain
+\[\left( \begin{array}{ccc} a & b & c \\ f' & g' & 0 \\ 0 & f' & g' \end{array} \right) \left( \begin{array}{c} u_{xx} \\ u_{xy} \\ u_{yy} \end{array} \right) = \left( \begin{array}{c} d \\ \phi' \\ \psi' \end{array} \right).\]
+\(\gamma\) is characteristic if the above system is singular, i.e., if
+\[0 = \left| \begin{array}{ccc} a & b & c \\ f' & g' & 0 \\ 0 & f' & g' \end{array} \right| = a (g')^2 - b f' g' + c (f')^2.\]
+Solving for \(dy/dx = f' / g'\), and identifying \(a = x\), \(b = x - y\), \(c = -y\), yields
+\[\frac{dy}{dx} = \frac{f'}{g'} = \frac{b \pm \sqrt{b^2 - 4 a c}}{2 a} = 1, \ -\frac{y}{x}.\]
+Each of these solve to give \(x - y = \text{const}\) and \(x y = \text{const}\).  We set \(\xi = x - y\) and \(\eta = x y\), and compute
+\begin{eqnarray*}
+u_x & = & u_{\xi} + y u_{\eta}; \\
+u_y & = & -u_{\xi} + x u_{\eta}; \\
+u_{xx} & = & u_{\xi\xi} + 2 y u_{\xi\eta} + y^2 u_{\eta\eta}; \\
+u_{xy} & = & -u_{\xi\xi} + (x - y) u_{\xi\eta} + x y u_{\eta\eta} + u_{\eta}; \\
+u_{yy} & = & u_{\xi\xi} - 2 x u_{\xi\eta} + x^2 u_{\eta\eta}.
+\end{eqnarray*}
+Adding and cancelling terms then gives
+\[0 = x u_{xx} + (x - y) u_{xy} - y u_{yy} = (\xi^2 + 4 \eta) u_{\xi\eta} + \xi u_{\eta}.\]
+This is a separable ODE in \(u_{\eta}\), whose solution is
+\[u_{\eta} = (\xi^2 + 4 \eta)^{-1/2} g(\eta),\]
+hence
+\[u(\xi,\eta) = f(\xi) + \int^{\eta} (\xi^2 + 4 \eta')^{-1/2} g(\eta') d\eta'.\]
+
+
+
+\item State Parseval's relation for Fourier transforms.  Find the Fourier transform \(\widehat{f}(\xi)\) of
+\[f(x) = \begin{cases} e^{i \alpha x} / 2 \sqrt{\pi y}, & |x| \leq y \\ 0, & |x| > y \end{cases}\]
+in which \(y\) and \(\alpha\) are constants.  Use this in Parseval's relation to show that
+\[\int_{-\infty}^{\infty} \frac{\sin^2(\alpha - \xi) y}{(a - \xi)^2} d\xi = \pi y.\]
+What does the transform \(\widehat{f}(\xi)\) become in the limit \(y \to \infty\)?
+
+Use Parseval's relation to show that
+\[\frac{\sin(\alpha - \beta) y}{\alpha - \beta} = \frac{1}{\pi} \int_{-\infty}^{\infty} \frac{\sin (\alpha - \xi) y}{\alpha - \xi} \frac{\sin (\beta - \xi) y}{\beta - \xi} d\xi.\]
+
+{\bf Solution}
+
+Recall that the Fourier transform is given by (formally at least)
+\[\widehat{f}(\xi) = \mathcal{F}_x(f(x))(\xi) = \int_{-\infty}^{\infty} e^{-i x \xi} f(x) dx.\]
+Parseval's relation (also known as Plancherel's Theorem) states that
+\[\left\| \widehat{f} \right\|_{L^2}^2 = 2 \pi \|f\|_{L^2}^2.\]
+We compute
+\begin{eqnarray*}
+\widehat{f}(\xi)
+& = & \int_{-\infty}^{\infty} e^{-i x \xi} f(x) dx \\
+& = & \frac{1}{2 \sqrt{\pi y}} \int_{|x| \leq y} e^{-i x \xi} e^{i \alpha x} dx \\
+& = & \left. \frac{1}{2 \sqrt{\pi y}} \frac{e^{i x (\alpha - \xi)}}{i (\alpha - \xi)} \right|_{-y}^y \\
+& = & \frac{1}{\sqrt{\pi y}} \frac{\sin(y(\alpha - \xi))}{\alpha - \xi},
+\end{eqnarray*}
+and so, by Parseval's relation,
+\begin{eqnarray*}
+\int_{-\infty}^{\infty} \frac{\sin^2(y(\alpha - \xi))}{(\alpha - \xi)^2} d\xi
+& = & \pi y \left\| \widehat{f} \right\|_{L^2}^2 \\
+& = & 2 \pi^2 y \|f\|_{L^2}^2 \\
+& = & 2 \pi^2 y \int_{-\infty}^{\infty} |f(x)|^2 dx \\
+& = & 2 \pi^2 y \int_{-y}^y \frac{1}{4 \pi y} dx \\
+& = & \pi y.
+\end{eqnarray*}
+In the limit as \(y \to \infty\), \(\widehat{f}(\xi) \to \delta(\alpha - \xi)\).
+
+Let
+\[g(x) = \begin{cases} e^{i \beta y} / 2 \sqrt{\pi y}, & |x| \leq y \\ 0, & |x| > y \end{cases}.\]
+Then by Parseval's relation,
+\begin{eqnarray*}
+\left( \widehat{f}, \overline{\widehat{g}} \right)_{L^2}
+& = & \frac{1}{2} \left( \left\| \widehat{f} + \widehat{g} \right\|_{L^2}^2 - \left\| \widehat{f} \right\|_{L^2}^2 - \left\| \widehat{g} \right\|_{L^2}^2 \right) \\
+& = & \pi \left( \|f + g\|_{L^2}^2 - \|f\|_{L^2}^2 - \|g\|_{L^2}^2 \right) \\
+& = & 2 \pi \left( f, \overline{g} \right)_{L^2},
+\end{eqnarray*}
+hence
+\begin{eqnarray*}
+\frac{1}{\pi} \int_{-\infty}^{\infty} \frac{\sin(y(\alpha - \xi))}{\alpha - \xi} \frac{\sin(y(\beta - \xi))}{\beta - \xi} d\xi
+& = & y \left( \widehat{f}, \overline{\widehat{g}} \right) \\
+& = & 2 \pi y \left( f, \overline{g} \right)_{L^2} \\
+& = & 2 \pi y \int_{-\infty}^{\infty} f(x) \overline{g(x)} dx \\
+& = & 2 \pi y \int_{-y}^y \frac{1}{4 \pi y} e^{i (\alpha - \beta) x} dx \\
+& = & \frac{\sin(y(\alpha - \beta))}{\alpha - \beta}.
+\end{eqnarray*}
+
+
+
+\item
+
+\begin{enumerate}
+\item For the cubic equation
+\[\epsilon^3 x^3 - 2 \epsilon x^2 + 2 x - 6 = 0,\]
+write the solution \(x\) in the asymptotic expansion \(x = x_0 + \epsilon x_1 + O(\epsilon^2)\) as \(\epsilon \to 0\).  Find the first two terms \(x_0\) and \(x_1\) for all solutions \(x\).
+
+\item For the ODE
+\begin{eqnarray*}
+u_t & = & u - \epsilon u^3, \\
+u(0) & = & 1,
+\end{eqnarray*}
+write \(u = u_0(t) + \epsilon u_1(t) + \epsilon^2 u_2(t) + O(\epsilon^3)\) as \(\epsilon \to 0\).  Find the first three terms \(u_0\), \(u_1\), and \(u_2\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Clearly, to leading order, \(x_0 = 3\).  To determine \(x_1\), let \(x = x_0 + \epsilon x_1 + O(\epsilon^2)\) and substitute into the cubic equation:
+\begin{eqnarray*}
+0 & = & \epsilon^3 x^3 - 2 \epsilon x^2 + 2 x - 6 \\
+  & = & \epsilon^3 \left( x_0 + \epsilon x_1 + O(\epsilon^2) \right)^3 - 2 \epsilon \left( x_0 + \epsilon x_1 + O(\epsilon^2) \right) + 2 \left( x_0 + \epsilon x_1 + O(\epsilon^2) \right) - 6 \\
+  & = & 2 x_0 - 6 + \left( -2 x_0 + 2 x_1 \right) \epsilon + O(\epsilon^2),
+\end{eqnarray*}
+and so \(x_1 = x_0 = 3\).
+
+\item We substitute into the differential equation:
+\begin{eqnarray*}
+0 & = & u_t - u + \epsilon u^3 \\
+  & = & \left( u_0 + \epsilon u_1 + \epsilon^2 u_2 + O(\epsilon^3) \right)_t - \left( u_0 + \epsilon u_1 + \epsilon^2 u_2 + O(\epsilon^3) \right) + \epsilon \left( u_0 + \epsilon u_1 + \epsilon^2 u_2 + O(\epsilon^3) \right)^3 \\
+  & = & (u_0)_t - u_0 + \left( (u_1)_t - u_1 + u_0^3 \right) \epsilon + \left( (u_2)_t - u_2 + 3 u_0^2 u_1 \right) \epsilon^2 + O(\epsilon^3).
+\end{eqnarray*}
+Thus,
+\begin{eqnarray*}
+0 = (u_0)_t - u_0, \ u_0(0) = 1 & \Rightarrow & u_0(t) = e^t; \\
+0 = (u_1)_t - u_1 + u_0^3 = (u_1)_t - u_1 + e^{3 t}, \ u_1(0) = 0 & \Rightarrow & u_1(t) = \frac{1}{2} e^t - \frac{1}{2} e^{3 t}; \\
+0 = (u_2)_t - u_2 + 3 u_0^2 u_1 = (u_2)_t - u_2 + \frac{3}{2} e^{3 t} - \frac{3}{2} e^{5 t}, \ u_2(0) = 0 & \Rightarrow & u_2(t) = \frac{3}{8} e^t - \frac{3}{4} e^{3 t} + \frac{3}{8} e^{5 t}.
+\end{eqnarray*}
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

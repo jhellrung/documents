@@ -1,0 +1,290 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Monday, August 29, 2005 \\
+Analysis Bootcamp, Homework 3 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item {\em Gamelin and Greene, page 45.  Problems 1, 4, 5.}
+
+\begin{itemize}
+
+\item[1.] {\em Show that if \(\Phi\) is a function from a nonempty compact metric space \(X\) to itself such that
+\[d(\Phi(x),\Phi(y)) < d(x,y), \ x \neq y,\]
+then \(\Phi\) has a unique fixed point.}
+
+{\bf Solution}
+
+Suppose that \(x,y \in X\) are such that \(\Phi(x) = x\) and \(\Phi(y) = y\).  Then, if \(x \neq y\),
+\[d(x,y) = d(\Phi(x),\Phi(y)) < d(x,y),\]
+a contradiction, hence \(x = y\).  This establishes uniqueness.
+
+Note that \(\Phi\) is continuous, hence \(\Psi : X \to \mathbb{R}\) defined by
+\[\Psi(x) = d(x,\Phi(x))\]
+is a continuous function on a compact metric space, hence, by Exercise 6.8, assumes its minimum value, say, \(m\), at \(x = x^*\).  Now if \(m > 0\), we have that
+\[\Psi(\Phi(x^*)) < \Psi(x^*) = m,\]
+contradicting the fact that \(m\) is the minimum of \(\Psi\).  Hence \(m = 0\) and \(\Phi(x^*) = x^*\), establishing existence.
+
+
+
+\item[4.] {\em Let \(\mathfrak{X}\) be a Banach space, let \(m \geq 1\), and let \(T\) be a continuous linear operator on \(\mathfrak{X}\) such that \(\|T^m\| < 1\).  Fix \(u \in \mathfrak{X}\) and define
+\[\Phi(v) = u + T(v), \ v \in \mathfrak{X}.\]
+\begin{enumerate}
+\item Show that \(\Phi^m\) is a contraction.
+\item Show that the equation
+\[v = u + T(v)\]
+has a unique solution \(v \in \mathfrak{X}\).
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(v,w \in \mathfrak{X}\).  Then
+\[d(\Phi(v),\Phi(w))
+     = \|T(v - w)\|
+  \leq \|T\| \|v - w\|
+     = \|T\| d(v,w),\]
+hence
+\[d(\Phi^m(v),\Phi^m(w))
+  \leq \|T\| d(\Phi^{m-1}(v),\Phi^{m-1}(w))
+  \leq \ldots
+  \leq \|T\|^m d(v,w)
+     < d(v,w),\]
+therefore \(\Phi^m\) is a contraction.
+
+\item Suppose \(v_1\) and \(v_2\) both satisfy \(v = u + T(v)\).  Then both \(v_1\) and \(v_2\) are fixed points of \(\Phi\), hence are fixed points of \(\Phi^m\).  By Theorem 8.1 (Contraction Mapping Principle), since \(\Phi^m\) is a contraction, \(v_1 = v_2\).  This establishes uniqueness.
+
+Let \(v\) be a fixed point of \(\Phi^m\).  Then
+\[\Phi^m(\Phi(v)) = \Phi(\Phi^m(v)) = \Phi(v),\]
+hence \(\Phi(v)\) is a fixed point of \(\Phi^m\) as well, and by uniqueness, \(v = \Phi(v)\), hence \(v\) is a fixed point of \(\Phi\) as well.  This establishes existence.
+
+\end{enumerate}
+
+
+
+\item[5.] {\em Let \(\mathfrak{X}\) be a Banach space and let \(T\) be a  continuous linear operator on \(\mathfrak{X}\).  Let \(u \in \mathfrak{X}\), let \(\lambda \in \mathbb{C}\), and define \(\Phi(v) = (u/\lambda) + T(v/\lambda)\), \(v \in \mathfrak{X}\).
+\begin{enumerate}
+\item By applying the Contraction Mapping Theorem to \(\Phi\), show that the equation
+\[\lambda v = u + T(v)\]
+has a unique solution \(v \in \mathfrak{X}\), provided \(|\lambda| > \|T\|\).
+\item Let \(v_0 = 0\) and \(v_m = \Phi(v_{m - 1})\), \(m \geq 1\).  Show that
+\[v_m = \sum_{k = 0}^{m + 1} \frac{T^k(u)}{\lambda^{k + 1}}.\]
+\item Show that if \(|\lambda| > \|T\|\), then the series
+\[\sum_{k = 0}^{\infty} T^k / \lambda^{k + 1}\]
+converges in norm to \((\lambda I - T)^{-1}\).  How can this be used to solve (8.14)?
+\item Show that if
+\[|\lambda| > \limsup_{n \to \infty} \|T^n\|^{1/n},\]
+then the series (8.15) converges in norm to \((\lambda I - T)^{-1}\).
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(v,w \in \mathfrak{X}\).  Then
+\[d(\Phi(v),\Phi(w))
+     = \|T((v - w)/\lambda)\|
+  \leq \|T\| \|v - w\| / |\lambda|
+  \leq (\|T\| / |\lambda|) d(v,w)
+     < d(v,w),\]
+hence \(\Phi\) is a contraction, so, by Theorem 8.1 (Contraction Mapping Principle), \(\Phi\) has a unique fixed point \(v^*\):
+\[v^* = \Phi(v^*) = u/\lambda + T(v^*/\lambda) \ \Rightarrow \ 
+  \lambda v^* = u + T(v^*).\]
+
+\item We have that
+\[v_1 = \Phi(v_0)
+      = \Phi(0)
+      = u/\lambda
+      = \sum_{k = 0}^0 \frac{T^k(u)}{\lambda^{k + 1}},\]
+and given that
+\[v_j = \sum_{k = 0}^{j - 1} \frac{T^k(u)}{\lambda^{k + 1}},\]
+for \(j \geq 1\), we see that
+\[v_{j + 1} = \Phi(v_j)
+            = \frac{u}{\lambda} + \frac{1}{\lambda} T(v_j)
+            = \frac{u}{\lambda} + \frac{1}{\lambda} T \left( \sum_{k = 0}^{j - 1} \frac{T^k(u)}{\lambda^{k + 1}} \right)
+            = \frac{u}{\lambda} + \sum_{k = 0}^{j - 1} \frac{T^{k + 1}(u)}{\lambda^{k + 2}}
+            = \sum_{k = 0}^j \frac{T^k(u)}{\lambda^{k + 1}},\]
+which shows the claim by induction on \(m\).
+
+
+\item Let
+\[S_m = \sum_{k = 0}^m \frac{T^k}{\lambda^{k + 1}}.\]
+We compute
+\[(\lambda I - T) S_m
+  = \sum_{k = 0}^m \frac{T^k}{\lambda^k} - \sum_{k = 0}^m \frac{T^{k + 1}}{\lambda^{k + 1}}
+  = I - \frac{T^{m + 1}}{\lambda^{m + 1}},\]
+hence
+\[\|(\lambda I - T) S_m - I\|
+     = \left\| \frac{T^{m + 1}}{\lambda^{m + 1}} \right\|
+  \leq \left( \frac{\|T\|}{|\lambda|} \right)^{m + 1}
+   \to 0\]
+as \(m \to \infty\), so \(S_m \to (\lambda I - T)^{-1}\) in norm as \(m \to \infty\).  Thus
+\[(\lambda I - T)^{-1} = \sum_{k = 0}^{\infty} \frac{T^k}{\lambda^{k + 1}}.\]
+Going back to (8.14),
+\[\lambda v = u + T(v),\]
+we see that we wish to solve \(v\) such that
+\[(\lambda I - T)(v) = u,\]
+hence in this case,
+\[v = (\lambda I - T)^{-1}(u).\]
+
+\item Given
+\[|\lambda| > \limsup_{n \to \infty} \|T^n\|^{1/n},\]
+then
+\[|\lambda| > \|T^n\|^{1/n}\]
+for all \(n\) sufficiently large.  Thus
+\[\frac{\|T^n\|^{1/n}}{|\lambda|} < 1\]
+for all \(n\) sufficiently large, and
+\[\frac{\|T^n\|}{|\lambda|^n} = \left( \frac{\|T^n\|^{1/n}}{|\lambda|} \right)^n \to 0\]
+as \(n \to \infty\).  It follows that, as before, \(S_m \to (\lambda I - T)^{-1}\) as \(m \to \infty\).
+
+\end{enumerate}
+
+
+
+\end{itemize}
+
+\item {\em Gamelin and Greene, page 55.  Problems 1, 2, 3, 8, 9.}
+
+\begin{itemize}
+
+\item[1.] {\em Define \(G : \mathbb{R}^2 \to \mathbb{R}^1\) by \(G(0,0) = 0\) and \(G(x,y) = xy/(x^2 + y^2)^{1/2}\) if \((x,y) \neq (0,0)\).  Show that \(G\) is continuous and the partial derivatives of \(G\) with respect to \(x\) and \(y\) exist everywhere, but \(G\) is not Frechet differentiable at \((0,0)\).}
+
+{\bf Solution}
+
+\(G\) is certainly continuous off \((0,0)\).  Around \((0,0)\), change to polar coordinates: \(x = r \cos \theta\), \(y = r \sin \theta\).  Then
+\[G(x,y) = \frac{r^2 \cos \theta \sin \theta}{r} \to 0\]
+as \(r \to 0\), so since \(G(0,0) = 0\), \(G\) is continuous everywhere.
+
+One can compute that, off \((0,0)\),
+\[G_1(x,y) = \frac{y^3}{\left( x^2 + y^2 \right)^{3/2}},\]
+\[G_2(x,y) = \frac{x^3}{\left( x^2 + y^2 \right)^{3/2}},\]
+both of which certainly exist.  At \((0,0)\),
+\[G_1(0,0) = \lim_{\delta \to 0} \frac{G(\delta,0) - G(0,0)}{\delta}
+           = \lim_{\delta \to 0} \frac{0 - 0}{\delta}
+           = 0,\]
+and similarly \(G_2(0,0) = 0\) as well.  Therefore, the partial derivatives of \(G\) exist everywhere.
+
+Each \(T \in \mathcal{B}(\mathbb{R}^2,\mathbb{R}^1)\) can be represented by
+\[T(x,y) = T_1 x + T_2 y\]
+for \(T_1,T_2 \in \mathbb{R}\).  Hence suppose \(T = G'(0,0)\) existed.  Then \(T\) satisfies
+\[\lim_{(x,y) \to (0,0)} \frac{G(x,y) - G(0,0) - T(x,y)}{\|(x,y)\|} = 0.\]
+The quotient simplifies to
+\[\frac{xy - (T_1x + T_2y) \sqrt{x^2 + y^2}}{x^2 + y^2},\]
+and changing to polar coordinates again, this simplifies further to
+\[\cos \theta \sin \theta - T_1 \cos \theta - T_2 \sin \theta
+  = \frac{1}{2} \sin(2\theta) - T_1 \cos \theta - T_2 \sin \theta,\]
+which is never identically zero no matter the choice of \(T_1,T_2\).  Hence the limit as \(r \to 0\) of the above expression, if it even exists, is, at the least, nonzero, meaning no such \(T\) can exist, as originally supposed.  Therefore, \(G\) is not Frechet differentiable at \((0,0)\).
+
+
+
+\item[2.] {\em Prove that if \(G = (G_1, \ldots, G_m)\) maps \(\mathbb{R}^n\) to \(\mathbb{R}^m\) and if the partial derivatives \(\partial G_j / \partial x_k\), \(1 \leq j \leq m\), \(1 \leq k \leq n\), exist everywhere and are continuous, then \(G\) is continuously differentiable in the sense of Frechet.}
+
+{\bf Solution}
+
+Each \(T \in \mathcal{B}(\mathbb{R}^n,\mathbb{R}^m)\) can be represented by a matrix \((T_{jk})\), \(1 \leq j \leq m\), \(1 \leq k \leq n\).  Let \(x_0 \in \mathbb{R}^n\) be given.  Now if there exists a \(T\) such that
+\[\lim_{x \to x_0} \frac{G(x) - G(x_0) - T(x - x_0)}{\|x - x_0\|} = 0,\]
+then the corresponding quotients for each of the components of \(G\),
+\[\frac{G_j(x) - G_j(x_0) - T_{j\cdot}(x - x_0)}{\|x - x_0\|},\]
+also tend to \(0\) as \(x \to x_0\), and, conversely, if the component quotients tend to \(0\), the original quotient does as well.  Further, \(T(x_0)\) is continuous with respect to \(x_0\) if and only if each component \(T_{j\cdot}(x_0)\) is continuous with respect to \(x_0\).  Thus, without loss of generality, we may assume \(m = 1\), i.e., \(G = G_j\) and \(T = T_{j\cdot}\) for some fixed \(j\).
+
+Without loss of generality, we may further assume \(x_0 = 0\) and \(G(0) = 0\).  Let \(x = \sum_{i = 1}^n x_ie_i\), and set \(y_0 = x_0 = 0\), \(y_k = y_{k - 1} + e_k x_k = \sum_{i = 1}^k e_i x_i\), \(1 \leq k \leq n\).  Treating \(G\) as a mapping from \(\mathbb{R} \to \mathbb{R}\) by varying only the \(k^{th}\) component, we obtain, from (9.2),
+\[G(y_k) = G(y_{k - 1}) + G_k(y_{k - 1}) x_k + R_k(x_k),\]
+where \(R_k\) is such that
+\[\lim_{x_k \to 0} \frac{R_k(x_k)}{|x_k|} = 0.\]
+We can rewrite this as
+\[G(y_k) = G(y_{k - 1}) + (G_k(0) - G_k(0) + G_k(y_{k - 1})) x_k + R_k(x_k)\]
+\[       = G(y_{k - 1}) + G_k(0) x_k + (G_k(y_{k - 1}) - G_k(y_0)) x_k + R_k(x_k)\]
+\[       = G(y_{k - 1}) + G_k(0) x_k + R_k'(x),\]
+where
+\[R_k'(x) = (G_k(y_{k - 1}) - G_k(0)) x_k + R_k(x_k).\]
+Now since \(y_{k - 1} \to 0\) as \(x \to 0\), by the continuity of \(G_k\), \(G_k(y_{k - 1}) \to G_k(0)\) as \(x \to 0\), hence
+\[\lim_{x \to 0} \left| \frac{R_k'(x)}{\|x\|} \right|
+  \leq \lim_{x \to 0} \left| \frac{(G_k(y_{k - 1}) - G_k(0)) x_k + R_k(x_k)}{|x_k|} \right|
+  = 0.\]
+Using the recurrence relation of the \(G(y_k)\)'s, we can then write
+\[G(x) = G(y_n) = \sum_{k = 1}^n G_k(0) x_k + \sum_{k = 1}^n R_k'(x),\]
+where
+\[\lim_{x \to 0} \frac{\sum_k R_k'(x)}{\|x\|} = 0,\]
+from which it follows that
+\[G'(0) = \left( G_1(0) \ \cdots \ G_n(0) \right),\]
+and \(G'(0)\) exists.  Indeed, there was nothing special concerning \(0\), hence \(G'(x)\) exists everywhere, and
+\[G'(x) = \left( G_1(x) \ \cdots \ G_n(x) \right).\]
+Since each \(G_k(x)\) depends continuously on \(x\), \(G'(x)\) also depends continuously on \(x\).
+
+
+
+\item[3.] {\em Prove that if \(F : \mathfrak{X} \to \mathfrak{Y}\) is differentiable at \(x_0 \in \mathfrak{X}\) and if \(G : \mathfrak{Y} \to \mathfrak{Z}\) is differentiable at \(y_0 = F(x_0) \in \mathfrak{Y}\), then \(G \circ F\) is differentiable at \(x_0\) and
+\[(G \circ F)'(x_0) = G'(F(x_0))F'(x_0).\]}
+
+{\bf Solution}
+
+Choose \(x \in X\) and set \(y = F(x) \in Y\).  (9.2) allows us to write
+\[G(y) = G(y_0) + G'(y_0) (y - y_0) + R_Y(y),\]
+where
+\[\lim_{y \to y_0} \frac{R_Y(y)}{\|y - y_0\|} = 0.\]
+We can evaluate \(y - y_0\), again using (9.2), as
+\[y - y_0 = F(x) - F(x_0) = F'(x_0) (x - x_0) + R_X(x),\]
+where
+\[\lim_{x \to x_0} \frac{R_X(x)}{\|x - x_0\|} = 0.\]
+Substituting and expressing everything in \(x\) yields
+\[G(F(x)) = G(F(x_0)) + G'(F(x_0)) F'(x_0) (x - x_0) + R_Z(x)\]
+where
+\[R_Z(x) = G'(y_0) R_X(x) + R_Y(F(x)).\]
+Now \(y \to y_0\) whenever \(x \to x_0\), by the continuity of \(F\) (implied by its differentiability, by Theorem 9.1).  Further, since
+\[y - y_0 = F'(x_0) (x - x_0) + R_X(x),\]
+we have that
+\[\|y - y_0\| \leq \|F'(x_0)\| \|x - x_0\| + \epsilon \|x - x_0\|\]
+for some \(\epsilon > 0\) and \(x\) sufficiently close to \(x_0\).  Hence
+\[\lim_{x \to x_0} \left| \frac{R_Y(y)}{\|x - x_0\|} \right|
+  \leq \lim_{x \to x_0} \left| \frac{R_Y(y)}{\|y - y_0\|} \right| \left( \|F'(x_0)\| + \epsilon \right)
+     = 0,\]
+and we see immediately that
+\[\lim_{x \to x_0} \frac{R_Z(x)}{\|x - x_0\|} = 0.\]
+Therefore,
+\[(G \circ F)'(x_0) = G'(F(x_0)) F'(x_0).\]
+
+
+
+\item[8.] {\em Let \(U\) be an open subset of a Banach space \(\mathfrak{X}\) and let \(F\) be a continuously differentiable function from \(U\) to a Banach space \(\mathfrak{Y}\) such that \(F'(x)\) is invertible for all \(x \in U\).  Show that \(F\) is an open map, that is, that the image under \(F\) of any open subset of \(U\) is an open subset of \(\mathfrak{Y}\).}
+
+{\bf Solution}
+
+Let \(V \subset U\) be open, and consider \(y \in F(V) \subset \mathfrak{Y}\).  Let \(x \in V\) such that \(F(x) = y\).  \(F'\) is invertible throughout \(\mathfrak{Y}\), hence the hypotheses of Theorem 9.9 (Inverse Function Theorem) are met, and there exists an open neighborhood \(W \subset V\) of \(x\) such that \(F(W)\) is open in \(\mathfrak{Y}\).  But \(y \in F(W) \subset F(V)\), hence \(y\) is an interior point of \(F(V)\).  Since \(y\) was arbitrary, \(F(V)\) is open, hence \(F\) is an open map.
+
+
+
+\item[9.] {\em A function \(F\) from \(\mathbb{R}^l\) to \(\mathbb{R}^m\) is a \(C^k\)-{\em function} if each of the component functions of \(F\) has continuous partial derivatives of all orders \(\leq k\).  Suppose that \(F\) is a \(C^k\)-function (\(k \geq 1\)) from \(\mathbb{R}^n \times \mathbb{R}^m\) to \(\mathbb{R}^m\) such that \(F(0,0) = 0\) and the Jacobian matrix
+\[\left( \frac{\partial F_i}{\partial y_j}(0,0) \right)_{i,j = 1}^m\]
+is invertible.  Prove that there is a \(C^k\)-function \(f\), defined in a neighborhood \(U\) of \(0\) in \(\mathbb{R}^n\), such that \(F(x,f(x)) = 0\), \(x \in U\).}
+
+{\bf Solution}
+
+We use Theorem 9.8 (Implicit Function Theorem), with \(\mathfrak{X} = \mathbb{R}^n\), \(\mathfrak{Y} = \mathbb{R}^m\), \(\mathfrak{Z} = \mathbb{R}^m\), and \((x_0,y_0) = (0,0)\).  This allows us to obtain a continuously differentiable function \(f : U \subset \mathbb{R}^n \to \mathbb{R}^m\) for open \(U\) containing \(0\), with derivative at \(0 \in \mathbb{R}^n\) of
+\[f'(0) = -F_2(0,0)^{-1} F_1(0,0).\]
+Evidently, we can apply the Implicit Function Theorem at any point \((x,f(x))\) in a neighborhood of \((0,0)\) where the Jacobian is invertible, obtaining the derivative of \(f\) to be
+\[f'(x) = -F_2(x,f(x))^{-1} F_1(x,f(x).\]
+Since \(F_2\) and hence \(F_2^{-1}\) are \(C^{k-1}\), as is \(F_1\), we see that in fact \(f\) is \(C^k\) in a sufficiently small neighborhood of \(0\).
+
+
+
+\end{itemize}
+
+
+
+
+\end{enumerate}
+
+\end{document}

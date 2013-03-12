@@ -1,0 +1,278 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\newcommand{\matrixiiibyiii}[9]{\left( \begin{array}{ccc} #1 & #2 & #3 \\ #4 & #5 & #6 \\ #7 & #8 & #9 \end{array} \right)}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, S04 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Let \(\mathcal{S}\) denote the set of sequences \(a = (a_1, a_2, \ldots)\), with \(a_k = 0\) or \(1\).  Show that the mapping \(\theta : \mathcal{S} \to \mathbb{R}\) defined by
+\[\theta((a_1, a_2, \ldots)) = \frac{a_1}{10} + \frac{a_2}{10^2} + \cdots\]
+is an injection.  Include an explanation of why the infinite series converges.
+
+Hint:  if \(a \neq b\), you may assume that
+\[a = (a_1, \ldots, a_{n - 1}, 0, a_{n + 1}, \ldots),\]
+\[b = (b_1, \ldots, b_{n - 1}, 1, b_{n + 1}, \ldots).\]
+
+{\bf Solution}
+
+As in the hint, suppose \(a \neq b\), \(a,b \in \mathcal{S}\).  Without loss of generality,
+\[a = (a_1, \ldots, a_{n - 1}, 0, a_{n + 1}, \ldots),\]
+\[b = (a_1, \ldots, a_{n - 1}, 1, b_{n + 1}, \ldots)\]
+for some \(n\), hence
+\[\theta(b) - \theta(a)
+  = \frac{1}{10^n} + \sum_{i = n + 1}^{\infty} \frac{b_i - a_i}{10^i},\]
+and
+\[\left| \sum_{i = n + 1}^{\infty} \frac{b_i - a_i}{10^i} \right|
+    \leq \sum_{i = n + 1}^{\infty} \frac{1}{10^i}
+       = \frac{1}{9 \cdot 10^n},\]
+so
+\[\theta(b) - \theta(a) \geq \frac{1}{10^n} - \frac{1}{9 \cdot 10^n} = \frac{8}{9 \cdot 10^n} > 0\]
+and \(\theta(b) \neq \theta(a)\).
+
+The infinite series converges since the partial sums are monotonically increasing and bounded above by
+\[\lim_{n \to \infty} \sum_{i = 1}^n \frac{1}{10^i}
+  = \lim_{n \to \infty} \frac{\frac{1}{10} - \frac{1}{10^{n + 1}}}{1 - \frac{1}{10}}
+  = \frac{1}{9}.\]
+
+
+
+\item Is \(f(x) = \sqrt{x}\) uniformly continuous on \([0,\infty)\)?  Prove your assertion.
+
+{\bf Solution}
+
+If \(x,z \in [0,\infty)\), then
+\[\sqrt{x + z} \leq \sqrt{x + z + 2\sqrt{xz}} = \sqrt{x} + \sqrt{z}.\]
+Now given any \(\epsilon > 0\), set \(\delta = \epsilon^2\).  Then for any \(x,y \in [0,\infty)\) with \(x \leq y < x + \delta\) we have, letting \(z = y - x\) in the above inequality,
+\[\sqrt{y} = \sqrt{x + (y - x)} \leq \sqrt{x} + \sqrt{y - x},\]
+hence
+\[0 \leq \sqrt{y} - \sqrt{x} \leq \sqrt{y - x} < \sqrt{\delta} = \epsilon,\]
+proving that \(f\) is uniformly continuous on \([0,\infty)\).
+
+
+
+\item
+
+\begin{enumerate}
+\item Carefully define when a function \(f\) on \([0,1]\) is Riemann integrable.
+
+\item Show that if \(f_n\) are Riemann integrable functions on \([0,1]\) and \(f_n\) converges to \(f\) uniformly, then \(f\) is Riemann integrable.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item (F03.4)
+
+\item Given \(\epsilon > 0\), choose \(N\) such that \(\|f_n - f\|_{\infty} < \epsilon\) for \(n > N\).  Then \(f_n(x) - \epsilon < f(x) < f_n(x) + \epsilon\) for all \(x \in [0,1]\) and \(n > N\), hence
+\[\int_0^1 f_n dx - \epsilon    < \underline{\int}_0^1 f dx
+                             \leq \overline{\int}_0^1 f dx
+                                < \int_0^1 f_n dx + \epsilon,\]
+so
+\[\overline{\int}_0^1 f dx - \underline{\int}_0^1 f dx < 2\epsilon.\]
+Since \(\epsilon\) was arbitrary, this shows that \(f\) is Riemann integrable.
+
+Incidentally, a second application of the above inequalities shows that
+\[\left| \int_0^1 f dx - \int_0^1 f_n dx \right| < \epsilon\]
+for \(n > N\), hence
+\[\lim_{n \to \infty} \int_0^1 f_n dx = \int_0^1 f dx.\]
+
+\end{enumerate}
+
+
+
+\item Are there infinite compact subsets of \(\mathbb{Q}\)?  Prove your assertion.
+
+{\bf Solution}
+
+Let
+\[A = \{0\} \cup \bigcup_{n = 1}^{\infty} \left\{ \frac{1}{n} \right\}.\]
+We show that \(A\) is sequentially compact.  Indeed, any sequence \(\{x_n\}_{n = 1}^{\infty}\) in \(A\) must itself converge to \(0\), for there are only finitely many elements of \(A\) outside of \(B(0;\epsilon)\) for any \(\epsilon > 0\), hence infinitely many of the \(x_n\)'s within \(B(0;\epsilon)\).  It follows that \(A\) is compact.
+
+
+
+\item Suppose that \(G\) is an open set in \(\mathbb{R}^n\), \(f : G \to \mathbb{R}^m\) is a function, and that \(x_0 \in G\).
+
+\begin{enumerate}
+\item Carefully define what is meant by \(f'(x_0) : \mathbb{R}^n \to \mathbb{R}^m\).
+
+\item Suppose that \(I\) is a line segment in \(G\) such that \(f'(x)\) is defined for all \(x \in I\).  Show that if \(f\) is differentiable at all the points of \(I\), then for some point \(c\) in \(I\)
+\[\|f(q) - f(p)\|_2 \leq \|f'(c)\| \|q - p\|_2.\]
+
+Hint:  let \(w\) be a unit vector with \(\|f(q) - f(p)\|_2 = (f(q) - f(p)) \cdot w\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item \(f\) is differentiable at \(x_0\) if there exists a linear map \(T : \mathbb{R}^n \to \mathbb{R}^m\) such that
+\[\lim_{x \to x_0} \frac{f(x) - f(x_0) - T(x - x_0)}{\|x - x_0\|} = 0.\]
+In this case, \(f'(x_0) = T\).
+
+\item Let
+\[w = f(q) - f(p)\]
+and define \(g : [0,1] \to \mathbb{R}\) by
+\[g(t) = f((1 - t)p + tq) \cdot w.\]
+Then \(g\) is differentiable on \([0,1]\), so an application of the Mean Value Theorem yields \(t \in [0,1]\) such that
+\[g(1) - g(0) = g'(t) = f'((1 - t)p + tq)(q - p) \cdot w = f'(c)(q - p) \cdot w,\]
+and \(c \in I\).  But
+\[g(1) - g(0) = f(q) \cdot w - f(p) \cdot w = (f(q) - f(p)) \cdot w = \|w\|^2,\]
+hence, applying the Cauchy Schwarz inequality,
+\[\|w\|^2 = f'(c)(q - p) \cdot w \leq \|f'(c)\| \|q - p\| \|w\|\]
+and it follows that
+\[\|f(q) - f(p)\| = \|w\| \leq \|f'(c)\| \|q - p\|.\]
+
+\end{enumerate}
+
+
+
+\item Let \(\|\cdot\|\) be any norm on \(\mathbb{R}^n\).
+
+\begin{enumerate}
+\item Prove that there exists a constant \(d\) with \(\|x\| \leq d \|x\|_2\) for all \(x \in \mathbb{R}^n\), and use this to show that \(N(x) = \|x\|\) is continuous in the usual topology on \(\mathbb{R}^n\).
+
+\item Prove that there exists a constant \(c\) with \(\|x\| \geq c \|x\|_2\) (Hint:  use the fact that \(N\) is continuous on the sphere \(\{x : \|x\|_2 = 1\}\)).
+
+\item Show that if \(L\) is an \(n\)-dimensional subspace of an arbitrary normed vector space \(V\), then \(L\) is closed.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(\{e_1, \ldots, e_n\}\) be the standard basis of \(\mathbb{R}^n\) with respect to \(\|\cdot\|_2\), and let
+\[x = \sum_{i = 1}^n x_i e_i.\]
+Then
+\[\|x\| \leq \sum_{i = 1}^n \|x_i e_i\|
+           = \sum_{i = 1}^n |x_i| \|e_i\|
+        \leq M \sum_{i = 1}^n |x_i|
+        \leq M \sum_{i = 1}^n \|x\|_2
+        = nM \|x\|_2\]
+where \(M = \max_i \|e_i\|\).  It follows that \(N(x) = \|x\|\) is uniformly continuous with respect to \(\|\cdot\|_2\).  Indeed, given \(\epsilon > 0\), for any \(x,y \in \mathbb{R}^n\) with \(\|x - y\|_2 < \epsilon/d\),
+\[|N(x) - N(y)| = |\|x\| - \|y\|| \leq \|x - y\| \leq d \|x - y\|_2 < \epsilon.\]
+
+\item Since \(N\) is continuous on \(S^n = \{x \in \mathbb{R}^n \ | \ \|x\|_2 = 1\}\), which is compact, \(N\) achieves its minimum \(c = N(u)\) for some \(u \in S^n\).  Hence for any \(x \in \mathbb{R}^n\),
+\[\|x\| =    \|x\|_2 \left\| \frac{x}{\|x\|_2} \right\|
+        =    \|x\|_2 N \left( \frac{x}{\|x\|_2} \right)
+        \geq \|x\|_2 N(u)
+        =    c \|x\|_2.\]
+
+\item \(L\) must be isomorphic to \((\mathbb{R}^n, \|\cdot\|)\) for some norm \(\|\cdot\|\) on \(\mathbb{R}^n\).  Thus we show \(L\) is closed if we can show \(\mathbb{R}^n\) is closed with respect to \(\|\cdot\|\).  To this end, let \(\{x_i\}_{i = 1}^n\) be a Cauchy sequence in \(\mathbb{R}^n\) with respect to \(\|\cdot\|\).  Then by (a) above, \(\{x_i\}\) is a Cauchy sequence with respect to \(\|\cdot\|_2\) as well, hence converges to some \(x^* \in \mathbb{R}^n\) with respect to \(\|\cdot\|_2\).  By (b) above, then, \(x_i \to x^*\) with respect to \(\|\cdot\|\).  Therefore, \(\mathbb{R}^n\) is complete, so closed, with respect to \(\|\cdot\|\).
+
+\end{enumerate}
+
+
+
+\item Let \(V\) be a finite dimensional real vector space.  Let \(W_1, W_2 \subset V\) be subspaces.  Show both of the following:
+
+\begin{enumerate}
+\item \(W_1^{\circ} \cap W_2^{\circ} = (W_1 + W_2)^{\circ}\)
+
+\item \((W_1 \cap W_2)^{\circ} = W_1^{\circ} + W_2^{\circ}\)
+
+\end{enumerate}
+
+(Note:  \(W_i^{\circ}\) is the annihilator of \(W_i\).)
+
+{\bf Solution}
+
+\begin{enumerate}
+\item (S03.7)
+
+\item The claim follows from the fact that \(W^{\circ\circ} = W\) for any subspace \(W\) of \(V\).
+
+\end{enumerate}
+
+
+
+\item Let \(T : \mathbb{R}^3 \to \mathbb{R}^3\) be a rotation about the axis \((1, 0, -1)\) by an angle of \(30^{\circ}\) (you can use either orientation).
+
+\begin{enumerate}
+\item Find the matrix representation \(A \in M_3(\mathbb{R})\) of \(T\) in the standard basis.  (You do not have to multiply out matrices but must evaluate inverses.)
+
+\item Find all the eigenvalues of \(A \in M_3(\mathbb{R})\).
+
+\item Find all the eigenvalues of \(A \in M_3(\mathbb{C})\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let
+\[B_T = \matrixiiibyiii{ \frac{1}{\sqrt{2}}}{0}{\frac{1}{\sqrt{2}}}
+                       {                  0}{1}{                 0}
+                       {-\frac{1}{\sqrt{2}}}{0}{\frac{1}{\sqrt{2}}}.\]
+Then regarding the columns of \(B_T\) as an orthonormal basis, the matrix representation of \(T\) in this basis is
+\[[T]_{B_T} = \matrixiiibyiii{1}{               0}{              0}
+                             {0}{ \cos 30^{\circ}}{\sin 30^{\circ}}
+                             {0}{-\sin 30^{\circ}}{\cos 30^{\circ}},\]
+so the matrix representation of \(T\) in the standard basis is
+\[T = B_T [T]_{B_T} B_T^{-1}
+    = B_T [T]_{B_T} B_T^t.\]
+
+\item The only real eigenvalue of \(T\) is \(1\).
+
+\item Considering eigenvalues in \(\mathbb{C}\), we have additionally that \(e^{i 30^{\circ}}\) and \(e^{-i 30^{\circ}}\) are eigenvalues of \(T\).
+
+\end{enumerate}
+
+
+
+\item Let \(V\) be a finite dimensional real inner product space under \((\cdot, \cdot)\) and \(T : V \to V\) a linear operator.  Show the following are equivalent:
+
+\begin{enumerate}
+\item \((Tx,Ty) = (x,y)\) for all \(x,y \in V\).
+
+\item \(\|Tx\| = \|x\|\) for all \(x \in V\).
+
+\item \(T^*T = I\), where \(T^*\) is the adjoint of \(T\).
+
+\item \(TT^* = I\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+Clearly, (a) implies (b) by setting \(y = x\).  To show that (b) implies (a),
+\[2(Tx,Ty) = (T(x + y), T(x + y)) - (Tx,Tx) - (Ty,Ty) = (x + y, x + y) - (x,x) - (y,y) = 2(x,y).\]
+Suppose (a).  Then for \(x,y \in V\),
+\[(x, T^*Ty - y) = (x, T^*Ty) - (x,y) = (Tx,Ty) - (x,y) = 0,\]
+so letting \(x = T^*Ty - y\) allows us to conclude that \(T^*Ty - y = 0\) for all \(y\), hence \(T^*T = I\), and (c) is satisfied.  Conversely, given (c),
+\[(x, T^*Ty - y) = 0\]
+for all \(x,y \in V\), and the expansion above gives (a).
+
+(c) and (d) imply each other, since a left (right) inverse is also a right (left) inverse.
+
+
+
+\item Let \(T\) be a real symmetric matrix.  Show that \(T\) is similar to a diagonal matrix.
+
+(You cannot use the Spectral Theorem.)
+
+{\bf Solution}
+
+(F01.9)
+
+
+
+\end{enumerate}
+
+\end{document}

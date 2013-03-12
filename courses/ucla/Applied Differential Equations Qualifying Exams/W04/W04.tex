@@ -1,0 +1,294 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Applied Differential Equations Qualifying Exam, Winter 2004 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Consider the differential equation:
+\[\frac{\partial^2 u}{\partial x^2}(x,y) + \frac{\partial^2 u}{\partial y^2}(x,y) + \lambda u(x,y) = 0 \ \ \ \ (1)\]
+in the strip \(\{(x,y) \ | \ 0 < y < \pi, \ -\infty < x < \infty\}\) with boundary conditions
+\[u(x,0) = 0, \ u(x,\pi) = 0. \ \ \ \ (2)\]
+Find all bounded solutions of the boundary value problem (1),(2) when
+\begin{enumerate}
+\item \(\lambda = 0\),
+\item \(\lambda > 0\),
+\item \(\lambda < 0\).
+\end{enumerate}
+
+{\bf Solution}
+
+We assume \(u(x,y) = X(x) Y(y)\), and separate variables to get
+\[0 = X'' Y + X Y'' + \lambda X Y \ \Rightarrow \ \frac{Y''}{Y} = -\frac{X'' + \lambda X}{X} = \mu\]
+for some constant \(\mu\).  The boundary conditions on \(Y\), namely, \(Y(0) = Y(\pi) = 0\), imply that \(Y = \sin(k y)\) with \(\mu_k = -k^2\) for \(k \geq 1\) integral.  The equation that \(X\) then satisfies
+\[X'' + (\lambda - k^2) X = 0,\]
+subject to the condition that \(X(x)\) be bounded on \(-\infty < x < \infty\).  Such nontrivial solutions only exist when \(\lambda \geq k^2\).  It follows that, if \(\lambda \geq 1\),
+\[u(x,y) = \sum_{1 \leq k \leq \sqrt{\lambda}} c_k X_k(x) \sin(k y)\]
+for some constants \(c_k\).  Otherwise, the only bounded solution is the trivial solution \(u \equiv 0\).
+
+
+
+\item Let \(C^2 \left( \overline{\Omega} \right)\) be the space of twice continuously differentiable functions in the bounded smooth closed domain \(\overline{\Omega} \subset \mathbb{R}^2\).  Let \(u_0(x,y)\) be the function that minimizes the functional
+\[D(u) = \iint_{\Omega} \left( \left( \frac{\partial u}{\partial x}(x,y) \right)^2 + \left( \frac{\partial u}{\partial y}(x,y) \right)^2 + f(x,y) u(x,y) \right) dx dy + \int_{\partial\Omega} a(s) u(x(s),y(s))^2 ds,\]
+where \(f(x,y)\) and \(a(s)\) are given continuous functions and \(ds\) is the arclength element on \(\partial\Omega\).
+
+Find the differential equation and the boundary condition that \(u_0\) satisfies.
+
+{\bf Solution}
+
+If \(u = u_0\) minimizes \(D\), then \(g(\epsilon) = D(u + \epsilon v)\) must have vanishing derivative at \(\epsilon = 0\) for all \(v \in C^2 \left( \overline{\Omega} \right)\).  We have
+\[g(\epsilon) = D(u + \epsilon v) = \int_{\Omega} \left( |\nabla(u + \epsilon v)|^2 + f (u + \epsilon v) \right) + \int_{\partial\Omega} a (u + \epsilon v)^2,\]
+so we compute
+\begin{eqnarray*}
+g'(0) & = & \int_{\Omega} \left( 2 \nabla u \cdot \nabla v + f v \right) + \int_{\partial\Omega} 2 a u v \\
+      & = & \int_{\Omega} \left( -2 \Delta u + f \right) v + \int_{\partial\Omega} \left( 2 a u + \nabla u \cdot \nu \right) v.
+\end{eqnarray*}
+For \(g'(0)\) to vanish for all \(v\), we'd thus require \(\Delta u = \frac{1}{2} f\) on \(\Omega\) and \(2 a u + \partial u / \partial \nu = 0\) on \(\partial\Omega\).
+
+
+
+\item Let \(f(x_1,x_2)\) be a continuous function with compact support.  Define
+\[u(x_1,x_2) = \frac{1}{2 \pi} \iint_{\mathbb{R}^2} \frac{f(y_1,y_2)}{z - w} dy_1 dy_2\]
+where \(z = x_1 + i x_2\), \(w = y_1 + i y_2\).  Prove that
+\[\frac{\partial u}{\partial x_1} + i \frac{\partial u}{\partial x_2} = f(x_1, x_2) \ \text{in \(\mathbb{R}^2\)}.\]
+
+{\bf Solution}
+
+By a change of variables,
+\[u(x_1,x_2) = \frac{1}{2 \pi} \iint \frac{f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2.\]
+Due to the integrability of the integrand near \(0\), we can say that
+\[u(x_1,x_2) = \lim_{\epsilon \searrow 0} \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2.\]
+We thus compute, for \(\epsilon > 0\), using integration by parts (and keeping in mind that \(f\) vanishes for large \(|z|\)),
+\begin{eqnarray*}
+\lefteqn{\frac{\partial}{\partial x_1} \left( \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2 \right)} \\
+& = & \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{\frac{\partial}{\partial x_1} f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2 \\
+& = & -\frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{\frac{\partial}{\partial z_1} f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2 \\
+& = & -\frac{1}{2 \pi} \int_{|z| = \epsilon} f(x_1 - z_1, x_2 - z_2) \frac{1}{z_1 + i z_2} \cdot \nu_1 ds_{z_1,z_2} \\
+&   & + \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} f(x_1 - z_1, x_2 - z_2) \frac{\partial}{\partial z_1} \frac{1}{z_1 + i z_2} dz_1 dz_2.
+\end{eqnarray*}
+Now
+\[\frac{\partial}{\partial z_1} \frac{1}{z_1 + i z_2} = -\frac{1}{(z_1 + i z_2)^2},\]
+while, since \(\nu_1 = -z_1 / \epsilon\) (the inward normal) and \(z_1^2 + z_2^2 = \epsilon^2\) on \(|z| = \epsilon\),
+\[\frac{1}{z_1 + i z_2} \cdot \nu_1 = \frac{z_1 - i z_2}{z_1^2 + z_2^2} \cdot \left( -\frac{z_1}{\epsilon} \right) = -\frac{z_1^2}{\epsilon^3}.\]
+We thus obtain
+\begin{eqnarray*}
+\lefteqn{\frac{\partial}{\partial x_1} \left( \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2 \right)} \\
+& = & \frac{1}{2 \pi \epsilon^3} \int_{|z| = \epsilon} f(x_1 - z_1, x_2 - z_2) z_1^2 ds_{z_1,z_2} \\
+&   & \ - \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} f(x_1 - z_1, x_2 - z_2) \frac{1}{(z_1 + i z_2)^2} dz_1 dz_2.
+\end{eqnarray*}
+A similar derivation gives
+\begin{eqnarray*}
+\lefteqn{i \frac{\partial}{\partial x_2} \left( \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2 \right)} \\
+& = & \frac{1}{2 \pi \epsilon^3} \int_{|z| = \epsilon} f(x_1 - z_1, x_2 - z_2) z_2^2 ds_{z_1,z_2} \\
+&   & \ + \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} f(x_1 - z_1, x_2 - z_2) \frac{1}{(z_1 + i z_2)^2} dz_1 dz_2,
+\end{eqnarray*}
+and so
+\begin{eqnarray*}
+\lefteqn{\left( \frac{\partial}{\partial x_1} + i \frac{\partial}{\partial x_2} \right) \left( \frac{1}{2 \pi} \iint_{|z| \geq \epsilon} \frac{f(x_1 - z_1, x_2 - z_2)}{z_1 + i z_2} dz_1 dz_2 \right)} \\
+&  =  & \frac{1}{2 \pi \epsilon} \int_{|z| = \epsilon} f(x_1 - z_1, x_2 - z_2) ds_{z_1,z_2} \\
+& \to & f(x_1,x_2)
+\end{eqnarray*}
+as \(\epsilon \searrow 0\).  The claim then follows:
+\[\frac{\partial u}{\partial x_1} + i \frac{\partial u}{\partial x_2} = f(x_1,x_2).\]
+
+
+
+\item Consider the boundary value problem on \([0,\pi]\):
+\begin{eqnarray*}
+y''(x) + p(x) y(x) = f(x), & 0 < x < \pi, \ \ \ \ (1) \\
+y(0) = 0, & y'(\pi) = 0. \ \ \ \ (2)
+\end{eqnarray*}
+Find the smallest \(\lambda_0\) such that the boundary value problem (1),(2) has a unique solution whenever \(p(x) > \lambda_0\) for all \(x\).  Justify your answer.
+
+{\bf Solution}
+
+Denote by \(L\) the linear differential operator defined by \(Ly = y'' + p y\), with the given boundary conditions.  Then it is easy to see that \(L\) is self-adjoint in the usual \(L^2\)-inner product (because of the boundary conditions on \(y\)):
+\[(Ly,z) = \int (y'' + p y) z = \int y (z'' + p z) = (y,Lz),\]
+hence the eigenfunctions of \(L\) form an orthogonal basis, demonstrating existence of a solution to (1),(2).
+
+Uniqueness requires that the null space of \(L\) be trivial.  Suppose \(Ly = 0\).  Then
+\[0 = (Ly,y) = \int (y'' + p y) y = \int (p y^2 - (y')^2);\]
+If \(p \leq 0\), then we'd be able to conclude that \(y = 0\), and we'd get uniqueness.
+
+
+
+\item Consider the Laplace equation
+\[\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0, \ y > 0, \ -\infty < x < \infty \ \ \ \ (1)\]
+with the boundary condition
+\[\frac{\partial u}{\partial y}(x,0) - u(x,0) = f(x),\]
+where \(f(x) \in C_0^{\infty}(\mathbb{R}^1)\).  Find a bounded solution \(u(x,y)\) of (1),(2) and show that \(u(x,y) \to 0\) when \(|x| + y \to \infty\).
+
+{\bf Solution}
+
+[F06.4]
+
+
+
+\item Consider the first-order system \(u_t - u_x = v_t + v_x = 0\) in the diamond-shaped region \(-1 < x + t < 1\), \(-1 < x - t < 1\).  For each of the following boundary value problems, state whether this problem is well-posed.  If it is well-posed, find the solution.
+
+\begin{enumerate}
+\item \(u(x,t) = u_0(x + t)\) on \(x - t = -1\), \(v(x - t) = v_0(x - t)\) on \(x + t = -1\).
+
+\item \(v(x,t) = v_0(x + t)\) on \(x - t = -1\), \(u(x - t) = u_0(x - t)\) on \(x + t = -1\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+We note that the characteristics for \(u\) lie on \(x + t = \text{const}\), while the characteristics for \(v\) lie on \(x - t = \text{const}\).
+
+\begin{enumerate}
+\item The initial condition curves for \(u\) and \(v\) lie nontangentially (in fact, orthogonally) to their respective characteristic curves, hence this is well-posed, with solutions \(u(x,t) = u_0(x + t)\) and \(v(x,t) = v_0(x - t)\).
+
+\item The initial condition curves for \(u\) and \(v\) lie along their respective characteristic curves, hence this is not well-posed.
+
+\end{enumerate}
+
+
+
+\item For the two-point boundary value problem \(L f = f_{xx} - f\) on \(-\infty < x < \infty\) with \(\lim_{x \to \infty} f(x) = \lim_{x \to -\infty} f(x) = 0\), the Green's function \(G(x,x')\) solves \(LG = \delta(x - x')\), in which \(L\) acts on the variables \(x\).
+
+\begin{enumerate}
+\item Show that \(G(x,x') = G(x - x')\).
+
+\item For each \(x'\), show that
+\[G(x,x') = \begin{cases} a_- e^x, & \text{for \(x < x'\)} \\ a_+ e^{-x}, & \text{for \(x' < x\)} \end{cases},\]
+in which \(a_{\pm}\) are functions that depend only on \(x'\).
+
+\item Using (a), find the \(x'\) dependence of \(a_{\pm}\).
+
+\item Finish finding \(G(x,x')\) by using the jump conditions to find the remaining unknowns in \(a_{\pm}\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item By the definition of \(G\),
+\[f(x') = \int L(G(\cdot,x'))(x) f(x) dx = \int G(x,x') (Lf)(x) dx.\]
+Now consider \((x,x') \mapsto G(x - x',0)\).  By changing variables,
+\[\int G(x - x',0) (Lf)(x) dx = \int G(y,0) (Lf)(y + x') dy = \int G(y,0) L(f \circ \tau_{x'})(y) dy,\]
+where \(\tau_{x'}\) denotes the shift map \(y \mapsto y + x'\) (and it commutes with \(L\), justifying the last equality).  But by the first set of equalities, it follows that
+\[\int G(y,0) L(f \circ \tau_{x'})(y) dy = (f \circ \tau_{x'})(0) = f(x'),\]
+i.e.,
+\[\int G(x,x') (Lf)(x) dx = \int G(x - x',0) (Lf)(x) dx,\]
+and since this is true for all \(f\), we find that \(G(x,x') = G(x - x',0) = G(x - x')\).
+
+Alternatively, one can note that
+\begin{eqnarray*}
+\int G_x(x,x') (Lf)(x) dx
+& = & -\int G(x,x') (Lf')(x) dx \\
+& = & -f'(x') \\
+& = & -\frac{d}{dx'} \int G(x,x') (Lf)(x) dx \\
+& = & -\int G_{x'}(x,x') (Lf)(x) dx,
+\end{eqnarray*}
+so that \(G_x + G_{x'} = 0\), hence \(G(x,x') = G(x - x')\).
+
+\item Since
+\[L(G(\cdot,x'))(x) = \delta(x - x') = 0\]
+for \(x\) away from \(x'\), \(G(x,x')\) must satisfy \(G_{xx}(x,x') - G(x,x') = 0\) for \(x < x'\) and \(x > x'\).  The general solution is \(C_1(x') e^x + C_2(x') e^{-x}\), and the decay requirements of \(G(x,x')\) at \(x = \pm \infty\) dictates that
+\[G(x,x') = \begin{cases} a_-(x') e^x, & x < x' \\ a_+(x') e^{-x}, & x > x' \end{cases}.\]
+
+\item From (a),
+\[G(x,x') = G(x - x',0) = \begin{cases} a_-(0) e^{x - x'}, & x - x' < 0 \\ a_+(0) e^{-(x - x')}, & x - x' > 0 \end{cases},\]
+so we find that \(a_{\pm}(x') = a_{\pm}(0) e^{\pm x'}\).
+
+\item We have that
+\[f(x') = \int_{-\infty}^{\infty} G(x - x') (Lf)(x) dx \\
+        = \lim_{\epsilon \searrow 0} \int_{|x - x'| > \epsilon} G(x - x') (f''(x) - f(x)) dx.\]
+We compute
+\begin{eqnarray*}
+\lefteqn{\int_{|x - x'| > \epsilon} G(x - x') (f''(x) - f(x)) dx} \\
+& = & \left. -G(x - x') f'(x) \right|_{x' - \epsilon}^{x' + \epsilon} + \int_{|x - x'| > \epsilon} G'(x - x') (-f'(x) - f(x)) dx \\
+& = & G(-\epsilon) f'(x' - \epsilon) - G(\epsilon) f'(x' + \epsilon) + \int_{|x - x'| > \epsilon} G'(x - x') (-f'(x) - f(x)) dx.
+\end{eqnarray*}
+We desire the above boundary term to vanish (in the limit as \(\epsilon \searrow 0\)), hence we require \(G\) to be continuous at \(0\), hence \(a_-(0) = a_+(0)\).  We continue applying integration by parts one more time:
+\begin{eqnarray*}
+\int_{|x - x'| > \epsilon} G'(x - x') (-f'(x) - f(x)) dx
+& = & \left. G'(x - x') f(x) \right|_{x' - \epsilon}^{x' + \epsilon} \\
+& = & G'(\epsilon) f(x' + \epsilon) - G'(-\epsilon) f(x' - \epsilon) \\
+& = & -a_+(0) e^{-\epsilon} f(x' + \epsilon) - a_-(0) e^{\epsilon} f(x' - \epsilon).
+\end{eqnarray*}
+We desire this boundary term to tend to \(f(x')\) as \(\epsilon \searrow 0\), giving \(a_+(0) + a_-(0) = -1\).  It follows that \(a_{\pm}(0) = -1/2\), and
+\[G(x - x') = \begin{cases} -\frac{1}{2} e^{x - x'}, & x < x' \\ -\frac{1}{2} e^{-(x - x')}, & x > x' \end{cases} = -\frac{1}{2} e^{-|x - x'|}.\]
+
+\end{enumerate}
+
+
+
+\item For the ODE
+\begin{eqnarray*}
+u_t & = & u - v^2; \\
+v_t & = & v - u^2;
+\end{eqnarray*}
+do all of the following:
+
+\begin{enumerate}
+\item Find all stationary points.
+
+\item Analyze their type.
+
+\item Show that \(u = v\) is an invariant set for this ODE, i.e., if \(u(0) = v(0)\), then \(u(t) = v(t)\) for all \(t\).
+
+\item Draw the phase plane for this system.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(F(u,v) = (u - v^2, v - u^2)\).  Then a stationary point \((u,v)^*\) satisfies \(F((u,v)^*) = 0\), hence \((u,v)^* \in \{(0,0), (1,1)\}\).
+
+\item We compute
+\[DF(u,v) = \left( \begin{array}{cc} 1 & -2 v \\ -2 u & 1 \end{array} \right).\]
+
+\begin{itemize}
+\item \((u,v)^* = (0,0)\).  The sole eigenvalue of
+\[DF(0,0) = \left( \begin{array}{cc} 1 & 0 \\ 0 & 1 \end{array} \right)\]
+is \(\lambda = 1\).  Thus, \((0,0)\) is an unstable node.
+
+\item \((u,v)^* = (1,1)\).  The eigenvalues of
+\[DF(1,1) = \left( \begin{array}{cc} 1 & -2 \\ -2 & 1 \end{array} \right)\]
+are \(\lambda_{\pm} = 1 \pm 2\).  The corresponding eigenvalues are
+\[v_{\pm} = \left( \begin{array}{c} 1 \\ \mp 1 \end{array} \right).\]
+Thus, \((1,1)\) is a saddle.
+
+\end{itemize}
+
+\item Let \(w = u - v\).  Then it is easy to get that \(w\) satisfies
+\[w_t = (1 + u + v) w.\]
+If \(w(0) = 0\), then by uniqueness, \(w(t) = 0\) for all \(t\).  In other words, if \(u(0) = v(0)\), then \(u(t) = v(t)\) for all \(t\).
+
+\item
+
+\end{enumerate}
+
+
+
+\item Consider the initial value problem
+\[u_{tt} = \Delta u\]
+for \(x \in \mathbb{R}^d\) and \(t > 0\), and with \(u(x,0) = u_0(x)\), \(u_t(x,0) = u_1(x)\), in which \(u_0(x) = u_1(x) = 0\) for \(|x| > R_1\) and \(|x| > R_2\).  For \(d = 2\) and \(d = 3\), find the largest set \(\Omega_0 \subset \{x \in \mathbb{R}^d, \ t > 0\}\) on which \(u = 0\) for any choice of \(u_0\).
+
+{\bf Solution}
+
+Let \(R = \max \{R_1, R_2\}\).  First consider \(d = 2\).  The domain of a dependence for a point \((x_0,t_0) \in \mathbb{R}^2 \times \mathbb{R}\) is the interior of the disc \(|x - x_0| \leq t_0\) in \(\mathbb{R}^2\).  Thus, the largest set \(\Omega_0\) on which we can be sure that \(u = 0\) is \(\Omega_0 = \{(x,t) \in \mathbb{R}^2 \times \mathbb{R} \ | \ |x| > R + t\}\).  On the other hand, for the case \(d = 3\), the domain of dependence for a point \((x_0,t_0) \in \mathbb{R}^3 \times \mathbb{R}\) is the surface of the sphere \(|x - x_0| = t_0\) in \(\mathbb{R}^3\).  Thus, the largest set \(\Omega_0\) on which we can be sure that \(u = 0\) is \(\Omega_0 = \{(x,t) \in \mathbb{R}^3 \times \mathbb{R} \ | \ |x| > R + t \ \text{or} \ |x| < t - R\}\).
+
+
+
+\end{enumerate}
+
+\end{document}

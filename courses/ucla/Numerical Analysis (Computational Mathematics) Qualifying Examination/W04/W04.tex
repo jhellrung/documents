@@ -1,0 +1,300 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Numerical Analysis Qualifying Exam, Winter 2004 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item (5 Pts.) Let \(g(x)\) be a continuously differentiable function and consider the fixed point problem
+\[x = g(x).\]
+
+\begin{enumerate}
+\item What conditions on \(g(x)\) and \(\alpha\), \(0 < \alpha \leq 1\), will guarantee convergence of the iteration
+\begin{eqnarray*}
+x^* & = & g(x_n) \\
+x_{n + 1} & = & \alpha x^* + (1 - \alpha) x_n
+\end{eqnarray*}
+to the solution \(\overline{x}\) of the fixed point problem?
+
+\item Prove that under the conditions that you derived in (a) the solution \(\overline{x}\) of the fixed point problem is unique.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item By Taylor's Theorem,
+\[g(x_n) = g(\overline{x}) + g'(y_n)(x_n - \overline{x})
+         = \overline{x} + g'(y_n)(x_n - \overline{x})\]
+for some \(y_n\) between \(x_n\) and \(\overline{x}\).  Thus, the error in the \((n+1)^{st}\) iteration is related to the error in the \(n^{th}\) iteration by
+\begin{eqnarray*}
+e_{n + 1} & = & x_{n + 1} - \overline{x} \\
+          & = & \alpha g(x_n) + (1 - \alpha) x_n - \overline{x} \\
+          & = & \alpha (g(x_n) - \overline{x}) + (1 - \alpha) (x_n - \overline{x}) \\
+          & = & \alpha g'(y_n) (x_n - \overline{x}) + (1 - \alpha) (x_n - \overline{x}) \\
+          & = & \left( 1 - \alpha(1 - g'(y_n)) \right) e_n.
+\end{eqnarray*}
+Convergence will be guaranteed if
+\[\left| 1 - \alpha(1 - g'(y_n)) \right| < 1\]
+for all \(n\), i.e.,
+\[1 - \frac{2}{\alpha} < g'(y_n) < 1.\]
+This is certainly satisfied if
+\[1 - \frac{2}{\alpha} < \inf g', \ \sup g' < 1.\]
+
+\item Suppose some \(\overline{x}' \neq \overline{x}\) with \(g(\overline{x}') = \overline{x}'\).  Then by the Mean Value Theorem,
+\[g(\overline{x}) - g(\overline{x}') = g'(y) (\overline{x} - \overline{x}')\]
+for some \(y\) between \(\overline{x}\) and \(\overline{x}'\).  But this implies \(g'(y) = 1\), contradictory to the conditions established in (a).  It follows that the solution \(\overline{x}\) is unique.
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) For a given value of \(h > 0\) consider the two approximations to \(f'(x)\):
+\[D_h f = \frac{f(x + h) - f(x)}{h}; \ D_{2h} f = \frac{f(x + 2h) - f(x)}{2h}.\]
+Derive the coefficients \(\beta_1\) and \(\beta_2\) so that the combination of approximations \(\beta_1 D_h f + \beta_2 D_{2h} f\) is a second-order approximation to \(f'(x)\).
+
+{\bf Solution}
+
+By Taylor's Theorem,
+\begin{eqnarray*}
+D_h f & = & f'(x) + \frac{1}{2} f''(x) h + O(h^2); \\
+D_{2h} f & = & f'(x) + f''(x) h + O(h^2). \\
+\end{eqnarray*}
+Therefore,
+\[2 D_h f - D_{2h} f = f'(x) + O(h^2).\]
+
+
+
+\item (5 Pts.) Assume the points \(\{x_i\}\), for \(i = 1, \ldots, n + 1\), are distinct.  Prove that the polynomial of degree less than or equal to \(n\) that interpolates the data \(\{(x_i, f(x_i))\}\) is unique.
+
+{\bf Solution}
+
+(W06.3)
+
+
+
+\item (10 Pts.) Consider the following two-step numerical method for solving \(\frac{dy}{dt} = f(t,y(t))\):
+\[y_{i + 2} = y_{i + 1} + dt \left( \frac{3}{2} f(t_{i + 1}, y_{i + 1}) - \frac{1}{2} f(t_i, y_i) \right).\]
+
+\begin{enumerate}
+\item Is this method consistent?  Explain.
+
+\item What is the order of this method?  Show your work.
+
+\item Does this method converge?  Explain.
+
+\item Find a necessary and sufficient condition for the linear stability of the method (show your analysis, but without solving explicitly the obtained set of inequalities in the complex domain).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Yes, as shown by the derivation of the order below.
+
+\item Assume that \(y_i = y(t_i)\) and \(y_{i + 1} = y(t_{i + 1})\).  Then by Taylor's Theorem,
+\begin{eqnarray*}
+y_{i + 1} - y_i & = & y'(t_{i + 1}) dt + O(dt^2) \\
+                & = & f(t_{i+1},y_{i+1}) dt + O(dt^2),
+\end{eqnarray*}
+so
+\begin{eqnarray*}
+f(t_i,y_i) & = & f(t_{i+1},y_{i+1}) - f_t(t_{i+1},y_{i+1}) dt - f_y(t_{i+1},y_{i+1}) (y_{i + 1} - y_i) + O(dt^2) \\
+           & = & f(t_{i+1},y_{i+1}) - f_t(t_{i+1},y_{i+1}) dt - f_y(t_{i+1},y_{i+1}) f(t_{i+1},y_{i+1}) dt + O(dt^2),
+\end{eqnarray*}
+hence
+\begin{eqnarray*}
+y_{i + 2} & = & y_{i + 1} + dt \left( \frac{3}{2} f(t_{i + 1}, y_{i + 1}) - \frac{1}{2} f(t_i, y_i) \right) \\
+          & = & y_{i + 1} + f(t_{i+1},y_{i+1}) dt + \frac{1}{2} \left( f_t(t_{i+1},y_{i+1}) + f_y(t_{i+1},y_{i+1}) f(t_{i+1},y_{i+1}) \right) dt^2 + O(dt^3) \\
+          & = & y(t_{i+2}) + O(dt^3),
+\end{eqnarray*}
+showing the method to be second-order.
+
+\item The method will converge if \(f\) is Lipschitz.
+
+\item We apply the method to the model problem \(y'(t) = \lambda y(t)\):
+\begin{eqnarray*}
+\lefteqn{y_{i + 2} = y_{i + 1} + dt \left( \frac{3}{2} \lambda y_{i + 1} - \frac{1}{2} \lambda y_i \right)} \\
+& \Rightarrow & y_{i + 2} - \left( 1 + \frac{3}{2} \lambda dt \right) y_{i + 1} + \frac{1}{2} \lambda dt y_i = 0,
+\end{eqnarray*}
+giving the characteristic polynomial
+\[\rho(\theta) = \theta^2 - \left( 1 + \frac{3}{2} \lambda dt \right) \theta + \frac{1}{2} \lambda dt\]
+with roots
+\[\zeta_{\pm} = 1 + \frac{3}{2} \lambda dt \pm \sqrt{ \left( 1 + \frac{3}{2} \lambda dt \right)^2 - 4 \left( \frac{1}{2} \lambda dt \right)}.\]
+The stability region are those complex \(\lambda dt\) such that \(|\zeta_{\pm}| \leq 1\).
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the hyperbolic equation
+\[u_t + u_x + 2u_y = 0\]
+for \(t > 0\), \((x,y)\) in the square \([-1,1] \times [-1,1]\), and initial data
+\[u(x,y,0) = \phi(x,y).\]
+
+\begin{enumerate}
+\item Boundary conditions on \(u\) are imposed to be zero on which sides of the square?  Why?
+
+\item Set up a finite difference approximation which converges to the correct solution.  Justify your answer.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We should have \(u(-1,y) = u(x,-1) = 0\), since the waves will travel in the positive \(x\) and positive \(y\) direction.
+
+\item We consider using Crank-Nicolson:
+\begin{eqnarray*}
+P_{k,h_x,h_y} u^n_{\ell,m}
+& = & D_{t+} u^n_{\ell,m} + \frac{1}{2} \left( D_{x0} u^{n+1}_{\ell,m} + D_{x0} u^n_{\ell,m} \right)
+                          + 2 \frac{1}{2} \left( D_{y0} u^{n+1}_{\ell,m} + D_{y0} u^n_{\ell,m} \right) \\
+& = & \frac{u^{n+1}_{\ell,m} - u^n_{\ell,m}}{k}
+    + \frac{u^{n+1}_{\ell+1,m} - u^{n+1}_{\ell-1,m} + u^n_{\ell+1,m} - u^n_{\ell-1,m}}{4h_x} \\
+& + & \frac{u^{n+1}_{\ell,m+1} - u^{n+1}_{\ell,m-1} + u^n_{\ell,m+1} - u^n_{\ell,m-1}}{2h_x}; \\
+R_{k,h_x,h_y} f^n_{\ell,m} & = & \frac{f^{n+1}_{\ell,m} + f^n_{\ell,m}}{2}.
+\end{eqnarray*}
+The symbols \(p_{k,h_x,h_y}(s,\xi,\eta)\) and \(r_{k,h_x,h_y}(s,\xi,\eta)\) for these difference operators are
+\begin{eqnarray*}
+p_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left. P \left( e^{skn} e^{i(\xi h_x\ell + \eta h_ym)} \right) \right/ e^{i(\xi h_x\ell + \eta h_ym)} \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    + \frac{1}{4h_x} \left( e^{sk} + 1 \right) \left( e^{i\xi h_x} - e^{-i\xi h_x} \right) \\
+& + & \frac{1}{2h_y} \left( e^{sk} + 1 \right) \left( e^{i\eta h_y} - e^{-i\eta h_y} \right) \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    + i \left( e^{sk} + 1 \right) \left( \frac{\sin \xi h_x}{2h_x} + \frac{\sin \eta h_y}{h_y} \right); \\
+r_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left. R \left( e^{skn} e^{i(\xi h_x\ell + \eta h_ym)} \right) \right/ e^{i(\xi h_x\ell + \eta h_ym)} \\
+& = & \frac{1}{2} \left( e^{sk} + 1 \right).
+\end{eqnarray*}
+By Taylor's Theorem, these reduce to
+\begin{eqnarray*}
+p_{k,h_x,h_y}(s,\xi,\eta)
+& = & \left( 1 + \frac{1}{2} sk \right) s + i \left( 1 + \frac{1}{2} sk \right) \left( \xi + 2 \eta \right) + O(k^2) + O(h_x^2) + O(h_y^2) \\
+r_{k,h_x,h_y}(s,\xi,\eta)
+& = & 1 + \frac{1}{2} sk + O(k^2).
+\end{eqnarray*}
+We now note that the symbol of the differential operator \(P = \partial_t + \partial_x + 2\partial_y\) is
+\begin{eqnarray*}
+p(s,\xi,\eta)
+& = & \left. P \left( e^{st} e^{i(\xi x + \eta y)} \right) \right/ e^{st} e^{i(\xi x + \eta y)} \\
+& = & s + i\xi + 2i\eta,
+\end{eqnarray*}
+and so \(p_{k,h_x,h_y}(s,\xi,\eta) - r_{k,h_x,h_y}(s,\xi,\eta) p(s,\xi,\eta) \in O(k^2) + O(h_x^2) + O(h_y^2)\), i.e., second-order accuracy.
+
+We analyze stability by replacing \(g = e^{sk}\) in \(p_{k,h_x,h_y}(s,\xi,\eta) = 0\) and solve for \(g\) to determine the root of the amplification polynomial:
+\begin{eqnarray*}
+\lefteqn{\frac{1}{k} (g - 1) + i (g + 1) \left( \frac{\sin \xi h_x}{2h_x} + \frac{\sin \eta h_y}{h_y} \right) = 0} \\
+& \Rightarrow & g - 1 + i (g + 1) \left( \frac{1}{2} \lambda_x \sin \theta + \lambda_y \sin \phi \right) = 0 \\
+& \Rightarrow & g = \frac{1 - i \left( \frac{1}{2} \lambda_x \sin \theta + \lambda_y \sin \phi \right)}
+                         {1 + i \left( \frac{1}{2} \lambda_x \sin \theta + \lambda_y \sin \phi \right)},
+\end{eqnarray*}
+and we see that \(|g| = 1\) for all combinations of \(\lambda_x, \lambda_y, \theta, \phi\), and hence the scheme is unconditionally stable.  The Lax-Richtmyer Equivalence Theorem then implies that the scheme is convergent.
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the equation
+\[u_t = u_{xx}\]
+to be solved for \(t > 0\), \(x \in [-1,1]\); with periodic initial data
+\[u(x,0) \equiv \phi(x), \ \phi(x + 2) \equiv \phi(x);\]
+and \(u(x,t)\) periodic in \(x\) for \(t > 0\).  Give a fourth or higher order accurate convergent finite difference scheme.  Justify your answer.
+
+{\bf Solution}
+
+We consider using fourth-order Crank-Nicolson:
+\begin{eqnarray*}
+P_{k,h} u^n_m
+& = & D_{t+} u^n_m - \frac{1}{2} \left( D_x^{*2} u^{n+1}_m + D_x^{*2} u^n_m \right) \\
+& = & \frac{u^{n+1}_m - u^n_m}{k}
+    - \frac{-u^{n+1}_{m+2} + 16u^{n+1}_{m+1} - 30u^{n+1}_m + 16u^{n+1}_{m-1} - u^{n+1}_{m-2}}{24h^2} \\
+& - & \frac{-u^n_{m+2} + 16u^n_{m+1} - 30u^n_m + 16u^n_{m-1} - u^n_{m-2}}{24h^2}; \\
+R_{k,h} f^n_m & = & \frac{f^{n+1}_m + f^n_m}{2}.
+\end{eqnarray*}
+The symbols \(p_{k,h}(s,\xi)\) and \(r_{k,h}(s,\xi)\) for these difference operators are
+\begin{eqnarray*}
+p_{k,h}(s,\xi)
+& = & \left. P \left( e^{skn} e^{i\xi mh} \right) \right/ e^{skn} e^{i\xi mh} \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    - \frac{1}{24h^2} \left( e^{sk} + 1 \right) \left( -e^{2i\xi h} + 16e^{i\xi h} - 30 + 16e^{-i\xi h} - e^{-2i\xi h} \right) \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    + \frac{1}{24h^2} \left( e^{sk} + 1 \right) \left( 30 - 32 \cos \xi h + 2 \cos 2\xi h \right) \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    + \frac{1}{12h^2} \left( e^{sk} + 1 \right) \left( 15 - 16 \cos \xi h + 2 \cos^2 \xi h - 1 \right) \\
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    + \frac{1}{6h^2} \left( e^{sk} + 1 \right) (\cos \xi h - 7)(\cos \xi h - 1); \\
+r_{k,h}(s,\xi)
+& = & \left. R \left( e^{skn} e^{i\xi mh} \right) \right/ e^{skn} e^{i\xi mh} \\
+& = & \frac{1}{2} \left( e^{sk} + 1 \right).
+\end{eqnarray*}
+Using Taylor's Theorem to expand each symbol yields
+\begin{eqnarray*}
+p_{k,h}(s,\xi)
+& = & \frac{1}{k} \left( e^{sk} - 1 \right)
+    + \frac{1}{6h^2} \left( e^{sk} + 1 \right) (\cos \xi h - 7)(\cos \xi h - 1) \\
+& = & \left( 1 + \frac{1}{2} sk \right) s
+    + \left( 1 + \frac{1}{2} sk \right) \frac{1}{3h^2} \left( -6 - \frac{1}{2} \xi^2 h^2 + \frac{1}{24} \xi^4 h^4 + O(h^6) \right) \\
+&   & \left( -\frac{1}{2} \xi^2 h^2 + \frac{1}{24} \xi^4 h^4 + O(h^6) \right)
+    + O(k^2) \\
+& = & \left( 1 + \frac{1}{2} sk \right) \left( s + \xi^2 \right) + O(k^2) + O(h^4); \\
+r_{k,h}(s,\xi)
+& = & 1 + \frac{1}{2} sk + O(k^2).
+\end{eqnarray*}
+Now noting that the symbol of the differential operator \(P = \partial_t - \partial_x^2\) is \(p(s,\xi) = s + \xi^2\), we see immediately that \(p_{k,h}(s,\xi) - r_{k,h}(s,\xi) p(s,\xi) \in O(k^2) + O(h^4)\), verifying (2,4) order accuracy.
+
+For the stability analysis, we replace \(g = e^{sk}\) in \(p_{k,h}(s,\xi) = 0\) and solve for \(g\) to determine the roots of the amplification polynomial:
+\begin{eqnarray*}
+\lefteqn{\frac{1}{k} (g - 1) + \frac{1}{6h^2} (g + 1) (\cos \xi h - 7) (\cos \xi h - 1) = 0} \\
+& \Rightarrow & g - 1 + \frac{1}{6} \mu (g + 1) (\cos \theta - 7) (\cos \theta - 1) = 0 \\
+& \Rightarrow & g = \frac{1 - \frac{1}{6} \mu (\cos \theta - 7) (\cos \theta - 1)}
+                         {1 + \frac{1}{6} \mu (\cos \theta - 7) (\cos \theta - 1)},
+\end{eqnarray*}
+from which we see that \(|g| \leq 1\) for all \(\mu,\theta\), and hence the scheme is unconditionally stable.  It follows by the Lax-Richtmyer Equivalence Theorem that the scheme is convergent.
+
+
+
+\item (10 Pts.)
+
+\begin{enumerate}
+\item
+
+\item
+
+\item
+
+\item
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item
+
+\item
+
+\item
+
+\item
+
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}

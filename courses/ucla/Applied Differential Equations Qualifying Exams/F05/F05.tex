@@ -1,0 +1,330 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Applied Differential Equations Qualifying Exam, Fall 2005 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Consider the initial value problem
+\[u_t = v; \ v_t = |u|^{\alpha};\]
+\[u(t = 0) = u_0; \ v(t = 0) = 0.\]
+For what constant values of \(u_0 \geq 0\) and \(\alpha \geq 0\) is this problem well-posed, (a) locally in time, or (b) globally in time?  Prove your answer.
+
+{\bf Solution}
+
+Let \(F(u,v) = (v, |u|^{\alpha})\).
+
+\begin{enumerate}
+\item We're guaranteed well-posedness at least locally in time whenever \(F\) is locally Lipschitz around \((u_0,0)\), which is the case whenever \(u_0 > 0\) or \(\alpha \geq 1\).
+
+\item Assume we're in the case of well-posedness at least locally in time, i.e., \(u_0 > 0\) or \(\alpha \geq 1\).  Clearly if \(u_0 = 0\) (and \(\alpha \geq 1\)), the solution is \(u(t) = v(t) = 0\), hence this case is well-posed globally in time.  We therefore restrict our attention to \(u_0 > 0\) (and hence begin with no assumptions on \(\alpha\) aside from \(\alpha \geq 0\)).
+
+Note that \(u_{tt} = |u|^{\alpha} \geq 0\), and \(u_t(0) = v(0) = 0\), hence \(u_t\) remains nonnegative as \(t\) increases, from which we can conclude that \(u \geq u_0 > 0\) for all \(t\).  We can thus drop absolute value signs in what follows.  Further, since \(v_t = u^{\alpha} \geq u_0^{\alpha}\), we get that \(v \geq u_0^{\alpha} t\).  We can use this to conclude that \(u \geq u_0 + \frac{1}{2} u_0^{\alpha} t^2\), and so on.  This implies that \(u,v\) dominate \(t^n\) as \(t \to \infty\) for all finite \(n\).
+
+Since \(u\) remains away from \(0\) for all \(t\), well-posedness globally in time can only fail if we have finite-time blow-up, since the problem is well-posed everywhere locally in time.  We thus aim to estimate \(u\).  Starting with \(u_{tt} = u^{\alpha}\), we can multiply by \(u_t\), integrate, and apply initial conditions to obtain the relation
+\[v^2 = \frac{2}{\alpha + 1} \left( u^{\alpha + 1} - u_0^{\alpha + 1} \right).\]
+It follows that
+\[u_t = v = \left( \frac{2}{\alpha + 1} \left( u^{\alpha + 1} - u_0^{\alpha + 1} \right) \right)^{1/2}.\]
+By the previous remarks, \(u \to \infty\) as \(t \to \infty\), hence there exists a \(T > 0\) such that \(u^{\alpha + 1} > 2 u_0^{\alpha + 1}\) for \(t \geq T\).  For \(t \geq T\), then,
+\[u_t \geq \left( \frac{1}{\alpha + 1} u^{\alpha + 1} \right)^{1/2}.\]
+Suppose \(\alpha > 1\).  Then separating variables gives
+\[u(t) \geq \left( u(T)^{-(\alpha - 1)/2} - \frac{2}{(\alpha - 1)(\alpha + 1)^{1/2}} (t - T) \right)^{-2/(\alpha - 1)}\]
+for \(t \geq T\).  Clearly the large paranthesized expression,
+\[u(T)^{-(\alpha - 1)/2} - \frac{2}{(\alpha - 1)(\alpha + 1)^{1/2}} (t - T),\]
+vanishes for some finite \(t > T\), indicating a finite-time blow-up.  Hence the case \(\alpha > 1\) is not well-posed globally in time.
+
+On the other hand, if \(0 \leq \alpha < 1\), then
+\[u_t = \left( \frac{2}{\alpha + 1} \left( u^{\alpha + 1} - u_0^{\alpha + 1} \right) \right)^{1/2}
+      \leq \left( \frac{2}{\alpha + 1} u^{\alpha + 1} \right)^{1/2}\]
+gives, when separating variables,
+\[u(t) \leq \left( u_0^{(1 - \alpha)/2} + \frac{2}{(1 - \alpha) (1 + \alpha)^{1/2}} t \right)^{2/(1 - \alpha)},\]
+which is finite for all \(t\).  Hence the case \(0 \leq \alpha < 1\) is well-posed globally in time.
+
+For the case \(\alpha = 1\), one can solve the system directly, giving \(u = u_0 \cosh t\), which is also finite for all \(t\).  Hence the case \(\alpha = 1\) is well-posed globally in time.
+
+\end{enumerate}
+
+
+
+\item Consider the two-point boundary value operator \(L\) defined for \(u = u(x)\) by
+\[L u = u'' + u' - a (1 + x^2) u\]
+defined on the interval \(x \in [0,1]\) with boundary conditions
+\[u(0) = u(1) = 0\]
+with \(a > 0\).  Let \(\lambda_{a0}\) be the eigenvalue of smallest absolute value for \(L\) and let \(u_{a0}\) be the corresponding eigenfunction.  Do the following:
+
+\begin{enumerate}
+\item Find an inner product in terms of which \(L\) is self-adjoint.
+
+\item Show that \(\lambda_{a0} < 0\).
+
+\item Show that \(|\lambda_{a0}|\) is an increasing function of \(a\), i.e., if \(0 < a_1 < a_2\), then \(|\lambda_{a10}| < |\lambda_{a20}|\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We try using a weighted \(L^2\)-inner product with weighted function \(\phi\), and compute, using integration by parts,
+\begin{eqnarray*}
+(L u, v)_{\phi}
+& = & \int_0^1 (L u) v \phi dx \\
+& = & \int_0^1 \left( u'' + u' - a (1 + x^2) u \right) v \phi dx \\
+& = & \int_0^1 \left( u (v \phi)'' - u (v \phi)' - a (1 + x^2) u v \phi \right) dx \\
+& = & \int_0^1 u \left( (v \phi)'' - (v \phi)' - a (1 + x^2) v \phi \right) dx \\
+& = & \int_0^1 u \left( v'' \phi + 2 v' \phi' + v \phi'' - v' \phi - v \phi' - a (1 + x^2) v \phi \right) dx \\
+& = & \int_0^1 u \left( v'' + \left( 2 \frac{\phi'}{\phi} - 1 \right) v' + \frac{\phi'' - \phi'}{\phi} v - a (1 + x^2) v \right) \phi dx.
+\end{eqnarray*}
+We'd like this to equal \((u, L v)_{\phi}\), so for the paranthesized expression to be \(L v\), we'd require
+\begin{eqnarray*}
+2 \frac{\phi'}{\phi} - 1 = 1 & \Rightarrow & \phi' = \phi; \\
+\frac{\phi'' - \phi'}{\phi} = 0 & \Rightarrow & \phi'' = \phi'.
+\end{eqnarray*}
+We see that these are compatible conditions, both giving \(\phi(x) = e^x\).
+
+\item Let \((\lambda,u)\) be an eigenvalue/eigenfunction pair, and suppose \(u\) is normalized such that \(\max u = 1\).  Let \(x_0 \in [0,1]\) be the point at which \(u\) attains its maximum.  Then \(u'(x_0) = 0\) and \(u''(x_0) \leq 0\).  Thus
+\[0 = L u - \lambda u
+    = u'' + u' - \left( a (1 + x^2) + \lambda \right) u,\]
+and upon evaluation at \(x_0\), we find that
+\[a (1 + x_0)^2 + \lambda \leq 0 \ \Rightarrow \ \lambda < 0.\]
+Alternatively, we can compute
+\begin{eqnarray*}
+\lambda \|u\|_{\phi}^2
+& = & (\lambda u, u)_{\phi} \\
+& = & (L u, u)_{\phi} \\
+& = & \int_0^1 \left( u'' u + u' u - a (1 + x^2) u^2 \right) e^x dx \\
+& = & -\int_0^1 \left( (u')^2 + a (1 + x^2) u^2 \right) e^x dx \\
+& < & 0,
+\end{eqnarray*}
+since, by integration by parts,
+\[\int_0^1 u'' u e^x dx = -\int_0^1 \left( (u')^2 + u' u \right) e^x dx.\]
+We again conclude that \(\lambda < 0\).
+
+\item \(\lambda_{a0}\) is given by the Rayleigh Quotient
+\[\lambda_{a0} = \sup \frac{(L u, u)_{\phi}}{(u, u)_{\phi}}.\]
+Since \(\lambda_{a0} < 0\), the claim is shown once we demonstrate that \((L u, u)_{\phi}\) decreases as \(a\) increases for fixed \(u\)..  But this is clear from the expression in (b):
+\[(L u, u)_{\phi} = -\int_0^1 \left( (u')^2 + a (1 + x^2) u^2 \right) e^x dx.\]
+
+\end{enumerate}
+
+
+
+\item For the ODE \(f'' - f (f^2 - 1) = 0\) do the following:
+
+\begin{enumerate}
+\item Find the stationary points and classify their type.
+
+\item Find all periodic orbits and all orbits that connect stationary points.
+
+\item Draw a picture of the phase plane.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Rewrite the system as
+\[(f,f')' = (f', f(f^2 - 1)) = F(f,f').\]
+Stationary points \((f,f')^*\) satisfy \(F((f,f')^*) = 0\), giving \((f,f')^* \in \{(0,0), (\pm 1,0)\}\).  We compute
+\[DF(f,f') = \left( \begin{array}{cc} 0 & 1 \\ 3 f^2 - 1 & 0 \end{array} \right).\]
+
+\begin{itemize}
+\item \((f,f')^* = (0,0)\).  The eigenvalues of
+\[DF(0,0) = \left( \begin{array}{cc} 0 & 1 \\ -1 & 0 \end{array} \right)\]
+are \(\lambda_{\pm} = \pm i\).  Thus, \((0,0)\) is a center.
+
+\item \((f,f')^* = (1,0)\).  The eigenvalues of
+\[DF(1,0) = \left( \begin{array}{cc} 0 & 1 \\ 2 & 0 \end{array} \right)\]
+are \(\lambda_{\pm} = \pm \sqrt{2}\), with corresponding eigenvectors
+\[v_{\pm} = \left( \begin{array}{c} 1 \\ \pm \sqrt{2} \end{array} \right).\]
+Thus, \((1,0)\) is a saddle.
+
+\item \((f,f')^* = (-1,0)\).  Same as for \((1,0)\).
+
+\end{itemize}
+
+\item Multiplying by \(f'\) and integrating gives
+\[(f')^2 - \frac{1}{4} f^4 + \frac{1}{2} f^2 = C.\]
+Attempting to solve for \(f'\) in terms of \(f\) yields
+\[f' = \pm \sqrt{C + \frac{1}{4} f^4 - \frac{1}{2} f^2}.\]
+Periodic orbits correspond to \(0 < C < 1/2\), and the orbits that connect the saddle points \((\pm 1, 0)\) corresopnd to \(C = 1/2\).
+
+\item
+
+\end{enumerate}
+
+
+
+\item Consider the heat equation
+\[u_t = u_{yy}\]
+on the real line with initial data \(u_0 = 1\), \(y < 0\), \(u_0 = 0\), \(y > 0\).  (a) Show that the solution \(u(y,t)\) satisfies \(\lim_{t \to \infty} u(y,t) = 1/2\).  (b) Is the limit uniform in \(y\)?  Prove your answer.
+
+{\bf Solution}
+
+\begin{enumerate}
+\item The solution is given by
+\begin{eqnarray*}
+u(y,t) &  =  & \frac{1}{\sqrt{4 \pi t}} \int_{-\infty}^{\infty} e^{-(y - x)^2 / 4 t} u_0(x) dx \\
+       &  =  & \frac{1}{\sqrt{4 \pi t}} \int_{-\infty}^0 e^{-(y - x)^2 / 4 t} dx, \ \ \ \ \left[ z = \frac{x - y}{2 \sqrt{t}} \right] \\
+       &  =  & \frac{1}{\sqrt{\pi}} \int_{-\infty}^{-y / 2 \sqrt{t}} e^{-z^2} dz,
+\end{eqnarray*}
+which, as \(t \to \infty\) with \(y\) fixed, tends to
+\[\frac{1}{\sqrt{\pi}} \int_{-\infty}^0 e^{-z^2} dz = \frac{1}{2}.\]
+
+\item No, since, for fixed \(t > 0\), we still have \(u(y,t) \to 1\) as \(y \to -\infty\) and \(u(y,t) \to 0\) as \(y \to \infty\).
+
+\end{enumerate}
+
+
+
+\item The Cahn-Hilliard equation for phase separation of a binary alloy is
+\[u_t + \Delta \left( \epsilon \Delta u - \frac{1}{\epsilon} W'(u) \right) = 0,\]
+where \(W(u)\) is a smooth function of \(u\).  Show that
+\[E(u) = \epsilon \frac{1}{2} \int |\nabla u|^2 dx + \frac{1}{\epsilon} \int W(u) dx\]
+is a monotonically decreasing quantity for smooth solutions of the Cahn-Hilliard equation on the torus \(\mathbb{T}^n\).
+
+{\bf Solution}
+
+Using integration by parts (and noting that \(\partial\mathbb{T}^n = \emptyset\)), we compute
+\begin{eqnarray*}
+\frac{d}{dt} E(u)
+&   =  & \frac{d}{dt} \left( \epsilon \frac{1}{2} \int |\nabla u|^2 dx + \frac{1}{\epsilon} \int W(u) dx \right) \\
+&   =  & \epsilon \frac{1}{2} \int \left( 2 \nabla u \cdot \nabla (u_t) \right) dx + \frac{1}{\epsilon} \int W'(u) u_t dx \\
+&   =  & -\epsilon \int \Delta u u_t dx + \frac{1}{\epsilon} \int W'(u) u_t dx \\
+&   =  & \int \left( \frac{1}{\epsilon} W'(u) - \Delta u \right) u_t dx \\
+&   =  & \int \left( \frac{1}{\epsilon} W'(u) - \Delta u \right) \Delta \left( \frac{1}{\epsilon} W'(u) - \Delta u \right) dx \\
+&   =  & -\int \left| \nabla \left( \frac{1}{\epsilon} W'(u) - \Delta u \right) \right|^2 dx \\
+& \leq & 0.
+\end{eqnarray*}
+
+
+
+\item Let \(f\) be a smooth function defined on \(\mathbb{R}^3\) and suppose that \(\Delta \Delta f = 0\) for \(|x| \leq a\).  Show that
+\[\left( 4 \pi a^2 \right)^{-1} \int_{|x| = a} f(x) ds = f(0) + \frac{a^2}{6} \Delta f(0).\]
+Hint:  Do this first for spherically symmetric \(f\), i.e., for \(f(x) = f(r = |x|)\), for which \(\Delta = r^{-2} \partial_r \left( r^2 \partial_r \right)\).
+
+{\bf Solution}
+
+Let
+\[I(a) = \frac{1}{4 \pi a^2} \int_{|x| \leq a} f(x) ds = \frac{1}{4 \pi} \int_{|\xi| = 1} f(a\xi) ds(\xi).\]
+We compute \(I'(a)\):
+\begin{eqnarray*}
+I'(a) & = & \frac{1}{4 \pi} \int_{|\xi| = 1} \nabla f(a\xi) \cdot \xi ds(\xi) \\
+      & = & \frac{1}{4 \pi} \int_{|\xi| = 1} \nabla f(a\xi) \cdot \nu ds(\xi) \\
+      & = & \frac{1}{4 \pi a^2} \int_{|\xi| = 1} \nabla f(x) \cdot \nu ds \\
+      & = & \frac{1}{4 \pi a^2} \int_{|\xi| \leq 1} \Delta f(x) dx,
+\end{eqnarray*}
+where we have used the Divergence Theorem in the last equality.  But \(\Delta f\) is harmonic, hence satisfies the mean value property, so we have
+\[I'(a) = \frac{a}{3} \Delta f(0).\]
+Upon integrating and noting that \(I(0) = f(0)\), we obtain the claim:
+\[I(a) = f(0) + \frac{a^2}{6} \Delta f(0).\]
+
+
+
+\item Find the (entropy) solution for all time \(t > 0\) of the inviscid Burgers equation \(u_t + \frac{1}{2} (u^2)_x = 0\) with initial condition
+\[u(x,0) = \begin{cases} 0, & x < -1 \\ x + 1, & -1 < x < 0 \\ 1 - \frac{1}{2} x, & 0 < x < 2 \\ 0, & x > 2 \end{cases}.\]
+
+{\bf Solution}
+
+Denote \(g(x) = u(x,0)\), and, for the purposes of applying the method of characteristics, let \(y = t\), so that the PDE is \(uu_x + u_y = 0\).  The initial condition curve may be parametrized by \(s \mapsto (s,0,g(s)) = (x_0,y_0,z_0)\).  As mentioned, we use the method of characteristics, giving the system of ODEs
+\begin{eqnarray*}
+x'(t) & = & z; \\
+y'(t) & = & 1; \\
+z'(t) & = & 0.
+\end{eqnarray*}
+We can solve for \(y\) and \(z\) immediately:
+\begin{eqnarray*}
+y(t) & = & t + y_0 = t; \\
+z(t) & = & z_0 = g(s).
+\end{eqnarray*}
+It follows that
+\[x(t) = g(s) t + x_0 = g(s) t + s.\]
+To solve for \(s,t\) in terms of \(x,y\), we have immediately that \(t = y\), defining \(s\) implicitly by
+\[0 = g(s) y + s - x.\]
+This is invertible precisely when \(-1 < y < 2\) (this ensures that the \(s\)-derivative of the right-hand side never vanishes).  Since
+\[0 = g(s) y + s - x = \begin{cases} s - x, & s < -1 \\ (1 + y) s - x + y, & -1 < s < 0 \\ \left( 1 - \frac{1}{2} y \right) s - x + y, & 0 < s < 2 \\ s - x, & s > 2 \end{cases},\]
+we find that
+\[s = s(x,y) = \begin{cases} x, & x < -1 \\ \frac{x - y}{1 + y}, & -1 < x < y \\ \frac{x - y}{1 - \frac{1}{2} y}, & y < x < 2 \\ x, & x > 2 \end{cases}\]
+and the resulting solution is
+\[u(x,y) = z = g(s(x,y)) = \begin{cases} 0, & x < -1 \\ \frac{1 + x}{1 + y}, & -1 < x < y \\ \frac{2 - x}{2 - y}, & y < x < 2 \\ 0, & x > 2 \end{cases}.\]
+This solution evidently forms a shock at (particularly) \(y = 2\):
+\[u(x,2) = \begin{cases} 0, & x < -1 \\ \frac{1}{3} (1 + x), & -1 < x < 2 \\ 0, & x > 2 \end{cases}.\]
+To determine the propagation of the shock, we return to the original PDE and integrate with respect to \(x\) between \(x = a\) and \(x = b\) to obtain
+\[\frac{1}{2} u(b,y)^2 - \frac{1}{2} u(a,y)^2 + \frac{d}{dy} \int_a^b u(x,y) dx = 0.\]
+If the shock propagates along \(x = \xi(y)\), then taking \(a < \xi(y) < b\) gives
+\begin{eqnarray*}
+0 & = & \frac{1}{2} u(b,y)^2 - \frac{1}{2} u(a,y)^2 + \frac{d}{dy} \int_a^b u(x,y) dx \\
+  & = & \frac{1}{2} u(b,y)^2 - \frac{1}{2} u(a,y)^2 + \frac{d}{dy} \left( \int_a^{\xi(y)} u(x,y) dx + \int_{\xi(y)}^b u(x,y) dx \right) \\
+  & = & \frac{1}{2} u(b,y)^2 - \frac{1}{2} u(a,y)^2 \\
+  &   & \ + \xi'(y) u_{\ell}(\xi(y),y) + \int_a^{\xi(y)} u_y(x,y) dx - \xi'(y) u_r(\xi(y),y) + \int_{\xi(y)}^b u_y(x,y) dx,
+\end{eqnarray*}
+and letting \(a \nearrow \xi(y)\) and \(b \searrow \xi(y)\) gives
+\[\xi'(y) = \frac{\frac{1}{2} u_r(\xi(y),y)^2 - \frac{1}{2} u_{\ell}(\xi(y),y)^2}{u_r(\xi(y),y) - u_{\ell}(\xi(y),y)} = \frac{1}{2} \left( u_r(\xi(y),y) + u_{\ell}(\xi(y),y) \right),\]
+where \(u_r\) and \(u_{\ell}\) denote the values of \(u\) to the right and left of the shock, respectively.  In this case,
+\begin{eqnarray*}
+u_r(\xi(y),y) & = & 0; \\
+u_{\ell}(\xi(y),y) & = & \frac{1 + \xi(y)}{1 + y};
+\end{eqnarray*}
+so
+\[\xi'(y) = \frac{1 + \xi(y)}{2(1 + y)}\]
+with \(\xi(2) = 2\).  Solving for \(\xi\) yields
+\[\xi(y) = \sqrt{3 (1 + y)} - 1.\]
+The solution is thus (for \(y > 2\))
+\[u(x,y) = \begin{cases} 0, & x < -1 \\ \frac{1 + x}{1 + y}, & -1 < x < \sqrt{3 (1 + y)} - 1 \\ 0, & x > \sqrt{3 (1 + y)} - 1 \end{cases}.\]
+
+
+
+\item Consider the ``eikonal'' equation in \(\mathbb{R}^2\):
+\[\phi_x^2 + \phi_y^2 = 1\]
+on the domain \(0 < x < 2\pi\) and \(0 \leq y < \infty\), with periodic boundary conditions in \(x\) and boundary data
+\[\phi(x,0) = \cos x.\]
+Find a solution in an implicit form.
+
+{\bf Solution}
+
+For the purposes of applying the method of characteristics, let \(u = \phi\), so that the PDE is \(u_x^2 + u_y^2 = 1\).  We identify \(F(x,y,p,q) = (p^2 + q^2 - 1) / 2 = 0\), and parametrize the initial condition curve by \(s \mapsto (s, 0, \cos(s)) = (x_0,y_0,z_0)\).  To determine \(p_0 = \phi\) and \(q_0 = \psi\), we require
+\[0 = F(x_0,y_0,z_0,\phi,\psi) = \frac{1}{2} \left( \phi^2 + \psi^2 - 1 \right)\]
+and
+\[0 = z_0' - \phi x_0' - \psi y_0' = -\sin(s) - \phi,\]
+yielding \(\phi(s) = -\sin(s)\), \(\psi(s) = \pm \cos(s)\).  As mentioned, we use the method of characteristics, giving the system of ODEs
+\begin{eqnarray*}
+x' & = & F_p = p; \\
+y' & = & F_q = q; \\
+z' & = & p x' + q y' = p^2 + q^2 = 1; \\
+p' & = & -F_x - F_z p = 0; \\
+q' & = & -F_y - F_z q = 0.
+\end{eqnarray*}
+We can solve for \(z\), \(p\), and \(q\) immediately:
+\begin{eqnarray*}
+z(t) & = & t + z_0 = t + \cos(s); \\
+p(t) & = & p_0 = -\sin(s); \\
+q(t) & = & q_0 = \pm \cos(s).
+\end{eqnarray*}
+It follows that
+\begin{eqnarray*}
+x(t) & = & -t \sin(s) + x_0 = -t \sin(s) + s; \\
+y(t) & = & \pm t \cos(s) + y_0 = \pm t \cos(s).
+\end{eqnarray*}
+We can derive implicit equations that give \(s,t\) in terms of \(x,y\).  First, eliminating \(t\) in the equations for \(x\) and \(y\), we find that
+\[x = s \mp y \tan(s).\]
+
+
+
+
+
+\end{enumerate}
+
+\end{document}

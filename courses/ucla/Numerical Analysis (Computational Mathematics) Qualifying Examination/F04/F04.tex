@@ -1,0 +1,347 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Numerical Analysis Qualifying Exam, Fall 2004 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item (5 Pts.) Let \(\overline{x}\) be a root of a continuously differentiable function \(f(x) : \mathbb{R} \to \mathbb{R}\).  If \(x^*\) is an approximate root, then
+
+\begin{enumerate}
+\item Derive an expression that relates the magnitude of the residual at \(x^*\) to the magnitude of the error of the root \(x^*\).
+
+\item Give an example of a function where the magnitude of the residual at \(x^*\) over-estimates the error of the root \(x^*\).
+
+\item Give an example of a function where the magnitude of the residual at \(x^*\) under-estimates the error of the root \(x^*\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+
+\item By Taylor's Theorem,
+\[f(x^*) = f(x) + f'(\alpha) (x^* - x)
+         = f'(\alpha) (x^* - x)\]
+for some \(\alpha\) between \(x^*\) and \(x\), so
+\[|f(x^*)| = |f'(\alpha)| |x^* - x|.\]
+
+\item \(f(x) = 2x\)
+
+\item \(f(x) = \frac{1}{2} x\)
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) Consider the integration formula
+\[\int_{-1}^1 f(x) dx \approx f(\alpha_1) \beta + f(\alpha_2) \beta.\]
+
+\begin{enumerate}
+\item Determine \(\alpha_1\), \(\alpha_2\), and \(\beta\) so that this formula is exact for all quadratic polynomials.
+
+\item What is the minimal degree polynomial for which the formula with the coefficients derived in (a) is not exact?
+
+\item What is the expected order of a composite integration method based upon the formula with coefficients derived in (a)?
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(f(x) = ax^2 + bx + c\).  Then, on the one hand,
+\[\int_{-1}^1 f(x) dx
+  = \left. \frac{1}{3} ax^3 + \frac{1}{2} bx^2 + cx \right|_{-1}^1
+  = \frac{2}{3} a + 2c,\]
+and on the other hand,
+\[\beta \left( f(\alpha_1) + f(\alpha_2) \right)
+  = \beta (\alpha_1^2 + \alpha_2^2) a
+  + \beta (\alpha_1 + \alpha_2) b
+  + 2 \beta c.\]
+Equating coefficients on the above two expression, we find that \(\alpha_1 = -\alpha_2 = \frac{1}{\sqrt{3}}\) and \(\beta = 1\).
+
+\item \(3\)
+
+\item Given that we wish to integrate \(f\) over \([-h,h]\), we would approximate \(f\) by a quadratic \(q\) to \(O(h^3)\) over \([-h,h]\).  The integral over \([-h,h]\) of \(f\) could then be approximated by the integral of \(q\) over \([-h,h]\) to \(O(h^4)\).  The composite integration scheme would then be accurate to \(O(h^3)\).
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) Let \(A \in \mathbb{R}^{n \times m}\) and \(b \in \mathbb{R}^n\) with \(m > n\).  For \(\sigma > 0\) consider the following minimization problem:
+\[\min_{x \in \mathbb{R}^m} \left( \|Ax - b\|_2^2 + \sigma^2 \|x\|_2^2 \right).\]
+Derive the equation that the optimal solution satisfies and explain why the optimal solution is unique.
+
+{\bf Solution}
+
+Let
+\[F(x) = \|Ax - b\|_2^2 + \sigma^2 \|x\|_2^2\]
+and suppose \(x^*\) minimizes \(F\).  Then for any \(\epsilon \in \mathbb{R}^m\),
+\[F(x^*) \leq F(x^* + \epsilon).\]
+In other words, if \(g(\epsilon) = F(x^* + \epsilon)\), \(g\) has a minimum at \(\epsilon = 0\), i.e., \((\nabla g)(0) = 0\).  We thus compute
+\begin{eqnarray*}
+\nabla g & = & \nabla \left( \|A(x^* + \epsilon) - b\|_2^2 + \sigma^2 \|x^* + \epsilon\|_2^2 \right) \\
+         & = & 2 A^T (A(x^* + \epsilon) - b) + 2 \sigma^2 (x^* + \epsilon),
+\end{eqnarray*}
+and at \(\epsilon = 0\),
+\[0 = (\nabla g)(0) = 2 \left( (A^T A + \sigma^2 I) x^* - A^T b \right)\]
+and we find that \(x^*\) satisfies \((A^T A + \sigma^2 I) x^* = A^T b\).
+
+We will show that all eigenvalues of \(A^T A + \sigma^2 I\) are positive, hence \(A^T A + \sigma^2 I\) will be nonsingular, and it will follow that \(x^*\) is unique.  To this end, let \(\lambda\) be an eigenvalue of \(A^T A + \sigma^2 I\) and \(x\) a corresponding eigenvector.  Then
+\begin{eqnarray*}
+\lefteqn{(A^T A + \sigma^2 I) x = \lambda x} \\
+& \Rightarrow & x^T A^T A x + x^T \sigma^2 x = x^T \lambda x \\
+& \Rightarrow & \|Ax\|_2^2 + \sigma^2 \|x\|_2^2 = \lambda \|x\|_2^2 \\
+& \Rightarrow & \lambda = \sigma^2 + \frac{\|Ax\|_2^2}{\|x\|_2^2} > 0
+\end{eqnarray*}
+since \(\sigma > 0\).  By the previous comments, we have that \(x^*\) is unique.
+
+
+
+\item (10 Pts.) Show that the one-step method given by
+\begin{eqnarray*}
+k_1 & = & f(t^n,y^n), \\
+k_2 & = & f \left( t^n + \frac{h}{2}, y^n + \frac{h}{2} k_1 \right), \\
+k_3 & = & f \left( t^n + h, y^n + h (-k_1 + 2k_2) \right), \\
+y^{n + 1} & = & y^n + \frac{h}{6} \left( k_1 + 4k_2 + k_3 \right) \\
+\end{eqnarray*}
+for solving \(y'(t) = f(t,y(t))\) is third-order.
+
+{\bf Solution}
+
+To simplify the notation, let \(f\), \(f_t\), \(f_y\), etc.; denote \(f(t^n,y^n)\), \(f_t(t^n,y^n)\), \(f_y(t^n,y^n)\), etc.; respectively.  We use Taylor's Theorem to expand each intermediate variable out to \(O(h^3)\):
+\[k_1 = f\]
+\begin{eqnarray*}
+k_2 & = & f \left( t^n + \frac{h}{2}, y^n + \frac{h}{2} k_1 \right) \\
+    & = & f + f_t \frac{h}{2} + f_y \frac{h}{2} k_1
+            + \frac{1}{2} f_{tt} \frac{h^2}{4} + f_{ty} \frac{h^2}{4} k_1 + \frac{1}{2} f_{yy} \frac{h^2}{4} k_1^2
+            + O(h^3) \\
+    & = & f + \left( \frac{1}{2} f_t + \frac{1}{2} f_y f \right) h
+            + \left( \frac{1}{8} f_{tt} + \frac{1}{4} f_{ty} f + \frac{1}{8} f_{yy} f^2 \right) h^2
+            + O(h^3)
+\end{eqnarray*}
+\begin{eqnarray*}
+k_3 & = & f \left( t^n + h, y^n + h (-k_1 + 2k_2) \right) \\
+    & = & f + f_t h + f_y h (-k_1 + 2k_2)
+            + \frac{1}{2} f_{tt} h^2 + f_{ty} h^2 (-k_1 + 2k_2) + \frac{1}{2} f_{yy} h^2 (-k_1 + 2k_1)^2
+            + O(h^3).
+\end{eqnarray*}
+We work on simplifying out each term in \(k_3\) with \(-k_1 + 2k_2\) separately and only up to \(O(h^3)\):
+\begin{eqnarray*}
+f_y h (-k_1 + 2k_2)
+& = & f_y h \left( f + \left( f_t + f_y f \right) h + O(h^2) \right) \\
+& = & f_y f h + \left( f_t f_y + f_y^2 f \right) h^2 + O(h^3) \\
+f_{ty} h^2 (-k_1 + 2k_2)
+& = & f_{ty} h^2 \left( f + O(h) \right) \\
+& = & f_{ty} f h^2 + O(h^3) \\
+\frac{1}{2} f_{yy} h^2 (-k_1 + 2k_1)^2
+& = & \frac{1}{2} f_{yy} h^2 \left( f + O(h) \right)^2 \\
+& = & \frac{1}{2} f_{yy} f^2 h^2 + O(h^3).
+\end{eqnarray*}
+The expression for \(k_3\) now becomes
+\begin{eqnarray*}
+k_3 & = & f + f_t h + f_y h (-k_1 + 2k_2)
+            + \frac{1}{2} f_{tt} h^2 + f_{ty} h^2 (-k_1 + 2k_2) + \frac{1}{2} f_{yy} h^2 (-k_1 + 2k_1)^2
+            + O(h^3) \\
+    & = & f + f_t h + \left( f_y f h + \left( f_t f_y + f_y^2 f \right) h^2 \right)
+            + \frac{1}{2} f_{tt} h^2 + \left( f_{ty} f h^2 \right) + \left( \frac{1}{2} f_{yy} f^2 h^2 \right)
+            + O(h^3) \\
+    & = & f + \left( f_t + f_y f \right) h
+            + \left( f_t f_y + f_y^2 f + \frac{1}{2} f_{tt} + f_{ty} f + \frac{1}{2} f_{yy} f^2 \right) h^2
+            + O(h^3).
+\end{eqnarray*}
+We can now evaluate the quantity \(k_1 + 4k_2 + k_3\):
+\begin{eqnarray*}
+k_1 + 4k_2 + k_3
+& = & f \\
+& + & 4 \left( f + \left( \frac{1}{2} f_t + \frac{1}{2} f_y f \right) h
+                 + \left( \frac{1}{8} f_{tt} + \frac{1}{4} f_{ty} f + \frac{1}{8} f_{yy} f^2 \right) h^2
+                 + O(h^3) \right) \\
+& + & f + \left( f_t + f_y f \right) h
+        + \left( f_t f_y + f_y^2 f + \frac{1}{2} f_{tt} + f_{ty} f + \frac{1}{2} f_{yy} f^2 \right) h^2
+        + O(h^3) \\
+& = & 6f + 3 \left( f_t + f_y f \right) h
+         + \left( f_{tt} + 2 f_{ty} f + f_{yy} f^2 + f_y f_t + f_y^2 f \right) h^2
+         + O(h^3)
+\end{eqnarray*}
+and so
+\begin{eqnarray*}
+y^{n + 1} & = & y^n + \frac{h}{6} \left( k_1 + 4k_2 + k_3 \right) \\
+          & = & y^n + f h
+                    + \frac{1}{2} \left( f_t + f_y f \right) h^2
+                    + \frac{1}{6} \left( f_{tt} + 2 f_{ty} f + f_{yy} f^2 + f_y f_t + f_y^2 f \right) h^3
+                    + O(h^4).
+\end{eqnarray*}
+It is easy to see that this agrees with \(y(t^n+h)\) to \(O(h^4)\):
+\begin{eqnarray*}
+y'(t^n) & = & f \\
+y''(t^n) & = & f_t + f_y f \\
+y^{(3)}(t^n) & = & f_{tt} + f_{ty} f + f_{ty} f + f_{yy} f^2 + f_y f_t + f_y^2 f;
+\end{eqnarray*}
+therefore the method is indeed third-order.
+
+
+
+\item (10 Pts.) Given the second-order partial differential equation
+\[u_{tt} + 2bu_{tx} = a^2 u_{xx} + cu_x + du_t + eu + f(t,x)\]
+to be solved for \(t > 0\), \(0 \leq x \leq 2\pi\), with \(u(x,t)\) periodic in \(x\) of period \(2\pi\):
+
+\begin{enumerate}
+\item For what values of \(a,b\) is the initial value problem with initial data
+\begin{eqnarray*}
+u(x,0) & = & u_0(x) \\
+u_t(x,0) & = & u_1(x)
+\end{eqnarray*}
+well-posed?
+
+\item Write a stable convergent finite difference approximation for this problem.  Justify your answer.
+
+\end{enumerate}
+
+Hint:  You might consider making this into a first-order system of equations.
+
+{\bf Solution}
+
+\begin{enumerate}
+\item The symbol \(p(s,\xi)\) of the differential operator \(P = \partial_t^2 + 2b\partial_{tx} - a^2\partial_x^2 - c\partial_x - d\partial_t - e\) is
+\begin{eqnarray*}
+p(s,\xi)
+& = & \left. P \left( e^{st} e^{i\xi x} \right) \right/ e^{st} e^{i\xi x} \\
+& = & s^2 + 2 i b s \xi + a^2 \xi^2 - i c \xi - d s - e \\
+& = & s^2 + (2 i b \xi - d) s + a^2 \xi^2 - i c \xi - e.
+\end{eqnarray*}
+The roots of the symbol (as a function of \(s\)) are then
+\begin{eqnarray*}
+q_{\pm}(\xi)
+& = & \frac{1}{2} \left( d - 2 i b \xi \pm \sqrt{(2 i b \xi - d)^2 - 4 \left( a^2 \xi^2 - i c \xi - e \right)} \right) \\
+& = & \frac{d}{2} - i b \xi \pm \sqrt{d^2 + 4e + 4i (c - bd) \xi - 4 (a^2 + b^2) \xi^2}.
+\end{eqnarray*}
+Well-posedness requires that \(\Re(q_{\pm})\) be bounded above for all \(\xi\).  But this is indeed the case regardless of the values of \(a, \ldots, e\) so long as \(a^2 + b^2 > 0\).  For certainly
+\[\Re \left( \frac{d}{2} - i b \xi \right) = \frac{d}{2}\]
+is bounded, while for large enough \(|\xi|\),
+\[4 (a^2 + b^2) \xi^2 - d^2 - 4e > 4 |c - bd| |\xi|,\]
+and hence the square root, for large enough \(|\xi|\), has negative real part.  It follows by continuity that
+\[\Re \left( \sqrt{d^2 + 4e + 4i (c - bd) \xi - 4 (a^2 + b^2) \xi^2} \right)\]
+is bounded for all \(\xi \in \mathbb{R}\), hence the problem is well-posed for any \(a, \ldots, e\) so long as \(a^2 + b^2 > 0\).
+
+Alternatively, we can rewrite the equation as a system.  Introduce
+\[U(t,x) = \left( \begin{array}{c} u(x,t) \\ u_t(x,t) \\ u_x(x,t) \end{array} \right);\]
+then we find that
+\[U_t = \left( \begin{array}{ccc} 0 & 0 & 0 \\ 0 & -2b & a^2 \\ 0 & 1 & 0 \end{array} \right) U_x
+      + \left( \begin{array}{ccc} 0 & 1 & 0 \\ e & d & c \\ 0 & 0 & 0 \end{array} \right) U
+      + \left( \begin{array}{c} 0 \\ f(t,x) \\ 0 \end{array} \right).\]
+For well-posedness, we can ignore the inhomogeneous and lower-order terms (\(U\)) (as long as not both \(a\) and \(b\) are \(0\)), and thus consider the well-posedness of the system
+\[U_t = \left( \begin{array}{ccc} 0 & 0 & 0 \\ 0 & -2b & a^2 \\ 0 & 1 & 0 \end{array} \right) U_x.\]
+We then have, after a Fourier transform in space, \(\widehat{U}_t = Q(\xi) \widehat{U}\), where
+\[Q(\xi) = \left( \begin{array}{ccc} 0 & 0 & 0 \\ 0 & -2ib\xi & ia^2\xi \\ 0 & i\xi & 0 \end{array} \right),\]
+which has characteristic equation
+\begin{eqnarray*}
+\det(qI - Q(\xi))
+& = & \left| \begin{array}{ccc} q & 0 & 0 \\ 0 & q + 2ib\xi & -ia^2\xi \\ 0 & -i\xi & q \end{array} \right| \\
+& = & q \left( q^2 + 2ib\xi q + a^2\xi^2 \right)
+\end{eqnarray*}
+with roots
+\[q_0(\xi) = 0, \ q_{\pm}(\xi) = i \left( -b \pm \sqrt{a^2 + b^2} \right) \xi,\]
+which are both purely imaginary for all \(\xi\) (i.e., \(\Re(q)\) is bounded for all roots \(q\)).  Therefore, the system is well-posed so long as not both \(a\) and \(b\) are \(0\).
+
+\item We consider using Lax-Wendroff for the equivalent system for \(U\).  To simplify the notation, write
+\[U_t = A U_x + B U + F.\]
+By Taylor's Theorem (where \(U\), \(U_t\), etc.; denote \(U(t,x)\), \(U_t(t,x)\), etc.),
+\[U(t+k,x) = U + U_t k + \frac{1}{2} U_{tt} k^2 + O(k^3).\]
+We can substitute the time derivatives of \(U\) for space derivatives using \(U_t = AU_x + BU + F\):
+\begin{eqnarray*}
+U_t & = & A U_x + B U + F \\
+U_{tt} & = & \left( A U_x + B U + F \right)_t \\
+       & = & A \left( U_t \right)_x + B U_t + F_t \\
+       & = & A \left( A U_x + B U + F \right)_x + B \left( A U_x + B U + F \right) + F_t \\
+       & = & A^2 U_{xx} + (AB + BA) U_x + B^2 U + B F + F_t + A F_x,
+\end{eqnarray*}
+so
+\begin{eqnarray*}
+U(t + k, x) & = & U + \left( A U_x + B U + F \right) k \\
+            & + & \frac{1}{2} \left( A^2 U_{xx} + (AB + BA) U_x + B^2 U + B F + F_t + A F_x \right) k^2 + O(k^3) \\
+            & = & \frac{1}{2} A^2 k^2 U_{xx}
+                + \left( A k + \frac{1}{2} (AB + BA) k^2 \right) U_x
+                + \left( I + B k + \frac{1}{2} B^2 k^2 \right) U \\
+            & + & \left( I k + \frac{1}{2} B k^2 \right) F
+                + \frac{1}{2} k^2 F_t
+                + \frac{1}{2} A k^2 F_x
+                + O(k^3).
+\end{eqnarray*}
+By using the approximations
+\begin{eqnarray*}
+U_{xx} & = & D_x^2 U^n_m + O(h^2) \\
+U_x & = & D_{x0} U^n_m + O(h^2) \\
+F_t & = & D_{t0} F^n_m + O(k^2) \\
+F_x & = & D_{x0} F^n_m + O(h^2)
+\end{eqnarray*}
+we obtain a second-order accurate (explicit) scheme.
+
+For the stability analysis, we can safely ignore the lower-order term \(BU\), and thus just consider the system \(U_t = A U_x\).  The Lax-Wendroff scheme above then simplifies to
+\begin{eqnarray*}
+U^{n+1}_m & = & \frac{1}{2} k^2 A^2 D_x^2 U^n_m + Ak D_{x0} U^n_m + U^n_m \\
+          & = & \frac{1}{2} k^2 A^2 \frac{1}{h^2} \left( U^n_{m+1} - 2U^n_m + U^n_{m-1} \right)
+              + Ak \frac{1}{2h} \left( U^n_{m+1} - U^n_{m-1} \right)
+              + U^n_m,
+\end{eqnarray*}
+and hence the amplification matrix \(G\) is (substituting \(G^n e^{i\xi mh} = U^n_m\))
+\begin{eqnarray*}
+G & = & \frac{k^2}{2h^2} A^2 \left( e^{i\xi h} - 2 + e^{-i\xi h} \right)
+      + \frac{k}{2h} A \left( e^{i\xi h} - e^{-i\xi h} \right)
+      + 1 \\
+  & = & 1 - \lambda^2 A^2 (1 - \cos \theta) + i \lambda A \sin \theta.
+\end{eqnarray*}
+Since \(G\) is a polynomial in \(A\), it shares precisely the same eigenvectors as \(A\), and the eigenvalues are related by
+\[g = 1 - \lambda^2 q^2 (1 - \cos \theta) + i \lambda q \sin \theta,\]
+for \(q\) an eigenvalue of \(A\) and \(g\) an eigenvalue of \(G\).  Thus
+\begin{eqnarray*}
+|g| & = & \left( 1 - \lambda^2 q^2 (1 - \cos \theta) \right)^2 + \lambda^2 q^2 \sin^2 \theta \\
+    & = & \left( 1 - 2 \lambda^2 q^2 \sin^2 \frac{\theta}{2} \right)^2 + 4 \lambda^2 q^2 \sin^2 \frac{\theta}{2} \cos^2 \frac{\theta}{2} \\
+    & = & 1 - 4 \lambda^2 q^2 \sin^2 \frac{\theta}{2} + 4 \lambda^4 q^4 \sin^4 \frac{\theta}{2} + 4 \lambda^2 q^2 \sin^2 \frac{\theta}{2} \cos^2 \frac{\theta}{2} \\
+    & = & 1 - 4 \lambda^2 q^2 \sin^2 \frac{\theta}{2} \left( 1 - \lambda^2 q^2 \sin^2 \frac{\theta}{2} - \cos^2 \frac{\theta}{2} \right) \\
+    & = & 1 - 4 \lambda^2 q^2 \left( 1 - \lambda^2 q^2 \right) \sin^4 \frac{\theta}{2}
+\end{eqnarray*},
+and we see that \(|g| \leq 1\) if and only if \(|\lambda q| \leq 1\).  The eigenvalues of \(A\) were (effectively) found in (a):
+\[q = 0, \ -b \pm \sqrt{a^2 + b^2}.\]
+Stability of the scheme thus requires
+\[\lambda \left( |b| + \sqrt{a^2 + b^2} \right) \leq 1.\]
+By the Lax-Richtmyer Equivalence Theorem, with this choice of \(\lambda\), the scheme is convergent.
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the equation
+\[u_t = u_{xx} + u_x\]
+to be solved for \(t > 0\), \(0 \leq x \leq 2\pi\), with \(u(x,t)\) periodic in \(x\) of period \(2\pi\), and initial data \(u(x,0) = u_0(x)\).
+
+Write an unconditionally stable convergent second-order accurate scheme for this equation and prove that your scheme satisfies these properties.
+
+{\bf Solution}
+
+(W06.6)
+
+
+
+\item
+
+{\bf Solution}
+
+
+
+\end{enumerate}
+
+\end{document}

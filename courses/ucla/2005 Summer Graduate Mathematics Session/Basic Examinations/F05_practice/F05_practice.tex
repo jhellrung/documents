@@ -1,0 +1,167 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\im{\mathop{\rm im}\nolimits}
+\def\ker{\mathop{\rm ker}\nolimits}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, F05 (practice) \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Let \((X,d)\) and \((Y,\rho)\) be connected metric spaces, and give the product \(X \times Y\) the metric
+\[D((x,y), (x',y')) = d(x,x') + \rho(y,y').\]
+Prove the metric space \(X \times Y\) is connected.
+
+{\bf Solution}
+
+Suppose \(X \times Y\) is not connected.  Then there exists nonempty sets \(A,B\) such that \(X \times Y = A \cup B\) with \(A \cap \overline{B} = \overline{A} \cap B = \emptyset\).  For \(x \in X\), define
+\[P_x = \{(x,y) \in X \times Y \ | \ y \in Y\}.\]
+Then \(P_x\) is isomorphic to \(Y\); it follows that \(A \cap P_x\) and \(B \cap P_x\) form separated sets of \(P_x\), thus, as \(Y\) is connected, either \(A \cap P_x\) or \(B \cap P_x\) is empty.  Thus \(P_x\) is completely contained within either \(A\) or \(B\) for all \(x \in X\).  Likewise, if we define
+\[Q_y = \{(x,y) \in X \times Y \ | \ x \in X\}\]
+for \(x \in X\), \(Q_y\) is completely contained in either \(A\) or \(B\) for every \(y \in Y\).
+
+Now \(A\) and \(B\) are both nonempty, hence there exists some \(x_A,x_B \in X\) such that \(P_{x_A} \subset A\) and \(P_{x_B} \subset B\).  Likewise, there exists some \(y_A, y_B \in Y\) such that \(Q_{y_A} \subset A\) and \(Q_{y_B} \subset B\).  Thus \((x_A, y_B) \in A \cap B = \emptyset\), a contradiction.  It follows that \(X \times Y\) is connected.
+
+
+
+\item Let \(X\) and \(Y\) be Banach spaces and let \(T : X \to Y\) be a linear map such that there are constants \(0 < c < C < \infty\) such that for all \(x \in X\),
+\[c \|x\|_X \leq \|T(x)\|_Y \leq C \|x\|_X.\]
+Prove that the range \(T(X) = \{y \in Y : y = T(x), \text{ some } x \in X\}\) is a closed subset of \(Y\).  Note:  You cannot assume \(T\) maps \(X\) {\em onto} \(Y\).
+
+{\bf Solution}
+
+Let \(\{y_n\}_{n = 1}^{\infty}\) be a Cauchy sequence in \(Y\).  Then for each \(y_n\), there exists some \(x_n\) such that \(T(x_n) = y_n\).  Thus
+\[\|x_n - x_m\|_X
+  \leq \frac{1}{c} \|T(x_n) - T(x_m)\|_Y
+     = \frac{1}{c} \|y_n - y_m\|_Y,\]
+from which it follows that \(\{x_n\}_{n = 1}^{\infty}\) is a Cauchy sequence (in \(X\)) as well.  Since \(X\) is a Banach space, there exists some \(x^*\) such that \(x_n \to x^*\) as \(n \to \infty\).  Set \(y^* = T(x^*)\).  Then
+\[\|y^* - y_n\|_Y
+  \leq \|T(x^*) - T(x_n)\|_Y
+  \leq C \|x^* - x_n\|_X,\]
+from which it follows that \(y_n \to y^*\) as \(n \to \infty\).  Therefore \(Y\) is closed.
+
+
+
+\item Give an example of a function \(F : \mathbb{R}^2 \to \mathbb{R}\) such that the partial derivatives \(D_1F\) and \(D_2F\) exist and are continuous, and such that the mixed partials derivatives \(D_{1,2}F(0,0)\) and \(D_{2,1}F(0,0)\) exist, but
+\[D_{1,2}(0,0) \neq D_{2,1}F(0,0).\]
+
+{\bf Solution}
+
+Define \(F(0,0) = 0\) and
+\[F(x,y) = \frac{xy(x^2 - y^2)}{x^2 + y^2}.\]
+
+
+
+\item Let \(U \subset \mathbb{R}^2\) be open and let \(f : U \to \mathbb{R}\) a function such that each partial derivative
+\[\frac{\partial f}{\partial x_j} = \lim_{h \to 0} \frac{f(x + he_j) - f(x)}{h}\]
+exists {\em and is continuous in \(U\)}.  Prove \(f \in C^1(U)\).  Note:  (Above \(e_j\) denotes the \(j^{th}\) unit vector in \(\mathbb{R}^n\).)
+
+{\bf Solution}
+
+Without loss of generality, let \(0 \in U\); we show that \(f\) is differentiable at \(0\), from which the argument can be extended to show that \(f\) is differentiable on all of \(U\).
+
+Let \(x = \sum_{i = 1}^n x_i e_i\) in some open ball of \(0\) contained in \(U\).  Set \(y_0 = 0\) and
+\[y_j = \sum_{i = 1}^j x_i e_i\]
+for \(j = 1, \ldots, n\).  Multiple applications of the Mean Value Theorem yields points \(y_j'\) between \(y_{j - 1}\) and \(y_j\) such that
+\[f(y_1) - f(y_0) = \frac{\partial f}{\partial x_1}(y_1')(x_1 - 0),\]
+\[f(y_2) - f(y_1) = \frac{\partial f}{\partial x_2}(y_2')(x_2 - 0),\]
+\[\vdots\]
+\[f(y_n) - f(y_{n - 1}) = \frac{\partial f}{\partial x_n}(y_n')(x_n - 0).\]
+Since \(y_0 = 0\) and \(y_n = x\), we see that
+\[f(x) - f(0) = \sum_{i = 1}^n \frac{\partial f}{\partial x_i}(y_i')x_i.\]
+Since each \(\frac{\partial f}{\partial x_i}\) is continuous in \(U\), we can further restrict \(x\) to a neighborhood of \(0\) such that, given any \(\epsilon > 0\),
+\[\left| \frac{\partial f}{\partial x_i}(z) - \frac{\partial f}{\partial x_i}(0) \right| < \epsilon\]
+for all \(z\) in this neighborhood.  Thus
+\[\lim_{x \to 0} \frac{\left| f(x) - f(0) - \sum_i \frac{\partial f}{\partial x_i}(0) x_i \right|}{\|x\|}
+  \leq \lim_{x \to 0} \sum_i \left| \frac{\partial f}{\partial x_i}(y_i') - \frac{\partial f}{\partial x_i}(0) \right| \frac{|x_i|}{\|x\|}
+     < \epsilon \lim_{x \to 0} \sum_i \frac{|x_i|}{\|x\|}
+     < n\epsilon,\]
+and since \(\epsilon\) was arbitrary, we conclude that
+\[f'(0)x = \sum_i \frac{\partial f}{\partial x_i}(0) x_i\]
+and, in general, for \(t \in U\),
+\[f'(t)x = \sum_i \frac{\partial f}{\partial x_i}(t) x_i.\]
+The continuity of \(f'\) follows from the above equality and the continuity of the partials.
+
+
+
+\item Let \(f(x)\) be a bounded real function on the interval \([0,1]\) such that \(f\) has a finite set of discontinuities.  Prove that \(f\) is integrable on \([0,1]\).
+
+{\bf Solution}
+
+Enumerate the discontinuities of \(f\) on \([0,1]\) by \(x_i\), \(i = 1, \ldots, n\).  Since \(f\) is bounded, there exists an \(M\) such that \(|f| < M\) on \([0,1]\).
+
+Let \(\epsilon > 0\) be given.  Choose \(\delta\) such that \(\delta < \epsilon / 8 M n\) and the closures of the intervals \((x_i - \delta, x_i + \delta)\) are disjoint (possible since there are finitely many \(x_i\)'s).  Set
+\[E = [0,1] \backslash \bigcup_i (x_i - \delta, x_i + \delta),\]
+which is evidently a finite union of closed intervals, on each of which \(f\) is continuous.  Then there exists a partition \(P\) of \(E\) such that
+\[U(P,f|_E) - L(P,f|_E) < \frac{\epsilon}{2}.\]
+Let \(P' = P \cup \{0,1\}\) be viewed now as a partition of \([0,1]\), and set \(m_i\) and \(M_i\) to be the infimum and supremum of \(f\) over \([x_i - \delta, x_i + \delta] \cap [0,1]\).  Then \(M_i - m_i < 2M\), hence
+\[U(P',f) - L(P',f) < \frac{\epsilon}{2} + \sum_i (M_i - m_i) 2 \delta
+                    < \frac{\epsilon}{2} + 4 M n \delta
+                    < \frac{\epsilon}{2} + \frac{\epsilon}{2}
+                    = \epsilon,\]
+and it follows that \(f\) is Riemann integrable.
+
+
+
+\item Assume \(a_n \geq a_{n + 1} \geq 0\) and \(\lim a_n = 0\).  Prove the series
+\[\sum_{n = 1}^{\infty} (-1)^n a_n\]
+converges to a real number \(S\), and prove that the partial sums
+\[S_N = \sum_{n = 1}^N (-1)^n a_n\]
+satisfy
+\[|S_N - S| \leq |a_{N + 1}|.\]
+
+{\bf Solution}
+
+Consider
+\[S_{n + k} - S_n = \sum_{i = n + 1}^{n + k} (-1)^i a_i
+                  = (-1)^{n + 1} \left( a_{n + 1} - a_{n + 2} + \cdots + (-1)^{k - 1} a_{n + k} \right).\]
+Suppose first that \(k\) is odd.  Then
+\[\begin{array}{*{5}{c}}
+  d & = & a_{n + 1} - a_{n + 2} + \cdots + (-1)^{k - 1} a_{n + k} & & \\
+    & = & a_{n + 1} - (a_{n + 2} - a_{n + 3}) - (a_{n + 4} - a_{n + 5}) - \cdots - (a_{n + k - 1} - a_{n + k}) & \leq & a_{n + 1}
+  \end{array}\]
+since \(a_i \geq a_{i + 1}\).  But also
+\[d = (a_{n + 1} - a_{n + 2}) + (a_{n + 3} - a_{n + 4}) + \cdots + (a_{n + k - 2} - a_{n + k - 1}) + a_{n + k} \geq a_{n + k} \geq 0.\]
+Similarly, for \(k\) even,
+\[d = a_{n + 1} - (a_{n + 2} - a_{n + 3}) - (a_{n + 4} - a_{n + 5}) - \cdots - (a_{n + k - 2} - a_{n + k - 1}) - a_{n + k} \leq a_{n + 1},\]
+and
+\[d = (a_{n + 1} - a_{n + 2}) + (a_{n + 3} - a_{n + 4}) + \cdots + (a_{n + k - 1} - a_{n + k}) \geq 0.\]
+Hence
+\[|S_{n + k} - S_n| \leq a_{n + 1}.\]
+Since \(a_n \to 0\), it follows that \(\{S_n\}_{n = 1}^{\infty}\) is a Cauchy sequence in \(\mathbb{R}\), hence has some limit \(S\).  By letting \(k \to \infty\) in the above inequality, we arrive at
+\[|S - S_n| \leq a_{n + 1}.\]
+
+
+
+\item Let \(x = (x_1, x_2, \ldots, x_n)\), \(y = (y_1, y_2, \ldots, y_n)\) be two points in \(\mathbb{R}^n\).  Prove the Cauchy-Schwarz inequality
+\[\left| \sum_{j = 1}^n x_j y_j \right| \leq \left( \sum x_j^2 \right)^{\frac{1}{2}} \left( \sum y_j^2 \right)^{\frac{1}{2}},\]
+and show that equality holds in this inequality if and only if \(x\) and \(y\) are linearly dependent.
+
+{\bf Solution}
+
+For all \(\lambda \in \mathbb{R}\),
+\[0 \leq \|x - \lambda y\|^2 = \|x\|^2 + \lambda^2 \|y\|^2 - 2 \lambda (x \cdot y).\]
+Now if \(y = 0\), the claim is trivial, so suppose \(y \neq 0\).  Set \(\lambda = (x \cdot y) / \|y\|^2\).  Then
+\[0 \leq \|x\|^2 + \frac{(x \cdot y)^2}{\|y\|^2} - 2 \frac{(x \cdot y)}{\|y\|^2}
+       = \|x\|^2 - \frac{(x \cdot y)^2}{\|y\|^2},\]
+from which the claim follows immediately.  Equality is evidently achieved if and only if \(x = \lambda y\).
+
+
+
+\end{enumerate}
+
+\end{document}

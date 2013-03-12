@@ -1,0 +1,340 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\diam{\mathop{\rm diam}\nolimits}
+\def\int{\mathop{\rm int}\nolimits}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Monday, August 22, 2005 \\
+Analysis Bootcamp, Homework 1 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item {\em Let \(\mathbb{F}\) be an ordered field such that \(\mathbb{Q} \subset \mathbb{F}\) (with the same ordering and same field operations) and such that \(\mathbb{Q}\) is dense in \(\mathbb{F}\).  Prove the following properties of \(\mathbb{F}\) are equivalent:
+\begin{enumerate}
+\item Every nonempty subset of \(\mathbb{F}\) that is bounded above has a least upper bound in \(\mathbb{F}\).
+\item If \(A \subset \mathbb{F}\) is such that \(A \neq \emptyset\), \(\mathbb{F} \backslash A \neq \emptyset\), \(x < y \in A \Rightarrow x \in A\), and \(x \in A \Rightarrow \exists y \in A, y > x\), then there is a unique \(\alpha \in \mathbb{F}\) such that \(A = \{x \in \mathbb{F} : x < \alpha\}\).
+\item Every bounded increasing sequence in \(\mathbb{F}\) converges to a point in \(\mathbb{F}\), where \(x_n\) converges to \(X\) means that for every \(\mathbb{F} \ni \epsilon > 0\) there is \(N\) so that \(x - \epsilon < x_n < x + \epsilon\) whenever \(n > N\).
+\item Every Cauchy sequence in \(\mathbb{F}\) converges to a point of \(\mathbb{F}\), where the sequence \(x_n\) is Cauchy in \(\mathbb{F}\) if for every \(\mathbb{F} \ni \epsilon > 0\) there is \(N\) so that \(x_m - \epsilon < x_n < x_m + \epsilon\) whenever \(n > N\) and \(m > N\).
+\end{enumerate}}
+
+{\bf Solution}
+\begin{itemize}
+\item {\em (a) \(\Rightarrow\) (b)}
+
+Let \(A\) be as in the hypotheses of {\em (b)}.  \(A\) is nonempty (by hypothesis).  Further, \(\mathbb{F} \backslash A\) is nonempty as well (by hypothesis), hence there exists some \(z \in \mathbb{F}\) such that \(z \notin A\).  \(z\) is an upper bound of \(A\), for if \(x > z\) were such that \(x \in A\), then, since \(A\) satisfies the condition ``\(x < y \in A \Rightarrow x \in A\)'' (by hypothesis), we'd conclude that, in fact, \(z \in A\), but we chose \(z\) specifically such that \(z \notin A\).  Thus \(A\) satisfies the hypotheses of {\em (a)}, so has a least upper bound \(\alpha \in \mathbb{F}\).  Further, \(\alpha \notin A\), for, since \(A\) satisfies the condition ``\(x \in A \Rightarrow \exists y \in A, y > x\)'' (by hypothesis), the inclusion of \(\alpha \in A\) would imply the existence of some \(x \in A\) but with \(x > \alpha\), violating the fact that \(\alpha\) is a least upper bound of \(A\).  This establishes that \(A \subset \{x \in \mathbb{F} : x < \alpha\}\).  To show the opposite inclusion, suppose \(x < \alpha\).  There must exist some \(y \in A\) such that \(x < y < \alpha\), for if such was not the case, \(x\) would be an upper bound of \(A\), contradicting the fact that \(\alpha\) is the least upper bound.  But then the existence of such a \(y\) and the condition on \(A\) that ``\(x < y \in A \Rightarrow x \in A\)'' implies that \(x \in A\), which establishes the desired opposite inclusion.  Therefore, \(A = \{x \in \mathbb{F} : x < \alpha\}\).
+
+\item {\em (b) \(\Rightarrow\) (c)}
+
+Let \(\{x_n\}_{n = 1}^{\infty}\) be a sequence as in the hypotheses of {\em (c)}.  Let \(A_n = \{x \in \mathbb{F} : x < x_n\}\) and set \(A = \bigcup_n A_n\).  Clearly, \(A \neq \emptyset\) as each \(A_n \neq \emptyset\).  Further, \(\{x_n\}\) is bounded (by hypothesis), say, by \(z \in \mathbb{F}\), thus each \(A_n \subset \{x \in \mathbb{F} : x < z\}\), so \(A \subset \{x \in \mathbb{F} : x < z\}\), from which it follows that \(\mathbb{F} \backslash A \supset \{x \in \mathbb{F} : x \geq z\} \neq \emptyset\).  Further, suppose \(y \in A\).  Then \(y \in A_n\) for some \(n\), and since \(A_n \supset \{x \in \mathbb{F} : x < y\}\), any \(x \in \mathbb{F}\) with \(x < y\) will be in \(A_n\), hence \(A\).  This establishes the condition ``\(x < y \in A \Rightarrow x \in A\)''.  Lastly, suppose \(x \in A\).  Then, again, \(x \in A_n\) for some \(n\), so \(x < x_n\) and there exists a \(y \in \mathbb{F}\) such that \(x < y < x_n\).  \(y \in A_n\), so \(y \in A\), establishing the condition ``\(x \in A \Rightarrow \exists y \in A, y > x\)''.  Thus \(A\) satisfies the hypotheses of {\em (b)}, so there exists a unique \(\alpha \in \mathbb{F}\) such that \(A = \{x \in \mathbb{F} : x < \alpha\}\).
+
+Now let \(\epsilon \in \mathbb{F}\), \(\epsilon > 0\) be given, and set \(\alpha_- = \alpha - \epsilon \in A\).  Then \(\alpha_- \in A_N\) for some \(N\).  Indeed, since \(\{x_n\}\) is an increasing sequence (by hypothesis), \(A_m \subset A_{m + 1}\), hence \(\alpha_- \in A_n\) for all \(n \geq N\).  Thus \(\alpha_- < x_n\) for all \(n \geq N\), or, equivalently, \(\alpha - \epsilon < x_n\) for all \(n \geq N\).  Clearly, \(x_n < \alpha < \alpha + \epsilon\) for all \(n\), showing that \(x_n \to \alpha \in \mathbb{F}\).
+
+\item {\em (c) \(\Rightarrow\) (d)}
+
+Let \(\{x_n\}_{n = 1}^{\infty}\) be a Cauchy sequence as in the hypotheses of {\em (d)}.  Let \(\epsilon_i = 2^{-i}\) for integral \(i \geq 1\).  Now since \(\{x_n\}\) is Cauchy, for each \(i\), there exists an \(N_i\) such that for \(n,m \geq N_i\), \(|x_n - x_m| < \epsilon_i\).  Further, we can choose \(\{N_i\}_{i = 1}^{\infty}\) to be an increasing sequence of integers.  It follows that, for each \(i\), \(x_{N_i} - \epsilon_i < x_n < x_{N_i} + \epsilon_i\) whenever \(n \geq N_i\).  Set \(y_i = x_{N_i} - \sum_{j = i}^{\infty} \epsilon_j\).  Note that since \(\{N_i\}\) is an increasing sequence, \(N_{i + 1} > N_i\), so
+\[x_{N_i} - \epsilon_i < x_{N_{i + 1}},\]
+hence
+\[y_i = x_{N_i} - \epsilon_i - \sum_{j = i + 1}^{\infty} \epsilon_j
+      < x_{N_{i + 1}} - \sum_{j = i + 1}^{\infty} \epsilon_j = y_{i + 1},\]
+showing that \(\{y_i\}_{i = 1}^{\infty}\) is an increasing sequence.  Further,
+\[y_i = x_{N_i} - \sum_{j = i}^{\infty} \epsilon_j < x_{N_i} < x_{N_1} + \epsilon_1,\]
+showing that \(\{y_i\}\) is bounded.  Thus \(\{y_i\}\) satisfies the hypotheses of {\em (c)}, so \(y_i \to y\) for some \(y \in \mathbb{F}\).
+
+Now let \(\epsilon \in \mathbb{F}\), \(\epsilon > 0\) be given.  Choose \(I_1\) such that \(\epsilon_i < \epsilon\) for \(i \geq I_1\) (possible since \(\epsilon_i = 2^{-i} \to 0\)).  Further, by the conclusions of {\em (c)} above, there exists an \(I_2\) such that \(|y_i - y| < \epsilon\) for \(i \geq I_2\).  Set \(I = \max \{I_1, I_2\}\).  Now
+\[\sum_{j = i}^{\infty} \epsilon_j
+  = \sum_{j = i}^{\infty} 2^{-j}
+  = 2^{1 - i}
+  = 2\epsilon_i
+  < 2\epsilon\]
+for \(i \geq I\), so
+\[\epsilon > |y_i - y|
+           = \left| x_{N_i} - \sum_{j = i}^{\infty} \epsilon_j - y \right|
+           > \left| x_{N_i} - y \right| - \left| \sum_{j = i}^{\infty} \epsilon_j \right|
+           > \left| x_{N_i} - y \right| - 2\epsilon,\]
+for \(i \geq I\), hence
+\[\left| x_{N_i} - y \right| < 3\epsilon,\]
+for \(i \geq I\).  In particular, choose \(i = I\).  Then for \(n > N_I\), we know that
+\[|x_n - y| < \left| x_n - x_{N_I} \right| + \left| x_{N_I} - y \right|
+            < \epsilon_I + 3\epsilon
+            < 4\epsilon,\]
+proving that \(x_n \to y \in \mathbb{F}\).
+
+\item {\em (d) \(\Rightarrow\) (a)}
+
+Let \(A \subset \mathbb{F}\) satisfy the hypotheses of {\em (a)}.  Construct two sequences, \(\{x_n\}\) and \(\{z_m\}\) (finite or infinite) as follows.  \(A\) is nonempty (by hypothesis), so there exists, say, \(x_1 \in A\).  Further, \(A\) is bounded (by hypothesis), so there exists, say, \(z_1 \in \mathbb{F}\) such that \(x < z_1\) for all \(x \in A\).  Set \(n_1 = 1\), \(m_1 = 1\), and \(y_1 = \frac{1}{2} (x_1 + z_1)\).  Now if \(y_1\) is an upper bound of \(A\), set \(n_2 = n_1\), \(m_2 = m_1 + 1\), \(z_2 = y_1\), and \(y_2 = \frac{1}{2} (x_1 + z_2)\).  On the other hand, if \(y_1\) is not an upper bound of \(A\), set \(n_2 = n_1 + 1\), \(m_2 = m_1\), \(x_2 = y_1\), and \(y_2 = \frac{1}{2} (x_2 + z_1)\).  Continue the previous step on \(y_2\), obtaining \(y_3\), and so forth.  Explicitly, given \(y_i\),
+\begin{itemize}
+\item if \(y_i\) is an upper bound of \(A\), set \(n_{i + 1} = n_i\), \(m_{i + 1} = m_i + 1\), \(z_{m_{i + 1}} = y_i\);
+\item if \(y_i\) is not an upper bound of \(A\), set \(n_{i + 1} = n_i + 1\), \(m_{i + 1} = m_i\), \(x_{n_{i + 1}} = y_i\);
+\end{itemize}
+and finally set \(y_{i+1} = \frac{1}{2} \left( x_{n_{i + 1}} + z_{m_{i + 1}} \right)\).
+
+Suppose first that both of \(\{x_n\}\) and \(\{z_m\}\) are infinite; that is, \(n_i \to \infty\) and \(m_i \to \infty\).  We make the following observations.  For each \(i\), \(x_{n_i} < y_i < z_{m_i}\), which can easily be proved inductively.  Indeed, each \(z_m\) is an upper bound of \(A\) while each \(x_n\) is not, so, in fact, \(x_n < z_m\) for all pairs \(n,m\).  Further, \(\left\{ z_{m_i} \right\}\) is a decreasing sequence while \(\left\{ x_{n_i} \right\}\) is an increasing sequence.  Also, one can show that
+\[z_{m_i} - x_{n_i} = \frac{1}{2} \left( z_{m_{i - 1}} - x_{n_{i - 1}} \right),\]
+hence
+\[z_{m_i} - x_{n_i} = 2^{-i + 1} \left( z_{m_1} - x_{n_1} \right) = 2^{-i} d\]
+for \(d = 2 \left( z_{m_1} - x_{n_1} \right)\).  Now given \(\epsilon \in \mathbb{F}\), \(\epsilon > 0\), choose \(I\) large enough such that \(2^{-i} d < \epsilon\) for \(i \geq I\).  Then for any \(j,k \geq I\),
+\[\left| z_{m_j} - z_{m_k} \right|
+  < \left( z_{m_I} - z_{m_j} \right) + \left( z_{m_I} - z_{m_k} \right)
+  < \left( z_{m_I} - x_{n_I} \right) + \left( z_{m_I} - x_{n_I} \right)
+  = 2 \left( 2^{-i} d \right)
+  < 2 \epsilon.\]
+Now since both \(\{n_i\}\) and \(\{m_i\}\) are nondecreasing sequences, and, as sets, \(\{n_i\} = \{m_i\} = \mathbb{N}\), we have that
+\[\left| z_r - z_s \right| < 2\epsilon\]
+for \(r,s \geq m_I\) (since \(r = m_j\) for some \(j \geq I\), and similarly for \(s\)), establishing that \(\{z_m\}\) is a Cauchy sequence in \(\mathbb{F}\).  By {\em (d)}, then, \(\{z_m\}\) converges to a point \(\alpha \in \mathbb{F}\).
+
+A similar argument shows that \(\{x_n\}\) is a Cauchy sequence, too, hence converges as well.  More importantly, though, \(x_n \to \alpha\) as well, for take \(\epsilon \in \mathbb{F}\), \(\epsilon > 0\).  We can choose \(I\) large enough such that \(z_{m_i} - x_{n_i} = 2^{-i} d < \epsilon\) for \(i \geq I\).  Since \(\alpha < z_m\), we see that \(|\alpha - x_n| = \alpha - x_n < \epsilon\) for \(n \geq n_I\).
+
+We show first that \(\alpha\) is an upper bound of \(A\).  For suppose some \(y \in A\) was such that \(y > \alpha\); we can can choose \(m\) large enough such that \(\alpha < z_m < y\), contradicting the fact that \(z_m\) is an upper bound for \(A\).  Thus \(\alpha\) is an upper bound of \(A\).  To show that \(\alpha\) is the least upper bound, suppose \(y < \alpha\) was also an upper bound for \(A\).  We can choose \(n\) large enough such that \(y < x_n < \alpha\), contradicting the fact that \(x_n\) is not an upper bound of \(A\).  This establishes that \(\alpha\) is the least upper bound of \(A\).
+
+We now address the case when one of \(\{x_n\}\) or \(\{z_m\}\) are finite.  Suppose that \(\{x_n\}\) was finite, and set \(N = \max \{n_i\}\).  The observations above still apply.  In particular, \(\{z_m\}\) is still a Cauchy sequence which converges to some \(\alpha \in \mathbb{F}\), and \(\alpha\) is still an upper bound for \(A\).  Additionally, \(\alpha\) must be the least upper bound, for suppose \(y < \alpha\) was also an upper bound for \(A\).  We can choose \(m\) large enough such that \(z_m - x_N < \alpha - y\), implying that \(x_N > y\) (since \(z_m > \alpha\)), contradicting the fact that \(x_N\) is not an upper bound of \(A\).
+
+The case for \(\{z_m\}\) finite is similar.  Set \(M = \max \{m_i\}\).  \(\{x_n\}\) is still a Cauchy sequence which converges to \(\alpha \in \mathbb{F}\).  Again, \(\alpha\) is an upper bound for \(A\), for suppose some \(y \in A\) was such that \(y > \alpha\).  We can choose \(n\) large enough such that \(z_M - x_n < y - \alpha\), implying that \(z_M < y\) (since \(x_n < \alpha\)), contradicting the fact that \(z_M\) is an upper bound of \(A\).
+
+Therefore, in call cases, \(\alpha\) is the least upper bound of \(A\)
+
+\end{itemize}
+
+
+
+\item {\em Gamelin and Greene, page 8.  4, 10, 11, 12.}
+
+\begin{itemize}
+
+\item[4.] {\em Show that the semiopen interval \((0,1]\) is neither open nor closed in \(\mathbb{R}\).}
+
+{\bf Solution}
+
+\(1 \in (0,1]\) is not an interior point of \((0,1]\) (since \(B(1;r) \cap (0,1] = (1,1+r) \neq \emptyset\) for any \(r > 0\)), while \(0 \notin (0,1]\) is adherent to \((0,1]\) (since \(B(0;r) \cap (0,1] = (0,r) \neq \emptyset\) for any \(r > 0\)), so \((0,1]\) is neither open nor closed in \(\mathbb{R}\).
+
+
+
+\item[10.] {\em A point \(x \in X\) is a {\em limit point} of a subset \(S\) of \(X\) if every ball \(B(x;r)\) contains infinitely many points of \(S\).  Show that \(x\) is a limit point of \(S\) if and only if there is a sequence \(\{x_j\}_{j = 1}^{\infty}\) in \(S\) such that \(x_j \to x\) and \(x_j \neq x\) for all \(j\).  Show that the set of limit points of \(S\) is closed.}
+
+{\bf Solution}
+
+Let \(r_j = \frac{1}{j}\) for \(j \geq 1\).  Set \(x_j\) to be some point of \(B(x;r_j) \cap S \backslash \{x\}\) (possible since this set is given to contain infinitely many points).  Then given any \(\epsilon > 0\), there exists a \(J\) such that \(r_j < \epsilon\) for \(j > J\), hence \(d(x_j, x) < \epsilon\) for \(j > J\) (since \(x_j \in B(x;r_j)\)), showing that \(x_j \to x\).
+
+Denote the set of limit points of \(S\) by \(S'\).  Let \(x\) be adherent to \(S'\), and choose \(r > 0\).  \(x\) adherent to \(S'\) implies that \(B(x;r) \cap S' \neq \emptyset\), hence there exists some \(y \in B(x;r) \cap S'\).  Let \(h = r - d(x, y)\).  \(y\) is a limit point of \(S\), hence \(B(y;h)\) contains infinitely many points of \(S\).  Since \(B(y;h) \subset B(x;r)\), \(B(x;r)\) also contains infinitely many points of \(S\).  As \(r\) was arbitrary, we conclude that \(x\) is a limit point of \(S\) as as well, i.e., \(x \in S'\).  Therefore \(S'\) is closed.
+
+
+
+\item[11.] {\em A point \(x \in S\) is an {\em isolated point} of \(S\) if there exists \(r > 0\) such that \(B(x;r) \cap S = \{x\}\).  Show that the closure of a subset \(S\) of \(X\) is the disjoint union of the limit points of \(S\) and the isolated points of \(S\).}
+
+{\bf Solution}
+
+First note that the properties of being a limit point and of being an isolated point are mutually exclusive (that is, a point cannot be both a limit point and an isolated point).  Thus, we aim to show that every adherent point of \(S \subset X\) is either a limit point of \(S\) or an isolated point of \(S\).  Indeed, suppose \(x \in X\) was adherent to \(S\), i.e., \(B(x;r) \cap S \neq \emptyset\) for all \(r > 0\).  Either \(x\) is a limit point of \(S\) (in which case we're done), or there exists some \(r\) such that \(B(x;r)\) contains finitely many points of \(S\).  Set \(h = \min_{y \in B(x;r) \cap S \backslash \{x\}} d(x, y)\), or \(h = r\) in the case that \(B(x;r) \cap S \backslash \{x\} = \emptyset\).  Note that \(h > 0\) and \(B(x;h) \cap S\) has no points in common with \(B(x;r) \cap S \backslash \{x\}\).  Yet \(B(x;h) \subset B(x;r)\), and \(B(x;h) \cap S \neq \emptyset\) (since \(x\) is adherent to \(S\)), so we must have that \(B(x;h) = \{x\}\), showing that \(x\) is, in fact, an isolated point of \(S\).
+
+
+
+\item[12.] {\em Two metrics on \(X\) are {\em equivalent} if they determine the same open subsets.  Show that two metrics \(d,\rho\) on \(X\) are {\em equivalent} if and only if the convergent sequences in \((X,d)\) are the same as the convergent sequences in \((X,\rho)\).}
+
+{\bf Solution}
+
+Suppose \(d,\rho\) are equivalent metrics on \(X\).  Let \(\{x_n\}_{n = 1}^{\infty}\) be a convergent sequence in \((X,d)\), and suppose it converges to \(x \in X\).  Let \(\epsilon > 0\) be given.  \(B_{\rho}(x,\epsilon) = \{y \in X : \rho(y,x) < \epsilon\}\) is an open subset of \((X,\rho)\), hence is also an open subset of \((X, d)\) (since \(d,\rho\) are equivalent on \(X\)), and in particular, contains \(x\).  Thus, there exists some \(\delta > 0\) such that \(B_d(x,\delta) \subset B_{\rho}(x,\epsilon)\), and correspondingly some \(N\) such that \(x_n \in B_d(x,\delta)\) for \(n > N\).  It follows that \(x_n \in B_{\rho}(x,\epsilon)\) for \(n > N\), i.e., \(\rho(x_n,x) < \epsilon\) for \(n > N\), hence \(\{x_n\}\) converges to \(x\) in \((X,\rho)\).  Similarly, any convergent sequence in \((X,\rho)\) can be shown to be a convergent sequence in \((X,d)\).
+
+Now suppose the convergent sequences in \((X,d)\) are the same as in \((X,\rho)\), and let \(Y\) be an open subset of \((X,d)\).  Suppose, for the sake of contradiction, that \(Y\) is not an open subset of \((X,\rho)\), that is, there exists some \(x \in Y\) such that \(B_{\rho}(x,r) \not\subset Y\) for all \(r > 0\).  Let \(r_n = \frac{1}{n}\) for \(n \geq 1\), and choose \(x_n \in B_{\rho}(x,r_n) \backslash Y \neq \emptyset\).  Then \(\{x_n\}_{n = 1}^{\infty}\) converges to \(x\) in \((X,\rho)\), hence also converges to \(x\) in \((X,d)\) (by hypothesis).  But this means that for each \(r > 0\), there exists some \(N\) such that \(x_n \in B_d(x,r)\) for \(n > N\), and each \(x_n \notin Y\), contradicting the fact that \(x\) is an interior point of \(Y\) with respect to \(d\) (since \(x \in Y\) and \(Y\) is open in \((X,d)\)).  It follows that \(Y\) must also be an open subset of \((X,\rho)\).
+
+
+
+\end{itemize}
+
+\item {\em Gamelin and Greene, page 12.  3, 5, 7, 8.}
+
+\begin{itemize}
+
+\item[3.] {\em Prove that the set of isolated points of a countable complete metric space \(X\) forms a dense subset of \(X\).}
+
+{\bf Solution}
+
+Let \(T\) be the set of isolated points of \(X\).  Now suppose, for the sake of contradiction, that \(T\) is not dense in \(X\).  Then there exists some \(x \in X\) and \(r > 0\) such that \(B(x;2r)\) contains no points of \(T\).  Then \(Y = \overline{B(x;r)} \subset B(x;2r)\) contains no points of \(T\) as well.  \(Y\) is a closed subspace of \(X\), which is complete, hence \(Y\) is complete as well, by Theorem 2.3, and since \(Y \subset X\), \(Y\) is at most countable.
+
+Further, \(Y\) contains no isolated points with respect to \(Y\).  For suppose there existed some \(y \in Y\) and \(h > 0\) such that \(B(y;h) \cap Y = \{y\}\).  If \(d(x,y) < r\), then \(y\) is an interior point of \(Y\), i.e., \(B(y; r - d(x,y)) \subset Y\).  Set \(k = \min \{h, r - d(x,y)\}\).  Then \(B(y;k) \subset Y\), so \(\{y\} \subset B(y;k) = B(y;k) \cap Y \subset B(y;h) \cap Y = \{y\}\), hence \(B(y;k) = \{y\}\) and \(y\) would also be an isolated point with respect to \(X\).  But this contradicts the construction of \(Y\) containing no isolated points of \(X\).  On the other hand, suppose \(d(x,y) = r\).  Then \(y \notin B(x;r)\), and since \(B(y;h) \cap B(x;r) \subset B(y;h) \cap Y = \{y\}\), we must conclude that \(B(y;h) \cap B(x;r) = \emptyset\).  But this implies that \(y\) is not adherent to \(B(x;r)\), contradicting the fact that \(y \in Y = \overline{B(x;r)}\).  Clearly, \(d(x,y) \leq r\) if \(y \in Y\), so \(Y\) cannot contain any isolated points with respect to \(Y\).
+
+For \(y \in Y\), set \(U_y = Y \backslash \{y\}\).  As no \(y \in Y\) is an isolated point of \(Y\), each \(U_y\) is dense in \(Y\).  Further, each \(z \in U_y\) is an interior point of \(U_y\) with respect to \(Y\), since \(B(z; d(z,y)) \cap Y \subset U_y\), hence each \(U_y\) is open with respect to \(Y\).  As established earlier, \(Y\) is countable, hence \(\{U_y\}\) can be arranged into a sequence, and \(Y\) is complete, so it follows from Theorem 2.6 (Baire Category Theorem) that \(\bigcap_{y \in Y} U_y\) is dense in \(Y\).  But \(\bigcap_{y \in Y} U_y = \emptyset\), so this implies that \(Y = \overline{\emptyset} = \emptyset\), which contradicts the fact that \(x \in Y\), by construction.  This proves that, indeed, \(T\) must be dense in \(X\).
+
+(Note:  Easier to take each \(U_y = Y \backslash \{y\}\) for \(y \in Y \backslash T\).)
+
+
+
+\item[5.] {\em Prove that any countable union of sets of the first category in \(X\) is again of the first category in \(X\).}
+
+{\bf Solution}
+
+A subset of the first category of a metric space \(X\) is a countable union of nowhere dense subsets, hence a countable union of subsets of the first category is a countable union of countable unions of nowhere dense subsets, hence is a countable union of nowhere dense subsets (a countable union of countable unions is again a countable union), hence is again of the first category.
+
+
+
+\item[7.] {\em Let \((X,d)\) be a metric space and let \(S\) be the set of Cauchy sequences in \(S\).  Define a relation ``\(\sim\)'' in \(X\) by declaring ``\(\{s_k\} \sim \{t_k\}\)'' to mean that \(d(s_k,t_k) \to 0\) as \(k \to \infty\).
+\begin{enumerate}
+\item Show that the relation ``\(\sim\)'' is an equivalence relation.
+\item Let \(\tilde{X}\) denote the set of equivalence classes of \(S\) and let \(\tilde{s}\) denote the equivalence class of \(s = \{s_k\}_{k = 1}^{\infty}\).  Show that the function
+\[\rho(\tilde{s}, \tilde{t}) = \lim_{k \to \infty} d(s_k, t_k), \ \ \tilde{s}, \tilde{t} \in \tilde{X}\]
+defines a metric on \(\tilde{X}\).
+\item Show that \((\tilde{X}, \rho)\) is complete.
+\item For \(x \in X\), define \(\tilde{x}\) to be the equivalence class of the constant sequence \(\{x, x, \ldots\}\).  Show that the function \(x \to \tilde{x}\) is an isometry of \(X\) onto a dense subset of \(\tilde{X}\).  (By an isometry, we mean that \(d(x,y) = \rho(\tilde{x}, \tilde{y})\), \(x,y \in X\).)
+
+{\em Note:}  If a complete metric space \(Y\) contains \(X\) as a dense subspace, we say that \(Y\) is a {\em completion} of \(X\).  The space \(\tilde{X}\) of Exercise 7 can be regarded as a completion of \(X\) by identifying each \(x \in X\) with the constant sequence \(\{x, x, \ldots\}\).  The next part of the exercise shows that the completion of \(X\) is unique, up to isometry.
+\item Show that when \(Y\) is a completion of \(X\), then the inclusion map \(X \to Y\) extends to an isometry of \(\tilde{X}\) onto \(Y\).
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let \(\{r_k\}_{k = 1}^{\infty}\), \(\{s_k\}_{k = 1}^{\infty}\), and \(\{t_k\}_{k = 1}^{\infty}\) be sequences in \(X\).
+
+\(d(r_k,r_k) = 0\) for all \(k\), hence \(d(r_k,r_k) \to 0\) as \(k \to \infty\), establishing that \(\{r_k\} \sim \{r_k\}\) and ``\(\sim\)'' is reflexive.
+
+\(d(r_k,s_k) = d(s_k,r_k)\) for all \(k\), hence \(d(r_k,s_k) \to 0 \ \Leftrightarrow \ d(s_k,r_k) \to 0\) (as \(k \to \infty\)), establishing that \(\{r_k\} \sim \{s_k\} \ \Leftrightarrow \ \{s_k\} \sim \{r_k\}\) and ``\(\sim\)'' is symmetric.
+
+\(d(r_k,t_k) \leq d(r_k,s_k) + d(s_k,t_k)\) for all \(k\), hence \(d(r_k,s_k) \to 0\) and \(d(s_k,t_k) \to 0\) implies that \(d(r_k,t_k) \to 0\) (as \(k \to \infty\)), establishing that \(\{r_k\} \sim \{s_k\}, \{s_k\} \sim \{t_k\} \Rightarrow \{r_k\} \sim \{t_k\}\) and ``\(\sim\)'' is transitive.
+
+\item Let \(\tilde{r}, \tilde{s}, \tilde{t} \in \tilde{X}\), \(r = \{r_k\}_{k = 1}^{\infty}\), \(s = \{s_k\}_{k = 1}^{\infty} \in \tilde{s}\), and \(t = \{t_k\}_{k = 1}^{\infty} \in \tilde{t}\).
+
+Let \(s' = \{s'_k\}_{k = 1}^{\infty} \in \tilde{s}\) and \(t' = \{t'_k\}_{k = 1}^{\infty} \in \tilde{t}\).  Now
+\[d(s_k,t_k) \leq d(s_k,s'_k) + d(s'_k,t'_k) + d(t'_k,t_k),\]
+and since \(d(s_k,s'_k) \to 0\) and \(d(t'_k,t_k) \to 0\) (as \(k \to \infty\)), we obtain
+\[\lim_{k \to \infty} d(s_k,t_k) \leq \lim_{k \to \infty} d(s'_k,t'_k).\]
+The above argument is completely symmetrical, which allows us to obtain the reverse inequality and conclude that
+\[\lim_{k \to \infty} d(s_k,t_k) = \lim_{k \to \infty} d(s'_k,t'_k)\]
+and \(\rho\) is well-defined.
+
+\(d(s_k,t_k) \geq 0\), so it follows that \(\rho(\tilde{s}, \tilde{t}) = \lim_{k \to \infty} d(s_k,t_k) \geq 0\) as well.
+
+\(\tilde{s} = \tilde{t}\) if and only if \(\{s_k\} \sim \{t_k\}\) if and only if \(\rho(\tilde{s}, \tilde{t}) = \lim_{k \to \infty} d(s_k,t_k) = 0\).
+
+\(d(s_k,t_k) = d(t_k,s_k)\), hence \(\rho(\tilde{s}, \tilde{t}) = \lim_{k \to \infty} d(s_k,t_k) = \lim_{k \to \infty} d(t_k,s_k) = \rho(\tilde{t}, \tilde{s})\).
+
+\[\rho(\tilde{r}, \tilde{t})
+  = \lim_{k \to \infty} d(r_k,t_k)
+  \leq \lim_{k \to \infty} \left( d(r_k,s_k) + d(s_k,t_k) \right)\]
+\[ = \lim_{k \to \infty} d(r_k,s_k) + \lim_{k \to \infty} d(s_k,t_k)
+  = \rho(\tilde{r}, \tilde{s}) + \rho(\tilde{s}, \tilde{t}).\]
+
+\item Let \(\{\tilde{s}_n\}_{n = 1}^{\infty}\) be a Cauchy sequence in \(\tilde{X}\).  Let \(\{s_n^k\}_{k = 1}^{\infty} \in \tilde{s}_n\) for each \(n\).  Now since each \(\{s_n^k\} \in S\), there exists a \(K_n\) such that \(d(s_n^i,s_n^j) < \frac{1}{n}\) for \(i,j \geq K_n\).  Set \(s = \left\{ s_k^{K_k} \right\}_{k = 1}^{\infty}\).
+
+Let \(\epsilon > 0\) be given.  Now since \(\{\tilde{s}_n\}\) is a Cauchy sequence, there exists an \(N\) such that \(\rho(\tilde{s}_n, \tilde{s}_m) < \epsilon\) for \(n,m > N\).  Set \(M = \max \left\{ N, \left\lceil \frac{1}{\epsilon} \right\rceil \right\}\), so that \(\frac{1}{M} < \epsilon\).  Now, for the moment, fix \(n,m > M\).  Since \(\epsilon > \rho(\tilde{s}_n, \tilde{s}_m) = \lim_{k \to \infty} d(s_n^k,s_m^k)\), there exists a \(K\) such that \(d(s_n^k,s_m^k) < \epsilon\) for \(k \geq K\).  Assume, without loss of generality, that \(K_n \leq K_m\), and set \(K_m' = \max \{K_m, K\}\).  Then
+\[d \left( s_n^{K_n},s_m^{K_m} \right)
+  \leq d \left( s_n^{K_n},  s_n^{K_m'} \right)
+     + d \left( s_n^{K_m'}, s_m^{K_m'} \right)
+     + d \left( s_m^{K_m'}, s_m^{K_m}  \right)
+  < \frac{1}{n} + \epsilon + \frac{1}{m}
+  < 3 \epsilon.\]
+Since the only requirements of \(n,m\) are that \(n,m > M\), this establishes that \(\tilde{s} \in \tilde{X}\) (that is, \(s\) is a Cauchy sequence).  Further, fix \(n > M\).  Then for \(k > \max \{K_n, M\}\),
+\[d \left( s_n^k, s_k^{K_k} \right)
+  \leq d \left( s_n^k, s_n^{K_n} \right)
+     + d \left( s_n^{K_n}, s_k^{K_k} \right)
+  < \frac{1}{n} + 3\epsilon
+  < 4\epsilon,\]
+hence \(\rho(\tilde{s}_n, \tilde{s}) = \lim_{k \to \infty} d \left( s_n^k, s_k^{K_k} \right) < 4\epsilon\).  Since the only requirement on \(n\) is that \(n > M\), this establishes that \(\tilde{s}_n \to \tilde{s} \in \tilde{X}\), i.e., that \(\{\tilde{s}_n\}\) converges.  Therefore, \((\tilde{X}, \rho)\) is complete.
+
+\item Let \(x,y \in X\), \(x_k = x\) and \(y_k = y\) for \(k \geq 1\), \(\tilde{x} = \{x_k\}_{k = 1}^{\infty}\), and \(\tilde{y} = \{y_k\}_{k = 1}^{\infty}\).
+
+\(d(x_k,y_k) = d(x,y)\), hence \(\rho(\tilde{x}, \tilde{y}) = \lim_{k \to \infty} d(x_k,y_k) = d(x,y)\), showing that \(x \to \tilde{x}\) is an isometry of \((X,d)\) onto \((\tilde{X}, \rho)\).
+
+Let \(\tilde{s} \in \tilde{X}\), \(\{s_k\}_{k = 1}^{\infty} \in \tilde{s}\), and \(r > 0\).  Since \(\{s_k\}\) is a Cauchy sequence, there exists a \(K\) such that \(d(s_i,s_j) < r\) for \(i,j \geq K\).  Set \(\tilde{x} = \{x, x, \ldots\}\) for \(x = s_K\).  Then \(\rho(\tilde{s}, \tilde{x}) = \lim_{k \to \infty} d(s_k,x) < r\), hence \(\tilde{x} \in B_{\rho}(\tilde{s},r)\).  Since \(\tilde{x}\) is in the image of \(X\) of the mapping \(x \to \tilde{x}\), this shows that the said image is dense in \(\tilde{X}\).
+
+\item Define \(f : \tilde{X} \to Y\) by \(f \left( \tilde{s} = \{s_k\}_{k = 1}^{\infty} \right) = \lim_{k \to \infty} s_k\), where each \(s_k\) is mapped by the inclusion \(X \to Y\).
+
+\end{enumerate}
+
+
+
+\item[8.] {\em The {\em diameter} of a nonempty subset \(E\) of a metric space \((X,d)\) is defined to be
+\[\diam(E) = \sup \{d(x,y) : x,y \in E\}.\]
+Show that if \(\{E_k\}_{k = 1}^{\infty}\) is a decreasing sequence of closed nonempty subsets of a complete metric space whose diameters tend to zero, then \(\bigcap_{k = 1}^{\infty} E_k\) consists of precisely one point.  How much of the conclusion remains true if \(X\) is not complete?  Can this property be used to characterize complete metric spaces?  Justify your answer.}
+
+{\bf Solution}
+
+Suppose \(x \in \bigcap_{k = 1}^{\infty} E_k\).  Then for any \(y \in X\), there exists some \(K\) such that \(\diam(E_k) < d(x,y)\) for \(k > K\), hence \(y \notin E_k\) for \(k > K\) (since \(x \in E_k\)), hence \(y \notin \bigcap E_k\).  This shows that \(\bigcap E_k\) consists of at most one point.
+
+Choose \(x_k \in E_k \cap (X \backslash E_{k + 1})\) (possible since each \(E_k \neq \emptyset\)).  \(\{x_k\}\) is a Cauchy sequence, since, given some \(\epsilon > 0\), there exists a \(K > 0\) such that \(\diam(E_k) < \epsilon\) for \(k \geq K\), hence \(d(x_i,x_j) < \epsilon\) for \(i,j \geq K\) (since \(x_i,x_j \in E_K\) for \(i,j \geq K\)).  Thus, \(x_k \to x\) for some \(x \in X\), since \(X\) is complete.  Fix \(k\) and \(r > 0\), and notice that there exists some \(I\) such that \(d(x_i,x) < r\) for \(i \geq I\).  Since \(x_i \in E_k\) for \(i \geq \max \{I, k\}\), and \(r\) was arbitrary, that \(x\) is adherent to \(E_k\), hence \(x \in \overline{E_k} = E_k\).  Since \(k\) was arbitrary, we conclude that \(x \in \bigcap E_k\), and combined with the previous argument, in fact \(\{x\} = \bigcap E_k\).
+
+If \(X\) is not complete, the first argument remains valid since it did not utilize the fact that \(X\) was complete, so all we can conclude is that \(\bigcap E_k\) consists of at most one point.  Indeed, if we take \(E_k = \left( 0, \frac{1}{k} \right]\) within the metric space \(X = (0,1]\), then \(\bigcap E_k = \emptyset\).
+
+Suppose a metric space \(X\) was such that all such decreasing sequences of nonempty closed subsets whose diameters tended to \(0\) had precisely one point in their intersection.  Let \(\{x_k\}_{k = 1}^{\infty}\) be a Cauchy sequence in \(X\), set \(E = \overline{\bigcup_{k = 1}^{\infty} \{x_k\}}\), and set \(E_k = E \backslash \bigcup_{i = 1}^k \{x_i\}\).  Each \(E_k\) is closed (the removal of a finite number of points from a closed set is still closed), \(E_k \supset E_{k + 1}\), and \(\diam(E_k) \to 0\), hence, by hypothesis, \(\bigcap E_k = \{x\}\) for some \(x \in X\).  But \(x\) satisfies the conditions of being a convergent point of \(\{x_k\}\), and we conclude that \(X\) is complete.
+
+
+
+\end{itemize}
+
+\item {\em Gamelin and Greene, page 15.  4, 6, 9.}
+
+\begin{itemize}
+
+\item[4.] {\em Prove that every open subset of \(\mathbb{R}\) is a union of disjoint open intervals (finite, semi-infinite, or infinite).}
+
+{\bf Solution}
+
+Let \(Y \subset \mathbb{R}\) be open, and for \(x \in Y\), set \(I_x\) be the union of all open intervals containing \(x\) and contained by \(Y\).  \(I_x\) is then open as well (by Theorem 1.3).  Further, given \(x,y \in Y\), suppose some \(z \in I_x \cap I_y\).  Then some open interval containing \(x,z\) is contained in \(Y\), and some open interval containing \(y,z\) is contained in \(Y\), so it follows that some open interval containing \(x,y\) is contained in \(Y\).  Thus any open interval containing \(x\) and contained by \(Y\) can be extended to an open interval containing \(x,y\) and contained by \(Y\), and similarly for \(y\), hence \(I_x = I_y\).  Thus each pair of \(I_x\)'s is either disjoint or identical, and their union is all of \(Y\).
+
+
+\item[6.] {\em Prove that the set of rational numbers cannot be expressed as the intersection of a sequence of open subsets of \(\mathbb{R}\).}
+
+{\bf Solution}
+
+Suppose that there exists some sequence \(\{E_n\}_{n = 1}^{\infty}\) of open subsets of \(\mathbb{R}\) such that \(\bigcap_{n = 1}^{\infty} E_n = \mathbb{Q}\).  Then \(\left( \bigcap_{n = 1}^{\infty} E_n \right) \cap \left( \bigcap_{r \in \mathbb{Q}} \mathbb{R} \backslash r \right) = \emptyset\), which is not dense in \(\mathbb{R}\).  Each of the sets in the intersection is open, hence, by Theorem 2.6 (Baire Category Theorem), one of them is not dense in \(\mathbb{R}\).  Each \(\mathbb{R} \backslash r\) is dense in \(\mathbb{R}\) for \(r \in \mathbb{Q}\), hence one of the \(E_n\)'s is not dense in \(\mathbb{R}\), i.e., there exists an open interval \(I \subset \mathbb{R}\) not in one of the \(E_n\)'s.  But then \(\bigcap_n E_n\) would not contain \(I\) either, and this contradicts the fact that \(\bigcap_n E_n = \mathbb{Q}\) is dense in \(\mathbb{R}\).  Therefore, the set of rational numbers cannot be expressed as the intersection of a sequence of open subsets of \(\mathbb{R}\).
+
+
+
+\item[9.] {\em Determine the interior, the closure, the limit points, and the isolated points of each of the following subsets of \(\mathbb{R}\):
+\begin{enumerate}
+\item the interval \([0,1)\),
+\item the set of rational numbers,
+\item \(\{m + n \pi : m \text{ and } n \text{ positive integers}\}\),
+\item \(\left\{ \frac{1}{m} + \frac{1}{n} : m \text{ and } n \text{ positive integers} \right\}\).
+\end{enumerate}}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item
+\begin{itemize}
+\item \(\int([0,1)) = (0,1)\)
+\item \(\overline{[0,1)} = [0,1]\)
+\item \(\text{limit points of } [0,1) = [0,1]\)
+\item \(\text{isolated points of } [0,1) = \emptyset\)
+\end{itemize}
+\item
+\begin{itemize}
+\item \(\int(\mathbb{Q}) = \emptyset\)
+\item \(\overline{\mathbb{Q}} = \mathbb{R}\)
+\item \(\text{limit points of } \mathbb{Q} = \mathbb{R}\)
+\item \(\text{isolated points of } \mathbb{Q} = \emptyset\)
+\end{itemize}
+\item
+\begin{itemize}
+\item \(\int(\{m + n \pi\}) = \emptyset\)
+\item \(\overline{\{m + n \pi\}} = \{m + n \pi\}\)
+\item \(\text{limit points of } \{m + n \pi\} = \emptyset\)
+\item \(\text{isolated points of } \{m + n \pi\} = \{m + n \pi\}\)
+\end{itemize}
+\item
+\begin{itemize}
+\item \(\int \left( \left\{ \frac{1}{m} + \frac{1}{n} \right\} \right) = \emptyset\)
+\item \(\overline{ \left\{ \frac{1}{m} + \frac{1}{n} \right\} } = \left\{ \frac{1}{m} + \frac{1}{n} \right\} \cup \{0\}\)
+\item \(\text{limit points of } \left\{ \frac{1}{m} + \frac{1}{n} \right\} = \left\{ \frac{1}{n} \right\} \cup \{0\}\)
+\item \(\text{isolated points of } \left\{ \frac{1}{m} + \frac{1}{n} \right\} = \left\{ \frac{1}{m} + \frac{1}{n} \right\} \backslash \left\{ \frac{1}{n} \right\}\)
+\end{itemize}
+\end{enumerate}
+
+
+
+\end{itemize}
+
+\end{enumerate}
+
+\end{document}

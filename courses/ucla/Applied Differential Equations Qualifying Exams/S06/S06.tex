@@ -1,0 +1,339 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Applied Differential Equations Qualifying Exam, Spring 2006 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Solve the following initial value problem and verify your solution:
+\[u_x + u_y = u^2, \ u(x,0) = h(x).\]
+
+{\bf Solution}
+
+We use the method of characteristics, and as such parametrize the initial curve \(\Gamma\) by \(s \mapsto (s, 0, h(s)) = (x_0,y_0,z_0)\), and solve the system
+\begin{eqnarray*}
+x'(t) & = & 1; \\
+y'(t) & = & 1; \\
+z'(t) & = & z^2.
+\end{eqnarray*}
+We can solve all \(3\) equations immediately and independently:
+\begin{eqnarray*}
+x(t) & = & t + x_0 = t + s; \\
+y(t) & = & t + y_0 = t; \\
+z(t) & = & \frac{z_0}{1 - t z_0} = \frac{h(s)}{1 - t h(s)}.
+\end{eqnarray*}
+We solve for \(s,t\) in terms of \(x,y\) to obtain
+\begin{eqnarray*}
+s & = & x - y; \\
+t & = & y.
+\end{eqnarray*}
+It follows that
+\[u(x,y) = z = \frac{h(x - y)}{1 - y h(x - y)}.\]
+To verify this solves the initial value problem, we note that \(u(x,0) = h(x)\), while
+\begin{eqnarray*}
+u_x(x,y) & = & \frac{h'(x - y)}{(1 - y h(x - y))^2}, \\
+u_y(x,y) & = & \frac{h(x - y)^2 - h'(x - y)}{(1 - y h(x - y))^2},
+\end{eqnarray*}
+from which we easily verify that, indeed, \(u_x + u_y = u^2\).
+
+
+
+\item Consider an initial value problem for the {\em Kortewig-deVries equation}
+\[u_t + u_{xxx} + 6 u u_x = 0, \ x \in \mathbb{R}, \ t > 0, \ u(x,0) = \phi(x). \ \ \ \ (1)\]
+Show that the following are conserved quantities for (1) (you may assume that the function \(u(x,t)\) vanishes as \(|x| \to \infty\), together with all of its derivatives):
+
+\begin{itemize}
+\item Mass:
+\[\int_{-\infty}^{\infty} u(x,t) dx,\]
+
+\item Momentum:
+\[\int_{-\infty}^{\infty} u(x,t)^2 dx,\]
+
+\item Energy:
+\[\int_{-\infty}^{\infty} \left( \frac{1}{2} u_x(x,t)^2 - u(x,t)^2 \right) dx.\]
+
+\end{itemize}
+
+{\bf Solution}
+
+All integrals below are over \(\mathbb{R}\), and we keep in mind that \(u\) and all its \(x\)-derivatives vanish at \(\pm \infty\).
+
+\begin{itemize}
+\item We compute
+\begin{eqnarray*}
+\frac{d}{dt} \int u dx
+& = & \int u_t dx \\
+& = & \int -\left( u_{xxx} + 6 u u_x \right) dx \\
+& = & \left. -u_{xx} - 3 u^2 \right|_{-\infty}^{\infty} \\
+& = & 0.
+\end{eqnarray*}
+It follows that mass is conserved.
+
+\item We compute
+\begin{eqnarray*}
+\frac{d}{dt} \int u^2 dx
+& = & \int 2 u u_t dx \\
+& = & \int -2 u \left( u_{xxx} + 6 u u_x \right) dx \\
+& = & -2 \int u u_{xxx} dx - 12 \int u^2 u_x dx \\
+& = & \left. -2 u_x u_{xx} \right|_{-\infty}^{\infty} + 2 \int u_x u_{xx} dx - 12 \int u^2 u_x dx \\
+& = & \left. u_x^2 - 4 u^3 \right|_{-\infty}^{\infty} \\
+& = & 0.
+\end{eqnarray*}
+It follows that momentum is conserved.
+
+\item We compute
+\begin{eqnarray*}
+\frac{d}{dt} \int \left( \frac{1}{2} u_x^2 - u^3 \right) dx
+& = & \int \left( u_x (u_x)_t - 3 u^2 u_t \right) dx \\
+& = & \int \left( u_x (u_t)_x - 3 u^2 u_t \right) dx \\
+& = & \int \left( -u_x \left( u_{xxx} + 6 u u_x \right)_x + 3 u^2 \left( u_{xxx} + 6 u u_x \right) \right) dx \\
+& = & \int \left( -u_x u_{xxxx} - 6 u_x^3 - 6 u u_x u_{xx} + 3 u^2 u_{xxx} + 18 u^3 u_x \right) dx.
+\end{eqnarray*}
+Now,
+\begin{eqnarray*}
+\int u_x u_{xxxx} dx & = & -\int u_{xx} u_{xxx} dx = \left. -u_{xx}^2 \right|_{-\infty}^{\infty} = 0; \\
+\int u_x^3 dx & = & \int u_x^2 u_x dx = -\int 2 u u_x u_{xx} dx; \\
+\int u^2 u_{xxx} dx & = & -\int 2 u u_x u_{xx} dx; \\
+\int u^3 u_x dx & = & \left. \frac{1}{4} u^4 \right|_{-\infty}^{\infty} = 0.
+\end{eqnarray*}
+Thus, the outer terms in the integrand vanish outright, while the inner \(3\) terms additively cancel, leaving \(0\).  It follows that energy is conserved.
+
+\end{itemize}
+
+
+
+\item Let \(0 < L < \infty\) and let \(0 < p(x) \in C^{\infty}([0,L])\).  Consider the following intial-boundary value problem on \((0,L) \times (0,\infty)\):
+\[\left\{
+\begin{array}{l}
+\partial_t u = \partial_x \left( p(x) \partial_x u \right), \ (x,t) \in (0,L) \times (0,\infty); \\
+u(x,0) = \phi(x), \ \partial_x u(0,t) = \partial_x u(L,t) = 0. \\
+\end{array}
+\right.\]
+Here \(\phi \in C^{\infty}([0,L])\).  Compute the limit of \(u(x,t)\) as \(t \to \infty\).
+
+{\bf Solution}
+
+We separate variables, assuming \(u(x,t) = X(x) T(t)\), giving
+\[XT' = (p X')'T \ \Rightarrow \ \frac{T'}{T} = \frac{(p X')'}{X} = \lambda\]
+for some constant \(\lambda\).  \(T\) solves easily to \(T(t) = e^{\lambda t}\).  We are thus left to analyze
+\[(p X')' = \lambda X\]
+subject to the boundary conditions \(X'(0) = X'(L) = 0\).  Let \(M\) denote the linear differential operator (with boundary conditions) on the left-hand side.  Then \(\lambda\) is an eigenvalue for \(M\) and \(X\) is an eigenfunction.  We show that \(\lambda \leq 0\):
+\begin{eqnarray*}
+\lambda (X,X) &   =  & (\lambda X, X) \\
+              &   =  & (MX, X) \\
+              &   =  & \int_0^L (MX) X dx \\
+              &   =  & \int_0^L (p X')' X dx \\
+              &   =  & -\int_0^L p (X')^2 dx \\
+              & \leq & 0,
+\end{eqnarray*}
+and hence \(\lambda \leq 0\), as claimed.  Further, note that \(M\) is self-adjoint in the usual \(L^2\)-inner product:
+\begin{eqnarray*}
+(M u, v) & = & \int_0^L (M u) v dx \\
+         & = & \int_0^L (p u')' v dx \\
+         & = & -\int_0^L p u' v' dx \\
+         & = & \int_0^L u (p v') dx \\
+         & = & (u, M v);
+\end{eqnarray*}
+it follows that the eigenfunctions of \(M\) form an orthogonal basis.  Denoting the eigenvalues by \(\lambda_k\) and the corresponding (normalized) eigenfunctions by \(X_k\), by linearity the solution to the PDE is
+\[u(x,t) = \sum_k c_k e^{\lambda_k t} X_k(x),\]
+where the \(c_k\)'s are the Fourier coefficients of \(u(x,0) = \phi(x)\):
+\[c_k = \int_0^L \phi(x) X_k(x) dx.\]
+Now in the limit as \(t \to \infty\), due to the \(e^{\lambda_k t}\)'s, the term in the expression of \(u\) corresponding to the largest \(\lambda_k\) dominates the rest of the terms in the sum.  We see that \(\lambda = 0\) is an eigenvalue of \(M\) with eigenfunction \(X \equiv 1\), and this must be the largest eigenvalue by the nonpositivity of all eigenvalues, hence, based on this discussion,
+\[\lim_{t \to \infty} u(x,t) = \int_0^L \phi(x) dx.\]
+
+
+
+\item Consider the initial value problem of the form
+\[\frac{dy}{dt} = f(y), \ y(0) = 0. \ \ \ \ (3)\]
+Show that there exists a continuous function \(f : \mathbb{R} \to \mathbb{R}\) with \(f(y) = 0\) precisely when \(y = 0\) and such that \(f\) does not satisfy the Lipschitz condition in any neighborhood of \(0\), while the uniqueness of the initial value problem (3) holds.
+
+{\bf Solution}
+
+Let
+\[f(y) = -y^{1/3}.\]
+Notice that \(f\) is continuous; \(f(y) = 0\) precisely when \(y = 0\); and \(f'\) is unbounded in any neighborhood of \(0\), hence cannot be Lipschitz in any neighborhood of \(0\).  Further, \(y(t) \equiv 0\) is the unique solution to \(y'(t) = f(y(t))\) with \(y(0) = 0\), since \(0\) is a stable fixed point for \(f\).
+
+
+
+\item Consider the second-order ODE
+\[x''(t) + x(t) + 2 x(t)^2 = 0. \ \ \ \ (4)\]
+
+\begin{itemize}
+\item Find the conserved quantity for (4).
+
+\item Rewrite (4) as a \(2 \times 2\) system of the first order.
+
+\item Find and classify the equilibrium points.
+
+\item Sketch the phase portrait of the equation.
+
+\end{itemize}
+
+{\bf Solution}
+
+\begin{itemize}
+\item Multiplying the equation by \(x'\) and integrating gives
+\[C = \frac{1}{2} \left( x' \right)^2 + \frac{1}{2} x^2 + \frac{2}{3} x^3.\]
+
+\item
+\[(x,x')' = (x', -x - 2 x^2) = F(x,x').\]
+
+\item Equilibrium points \((x,x')^*\) satisfy
+\[0 = F((x,x')*) \ \Rightarrow \ (x,x')^* \in \left\{ (0,0), \left( -\frac{1}{2}, 0 \right) \right\}.\]
+We also compute
+\[DF(x,x') = \left( \begin{array}{cc} 0 & 1 \\ -1 - 4 x & 0 \end{array} \right).\]
+
+\begin{itemize}
+\item \((x,x')^* = (0,0)\).  We have
+\[DF(0,0) = \left( \begin{array}{cc} 0 & 1 \\ -1 & 0 \end{array} \right)\]
+with eigenvalues \(\lambda_{\pm} = \pm i\).  It follows that \((0,0)\) is a center.
+
+\item \((x,x')^* = (-1/2, 0)\).  We have
+\[DF \left( -\frac{1}{2}, 0 \right) = \left( \begin{array}{cc} 0 & 1 \\ 1 & 0 \end{array} \right)\]
+with eigenvalues \(\lambda_{\pm} = \pm 1\) and corresponding eigenvalues
+\[v_{\pm} = \left( \begin{array}{c} 1 \\ \pm 1 \end{array} \right).\]
+It follows that \((-1/2, 0)\) is a saddle.
+
+\end{itemize}
+
+\item
+
+\end{itemize}
+
+
+
+\item Let \(\Omega \subset \mathbb{R}^n\) be a bounded, open, and connected set.  Suppose that \(u \in C^2(\Omega) \cap C \left( \overline{\Omega} \right)\) is a solution of
+\[\Delta u + \sum_{k = 1}^n a_k(x) \frac{\partial u}{\partial x_k} + c(x) u = 0 \ \text{in \(\Omega\)},\]
+where \(a_k(x)\), \(1 \leq k \leq n\), and \(c(x)\) are continuous in \(\overline{\Omega}\), with \(c(x) < 0\) in \(\Omega\).  Show that \(u = 0\) on \(\partial\Omega\) implies that \(u = 0\) in \(\Omega\).
+
+Hint:  Show that \(\max u(x) \leq 0\) and \(\min u(x) \geq 0\).
+
+{\bf Solution}
+
+Assume that \(u = 0\) on \(\partial\Omega\), and suppose \(u\) attains its maximum at \(x^* \in \Omega\); immediately we have \(u(x^*) \geq 0\).  Then \(\Delta u(x^*) \leq 0\) and \(\left( \partial u / \partial x_k \right)(x^*) = 0\) for \(1 \leq k \leq n\), thus it follows (from the PDE that \(u\) satisfies) that \(c(x^*) u(x^*) \geq 0\).  The fact that \(c < 0\) implies then that \(u(x^*) \leq 0\), so in fact we must have \(\max_{\overline{\Omega}} u = u(x^*) = 0\).  A completely analogous argument allows us to conclude that \(\min_{\overline{\Omega}} u = 0\) as well, hence \(u \equiv 0\).
+
+
+
+\item Let \(\Omega \subset \mathbb{R}^n\) be a smooth bounded domain and let \(f \in C \left( \overline{\Omega} \right)\).  Find the minimum of the functional
+\[E(u) = \int_{\Omega} \left( \frac{1}{2} \sum_{k = 1}^n \left( \frac{\partial u}{\partial x_k} \right)^2 - f(x) u(x) \right) dx\]
+on the space of smooth functions in \(\overline{\Omega}\), subject to the constraints
+\[u|_{\partial\Omega} = 0,  \ \int_{\Omega} = u(x) dx = A,\]
+where \(A\) is a given constant.  You may assume that a smooth solution of this problem exists.  You may also regard the solution of
+\[\Delta w = h \ \text{in \(\Omega\)}, \ w|_{\partial\Omega} = 0\]
+as known, for any \(h \in C \left( \overline{\Omega} \right)\).
+
+{\em Hint.}  Use Lagrange multipliers.
+
+{\bf Solution}
+
+Let \(u\) be the solution to \(\Delta u = -f\) in \(\Omega\) with \(u = 0\) on \(\partial\Omega\).  We claim that \(E(u)\) is the minimum of \(E\).  Indeed, for any \(v \in C^2(\Omega) \cap C \left( \overline{\Omega} \right)\) with \(v = 0\) on \(\partial\Omega\),
+\begin{eqnarray*}
+E(u + v) & = & \int_{\Omega} \left( \frac{1}{2} \|\nabla u + \nabla v\|^2 - f (u + v) \right) dx \\
+         & = & E(u) + \frac{1}{2} \int_{\Omega} \|\nabla v\|^2 dx + \int_{\Omega} \nabla u \cdot \nabla v dx - \int_{\Omega} f v dx \\
+         & = & E(u) + \frac{1}{2} \int_{\Omega} \|\nabla v\|^2 dx - \int_{\Omega} \Delta u v dx - \int_{\Omega} f v dx \\
+         & = & E(u) + \frac{1}{2} \int_{\Omega} \|\nabla v\|^2 dx - \int_{\Omega} \left( \Delta u + f \right) v dx \\
+         & = & E(u) + \frac{1}{2} \int_{\Omega} \|\nabla v\|^2 dx \\
+         & \geq & E(u),
+\end{eqnarray*}
+where we have used the fact that \(v = 0\) on \(\partial\Omega\) and that \(\Delta u = -f\) in \(\Omega\).  Since the set of such \(u + v\) is exactly the space which is the domain of \(E\), we conclude that \(u\), indeed, minimizes \(E\).
+
+
+
+\item Let \(u(x,t) \in C^2 \left( \mathbb{R}^n \times \mathbb{R} \right)\) be a solution of the wave equation
+\[\frac{\partial^2 u}{\partial t^2} - \sum_{j = 1}^n \frac{\partial^2 u}{\partial x_j^2} = 0\]
+in the domain
+\[\mathcal{D} = \left\{ (x,t) \ \left| \ x' = (x_1, \ldots, x_{n - 1}) \in \mathbb{R}^{n - 1}, \ t \geq |x_n| \right. \right\}.\]
+In the picture, the variable \(x' = (x_1, \ldots, x_{n - 1})\) has been suppressed.
+
+Assume for simplicity that \(u = 0\) for \(|x'| \geq R\) for some \(R > 1\).  Suppose that \(u|_{\Gamma_1} = 0\) and \(u|_{\Gamma_2} = 0\), where
+\[\Gamma_1 = \left\{ (x,t) \ \left| \ x' \in \mathbb{R}^{n - 1}, \ t - x_n = 0, \ t > 0 \right. \right\}\]
+and
+\[\Gamma_2 = \left\{ (x,t) \ \left| \ x' \in \mathbb{R}^{n - 1}, \ t + x_n = 0, \ t > 0 \right. \right\}.\]
+Prove that \(u \equiv 0\).
+
+{\em Hint.}  Integrate by parts in
+\[0 = \int \left( \frac{\partial^2 u}{\partial t^2} - \Delta u \right) \frac{\partial u}{\partial t} dx dt,\]
+the integration being performed over the domain \(\mathcal{D} \cap \{t \leq T\}\), where \(T > 0\) is arbitrary.  You may find it useful to make a change of variables \(s = t - x_n\), \(\tau = t + x_n\), \(y' = x'\).
+
+{\bf Solution}
+
+As suggested by the hint, we attempt to examine
+\[0 = \int_{\mathcal{D} \cap \{t \leq T\}} \left( u_{tt} - \Delta u \right) u_t dx dt
+    = \int_0^T \int_{\mathbb{R}^{n - 1}} \int_{-t}^t \left( u_{tt}(x,t) - \Delta u (x,t) \right) u_t(x,t) dx_n dx' dt
+    = I.\]
+We first split \(I\) into the \(n + 1\) pieces below:
+\begin{eqnarray*}
+I_t & = & \int_0^T \int_{\mathbb{R}^{n - 1}} \int_{-t}^t u_{tt}(x,t) u_t(x,t) dx_n dx' dt; \\
+I_j & = & \int_0^T \int_{\mathbb{R}^{n - 1}} \int_{-t}^t u_{x_kx_k}(x,t) u_t(x,t) dx_n dx' dt, \ j = 1, \ldots, n;
+\end{eqnarray*}
+such that
+\[0 = I = I_t - \sum_{j = 1}^n I_j.\]
+We will integrate by parts and permute orders of integration in what follows without much comment.  We first examine \(I_t\):
+\begin{eqnarray*}
+I_t
+& = & \int_0^T \int_{\mathbb{R}^{n - 1}} \int_{-t}^t u_{tt}(x,t) u_t(x,t) dx_n dx' dt \\
+& = & \int_{\mathbb{R}^{n - 1}} \int_{-T}^T \int_{|x_n|}^T u_{tt}(x,t) u_t(x,t) dt dx_n dx' \\
+& = & \int_{\mathbb{R}^{n - 1}} \int_{-T}^T \int_{|x_n|}^T \frac{\partial}{\partial t} \left( \frac{1}{2} u_t(x,t)^2 \right) dt dx_n dx' \\
+& = & \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \int_{-T}^T \left( u_t(x,T)^2 - u_t(x,|x_n|)^2 \right) dx_n dx' \\
+& = & \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \left( \int_{-T}^T u_t(x',y,T)^2 dy - \int_0^T \left( u_t(x',y,y)^2 + u_t(x',-y,y)^2 \right) dy \right) dx'.
+\end{eqnarray*}
+Second, we examine \(I_n\):
+\begin{eqnarray*}
+I_n
+& = & \int_0^T \int_{\mathbb{R}^{n - 1}} \int_{-t}^t u_{x_nx_n}(x,t) u_t(x,t) dx_n dx' dt \\
+& = & \int_{\mathbb{R}^{n - 1}} \int_0^T \left( \left. u_{x_n}(x,t) u_t(x,t) \right|_{-t}^t - \int_{-t}^t u_{x_n}(x,t) u_{tx_n}(x,t) dx_n \right) dt dx' \\
+& = & \int_{\mathbb{R}^{n - 1}} \left( \int_0^T \left( u_{x_n}(x',t,t) u_t(x',t,t) - u_{x_n}(x',-t,t) u_t(x',-t,t) \right) dt \right. \\
+&   & \ \left. - \int_{-T}^T \int_{|x_n|}^T u_{x_n}(x,t) u_{x_nt}(x,t) dt dx_n \right) dx' \\
+& = & \int_{\mathbb{R}^{n - 1}} \left( \int_0^T \left( u_{x_n}(x',y,y) u_t(x',y,y) - u_{x_n}(x',-y,y) u_t(x',-y,y) \right) dy \right. \\
+&   & \ \left. - \int_{-T}^T \int_{|x_n|}^T \frac{\partial}{\partial t} \left( \frac{1}{2} u_{x_n}(x,t)^2 \right) dt dx_n \right) dx' \\
+& = & \int_{\mathbb{R}^{n - 1}} \left( \int_0^T \left( u_{x_n}(x',y,y) u_t(x',y,y) - u_{x_n}(x',-y,y) u_t(x',-y,y) \right) dy \right. \\
+&   & \ \left. - \frac{1}{2} \int_{-T}^T \left( u_{x_n}(x,T)^2 - u_{x_n}(x,|x_n|)^2 \right) dx_n \right) dx' \\
+& = & \int_{\mathbb{R}^{n - 1}} \left( \int_0^T \left( u_{x_n}(x',y,y) u_t(x',y,y) - u_{x_n}(x',-y,y) u_t(x',-y,y) \right) dy \right. \\
+&   & \ \left. - \frac{1}{2} \int_{-T}^T u_{x_n}(x',y,T)^2 dy + \frac{1}{2} \int_0^T \left( u_{x_n}(x',y,y)^2 + u_{x_n}(x',-y,y)^2 \right) dy \right) dx'.
+\end{eqnarray*}
+The \(I_j\)'s for \(j = 1, \ldots, n - 1\) are similar to \(I_n\), with the exception that we don't pick any boundary terms when integrating by parts to move the \(\partial / \partial x_j\):
+\[I_j = -\frac{1}{2} \int_{\mathbb{R}^{n - 1}} \left( \int_{-T}^T u_{x_j}(x',y,T)^2 dy - \int_0^T \left( u_{x_j}(x',y,y)^2 + u_{x_j}(x',-y,y)^2 \right) dy \right) dx'.\]
+We can simplify this further by noting that, since \(u(x',y,y) = 0\) for all \(x_j \in \mathbb{R}\) (and \(y \in [0,T]\)),
+\[0 = \frac{\partial}{\partial x_j} \left( u(x',y,y) \right) = u_{x_j}(x',y,y),\]
+and similarly for \(u_{x_j}(x',-y,y)\).  Thus,
+\[I_j = -\frac{1}{2} \int_{\mathbb{R}^{n - 1}} \int_{-T}^T u_{x_j}(x',y,T)^2 dy dx'.\]
+Next, we simplify the difference \(I_t - I_n\):
+\begin{eqnarray*}
+I_t - I_n
+& = & \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \left( \int_{-T}^T \left( u_t(x',y,T)^2 + u_{x_n}(x',y,T)^2 \right) dy \right. \\
+&   & \ \left. - \int_0^T \left( u_t(x',y,y)^2 + u_{x_n}(x',y,y)^2 + 2 u_t(x',y,y) u_{x_n}(x',y,y) \right. \right. \\
+&   & \ \ \ \ \ \left. \left. + u_t(x',-y,y)^2 + u_{x_n}(x',-y,y)^2 - 2 u_t(x',-y,y) u_{x_n}(x',-y,y) \right) dy \right) dx' \\
+& = & \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \left( \int_{-T}^T \left( u_t(x',y,T)^2 + u_{x_n}(x',y,T)^2 \right) dy \right. \\
+&   & \ \left. - \int_0^T \left( \left( u_t(x',y,y) + u_x(x',y,y) \right)^2 + \left( u_t(x',-y,y) - u_x(x',-y,y) \right)^2 \right) dy \right) dx' \\
+& = & \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \left( \int_{-T}^T \left( u_t(x',y,T)^2 + u_{x_n}(x',y,T)^2 \right) dy \right. \\
+&   & \ \left. - \int_0^T \left( \left( \frac{\partial}{\partial y} u(x',y,y) \right)^2 + \left( \frac{\partial}{\partial y} u(x',-y,y) \right)^2 \right) dy \right) dx'.
+\end{eqnarray*}
+Similar to the previous simplification of \(I_{x_j}\), since \(u(x',y,y) = 0\) for \(y \in [0,T]\), we have that
+\[\frac{\partial}{\partial y} u(x',y,y) = 0,\]
+and the difference \(I_t - I_n\) simplifies to
+\[I_t - I_n = \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \int_{-T}^T \left( u_t(x',y,T)^2 + u_{x_n}(x',y,T)^2 \right) dy dx'.\]
+We finally get, then, that
+\[0 = I = I_t - \sum_{j = 1}^n I_j = \frac{1}{2} \int_{\mathbb{R}^{n - 1}} \int_{-T}^T \left( u_t(x',y,T)^2 + \sum_{j = 1}^n u_{x_j}(x',y,T)^2 \right) dy dx'.\]
+As the integrand is nonnegative, we therefore infer that (replacing \((x',y) = (x',x_n) = x\))
+\[u_t(x,T) = u_{x_1}(x,T) = \cdots = u_{x_n}(x,T) = 0.\]
+In particular, since \(u(x',T,T) = u(x',-T,T) = 0\), we must conclude that \(u(x,T) = 0\).  But since \(T\) was arbitrary, we obtain \(u \equiv 0\).
+
+
+
+\end{enumerate}
+
+\end{document}

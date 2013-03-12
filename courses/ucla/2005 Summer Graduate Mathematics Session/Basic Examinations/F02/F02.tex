@@ -1,0 +1,219 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\def\im{\mathop{\rm im}\nolimits}
+\def\ker{\mathop{\rm ker}\nolimits}
+\def\rank{\mathop{\rm rank}\nolimits}
+\def\span{\mathop{\rm span}\nolimits}
+\newcommand{\matrixiiibyiii}[9]{\left( \begin{array}{ccc} #1 & #2 & #3 \\ #4 & #5 & #6 \\ #7 & #8 & #9 \end{array} \right)}
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Basic Examination, F02 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Let \(K\) be a compact subset and \(F\) be a closed subset in the metric space \(X\).  Suppose \(K \cap F = \emptyset\).  Prove that
+\[0 < \inf \{ d(x,y) : x \in K, y \in F \}.\]
+
+{\bf Solution}
+
+Let \(f : K \to \mathbb{R}\) be defined by
+\[f(x) = \inf_{y \in F} d(x,y).\]
+It is evident that \(f\) is continuous, hence must achieve its minimum \(m\) for some \(x \in K\).  Now if \(m = 0\), this implies that \(x \in \overline{F} = F\), hence \(K \cap F \neq \emptyset\), which is a contradiction to the given.  Thus
+\[0 < m \leq \inf_{x \in K} f(x) = \inf_{x \in K, y \in F} d(x,y).\]
+
+
+
+\item Show why the Least Upper Bound Property (every set bounded above has a least upper bound) implies the Cauchy Completeness Property (every Cauchy sequence has a limit) of the real numbers.
+
+{\bf Solution}
+
+Let \(\{x_n\}_{n = 1}^{\infty} \subset \mathbb{R}\) be a Cauchy sequence.  Let \(N_i\) be large enough such that \(|x_n - x_m| < 1/i\) for all \(n,m \geq N_i\), and also such that \(N_i < N_{i + 1}\), \(i \geq 1\).  Let
+\[E_i = \bigcup_{n = N_i}^{\infty} \{x_n\},\]
+\[\alpha_i = \sup E_i,\]
+whose existence is guaranteed by the Least Upper Bound Property of \(\mathbb{R}\), since \(E_i\) is bounded above by \(x_{N_i} + 1/i\).  Then \(\{\alpha_i\}_{i = 1}^{\infty}\) is a monotonically decreasing sequence bounded below by \(x_{N_1} - 1\).  Since the Least Upper Bound Property and the Greatest Lower Bound Property are equivalent for \(\mathbb{R}\) (by the isomorphism \(x \leftrightarrow -x\)), it follows that \(\bigcup_{i = 1}^{\infty} \{\alpha_i\}\) has a greatest lower bound, say, \(\alpha^* \in \mathbb{R}\).
+
+Now given \(\epsilon > 0\), we can choose \(i\) such that \(\alpha_i - \alpha^* < \epsilon\) and such that \(1/i < \epsilon\).  Then for \(n \geq N_i\), \(x_n \in E_i\), hence \(\alpha_i - x_n \leq 1/i < \epsilon\), hence
+\[|x_n - \alpha^*| \leq |x_n - \alpha_i| + |\alpha_i - \alpha^*| < 2\epsilon,\]
+showing that \(x_n \to \alpha^*\).
+
+
+
+\item Show that there is a subset of the real numbers which is not the countable intersection of open subsets.
+
+{\bf Solution}
+
+\(\mathbb{Q}\) cannot be expressed as a countable intersection of open sets.
+
+(S02.2)
+
+
+
+\item By integrating the series
+\[\frac{1}{1 + x^2} = 1 - x^2 + x^4 - x^6 + x^8 \cdots\]
+prove that \(\frac{\pi}{4} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} \cdots\).  Justify carefully all the steps (especially taking the limit as \(x \to 1\) from below).
+
+{\bf Solution}
+
+We first note that
+\[\int_0^{\alpha} \frac{1}{1 + x^2} dx = \arctan(\alpha) \to \frac{\pi}{4}\]
+as \(\alpha \uparrow 1\).  Also, for all \(\alpha \in [0,1)\),
+\[  \int_0^{\alpha} \frac{1}{1 + x^2} dx
+  = \int_0^{\alpha} \left( \sum_{i = 0}^{\infty} (-1)^i x^{2i} \right) dx
+  = \sum_{i = 0}^{\infty} (-1)^i \int_0^{\alpha} x^{2i} dx
+  = \sum_{i = 0}^{\infty} (-1)^i \frac{\alpha^{2i + 1}}{2i + 1},\]
+where the exchange of the integral and summation is justified by the uniform convergence of the series on \([0, \alpha]\).  Set
+\[S_n(\alpha) = \sum_{i = 0}^n (-1)^i \frac{\alpha^{2i + 1}}{2i + 1},\]
+\[S(\alpha) = \lim_{n \to \infty} S_n(\alpha)\]
+for \(\alpha \in [0,1]\).  We know that \(S(\alpha) = \arctan(\alpha)\) for \(\alpha \in [0,1)\), hence we just need to show that \(S(\alpha) \to S(1)\) as \(\alpha \uparrow 1\).  Indeed, for any fixed \(n \geq 0\),
+\[\begin{array}{rcl}
+  |S(1) - S(\alpha)|
+  & \leq & |S(1) - S_n(1)| + |S_n(1) - S_n(\alpha)| + |S_n(\alpha) - S(\alpha)| \\
+  &    < & \frac{1}{2n + 3} + |S_n(1) - S_n(\alpha)| + \frac{\alpha^{2n + 3}}{2n + 3} \\
+  &    < & \frac{2}{2n + 3} + |S_n(1) - S_n(\alpha)|
+  \end{array}.\]
+As \(\alpha \uparrow 1\), \(S_n(\alpha) \to S_n(1)\), hence
+\[\lim_{\alpha \uparrow 1} |S(1) - S(\alpha)| \leq \frac{2}{2n + 3},\]
+and since \(n\) was arbitrary, we conclude that
+\[\lim_{\alpha \uparrow 1} S(\alpha) = S(1),\]
+hence
+\[1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \cdots = S(1) = \lim_{\alpha \uparrow 1} S(\alpha) = \lim_{\alpha \uparrow 1} \arctan(\alpha) = \frac{\pi}{4}.\]
+
+
+
+\item Suppose \(f : \mathbb{R}^2 \to \mathbb{R}\) has partial derivatives at every point bounded by \(A > 0\).
+
+\begin{enumerate}
+\item Show that there is an \(M > 0\) such that
+\[|f((x,y)) - f((x_1,y_1))| \leq M((x - x_1)^2 + (y - y_1)^2)^{1/2}.\]
+
+\item What is the smallest value of \(M\) (in terms of \(A\)) for which this always works?
+
+\item Give an example where that value of \(M\) makes the inequality an equality.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Given \((x,y), (x_1,y_1) \in \mathbb{R}^2\), two applications of the Mean Value Theorem yields points \(c\) between \(x\) and \(x_1\) and \(d\) between \(y\) and \(y_1\) such that
+\[f(x_1,y) - f(x,y) = \frac{\partial f}{\partial x}(c,y)(x_1 - x),\]
+\[f(x_1,y_1) - f(x_1,y) = \frac{\partial f}{\partial y}(x_1,d)(y_1 - y),\]
+hence
+\[|f(x_1,y_1) - f(x,y)| \leq A|x_1 - x| + A|y_1 - y| \leq \sqrt{2} A \sqrt{(x_1 - x)^2 + (y_1 - y)^2}.\]
+
+\item The above inequality is tight for general \(f\) and \((x,y), (x_1,y_1) \in \mathbb{R}^2\), i.e., \(M \geq A/\sqrt{2}\).
+
+\item Let
+\[f(x,y) = A(x + y).\]
+Then
+\[|f(x + t,y + t) - f(x,y)| = 2A|t| = \sqrt{2} A \sqrt{t^2 + t^2}.\]
+
+\end{enumerate}
+
+
+
+\item Suppose \(F : \mathbb{R}^3 \to \mathbb{R}^2\) is continuously differentiable.  Suppose for some \(v_0 \in \mathbb{R}^3\) and \(x_0 \in \mathbb{R}^2\) that \(F(v_0) = x_0\) and \(F'(v_0) : \mathbb{R}^3 \to \mathbb{R}^2\) is onto.  Show that there is a continuously differentiable function \(\gamma\), \(\gamma : (-\epsilon,\epsilon) \to \mathbb{R}^3\) for some \(\epsilon > 0\), such that
+\begin{enumerate}
+\item \(\gamma'(0) \neq \vec{0} \in \mathbb{R}^3\), and
+\item \(F(\gamma(t)) = x_0\) for all \(t \in (-\epsilon,\epsilon)\).
+\end{enumerate}
+
+{\bf Solution}
+
+
+
+\item Let \(T : V \to W\) be a linear transformation of finite dimensional real vector spaces.  Define the transpose of \(T\) and then prove both of the following:
+
+\begin{enumerate}
+\item \(\im(T)^{\circ} = \ker(T^t)\), where \(\im(T)^{\circ}\) is the annihilator of \(\im(T)\), the image (range of \(T\), and \(\ker(T^t)\) is the kernel (null space) of \(T^t\).
+
+\item \(\rank(T) = \rank(T^t)\), where the rank of a linear transformation is the dimension of its image.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\(T^t : W^* \to V^*\) is defined such that \(T^t(g) = g \circ T \in V^*\) for \(g \in W^*\).
+
+(F01.7)
+
+
+
+\item Let \(T\) be the rotation of an angle \(60^{\circ}\) counterclockwise about the origin in the plane perpendicular to \((1,1,2)\) in \(\mathbb{R}^3\).
+
+\begin{enumerate}
+\item Find the matrix representation of \(T\) in the standard basis.  Find all eigenvalues and eigenspaces of \(T\).
+
+\item What are the eigenvalues and eigenspaces of \(T\) if \(\mathbb{R}^3\) is replaced by \(\mathbb{C}^3\).
+
+\end{enumerate}
+
+(You do not have to multiply any matrices out but must compute any inverses.)
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Let
+\[B_T = \matrixiiibyiii{\frac{1}{\sqrt{6}}}{ \frac{1}{\sqrt{2}}}{ \frac{1}{\sqrt{3}}}
+                       {\frac{1}{\sqrt{6}}}{-\frac{1}{\sqrt{2}}}{ \frac{1}{\sqrt{3}}}
+                       {\frac{2}{\sqrt{6}}}{                  0}{-\frac{1}{\sqrt{3}}}.\]
+Then regarding the columns of \(B_T\) as an orthonormal basis, the matrix representation of \(T\) in this basis is
+\[[T]_{B_T} = \matrixiiibyiii{1}{               0}{              0}
+                             {0}{ \cos 60^{\circ}}{\sin 60^{\circ}}
+                             {0}{-\sin 60^{\circ}}{\cos 60^{\circ}},\]
+so the matrix representation of \(T\) in the standard basis is
+\[T = B_T [T]_{B_T} B_T^{-1}
+    = B_T [T]_{B_T} B_T^t.\]
+The only eigenvalue of \(T\) is \(1\), with corresponding eigenspace \(\span \{(1 \ 1 \ 2)\}\).
+
+\item If we consider complex eigenvalues and eigenspaces, then \(T\) additionally has eigenvalues \(e^{i 60^{\circ}}\) and \(e^{-i 60^{\circ}}\) with corresponding eigenspaces \(\span \{(1 \ i)\}\) and \(\span \{(1 \ -i)\}\), respectively.
+
+\end{enumerate}
+
+
+
+\item Let \(V\) be a complex inner product space.  State and prove the Cauchy-Schwarz inequality.
+
+{\bf Solution}
+
+Given \(u,v \in V\), the Cauchy-Schwarz inequality states that
+\[|(u,v)| \leq \|u\| \|v\|,\]
+with equality if and only if \(u\) and \(v\) are linearly dependent.
+
+To prove the claim, consider
+\[0 \geq (u - tv, u - tv) = \|u\|^2 + |t|^2 \|v\|^2 - t\overline{(u,v)} - \overline{t}(u,v)\]
+for any \(t \in \mathbb{C}\).  Now if \(v = 0\), the claim is trivial, so suppose \(v \neq 0\) and set \(t = (u,v) / \|v\|^2\) to yield
+\[0 \geq \|u\|^2 + \frac{|(u,v)|^2}{\|v\|^2} - \frac{|(u,v)|^2}{\|v\|^2} - \frac{|(u,v)|^2}{\|v\|^2}
+       = \|u\|^2 - \frac{|(u,v)|^2}{\|v\|^2},\]
+from which the first part of the claim follows immediately.  Clearly, equality holds if and only if \(u - tv = 0\) for some value of \(t\).
+
+
+
+\item Let \(A\) be an \(n \times n\) complex matrix satisfying \(A^*A = AA^*\), where \(A^*\) is the adjoint of \(A\).  Let \(V = \mathbb{C}^{\{n \times 1\}}\), the \(n \times 1\) complex column matrices, be an inner product space under the dot product.  View \(A : V \to V\) as a linear map.  Prove that there exists an orthonormal basis of \(V\) consisting of eigenvectors of \(A\), i.e., prove this form of the Spectral Theorem for normal operators.
+
+{\bf Solution}
+
+Let \(\lambda\) be an eigenvalue of \(A\) (whose existence is given by the roots of the characteristic polynomial), and let \(E_{\lambda} = \{x \in V \ | \ A x = \lambda x\}\) be the corresponding eigenspace.  Then given any \(x \in E_{\lambda}\),
+\[A(A^*x) = A^*(Ax) = A^*(\lambda x) = \lambda (A^*x),\]
+thus \(A^*x \in E_{\lambda}\) and \(A^*\) is invariant on \(E_{\lambda}\).  Now given any \(y \in E_{\lambda}^{\perp}\), if \(x \in E_{\lambda}\), then
+\[(Ay,x) = (y,A^*x) = 0,\]
+since \(y \in E_{\lambda}^{\perp}\) and \(A^*x \in E_{\lambda}\).  Thus \(Ay \in E_{\lambda}^{\perp}\) and \(A\) is invariant on \(E_{\lambda}^{\perp}\).  It follows that the restriction of \(A\) to \(E_{\lambda}^{\perp}\) is a normal linear transformation, hence, by induction, has an orthonormal basis consisting of eigenvectors of \(A\).  Combine this orthonormal basis with an orthonormal basis for \(E_{\lambda}\) and we arrive at the desired conclusion.
+
+
+
+\end{enumerate}
+
+\end{document}

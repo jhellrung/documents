@@ -1,0 +1,286 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Numerical Analysis Qualifying Exam, Fall 2003 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item (5 Pts.) For a single panel, Simpson's rule
+\[\int_a^{a + 2h} f(x) dx \approx \frac{h}{3} \left( f(a) + 4 f(a + h) + f(a + 2h) \right)\]
+is fifth-order accurate.
+
+\begin{enumerate}
+\item What is the order of accuracy of the composite Simpson's rule?
+
+\item I have written a program that implements composite Simpson's rule for integrating functions over the interval \([0,1]\).  In checking the program for correctness, I test the routine on the integral \(\int_0^1 x^5 dx\) and I obtain the following results:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\(M\) & approximation & error \\
+\hline
+\(8\) & \(0.24169\) & \(0.04169\) \\
+\(16\) & \(0.22083\) & \(0.02083\) \\
+\(32\) & \(0.21041\) & \(0.01041\) \\
+\(64\) & \(0.20520\) & \(0.00520\) \\
+\end{tabular}
+\end{center}
+What is the factor by which the errors should decrease as the number of panels, \(M\), is doubled?
+
+\item On the basis of the above computational results, can I conclude that my program is incorrect?  Explain your answer.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item Composite Simpson's rule would be fourth-order accurate.
+
+\item The errors should decrease by a factor of \((1/2)^4 = 1/16\) for each doubling of \(M\).
+
+\item Yes, the program is probably incorrect.  The errors are only decreasing by a factor of \(1/2\) for each doubling of \(M\).
+
+\end{enumerate}
+
+
+
+\item (5 Pts.) Consider the following iterative method:
+\[A x^{k + 1} = B x^k + c\]
+where \(c\) is the vector \((1 \ 1)^t\) and \(A\) and \(B\) are the matrices
+\[A = \left( \begin{array}{cc} 2 & 0 \\ 0 & 2 \end{array} \right), \ 
+  B = \left( \begin{array}{cc} 2 & 1 \\ 1 & 2 \end{array} \right).\]
+
+\begin{enumerate}
+\item Assume the iteration converges; to what vector \(x\) does the iteration converge?
+
+\item Does this iteration converge for arbitrary initial vectors \(x^0\)?  Justify your answer.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item The iteration converging implies that
+\[Ax = Bx + c \ \Rightarrow \ x = (A - B)^{-1} c = \left( \begin{array}{c} -1 \\ -1 \end{array} \right).\]
+
+\item Since
+\begin{eqnarray*}
+A(x^{k + 1} - x)
+& = & Bx^k + c - Ax \\
+& = & Bx^k + (A - B)x - Ax \\
+& = & B(x^k - x),
+\end{eqnarray*}
+the iteration converges for all initial iterates \(x^0\) if and only if the eigenvalues of \(A^{-1} B\) are less than \(1\) in magnitude.  Indeed, we have
+\[A^{-1} B = \left( \begin{array}{cc} 1 & \frac{1}{2} \\ \frac{1}{2} & 1 \end{array} \right)\]
+with characteristic equation
+\[p(\lambda) = \left| \begin{array}{cc} \lambda - 1 & -\frac{1}{2} \\ -\frac{1}{2} & \lambda - 1 \end{array} \right|
+             = (\lambda - 1)^2 - \frac{1}{4}\]
+whose roots are
+\[\lambda_{\pm} = 1 \pm \frac{1}{2}.\]
+In particular, then \(|\lambda_+| \geq 1\), so the iteration will not converge if, e.g., \(x^0\) is an eigenvector corresponding to the eigenvalue \(\lambda_+\).
+
+\end{enumerate}
+
+
+
+\item (5 Pts.)
+
+\begin{enumerate}
+\item Give the cubic polynomial that interpolates the function \(f(x) = 2^x\) at the points \(x = 0\), \(x = 1\), \(x = 2\), and \(x = 3\).
+
+\item Give the value of your interpolant at \(x = \frac{1}{2}\), and hence derive an approximation to \(\sqrt{2} = 2^{1/2}\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We use the Lagrange polynomial form:
+\begin{eqnarray*}
+p(x) & = & \frac{(x - 1)(x - 2)(x - 3)}{(-1)(-2)(-3)} f(0)
+         + \frac{x(x - 2)(x - 3)}{(1)(-1)(-2)} f(1) \\
+     & + & \frac{x(x - 1)(x - 3)}{(2)(1)(-1)} f(2)
+         + \frac{x(x - 1)(x - 2)}{(3)(2)(1)} f(3) \\
+     & = & -\frac{1}{6} \left( x^3 - 6x^2 + 11x - 6 \right) (1)
+         +  \frac{1}{2} \left( x^3 - 5x^2 + 6x \right) (2) \\
+     & - &  \frac{1}{2} \left( x^3 - 4x^2 + 3x \right) (4)
+         +  \frac{1}{6} \left( x^3 - 3x^2 + 2x \right) (8) \\
+     & = & \frac{1}{6} x^3 + \frac{5}{6} x + 1
+\end{eqnarray*}
+
+\item We have
+\begin{eqnarray*}
+p \left( \frac{1}{2} \right)
+& = & \frac{1}{6} \left( \frac{1}{2} \right)^3 + \frac{5}{6} \left( \frac{1}{2} \right) + 1 \\
+& = & \frac{1}{48} + \frac{5}{12} + 1 \\
+& = & \frac{69}{48}.
+\end{eqnarray*}
+
+\end{enumerate}
+
+
+
+\item (10 Pts.)
+
+\begin{enumerate}
+\item Construct a two-stage second-order Runge-Kutta method for the ODE
+\[y' = f(y), \ y(0) = y_0;\]
+and find its region of absolute stability.
+
+\item Give an equivalent first-order system for the second-order differential equation
+\[y'' - 21 y' + 20 y = 0.\]
+
+\item Give the stability time-step restriction if second-order Runge-Kutta is used to compute solutions to the first-order system.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We use the method described by
+\[y_{n + 1} = y_n + h f \left( y_n + \frac{1}{2} h f(y_n) \right).\]
+To show second-order accuracy, we use Taylor's Theorem:
+\[f \left( y_n + \frac{1}{2} h f(y_n) \right)
+  = f(y_n) + \frac{1}{2} f'(y_n) f(y_n) h + O(h^2)\]
+so then, if \(y(t_n) = y_n\),
+\begin{eqnarray*}
+y_{n + 1} & = & y_n + f(y_n) h + \frac{1}{2} f'(y_n) f(y_n) h^2 + O(h^3) \\
+          & = & y(t_n + h) + O(h^3).
+\end{eqnarray*}
+We find the region of absolute stability by applying the method to the model problem \(y' = f(y) = \lambda y\):
+\begin{eqnarray*}
+y_{n + 1} & = & y_n + h \lambda \left( y_n + \frac{1}{2} h \lambda y_n \right) \\
+          & = & \left( 1 + \lambda h + \frac{1}{2} (\lambda h)^2 \right) y_n,
+\end{eqnarray*}
+giving the characteristic polynomial
+\[\rho(\theta) = \theta - \left( 1 + \lambda h + \frac{1}{2} (\lambda h)^2 \right)\]
+which has the single root
+\[\zeta = 1 + \lambda h + \frac{1}{2} (\lambda h)^2.\]
+The region of absolute stability is the set of complex \(\lambda h\) such that
+\[\left| 1 + \lambda h + \frac{1}{2} (\lambda h)^2 \right| < 1.\]
+We note that this region contains the interval \(\left( -\frac{1}{2}, 0 \right)\).
+
+\item We have
+\[Y' = \left( \begin{array}{cc} 0 & 1 \\ -20 & 21 \end{array} \right) Y = A Y\]
+where
+\[Y(t) = \left( \begin{array}{c} y(t) \\ y'(t) \end{array} \right).\]
+
+\item The characteristic polynomial of \(A\) is
+\begin{eqnarray*}
+p_A(\lambda) & = & \left| \begin{array}{cc} \lambda & -1 \\ 20 & \lambda - 21 \end{array} \right| \\
+             & = & \lambda (\lambda - 21) + 20 \\
+             & = & \lambda^2 - 21 \lambda + 20
+\end{eqnarray*}
+which has roots
+\[\lambda_{\pm} = \frac{21}{2} \pm \frac{1}{2} \sqrt{361},\]
+both of which are strictly positive.  Thus there is no stability time-step restriction.
+
+\end{enumerate}
+
+
+
+\item (10 Pts.) Consider the differential equation
+\[\left( \frac{\partial}{\partial t} + u \frac{\partial}{\partial x} \right)^2 \phi - c^2 \frac{\partial^2 \phi}{\partial x^2} = 0\]
+to be solved for \(0 \leq x \leq 1\), \(t > 0\); with periodic boundary conditions in \(x\); and initial data
+\begin{eqnarray*}
+\phi(x,0) & = & \phi_0(x) \\
+\phi_t(x,0) & = & \phi_1(x)
+\end{eqnarray*}
+Here \(u,c > 0\) are constants.  Give a convergent second-order accurate finite difference approximation to this equation.  Be sure to justify that your approximation is second-order accurate and convergent.
+
+{\bf Solution}
+
+We expand the differential equation, obtaining
+\[P \phi = \phi_{tt} + 2u \phi_{tx} - (c^2 - u^2) \phi_{xx} = 0.\]
+We now rewrite the equation as a system.  Introduce
+\[\Phi(t,x) = \left( \begin{array}{c} \phi(x,t) \\ \phi_t(x,t) \\ \phi_x(x,t) \end{array} \right);\]
+then we find that
+\[\Phi_t = \left( \begin{array}{ccc} 0 & 0 & 0 \\ 0 & -2u & c^2 - u^2 \\ 0 & 1 & 0 \end{array} \right) \Phi_x
+         + \left( \begin{array}{ccc} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{array} \right) \Phi.\]
+(F04.5)
+
+
+
+\item (10 Pts.) Consider the one-dimensional diffusion equation
+\[\frac{\partial v}{\partial t} = \alpha \frac{\partial^2 v}{\partial x^2}, \ \alpha > 0\]
+to be solved for \(0 \leq x \leq 1\), \(t > 0\); with periodic boundary conditions in \(x\); and initial data
+\[v(x,0) = v_0(x).\]
+Assume one uses the Dufort Frankel method:
+\[\frac{v^{n+1}_m - v^{n-1}_m}{2 \Delta t} - \alpha \left( \frac{v^n_{m+1} - (v^{n+1}_m + v^{n-1}_m) + v^n_{m-1}}{\Delta x^2} \right)\]
+as a means of computing approximate solutions to this equation.
+
+\begin{enumerate}
+\item Determine the truncation error associated with this approximation.  Under what conditions does the scheme provide a consistent approximation to the diffusion equation?  Would the condition required for consistency be difficult to satisfy in a set of computational experiments where \(\Delta x\) is repeatedly halved?
+
+\item Surprisingly, this scheme is explicit and unconditionally stable.  Show this, and explain why this does not violate the CFL condition.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item The symbol \(p(s,\xi)\) of the differential operator \(P = \partial_t - \alpha \partial_x^2\) is
+\begin{eqnarray*}
+p(s,\xi)
+& = & \left. P \left( e^{st} e^{i\xi x} \right) \right/ e^{st} e^{i\xi x} \\
+& = & s + \alpha \xi^2,
+\end{eqnarray*}
+while the symbol \(p_{\Delta t, \Delta x}(s,\xi)\) of the difference operator \(P_{\Delta t, \Delta x}\) given by
+\[P_{\Delta t, \Delta x} v^n_m
+  = \frac{v^{n+1}_m - v^{n-1}_m}{2 \Delta t} - \alpha \left( \frac{v^n_{m+1} - (v^{n+1}_m + v^{n-1}_m) + v^n_{m-1}}{\Delta x^2} \right)\]
+is
+\begin{eqnarray*}
+p_{\Delta t, \Delta x}(s,\xi)
+& = & \left. P_{\Delta t, \Delta x} \left( e^{sn\Delta t} e^{i\xi m\Delta x} \right) \right/ e^{sn\Delta t} e^{i\xi m\Delta x} \\
+& = & \frac{1}{2\Delta t} \left( e^{s\Delta t} - e^{-s\Delta t} \right)
+    - \frac{\alpha}{\Delta x^2} \left( e^{i\xi\Delta x} - \left( e^{s\Delta t} + e^{-s\Delta t} \right) e^{-i\xi\Delta x} \right) \\
+& = & \frac{1}{\Delta t} \sinh s\Delta t - \frac{2\alpha}{\Delta x^2} \left( \cos \xi\Delta x - \cosh s\Delta t \right) \\
+& = & s + O(\Delta t^2) - \frac{2\alpha}{\Delta x^2} \left( 1 - \frac{1}{2} \xi^2 \Delta x^2 + O(\Delta x^4) - 1 + O(\Delta t^2) \right) \\
+& = & s + \alpha \xi^2 + O(\Delta x^2) + O \left( \left( \frac{\Delta t}{\Delta x} \right)^2 \right) \\
+& = & p(s,\xi) + O(\Delta x^2) + O(\lambda^2),
+\end{eqnarray*}
+hence the scheme provides a consistent approximation to the differential equation if \(\lambda = \frac{\Delta t}{\Delta x} \to 0\) as \(\Delta t, \Delta x \to 0\).  This isn't any more difficult to satisfy than if we used the simplest explicit scheme and wished to retain stability.  For example, if we take \(\Delta t = \Delta x^2\) to retain second-order spatial accuracy, then we'd need to decrease \(\Delta t\) by a factor of \(\frac{1}{4}\) for each halving of \(\Delta x\).  However, there are certainly more efficient schemes.
+
+\item The scheme is explicit since it (ultimately) expresses \(v^{n+1}_m\) in terms of \(v^n_{m+1}\), \(v^n_{m-1}\), and \(v^{n-1}_m\).
+
+To analyze stability, we replace \(g = e^{s\Delta t}\) in \(p_{\Delta t, \Delta x}(s,\xi) = 0\) and solve for \(g\) to determine the roots of the amplification polynomial:
+\begin{eqnarray*}
+\lefteqn{\frac{1}{2\Delta t} \left( g - g^{-1} \right) - \frac{\alpha}{\Delta t^2} \left( 2 \cos \xi\Delta x - \left( g + g^{-1} \right) \right) = 0} \\
+& \Rightarrow & \frac{1}{2} \left( g - g^{-1} \right) - \alpha \mu \left( 2 \cos \theta - \left( g + g^{-1} \right) \right) \\
+& \Rightarrow & (2\alpha\mu + 1) g^2 - 4 \alpha\mu\cos\theta g + (2\alpha\mu - 1) = 0 \\
+& \Rightarrow & g_{\pm} = \frac{4\alpha\mu\cos\theta \pm \sqrt{(4\alpha\mu\cos\theta)^2 - 4(4\alpha^2\mu^2 - 1)}}{2(2\alpha\mu + 1)} \\
+& \Rightarrow & g_{\pm} = \frac{2\alpha\mu\cos\theta \pm \sqrt{1 - 4\alpha^2\mu^2\sin^2\theta}}{2\alpha\mu + 1}. \\
+\end{eqnarray*}
+Now if \(1 - 4\alpha^2\mu^2\sin^2\theta \geq 0\),
+\[|g_{\pm}| \leq \frac{2\alpha\mu|\cos\theta| + 1}{2\alpha\mu + 1} \leq 1,\]
+while if \(1 - 4\alpha^2\mu^2\sin^2\theta < 0\),
+\[|g_{\pm}|^2 = \frac{4\alpha^2\mu^2\cos^2\theta + 4\alpha^2\mu^2\sin^2\theta - 1}{4\alpha^2\mu^2 + 4\alpha\mu + 1}
+              = \frac{4\alpha^2\mu^2 - 1}{4\alpha^2\mu^2 + 4\alpha\mu + 1}
+              < 1.\]
+It follows that the scheme is unconditionally stable.  This does not violate the CFL condition, since consistency (rather than stability) requires that \(\lambda \to 0\) as \(\Delta t, \Delta x \to 0\)
+
+\end{enumerate}
+
+
+
+\item (10 Pts.)
+
+{\bf Solution}
+
+
+
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,318 @@
+\documentclass{article}
+
+%\usepackage[left=1in,top=1in,bottom=1in,right=1in,nohead,nofoot]{geometry}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+
+
+\def\supp{\mathop{\rm supp}\nolimits}
+
+
+\begin{document}
+
+
+\begin{flushright}
+Jeffrey Hellrung \\
+Applied Differential Equations Qualifying Exam, Fall 2006 \\
+\end{flushright}
+
+
+\begin{enumerate}
+
+\item Consider the second-order ODE
+\[x''(t) + x^3(t) - 4 x(t) = 0. \ \ \ \ (1)\]
+
+\begin{itemize}
+\item Find the conserved quantity for (1).
+
+\item Rewrite (1) as a first-order system.
+
+\item Find and classify the equilibrium points.
+
+\item Sketch the phase portrait of the systems.
+
+\end{itemize}
+
+{\bf Solution}
+
+\begin{itemize}
+\item Multiplying by \(x'\) and integrating gives
+\[C = \left( x' \right)^2 + \frac{1}{4} x^4 - 2 x^2.\]
+
+\item
+\[(x,x')' = (x', 4 x - x^3) = F(x,x').\]
+
+\item Equilibrium points \((x,x')^*\) satisfy
+\[F((x,x')^*) = 0 \ \Rightarrow \ \ (x,x')^* \in \{(0,0), (\pm 2, 0)\}.\]
+To classify the equilibrium points, we compute
+\[DF(x,x') = \left( \begin{array}{cc} 0 & 1 \\ 4 - 3 x^2 & 0 \end{array} \right).\]
+
+\begin{itemize}
+\item \((x,x')^* = (0,0)\):
+\[DF(0,0) = \left( \begin{array}{cc} 0 & 1 \\ 4 & 0 \end{array} \right)\]
+has eigenvalues \(\lambda_{\pm} = \pm 2\) and corresponding eigenvectors
+\[v_{\pm} = \left( \begin{array}{c} \pm 1 \\ 2 \end{array} \right).\]
+This equilibrium point is a saddle.
+
+\item \((x,x')^* = (2,0)\):
+\[DF(2,0) = \left( \begin{array}{cc} 0 & 1 \\ -8 & 0 \end{array} \right)\]
+has eigenvalues \(\lambda_{\pm} = \pm 2 \sqrt{2} i\).  This equilibrium point is a center.
+
+\item \((x,x')^* = (-2,0)\):  [Same as previous case.]
+
+\end{itemize}
+
+\item
+
+\end{itemize}
+
+
+
+\item Consider the equation
+\[u_{tt} = c^2 u_{xx} \ \ \ \ (2)\]
+for \(-a t < x < a t\) and \(0 \leq t\), in which \(a\) and \(c\) are positive constants.  For which boundary conditions on \(x = \pm a t\) is there existence and uniqueness for this problem?  Hint:  The answer depends on \(a\).
+
+{\bf Solution}
+
+
+
+
+
+\item Consider the PDE
+\begin{eqnarray*}
+u_t & = & \Delta u; \ \ \ \ (3) \\
+u(x,y,t = 0) & = & u_0(x,y); \ \ \ \ (4)
+\end{eqnarray*}
+in a half-plane \(-\infty < x < \infty\) and \(0 \leq y < \infty\), with \(u_0(x,y) \geq 0\).  Compare the following two boundary conditions:
+\[u(x,0,t) = 0 \ \ \ \ (5)\]
+and
+\[u_y(x,0,t) = 0. \ \ \ \ (6)\]
+Denote the solution of (3),(4), and (5) as \(u^D\); and the solution of (3), (4), and (6) as \(u^N\).  Show that \(u^D \leq u^N\) for all \(x,y\) and \(t > 0\).
+
+{\bf Solution}
+
+To obtain \(u^D\), we can extend \(u_0(x,y)\) for \(y < 0\) ``oddly'' by setting \(u_0(x,y) = -u_0(x,-y)\), yielding
+\begin{eqnarray*}
+u^D(x,y) & = & \frac{1}{4 \pi t} \iint_{\mathbb{R}^2} e^{-\left( (x - \xi)^2 + (y - \eta)^2 \right) / 4 t} u_0(\xi,\eta) d\xi d\eta \\
+         & = & \frac{1}{4 \pi t} \iint_{\eta \geq 0} \left( e^{-\left( (x - \xi)^2 + (y - \eta)^2 \right) / 4 t} u_0(\xi,\eta) - e^{-\left( (x - \xi)^2 + (y + \eta)^2 \right) / 4 t} u_0(\xi,\eta) \right) d\xi d\eta \\
+         & = & \frac{1}{4 \pi t} \iint_{\eta \geq 0} e^{-\left( (x - \xi)^2 + (y - \eta)^2 \right) / 4 t} \left( 1 - e^{-y \eta / t} \right) u_0(\xi,\eta) d\xi d\eta.
+\end{eqnarray*}
+Similarly, to obtain \(u^N\), we can extend \(u_0(x,y)\) for \(y < 0\) ``evenly'' by setting \(u_0(x,y) = u_0(x,-y)\), yielding
+\begin{eqnarray*}
+u^N(x,y) & = & \frac{1}{4 \pi t} \iint_{\mathbb{R}^2} e^{-\left( (x - \xi)^2 + (y - \eta)^2 \right) / 4 t} u_0(\xi,\eta) d\xi d\eta \\
+         & = & \frac{1}{4 \pi t} \iint_{\eta \geq 0} e^{-\left( (x - \xi)^2 + (y - \eta)^2 \right) / 4 t} \left( 1 + e^{-y \eta / t} \right) u_0(\xi,\eta) d\xi d\eta.
+\end{eqnarray*}
+Since \(u_0 \geq 0\), it is easy to see that \(u^N \geq u^D\).
+
+
+
+\item Consider the Laplace equation
+\[\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0, \ y > 0, \ x \in \mathbb{R}, \ \ \ \ (7)\]
+together with the boundary condition
+\[\frac{\partial u}{\partial y}(x,0) - u(x,0) = f(x), \ \ \ \ (8)\]
+where \(f(x) \in C_0^{\infty}(\mathbb{R})\) (i.e., \(f\) is smooth with compact support).  Find a representation for a bounded solution \(u(x,y)\) of (7), (8); and show that \(u(x,y) \to 0\) as \(y \to \infty\) uniformly in \(x \in \mathbb{R}\).
+
+{\bf Solution}
+
+We apply a Fourier transform in \(x\).  Recall that the Fourier transform, at least formally, is given by
+\[\mathcal{F}_x(f(x))(\xi) = \int_{-\infty}^{\infty} e^{-i x \xi} f(x) dx,\]
+and it is easy to verify that
+\[\mathcal{F}_x(f'(x))(\xi) = i \xi \mathcal{F}_x(f(x))(\xi).\]
+Denoting by \(\widehat{u}(\xi,y) = \mathcal{F}_x(u(x,y))(\xi)\), we see that \(\widehat{u}\) satisfies
+\[-\xi^2 \widehat{u} + \widehat{u}_{yy} = 0\]
+subject to the boundary condition
+\[\widehat{u}_y(\xi,0) - \widehat{u}(\xi,0) = \mathcal{F}_x(f(x))(\xi) = \widehat{f}(\xi).\]
+We can find the general solution for \(\widehat{u}\):
+\[\widehat{u}(\xi,y) = C_1(\xi) e^{-|\xi| y} + C_2(\xi) e^{|\xi| y}.\]
+Boundedness requires \(C_2 = 0\), while the boundary conditions require
+\[C_1(\xi) = -\frac{\widehat{f}(\xi)}{1 + |\xi|},\]
+and therefore
+\[\widehat{u}(\xi,y) = -\frac{\widehat{f}(\xi)}{1 + |\xi|} e^{-|\xi| y}.\]
+Since \(f \in C_0^{\infty} \subset \mathcal{S}\), \(\widehat{f} \in \mathcal{S}\), from which it follows easily that \(\xi \mapsto \widehat{u}(\xi,y) \in \mathcal{S}\), so \(x \mapsto u(x,y) \in \mathcal{S}\).  The exponential decrease in \(y\) also implies that \(y \mapsto u(x,y) \in \mathcal{S}\) as well, hence \(u\) is bounded.  Indeed,
+\begin{eqnarray*}
+|u(x,y)| &   =  & \left| \frac{1}{2 \pi} \int_{-\infty}^{\infty} e^{i x \xi} \widehat{u}(\xi,y) d\xi \right| \\
+         &   =  & \frac{1}{2 \pi} \left| \int_{-\infty}^{\infty} e^{i x \xi} \frac{\widehat{f}(\xi)}{1 + |\xi|} e^{-|\xi| y} d\xi \right| \\
+         & \leq & \frac{1}{2 \pi} \left\| \widehat{f} \right\|_{L^2} \left\| \frac{e^{-|\xi| y}}{1 + |\xi|} \right\|_{L^2_{\xi}}
+\end{eqnarray*}
+by the Cauchy-Schwarz Inequality.  But
+\[\left\| \widehat{f} \right\|_{L^2} = \frac{1}{2 \pi} \|f\|_{L^2} < \infty,\]
+by Plancherel's Theorem, while
+\begin{eqnarray*}
+\left\| \frac{e^{-|\xi| y}}{1 + |\xi|} \right\|_{L^2_{\xi}}^2
+&   =  & 2 \int_0^{\infty} \left( \frac{e^{-\xi y}}{1 + \xi} \right)^2 d\xi \\
+& \leq & 2 \int_0^{\infty} e^{-2 \xi y} d\xi \\
+&   =  & \frac{1}{y},
+\end{eqnarray*}
+from which it follows that
+\[|u(x,y)| \leq \frac{1}{4 \pi^2} \|f\|_{L^2} y^{-1} \to 0\]
+as \(y \to \infty\), uniformly in \(x\).
+
+
+
+\item Let \(a \in \mathbb{R}\) be a positive constant and \(f(t)\) a non-negative continuous function.  Assume that \(y(t)\) is a continuous function such that
+\[0 \leq y(t) \leq a + \int_0^t f(s) y(s)^2 ds \ \ \text{for \(t \geq 0\)}.\]
+Show that
+\[y(t) \leq \frac{a}{1 - a \int_0^t f(s) ds} \ \ \ \ (10)\]
+for all \(t \geq 0\) for which the denominator in the right hand side of (10) is positive.
+
+{\bf Solution}
+
+Denote by
+\[z(t) = a + \int_0^t f(s) y(s)^2 ds,\]
+and note that
+\[z'(t) = f(t) y(t)^2 \leq f(t) z(t)^2.\]
+It follows that
+\[\int_0^t \frac{z'(s)}{z(s)^2} ds \leq \int_0^t f(s) ds \ 
+  \Rightarrow \ \frac{1}{z(0)} - \frac{1}{z(t)} \leq \int_0^t f(s) ds \ 
+  \Rightarrow \ z(t) \leq \frac{a}{1 - a \int_0^t f(s) ds},\]
+from which the claim follows.
+
+
+
+\item Let \(\phi \in C^1(\mathbb{C})\) be a function with compact support.  When \(\zeta \in \mathbb{C}\), let us write \(\zeta = \xi + i \eta\), with \(\xi,\eta \in \mathbb{R}\), and introduce the Cauchy-Riemann operator,
+\[\frac{\partial}{\partial \overline{\zeta}} = \frac{1}{2} \left( \frac{\partial}{\partial \xi} + i \frac{\partial}{\partial \eta} \right).\]
+Let \(z \in \mathbb{C}\).  Show that
+\[\phi(z) = -\frac{1}{\pi} \iint \frac{\partial \phi}{\partial \overline{\zeta}} (\zeta) (\zeta - z)^{-1} d\xi d\eta.\]
+
+{\bf Solution}
+
+Notice that
+\[\Delta = 4 \frac{\partial}{\partial \zeta} \frac{\partial}{\partial \overline{\zeta}},\]
+where
+\[\frac{\partial}{\partial \zeta} = \frac{1}{2} \left( \frac{\partial}{\partial \xi} - i \frac{\partial}{\partial \eta} \right).\]
+Further, if \(K(\xi,\eta) = \frac{1}{4 \pi} \log (\xi^2 + \eta^2)\) is the fundamental solution to the Laplacian, that is,
+\[\Delta K = \delta,\]
+then we can easily compute that
+\[\frac{\partial}{\partial \zeta} K(\zeta) = \frac{1}{4 \pi} \zeta^{-1},\]
+so that, using integration by parts,
+\begin{eqnarray*}
+\phi(z) & = & \iint \phi(\zeta) \Delta K(z - \zeta) d\xi d\eta \\
+        & = & -4 \iint \frac{\partial \phi}{\partial \overline{\zeta}}(\zeta) \frac{\partial}{\partial \zeta} K(z - \zeta) d\xi d\eta \\
+        & = & -\frac{1}{\pi} \iint \frac{\partial \phi}{\partial \overline{\zeta}}(\zeta) (\zeta - z)^{-1} d\xi d\eta.
+\end{eqnarray*}
+
+
+
+
+\item Let \(u\) solve the heat equation in a two-dimensional channel, i.e.,
+\begin{eqnarray*}
+u_t & = & \Delta u; \\
+u(x,y,t = 0) & = & u_0(x,y); \\
+u_y(x,0,t) = u_y(x,\pi,t) & = & 0;
+\end{eqnarray*}
+for \(-\infty < x < \infty\) and \(0 \leq y \leq \pi\).  The initial data \(u_0\) is assumed to be smooth and vanish for \(|x|\) large.
+
+\begin{enumerate}
+\item Show that \(u(x,y,t)\) can be expanded in a cosine series in \(y\), i.e.,
+\[u(x,y,t) = \sum_{k \geq 0} \widehat{u}(x,k,t) \cos(k y)\]
+and find an equation for the \(k^{th}\) coefficient \(\widehat{u}(x,k,t)\).
+
+\item Find the limit of \(t^{1/2} u(x,y,t)\) as \(t \to \infty\).
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We separate variables by assuming \(u(x,y,t) = Y(y) Z(x,t)\) and substituting into the PDE, finding that
+\[0 = u_t - \Delta u = Y Z_t - Y Z_{xx} - Y'' Z \ \Rightarrow \ \frac{Z_t - Z_{xx}}{Z} = \frac{Y''}{Y} = \lambda\]
+for some constant \(\lambda\).  Solving for \(Y\) yields the general solution \(Y = C_1 e^{\sqrt{\lambda} y} + C_2 e^{\sqrt{\lambda} y}\).  The boundary conditions \(u_y(x,0,t) = u_y(x,\pi,t) = 0\) imply that \(Y'(0) = Y'(\pi) = 0\), hence we conclude that \(Y = \cos \left( \sqrt{-\lambda} y \right)\), with \(\lambda \leq 0\) and \(\sqrt{-\lambda} \in \mathbb{Z}\).  Letting \(\lambda = -k^2\) for \(k \in \mathbb{Z}\), this gives simply \(Y_k = \cos(k y)\).  By linearity, then, \(u\) must be of the form
+\[u(x,t) = \sum_{k \geq 0} Z_k(x,t) \cos(k y),\]
+where \(Z_k\) satisfies
+\[(Z_k)_t - (Z_k)_{xx} = -k^2 Z_k, \ x \in \mathbb{R}, \ t \geq 0.\]
+This has the solution
+\[Z_k(x,t) = \frac{1}{\sqrt{4 \pi t}} e^{-k^2 t} \int_{-\infty}^{\infty} e^{-(x - \xi)^2 / 4 t} Z_k(\xi,0) d\xi.\]
+We notice that \(Z_k(x,0)\) is just the coefficient on \(\cos(k y)\) when expanding \(u_0(x,y)\) for fixed \(x\):
+\[Z_k(x,0) = \frac{2}{\pi} \int_0^{\pi} u_0(x,y) \cos(k y) dy.\]
+
+\item In the limit as \(t \to \infty\), \(Z_0\) dominates \(Z_k\) for \(k > 0\), due to the presence of the exponentially decaying factor \(e^{-k^2 t}\).  Thus,
+\[\lim_{t \to \infty} \sqrt{t} u(x,y,t) = \lim_{t \to \infty} \sqrt{t} Z_0(x,t).\]
+Noting that
+\[Z_0(x,0) = \frac{2}{\pi} \int_0^{\pi} u_0(x,y) dy,\]
+we thus obtain
+\begin{eqnarray*}
+\sqrt{t} Z_0(x,t)
+&  =  & \frac{1}{\pi^{3/2}} \int_{-\infty}^{\infty} e^{-(x - \xi)^2 / 4 t} \left( \int_0^{\pi} u_0(\xi,y) dy \right) d\xi \\
+& \to & \frac{1}{\pi^{3/2}} \int_{-\infty}^{\infty} \int_0^{\pi} u_0(\xi,y) dy d\xi
+\end{eqnarray*}
+as \(t \to \infty\).
+
+\end{enumerate}
+
+
+
+\item Suppose that \(u\) is a smooth solution of the initial boundary value problem
+\begin{eqnarray*}
+u_t & = & u_{xx} + c u^2; \\
+u(x,t = 0) & = & u_0(x); \\
+u(0,t) & = & u(1,t) = 0; \ \ \ \ (18)
+\end{eqnarray*}
+for \(0 < x < 1\), in which \(c\) is a positive constant.
+
+\begin{enumerate}
+\item Show that
+\[\frac{d}{dt} \int_0^1 |u(x,t)|^2 dx \leq -\left( \int_0^1 |u_x(x,t)|^2 dx \right) \left( 1 - c \left( \int_0^1 |u(x,t)|^2 dx \right)^{1/2} \right).\]
+Hint:  First show that
+\[\sup_x |u(x,t)|^2 \leq \int_0^1 |u_x(x,t)|^2 dx.\]
+
+\item If the initial data \(u_0\) satisfies
+\[\int_0^1 |u_0(x)|^2 dx < \frac{1}{c^2},\]
+show that \(u\) satisfies
+\[\int_0^1 |u(x,t)|^2 dx < \frac{1}{c^2}\]
+for all time.  Hint:  Show that
+\[\frac{d}{dt} \int_0^1 |u(x,t)|^2 dx \leq 0.\]
+
+\item If the boundary condition (18) is changed to \(\partial_x u_0 = 0\) at \(x = 0\) and \(x = 1\), find a counterexample, i.e., find initial data \(u_0\) for which the solution blows up in finite time.
+
+\end{enumerate}
+
+{\bf Solution}
+
+\begin{enumerate}
+\item We first show the suggested hint:
+\begin{eqnarray*}
+u(x,t) & \leq & |u(x,t)| \\
+       &   =  & \left| \int_0^x u_x(y,t) dy \right| \\
+       & \leq & \int_0^x |u_x(y,t)| dy \\
+       & \leq & \int_0^1 |u_x(x,t)| dx \\
+       & \leq & \left( \int_0^1 |u_x(x,t)|^2 dx \right)^{1/2},
+\end{eqnarray*}
+where the last inequality is from an application of the Cauchy-Schwarz Inequality.  It follows that
+\begin{eqnarray*}
+\frac{d}{dt} \int_0^1 |u(x,t)|^2 dx
+&   =  & \int_0^1 \frac{d}{dt} |u(x,t)|^2 dx \\
+&   =  & \int_0^1 2 \Re \left( \overline{u(x,t)} u_t(x,t) \right) dx \\
+&   =  & 2 \Re \left( \int_0^1 \overline{u(x,t)} u_t(x,t) dx \right) \\
+&   =  & 2 \Re \left( \int_0^1 \overline{u(x,t)} \left( u_{xx}(x,t) + c u(x,t)^2 \right) dx \right) \\
+&   =  & 2 \Re \left( \int_0^1 \overline{u(x,t)} u_{xx}(x,t) dx + c \int_0^1 |u(x,t)|^2 u(x,t) dx \right) \\
+&   =  & 2 \Re \left( -\int_0^1 |u_x(x,t)|^2 dx + c \int_0^1 |u(x,t)|^2 u(x,t) dx \right) \\
+& \leq & 2 c \int_0^1 |u(x,t)|^3 dx - 2 \int_0^1 |u_x(x,t)|^2 dx \\
+& \leq & 2 \left( \int_0^1 |u_x(x,t)|^2 dx \right) \left( c \int_0^1 |u(x,t)| dx - 1 \right) \\
+& \leq & 2 \left( \int_0^1 |u_x(x,t)|^2 dx \right) \left( c \left( \int_0^1 |u(x,t)|^2 \right)^{1/2} - 1 \right).
+\end{eqnarray*}
+
+\item Let
+\[T = \inf \left\{ t \geq 0 \ \left| \ \int_0^1 |u(x,t)|^2 dx \geq \frac{1}{c^2} \right. \right\}.\]
+By continuity of \(u\), \(T > 0\), while for \(t \leq T\), the inequality from (a) gives that
+\[\frac{d}{dt} \int_0^1 |u(x,t)|^2 dx \leq 0.\]
+This implies that
+\[\int_0^1 |u(x,t)|^2 dx \leq \int_0^1 |u(x,0)|^2 dx < \frac{1}{c^2}\]
+for all \(t \leq T\), particularly for \(t = T\) if \(T < \infty\).  It follows that we must have \(T = \infty\), hence
+\[\int_0^1 |u(x,t)|^2 dx < \frac{1}{c^2}\]
+for all \(t \geq 0\).
+
+\item If we take \(u_0(x) = \alpha\), then it is easy to verify that the solution to the new boundary value problem is
+\[u(x,t) = \frac{\alpha}{1 - c \alpha t},\]
+which blows up at \(t = (c \alpha)^{-1}\).
+
+\end{enumerate}
+
+
+
+
+\end{enumerate}
+
+\end{document}
